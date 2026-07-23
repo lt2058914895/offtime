@@ -8,7 +8,7 @@ final class CityService {
     private init() {}
     
     func addCity(cityName: String, cityEn: String, timezoneId: String) throws {
-        let exists = try repository.hasCity(timezoneId: timezoneId)
+        let exists = try repository.hasCity(cityName: cityName)
         if exists {
             throw CityError.alreadyExists
         }
@@ -52,8 +52,8 @@ final class CityService {
         try repository.updateCityTop(id: id.uuidString, isTop: isTop)
     }
     
-    func hasCity(timezoneId: String) throws -> Bool {
-        try repository.hasCity(timezoneId: timezoneId)
+    func hasCity(cityName: String) throws -> Bool {
+        try repository.hasCity(cityName: cityName)
     }
     
     func reorderCities(_ cities: [CityItem]) throws {

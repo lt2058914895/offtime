@@ -165,8 +165,8 @@ final class DatabaseRepository {
         }
     }
     
-    func hasCity(timezoneId: String) throws -> Bool {
-        let sql = "SELECT COUNT(*) FROM user_city WHERE timezone_id = ?;"
+    func hasCity(cityName: String) throws -> Bool {
+        let sql = "SELECT COUNT(*) FROM user_city WHERE city_name = ?;"
         
         var statement: OpaquePointer?
         defer { sqlite3_finalize(statement) }
@@ -175,7 +175,7 @@ final class DatabaseRepository {
             throw DatabaseError.prepareFailed
         }
         
-        sqlite3_bind_text(statement, 1, timezoneId, -1, SQLITE_TRANSIENT)
+        sqlite3_bind_text(statement, 1, cityName, -1, SQLITE_TRANSIENT)
         
         if sqlite3_step(statement) == SQLITE_ROW {
             return sqlite3_column_int(statement, 0) > 0

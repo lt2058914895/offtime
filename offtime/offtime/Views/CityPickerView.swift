@@ -57,13 +57,7 @@ struct CityPickerView: View {
         .navigationTitle("添加城市")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("取消") {
-                    dismiss()
-                }
-            }
-        }
+
         .onChange(of: searchText) { newValue in
             viewModel.searchText = newValue
         }
@@ -89,7 +83,7 @@ struct CityPickerView: View {
     
     private func selectCity(_ city: CitySuggestion) {
         Task {
-            let exists = await viewModel.checkCityExists(timezoneId: city.timezoneId)
+            let exists = await viewModel.checkCityExists(cityName: city.cityName)
             if exists {
                 toastMessage = "该城市已存在"
                 return
@@ -99,11 +93,7 @@ struct CityPickerView: View {
         }
     }
     
-    private func dismiss() {
-        if let presentationMode = UIApplication.shared.windows.first?.rootViewController?.presentedViewController {
-            presentationMode.dismiss(animated: true)
-        }
-    }
+
 }
 
 #Preview {

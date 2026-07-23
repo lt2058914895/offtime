@@ -69,6 +69,9 @@ struct ClockListView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
+            .onAppear {
+                viewModel.loadCities()
+            }
             .alert("确认删除", isPresented: $isShowingDeleteConfirm) {
                 Button("取消", role: .cancel) {}
                 Button("删除", role: .destructive) {

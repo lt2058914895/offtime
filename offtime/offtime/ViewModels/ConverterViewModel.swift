@@ -142,7 +142,7 @@ final class ConverterViewModel: ObservableObject {
     func addCity(cityName: String, cityEn: String, timezoneId: String) {
         Task {
             do {
-                let exists = try cityService.hasCity(timezoneId: timezoneId)
+                let exists = try cityService.hasCity(cityName: cityName)
                 if !exists {
                     try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
                 }

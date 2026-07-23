@@ -91,19 +91,20 @@ final class CityPickerViewModel: ObservableObject {
             CitySuggestion(id: "25", cityName: "芝加哥", cityEn: "Chicago", timezoneId: "America/Chicago", continent: "美洲"),
             CitySuggestion(id: "26", cityName: "多伦多", cityEn: "Toronto", timezoneId: "America/Toronto", continent: "美洲"),
             CitySuggestion(id: "27", cityName: "温哥华", cityEn: "Vancouver", timezoneId: "America/Vancouver", continent: "美洲"),
-            CitySuggestion(id: "28", cityName: "圣保罗", cityEn: "Sao Paulo", timezoneId: "America/Sao_Paulo", continent: "美洲"),
-            CitySuggestion(id: "29", cityName: "墨西哥城", cityEn: "Mexico City", timezoneId: "America/Mexico_City", continent: "美洲"),
+            CitySuggestion(id: "28", cityName: "卡尔加里", cityEn: "Calgary", timezoneId: "America/Edmonton", continent: "美洲"),
+            CitySuggestion(id: "29", cityName: "圣保罗", cityEn: "Sao Paulo", timezoneId: "America/Sao_Paulo", continent: "美洲"),
+            CitySuggestion(id: "30", cityName: "墨西哥城", cityEn: "Mexico City", timezoneId: "America/Mexico_City", continent: "美洲"),
         ]
         
         let oceaniaCities = [
-            CitySuggestion(id: "30", cityName: "奥克兰", cityEn: "Auckland", timezoneId: "Pacific/Auckland", continent: "大洋洲"),
-            CitySuggestion(id: "31", cityName: "墨尔本", cityEn: "Melbourne", timezoneId: "Australia/Melbourne", continent: "大洋洲"),
-            CitySuggestion(id: "32", cityName: "布里斯班", cityEn: "Brisbane", timezoneId: "Australia/Brisbane", continent: "大洋洲"),
+            CitySuggestion(id: "31", cityName: "奥克兰", cityEn: "Auckland", timezoneId: "Pacific/Auckland", continent: "大洋洲"),
+            CitySuggestion(id: "32", cityName: "墨尔本", cityEn: "Melbourne", timezoneId: "Australia/Melbourne", continent: "大洋洲"),
+            CitySuggestion(id: "33", cityName: "布里斯班", cityEn: "Brisbane", timezoneId: "Australia/Brisbane", continent: "大洋洲"),
         ]
         
         let africaCities = [
-            CitySuggestion(id: "33", cityName: "开罗", cityEn: "Cairo", timezoneId: "Africa/Cairo", continent: "非洲"),
-            CitySuggestion(id: "34", cityName: "约翰内斯堡", cityEn: "Johannesburg", timezoneId: "Africa/Johannesburg", continent: "非洲"),
+            CitySuggestion(id: "34", cityName: "开罗", cityEn: "Cairo", timezoneId: "Africa/Cairo", continent: "非洲"),
+            CitySuggestion(id: "35", cityName: "约翰内斯堡", cityEn: "Johannesburg", timezoneId: "Africa/Johannesburg", continent: "非洲"),
         ]
         
         allCities = hotCities + asiaCities + europeCities + americaCities + oceaniaCities + africaCities
@@ -190,12 +191,12 @@ final class CityPickerViewModel: ObservableObject {
         return matrix[len1][len2]
     }
     
-    func checkCityExists(timezoneId: String) async -> Bool {
+    func checkCityExists(cityName: String) async -> Bool {
         do {
             return try await withCheckedThrowingContinuation { continuation in
                 Task {
                     do {
-                        let exists = try cityService.hasCity(timezoneId: timezoneId)
+                        let exists = try cityService.hasCity(cityName: cityName)
                         continuation.resume(returning: exists)
                     } catch {
                         continuation.resume(throwing: error)
