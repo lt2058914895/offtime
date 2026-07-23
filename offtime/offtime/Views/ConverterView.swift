@@ -3,6 +3,8 @@ import SwiftUI
 struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
     @State private var path = NavigationPath()
+    @State private var showDatePicker = false
+    @State private var showTimePicker = false
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -13,8 +15,6 @@ struct ConverterView: View {
                     swapButton
                     
                     targetCard
-                    
-                    resultCard
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 20)
@@ -49,6 +49,54 @@ struct ConverterView: View {
                 datePickerRow
             }
         }
+        .sheet(isPresented: $showDatePicker) {
+            NavigationStack {
+                VStack(spacing: 20) {
+                    DatePicker(
+                        "",
+                        selection: $viewModel.sourceDate,
+                        displayedComponents: .date
+                    )
+                    .datePickerStyle(.graphical)
+                    .labelsHidden()
+                    
+                    Spacer()
+                }
+                .padding()
+                .navigationTitle("选择日期")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("完成") { showDatePicker = false }
+                    }
+                }
+            }
+            .presentationDetents([.medium])
+        }
+        .sheet(isPresented: $showTimePicker) {
+            NavigationStack {
+                VStack(spacing: 20) {
+                    DatePicker(
+                        "",
+                        selection: $viewModel.sourceDate,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
+                    
+                    Spacer()
+                }
+                .padding()
+                .navigationTitle("选择时间")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("完成") { showTimePicker = false }
+                    }
+                }
+            }
+            .presentationDetents([.medium])
+        }
     }
     
     private var swapButton: some View {
@@ -57,63 +105,76 @@ struct ConverterView: View {
                 viewModel.swapCities()
             }
         }) {
-            ZStack {
-                Circle()
-                    .fill(Color(.systemBackground))
-                    .shadow(color: Color.black.opacity(0.05), radius: 4)
-                
-                Image(systemName: "arrow.up.down")
-                    .font(.title2)
-                    .foregroundColor(Color(.systemGray4))
-            }
-            .frame(width: 44, height: 44)
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.body.weight(.semibold))
+                .foregroundColor(Color(.systemGray2))
+                .frame(width: 36, height: 36)
+                .background(Color(.systemBackground))
+                .clipShape(Circle())
+                .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
         }
-        .scaleEffect(viewModel.isSwapping ? 0.95 : 1.0)
+        .scaleEffect(viewModel.isSwapping ? 0.9 : 1.0)
     }
     
     private var targetCard: some View {
         CardView {
-            cityButton(title: "目标城市", city: viewModel.targetCity, action: {
-                path.append(AppRoute.cityPicker)
-            })
+            VStack(spacing: 12) {
+                cityButton(title: "目标城市", city: viewModel.targetCity, action: {
+                    path.append(AppRoute.cityPicker)
+                })
+                
+                Divider()
+                
+                resultDateTimeRow
+            }
         }
     }
     
-    private var resultCard: some View {
-        CardView {
-            VStack(spacing: 12) {
-                Text("转换结果")
-                    .font(.body)
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color(.systemGray5))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+    private var resultDateTimeRow: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("日期时间")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(Color(.systemGray3))
+            
+            HStack(spacing: 12) {
+                HStack(spacing: 6) {
+                    Image(systemName: "calendar")
+                        .font(.callout)
+                        .foregroundColor(Color(.secondaryLabel))
+                    Text(viewModel.resultDate)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color(.label))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
-                VStack(spacing: 6) {
+                HStack(spacing: 6) {
+                    Image(systemName: "clock")
+                        .font(.callout)
+                        .foregroundColor(Color(.secondaryLabel))
                     Text(viewModel.resultTime)
-                        .font(.system(size: 44))
-                        .fontWeight(.bold)
-                    
-                    if !viewModel.resultDate.isEmpty {
-                        Text(viewModel.resultDate)
-                            .font(.body)
-                            .foregroundColor(Color(.systemGray4))
-                    }
-                    
-                    HStack(spacing: 8) {
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color(.label))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                if !viewModel.timeDifference.isEmpty || viewModel.crossDay != nil {
+                    HStack(spacing: 4) {
+                        Image(systemName: "globe")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
                         if let crossDay = viewModel.crossDay {
                             Text(crossDay)
-                                .font(.body)
-                                .foregroundColor(Color(.systemGray4))
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(crossDay == "明日" ? Color.orange : Color.blue)
                         }
-                        
                         if !viewModel.timeDifference.isEmpty {
                             Text(viewModel.timeDifference)
-                                .font(.body)
-                                .foregroundColor(Color(.systemGray4))
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(Color(.label))
                         }
                     }
                 }
-                .frame(maxWidth: .infinity)
             }
         }
     }
@@ -141,20 +202,60 @@ struct ConverterView: View {
         }
     }
     
+    private var sourceDateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }
+    
+    private var sourceTimeFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }
+    
     private var datePickerRow: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             Text("日期时间")
-                .font(.body)
-                .fontWeight(.semibold)
-                .foregroundColor(Color(.systemGray5))
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(Color(.systemGray3))
             
-            DatePicker(
-                "",
-                selection: $viewModel.sourceDate,
-                displayedComponents: [.date, .hourAndMinute]
-            )
-            .datePickerStyle(.compact)
-            .labelsHidden()
+            HStack(spacing: 12) {
+                Button(action: { showDatePicker = true }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "calendar")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text(sourceDateFormatter.string(from: viewModel.sourceDate))
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(Color(.label))
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .buttonStyle(.plain)
+                
+                Button(action: { showTimePicker = true }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "clock")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text(sourceTimeFormatter.string(from: viewModel.sourceDate))
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(Color(.label))
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 }
