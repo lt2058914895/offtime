@@ -5,6 +5,7 @@ struct ConverterView: View {
     @State private var path = NavigationPath()
     @State private var showDatePicker = false
     @State private var showTimePicker = false
+    @State private var isSelectingSource = true
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -25,9 +26,14 @@ struct ConverterView: View {
             .toast(message: $viewModel.errorMessage)
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
-                case .cityPicker:
-                    CityPickerView(onCitySelected: { city in
-                        viewModel.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
+                case .citySelector:
+                    CitySelectorView(onCitySelected: { city in
+                        let item = CityItem(id: UUID(), cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, sortIndex: 0, isTop: false)
+                        if isSelectingSource {
+                            viewModel.sourceCity = item
+                        } else {
+                            viewModel.targetCity = item
+                        }
                         path.removeLast()
                     })
                 default:
@@ -41,7 +47,8 @@ struct ConverterView: View {
         CardView {
             VStack(spacing: 12) {
                 cityButton(title: "起点城市", city: viewModel.sourceCity, action: {
-                    path.append(AppRoute.cityPicker)
+                    isSelectingSource = true
+                    path.append(AppRoute.citySelector)
                 })
                 
                 Divider()
@@ -120,7 +127,8 @@ struct ConverterView: View {
         CardView {
             VStack(spacing: 12) {
                 cityButton(title: "目标城市", city: viewModel.targetCity, action: {
-                    path.append(AppRoute.cityPicker)
+                    isSelectingSource = false
+                    path.append(AppRoute.citySelector)
                 })
                 
                 Divider()

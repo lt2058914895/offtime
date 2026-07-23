@@ -6,9 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		690C5C5B3010918200CF6812 /* offtime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = offtime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -16,8 +13,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		690C5C5D3010918200CF6812 /* offtime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = offtime;
 			sourceTree = "<group>";
 		};
@@ -124,9 +119,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		690C5C573010918200CF6812 /* Sources */ = {
@@ -270,6 +262,7 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "世界时钟";
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "用于导入/导出城市列表文件";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "可选：用于自动定位获取本地时区，不会上传位置信息";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -303,6 +296,7 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "世界时钟";
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "用于导入/导出城市列表文件";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "可选：用于自动定位获取本地时区，不会上传位置信息";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

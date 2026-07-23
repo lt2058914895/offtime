@@ -64,6 +64,8 @@ struct ClockListView: View {
                     PrivacyPageView()
                 case .aboutPage:
                     AboutPageView()
+                case .citySelector:
+                    EmptyView()
                 }
             }
             .toast(message: $viewModel.errorMessage)

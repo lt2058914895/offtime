@@ -38,6 +38,7 @@ enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
 
 enum AppRoute: Hashable {
     case cityPicker
+    case citySelector
     case privacyPage
     case aboutPage
 }

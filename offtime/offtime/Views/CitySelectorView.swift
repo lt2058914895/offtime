@@ -1,16 +1,15 @@
 import SwiftUI
 
-struct CityPickerView: View {
+struct CitySelectorView: View {
     @StateObject private var viewModel = CityPickerViewModel()
     @State private var searchText = ""
-    @State private var toastMessage: String?
+    @Environment(\.dismiss) private var dismiss
     
     let onCitySelected: (CitySuggestion) -> Void
     
     var body: some View {
         ZStack {
             List {
-                // 自定义搜索栏
                 Section {
                     HStack {
                         Image(systemName: "magnifyingglass")
@@ -24,7 +23,8 @@ struct CityPickerView: View {
                     Section(header: Text(group.name)) {
                         ForEach(group.cities) { city in
                             Button(action: {
-                                selectCity(city)
+                                onCitySelected(city)
+                                dismiss()
                             }) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 2) {
@@ -35,8 +35,6 @@ struct CityPickerView: View {
                                             .foregroundColor(.secondary)
                                     }
                                     Spacer()
-                                    Image(systemName: "plus.circle")
-                                        .foregroundColor(.accentColor)
                                 }
                                 .padding(.vertical, 8)
                             }
@@ -54,20 +52,12 @@ struct CityPickerView: View {
                 LoadingView()
             }
         }
-        .navigationTitle("添加城市")
+        .navigationTitle("选择城市")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("取消") {
-                    dismiss()
-                }
-            }
-        }
         .onChange(of: searchText) { newValue in
             viewModel.searchText = newValue
         }
-        .toast(message: $toastMessage)
     }
     
     private var noResultsView: some View {
@@ -86,26 +76,8 @@ struct CityPickerView: View {
         }
         .padding()
     }
-    
-    private func selectCity(_ city: CitySuggestion) {
-        Task {
-            let exists = await viewModel.checkCityExists(timezoneId: city.timezoneId)
-            if exists {
-                toastMessage = "该城市已存在"
-                return
-            }
-            
-            onCitySelected(city)
-        }
-    }
-    
-    private func dismiss() {
-        if let presentationMode = UIApplication.shared.windows.first?.rootViewController?.presentedViewController {
-            presentationMode.dismiss(animated: true)
-        }
-    }
 }
 
 #Preview {
-    CityPickerView(onCitySelected: { _ in })
+    CitySelectorView(onCitySelected: { _ in })
 }
