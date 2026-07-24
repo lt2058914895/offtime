@@ -29,7 +29,6 @@ struct ClockListView: View {
                                 isShowingDeleteConfirm = true
                             }
                         )
-                        .listRowBackground(Color(.secondarySystemGroupedBackground))
                     }
                     .onMove(perform: move)
                     .onDelete(perform: delete)
@@ -117,12 +116,12 @@ struct ClockListCell: View {
         HStack(alignment: .center, spacing: 16) {
             Image(systemName: isDaytime ? "sun.max" : "moon")
                 .foregroundColor(isDaytime ? .yellow : .blue)
-                .font(.title)
+                .font(.title3)
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
                     Text(city.cityName)
-                        .font(.title2)
+                        .font(.body)
                         .fontWeight(.semibold)
                     Text(city.cityEn)
                         .font(.caption)
@@ -130,7 +129,7 @@ struct ClockListCell: View {
                     if let dstStatus = dstStatus {
                         Text(dstStatus)
                             .font(.caption2)
-                            .padding(.horizontal, 4)
+                            .padding(.horizontal, 3)
                             .padding(.vertical, 1)
                             .background(dstStatus == "夏令时" ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
                             .foregroundColor(dstStatus == "夏令时" ? .orange : .blue)
@@ -138,27 +137,28 @@ struct ClockListCell: View {
                     }
                 }
                 
-                Text(date)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(time)
-                    .font(.title)
-                    .fontWeight(.medium)
-                
-                HStack(spacing: 4) {
-                    if let crossDay = timeDifference.crossDay {
-                        Text(crossDay)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    Text(timeDifference.offset)
-                        .font(.caption)
+                HStack {
+                    Text(date)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
                         .foregroundColor(.secondary)
+                    Spacer()
+                    Text(time)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .monospacedDigit()
+                    Spacer()
+                    HStack(spacing: 2) {
+                        if let crossDay = timeDifference.crossDay {
+                            Text(crossDay)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Text(timeDifference.offset)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(timeDifferenceColor)
+                    }
                 }
             }
         }
@@ -168,6 +168,12 @@ struct ClockListCell: View {
                 onCopy()
             }
         }
+    }
+    
+    private var timeDifferenceColor: Color {
+        let offset = timeDifference.offset
+        if offset == "0h" { return .secondary }
+        return offset.hasPrefix("+") ? .green : .red
     }
 }
 

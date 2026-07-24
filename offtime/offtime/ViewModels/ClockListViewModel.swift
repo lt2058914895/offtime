@@ -135,6 +135,28 @@ final class ClockListViewModel: ObservableObject {
         return timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? "日期解析失败"
     }
     
+    func getRelativeDate(city: CityItem) -> String {
+        let targetDateStr = timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? ""
+        let localDateStr = timezoneService.getLocalDate(timezoneId: TimeZone.current.identifier, date: currentDate) ?? ""
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        guard let targetDate = formatter.date(from: targetDateStr),
+              let localDate = formatter.date(from: localDateStr) else {
+            return targetDateStr
+        }
+        
+        let diff = Calendar.current.dateComponents([.day], from: localDate, to: targetDate).day ?? 0
+        
+        switch diff {
+        case 0: return "今天"
+        case 1: return "明天"
+        case -1: return "昨天"
+        default: return targetDateStr
+        }
+    }
+    
     func getTimeDifference(city: CityItem) -> (offset: String, crossDay: String?) {
         return timezoneService.getTimeDifference(timezoneId: city.timezoneId, date: currentDate)
     }
