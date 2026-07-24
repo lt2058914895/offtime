@@ -116,7 +116,7 @@ struct ConverterView: View {
                 .font(.body.weight(.semibold))
                 .foregroundColor(Color(.systemGray2))
                 .frame(width: 36, height: 36)
-                .background(Color(.systemBackground))
+                .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(Circle())
                 .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
         }
@@ -145,7 +145,7 @@ struct ConverterView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color(.systemGray3))
             
-            HStack(spacing: 12) {
+            HStack {
                 HStack(spacing: 6) {
                     Image(systemName: "calendar")
                         .font(.callout)
@@ -154,7 +154,8 @@ struct ConverterView: View {
                         .font(.body.weight(.semibold))
                         .foregroundColor(Color(.label))
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer()
                 
                 HStack(spacing: 6) {
                     Image(systemName: "clock")
@@ -164,23 +165,22 @@ struct ConverterView: View {
                         .font(.body.weight(.semibold))
                         .foregroundColor(Color(.label))
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if !viewModel.timeDifference.isEmpty || viewModel.crossDay != nil {
-                    HStack(spacing: 4) {
-                        Image(systemName: "globe")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        if let crossDay = viewModel.crossDay {
-                            Text(crossDay)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(crossDay == "明日" ? Color.orange : Color.blue)
-                        }
-                        if !viewModel.timeDifference.isEmpty {
-                            Text(viewModel.timeDifference)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(Color(.label))
-                        }
+                Spacer()
+                
+                HStack(spacing: 4) {
+                    Image(systemName: "globe")
+                        .font(.callout)
+                        .foregroundColor(Color(.secondaryLabel))
+                    if let crossDay = viewModel.crossDay {
+                        Text(crossDay)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(crossDay == "明日" ? Color.orange : Color.blue)
+                    }
+                    if !viewModel.timeDifference.isEmpty {
+                        Text(viewModel.timeDifference)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(Color(.label))
                     }
                 }
             }
@@ -206,6 +206,10 @@ struct ConverterView: View {
                         .font(.body)
                         .foregroundColor(Color(.systemGray4))
                 }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(Color(.systemGray5))
+                .cornerRadius(8)
             }
         }
     }
@@ -224,10 +228,26 @@ struct ConverterView: View {
     
     private var datePickerRow: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("日期时间")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(Color(.systemGray3))
+            HStack {
+                Text("日期时间")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(Color(.systemGray3))
+                
+                Spacer()
+                
+                Button(action: {
+                    viewModel.sourceDate = viewModel.currentSourceCityDate()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.caption)
+                        Text("当前时间")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.accentColor)
+                }
+            }
             
             HStack(spacing: 12) {
                 Button(action: { showDatePicker = true }) {
@@ -241,7 +261,7 @@ struct ConverterView: View {
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
-                    .background(Color(.systemGray6))
+                    .background(Color(.systemGray5))
                     .cornerRadius(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -258,7 +278,7 @@ struct ConverterView: View {
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
-                    .background(Color(.systemGray6))
+                    .background(Color(.systemGray5))
                     .cornerRadius(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -280,7 +300,7 @@ private struct CardView<Content: View>: View {
     var body: some View {
         content
             .padding(16)
-            .background(Color(.systemBackground))
+            .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
             .shadow(color: Color.black.opacity(0.03), radius: 4)
     }

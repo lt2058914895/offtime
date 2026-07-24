@@ -27,12 +27,12 @@ struct ClockListView: View {
                                 isShowingDeleteConfirm = true
                             }
                         )
-                        .listRowBackground(Color.clear)
+                        .listRowBackground(Color(.secondarySystemGroupedBackground))
                     }
                     .onMove(perform: move)
                     .onDelete(perform: delete)
                 }
-                .listStyle(.plain)
+                .listStyle(.insetGrouped)
                 
                 if viewModel.cities.isEmpty && viewModel.viewState == .idle {
                     EmptyStateView()

@@ -4,6 +4,7 @@ import PhotosUI
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
+    @EnvironmentObject private var appEnvironment: AppEnvironment
     @State private var path = NavigationPath()
     
     var body: some View {
@@ -24,6 +25,7 @@ struct SettingsView: View {
                     }
                     .onChange(of: viewModel.themeMode) { newMode in
                         viewModel.updateTheme(newMode)
+                        appEnvironment.settings.themeMode = newMode
                     }
                 }
                 
@@ -203,6 +205,7 @@ struct PrivacyPageView: View {
         }
         .navigationTitle("隐私说明")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
@@ -236,19 +239,13 @@ struct AboutPageView: View {
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                 
-                Divider()
-                
-                Text("技术栈")
-                    .font(.headline)
-                
-                Text("SwiftUI + MVVM + GRDB")
-                    .font(.body)
-                    .foregroundColor(.secondary)
+
             }
             .padding()
         }
         .navigationTitle("关于")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 

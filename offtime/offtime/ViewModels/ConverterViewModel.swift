@@ -139,6 +139,17 @@ final class ConverterViewModel: ObservableObject {
         errorMessage = nil
     }
     
+    func currentSourceCityDate() -> Date {
+        guard let sourceCity = sourceCity,
+              let sourceTimezone = TimeZone(identifier: sourceCity.timezoneId) else {
+            return Date()
+        }
+        var sourceCalendar = Calendar.current
+        sourceCalendar.timeZone = sourceTimezone
+        let components = sourceCalendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+        return Calendar.current.date(from: components) ?? Date()
+    }
+    
     func addCity(cityName: String, cityEn: String, timezoneId: String) {
         Task {
             do {
