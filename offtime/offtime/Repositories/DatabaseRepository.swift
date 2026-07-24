@@ -21,12 +21,20 @@ final class DatabaseRepository {
                 .appending(path: "offtime.sqlite")
             
             if sqlite3_open(dbURL.path, &db) != SQLITE_OK {
-                // sqlite3_open 失败时也会分配句柄，需要关闭并置空
+                let errorMessage = db.map { String(cString: sqlite3_errmsg($0)) } ?? "unknown error"
                 if let handle = db {
                     sqlite3_close(handle)
                 }
                 db = nil
-                throw DatabaseError.openFailed
+                throw DatabaseError.openFailed(message: errorMessage)
+            }
+            
+            // 启用 WAL 模式，提升并发读性能
+            let pragmaWal = "PRAGMA journal_mode=WAL;"
+            var walStatement: OpaquePointer?
+            defer { sqlite3_finalize(walStatement) }
+            if sqlite3_prepare_v2(db, pragmaWal, -1, &walStatement, nil) == SQLITE_OK {
+                sqlite3_step(walStatement)
             }
             
             let createUserCityTable = """
@@ -60,13 +68,36 @@ final class DatabaseRepository {
         defer { sqlite3_finalize(statement) }
         
         if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-            throw DatabaseError.prepareFailed
+            let msg = String(cString: sqlite3_errmsg(db))
+            throw DatabaseError.prepareFailed(message: msg)
         }
         
         if sqlite3_step(statement) != SQLITE_DONE {
-            throw DatabaseError.stepFailed
+            let msg = String(cString: sqlite3_errmsg(db))
+            throw DatabaseError.stepFailed(message: msg)
         }
     }
+    
+    // MARK: - Transaction Support
+    
+    func performTransaction(_ block: () throws -> Void) throws {
+        try dbQueue.sync {
+            guard let db = db else {
+                throw DatabaseError.notInitialized
+            }
+            try executeStatement("BEGIN TRANSACTION;")
+            do {
+                try block()
+                try executeStatement("COMMIT;")
+            } catch {
+                // 回滚事务，忽略回滚本身的错误
+                try? executeStatement("ROLLBACK;")
+                throw error
+            }
+        }
+    }
+    
+    // MARK: - City CRUD
     
     func addCity(_ city: CityRecord) throws {
         try dbQueue.sync {
@@ -82,7 +113,8 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_text(statement, 1, city.id, -1, SQLITE_TRANSIENT)
@@ -93,7 +125,8 @@ final class DatabaseRepository {
             sqlite3_bind_int(statement, 6, Int32(city.isTop))
             
             if sqlite3_step(statement) != SQLITE_DONE {
-                throw DatabaseError.stepFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.stepFailed(message: msg)
             }
         }
     }
@@ -109,13 +142,15 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_text(statement, 1, id, -1, SQLITE_TRANSIENT)
             
             if sqlite3_step(statement) != SQLITE_DONE {
-                throw DatabaseError.stepFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.stepFailed(message: msg)
             }
         }
     }
@@ -131,7 +166,8 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             var cities: [CityRecord] = []
@@ -169,14 +205,16 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_int(statement, 1, Int32(sortIndex))
             sqlite3_bind_text(statement, 2, id, -1, SQLITE_TRANSIENT)
             
             if sqlite3_step(statement) != SQLITE_DONE {
-                throw DatabaseError.stepFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.stepFailed(message: msg)
             }
         }
     }
@@ -192,14 +230,16 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_int(statement, 1, isTop ? 1 : 0)
             sqlite3_bind_text(statement, 2, id, -1, SQLITE_TRANSIENT)
             
             if sqlite3_step(statement) != SQLITE_DONE {
-                throw DatabaseError.stepFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.stepFailed(message: msg)
             }
         }
     }
@@ -215,7 +255,8 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_text(statement, 1, cityName, -1, SQLITE_TRANSIENT)
@@ -228,6 +269,8 @@ final class DatabaseRepository {
         }
     }
     
+    // MARK: - Config CRUD
+    
     func saveConfig(key: String, value: String) throws {
         try dbQueue.sync {
             guard let db = db else {
@@ -239,14 +282,16 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_text(statement, 1, key, -1, SQLITE_TRANSIENT)
             sqlite3_bind_text(statement, 2, value, -1, SQLITE_TRANSIENT)
             
             if sqlite3_step(statement) != SQLITE_DONE {
-                throw DatabaseError.stepFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.stepFailed(message: msg)
             }
         }
     }
@@ -262,7 +307,8 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             sqlite3_bind_text(statement, 1, key, -1, SQLITE_TRANSIENT)
@@ -287,19 +333,34 @@ final class DatabaseRepository {
             defer { sqlite3_finalize(statement) }
             
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
-                throw DatabaseError.prepareFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
             }
             
             if sqlite3_step(statement) != SQLITE_DONE {
-                throw DatabaseError.stepFailed
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.stepFailed(message: msg)
             }
         }
     }
 }
 
-enum DatabaseError: Error {
-    case openFailed
+enum DatabaseError: Error, LocalizedError {
+    case openFailed(message: String)
     case notInitialized
-    case prepareFailed
-    case stepFailed
+    case prepareFailed(message: String)
+    case stepFailed(message: String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .openFailed(let msg):
+            return "数据库打开失败: \(msg)"
+        case .notInitialized:
+            return "数据库未初始化"
+        case .prepareFailed(let msg):
+            return "SQL准备失败: \(msg)"
+        case .stepFailed(let msg):
+            return "SQL执行失败: \(msg)"
+        }
+    }
 }

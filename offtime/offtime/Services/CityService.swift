@@ -32,9 +32,10 @@ final class CityService {
     
     func getAllCities() throws -> [CityItem] {
         let records = try repository.getAllCities()
-        return records.map { record in
-            CityItem(
-                id: UUID(uuidString: record.id)!,
+        return records.compactMap { record in
+            guard let uuid = UUID(uuidString: record.id) else { return nil }
+            return CityItem(
+                id: uuid,
                 cityName: record.cityName,
                 cityEn: record.cityEn,
                 timezoneId: record.timezoneId,
@@ -74,22 +75,24 @@ final class CityService {
         return try encoder.encode(cities)
     }
     
+    /// 使用事务保护导入操作，确保原子性：失败时回滚，原有数据不丢失
     func importCities(from data: Data) throws {
         let decoder = JSONDecoder()
         let cities = try decoder.decode([CityItem].self, from: data)
         
-        try repository.deleteAllCities()
-        
-        for (index, city) in cities.enumerated() {
-            let record = CityRecord(
-                id: city.id.uuidString,
-                cityName: city.cityName,
-                cityEn: city.cityEn,
-                timezoneId: city.timezoneId,
-                sortIndex: index,
-                isTop: city.isTop ? 1 : 0
-            )
-            try repository.addCity(record)
+        try repository.performTransaction {
+            try repository.deleteAllCities()
+            for (index, city) in cities.enumerated() {
+                let record = CityRecord(
+                    id: city.id.uuidString,
+                    cityName: city.cityName,
+                    cityEn: city.cityEn,
+                    timezoneId: city.timezoneId,
+                    sortIndex: index,
+                    isTop: city.isTop ? 1 : 0
+                )
+                try repository.addCity(record)
+            }
         }
     }
 }

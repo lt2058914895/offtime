@@ -8,6 +8,7 @@ extension View {
 
 struct ToastModifier: ViewModifier {
     @Binding var message: String?
+    @State private var dismissTask: Task<Void, Never>?
     
     func body(content: Content) -> some View {
         content
@@ -20,9 +21,16 @@ struct ToastModifier: ViewModifier {
                 }
             )
             .onChange(of: message) { newValue in
+                // 取消之前的定时任务，避免连续设置 toast 时提前消失
+                dismissTask?.cancel()
+                
                 if newValue != nil {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        message = nil
+                    dismissTask = Task {
+                        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2秒
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            message = nil
+                        }
                     }
                 }
             }

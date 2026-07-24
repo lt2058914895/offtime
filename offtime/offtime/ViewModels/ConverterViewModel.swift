@@ -127,20 +127,14 @@ final class ConverterViewModel: ObservableObject {
         }
         resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "日期解析失败"
         
-        // 计算源时区和目标时区之间的时差
-        let sourceOffset = sourceTimezone.secondsFromGMT(for: absoluteDate)
-        let targetOffset = targetTimezone.secondsFromGMT(for: absoluteDate)
-        let diffHours = Double(targetOffset - sourceOffset) / 3600
-        
-        if diffHours == 0 {
-            timeDifference = "0h"
-        } else if diffHours > 0 {
-            timeDifference = "+\(Int(diffHours))h"
-            crossDay = diffHours >= 24 ? "明日" : nil
-        } else {
-            timeDifference = "\(Int(diffHours))h"
-            crossDay = diffHours <= -24 ? "昨日" : nil
-        }
+        // 计算源时区和目标时区之间的时差（复用 TimezoneService）
+        let diff = timezoneService.getTimeDifferenceBetween(
+            sourceTimezoneId: source.timezoneId,
+            targetTimezoneId: target.timezoneId,
+            date: absoluteDate
+        )
+        timeDifference = diff.offset
+        crossDay = diff.crossDay
         
         viewState = .idle
     }

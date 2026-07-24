@@ -1,11 +1,13 @@
 import SwiftUI
 import UniformTypeIdentifiers
-import PhotosUI
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @State private var path = NavigationPath()
+    @State private var isPresentingFileExporter = false
+    @State private var isPresentingFileImporter = false
+    @State private var exportFileURL: URL?
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -53,13 +55,14 @@ struct SettingsView: View {
                 
                 Section("数据管理") {
                     Button(action: {
-                        exportCities()
+                        prepareExportFile()
+                        isPresentingFileExporter = true
                     }) {
                         Text("导出城市列表")
                     }
                     
                     Button(action: {
-                        importCities()
+                        isPresentingFileImporter = true
                     }) {
                         Text("导入城市列表")
                     }
@@ -94,75 +97,87 @@ struct SettingsView: View {
             }
             .toast(message: $viewModel.errorMessage)
             .toast(message: $viewModel.updateMessage)
+            // SwiftUI 原生文件导出
+            .fileExporter(
+                isPresented: $isPresentingFileExporter,
+                document: exportFileURL.map { JSONFileDocument(fileURL: $0) } ?? JSONFileDocument(fileURL: URL(fileURLWithPath: "/dev/null")),
+                contentType: UTType.json,
+                defaultFilename: "offtime_cities"
+            ) { result in
+                switch result {
+                case .success:
+                    viewModel.errorMessage = "导出成功"
+                case .failure(let error):
+                    viewModel.errorMessage = "导出失败: \(error.localizedDescription)"
+                }
+                // 清理临时文件
+                if let url = exportFileURL {
+                    try? FileManager.default.removeItem(at: url)
+                    exportFileURL = nil
+                }
+            }
+            // SwiftUI 原生文件导入
+            .fileImporter(
+                isPresented: $isPresentingFileImporter,
+                allowedContentTypes: [UTType.json],
+                allowsMultipleSelection: false
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    guard let url = urls.first else { return }
+                    do {
+                        let data = try Data(contentsOf: url)
+                        if viewModel.importCities(from: data) {
+                            viewModel.errorMessage = "导入成功"
+                        }
+                    } catch {
+                        viewModel.errorMessage = "导入失败，文件格式错误"
+                    }
+                case .failure:
+                    viewModel.errorMessage = "导入失败"
+                }
+            }
         }
     }
     
-    private func exportCities() {
+    private func prepareExportFile() {
         guard let data = viewModel.exportCities() else {
+            viewModel.errorMessage = "导出失败"
             return
         }
         
         let fileURL = FileManager.default.temporaryDirectory.appending(path: "offtime_cities.json")
-        
         do {
             try data.write(to: fileURL)
-            
-            let activityVC = UIActivityViewController(
-                activityItems: [fileURL],
-                applicationActivities: nil
-            )
-            
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let topViewController = windowScene.windows.first?.rootViewController {
-                topViewController.present(activityVC, animated: true)
-            }
+            exportFileURL = fileURL
         } catch {
             viewModel.errorMessage = "导出失败"
         }
     }
+}
+
+// MARK: - JSONFileDocument for SwiftUI fileExporter
+
+struct JSONFileDocument: FileDocument {
+    static var readableContentTypes: [UTType] { [.json] }
     
-    private func importCities() {
-        let documentPicker = UIDocumentPickerViewController(
-            forOpeningContentTypes: [.json],
-            asCopy: true
-        )
-        
-        documentPicker.delegate = DocumentPickerDelegate { url in
-            do {
-                let data = try Data(contentsOf: url)
-                if viewModel.importCities(from: data) {
-                    viewModel.errorMessage = "导入成功"
-                }
-            } catch {
-                viewModel.errorMessage = "导入失败"
-            }
-        }
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let topViewController = windowScene.windows.first?.rootViewController {
-            topViewController.present(documentPicker, animated: true)
-        }
+    var fileURL: URL
+    
+    init(fileURL: URL) {
+        self.fileURL = fileURL
+    }
+    
+    init(configuration: ReadConfiguration) throws {
+        fileURL = URL(fileURLWithPath: "/dev/null")
+    }
+    
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = try Data(contentsOf: fileURL)
+        return FileWrapper(regularFileWithContents: data)
     }
 }
 
-class DocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
-    let completion: (URL) -> Void
-    
-    init(completion: @escaping (URL) -> Void) {
-        self.completion = completion
-    }
-    
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if let url = urls.first {
-            completion(url)
-        }
-        controller.dismiss(animated: true)
-    }
-    
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        controller.dismiss(animated: true)
-    }
-}
+// MARK: - Privacy & About Pages
 
 struct PrivacyPageView: View {
     var body: some View {
@@ -239,8 +254,6 @@ struct AboutPageView: View {
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                
-
             }
             .padding()
         }

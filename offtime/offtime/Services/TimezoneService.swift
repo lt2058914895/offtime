@@ -3,82 +3,56 @@ import Foundation
 final class TimezoneService {
     static let shared = TimezoneService()
     
-    private let dateFormatter = DateFormatter()
     private let calendar = Calendar.current
     
     private init() {}
     
-    func getLocalTime(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
-            return nil
-        }
-        
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = "HH:mm"
-        
-        return dateFormatter.string(from: date)
+    // MARK: - Private Helpers
+    
+    /// 创建线程安全的 DateFormatter（每次调用创建新实例，避免数据竞争）
+    private func makeFormatter(timezone: TimeZone, dateFormat: String) -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.timeZone = timezone
+        formatter.dateFormat = dateFormat
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+        return formatter
     }
     
+    // MARK: - Time Formatting
+    
     func getLocalTime24(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
-            return nil
-        }
-        
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = "HH:mm"
-        
-        return dateFormatter.string(from: date)
+        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        return makeFormatter(timezone: timezone, dateFormat: "HH:mm").string(from: date)
     }
     
     func getLocalTime12(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
-            return nil
-        }
-        
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = "h:mm a"
-        dateFormatter.amSymbol = "AM"
-        dateFormatter.pmSymbol = "PM"
-        
-        return dateFormatter.string(from: date)
+        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        return makeFormatter(timezone: timezone, dateFormat: "h:mm a").string(from: date)
     }
     
     func getLocalDate(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
-            return nil
-        }
-        
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        return dateFormatter.string(from: date)
+        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd").string(from: date)
     }
     
     func getLocalDateTime(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
-            return nil
-        }
-        
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        
-        return dateFormatter.string(from: date)
+        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd HH:mm").string(from: date)
     }
     
+    // MARK: - Daytime Detection
+    
     func isDaytime(timezoneId: String, date: Date = Date()) -> Bool {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
-            return true
-        }
-        
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = "HH"
-        
-        if let hour = Int(dateFormatter.string(from: date)) {
+        guard let timezone = TimeZone(identifier: timezoneId) else { return true }
+        let hourStr = makeFormatter(timezone: timezone, dateFormat: "HH").string(from: date)
+        if let hour = Int(hourStr) {
             return hour >= 6 && hour < 18
         }
-        
         return true
     }
+    
+    // MARK: - Time Difference
     
     func getTimeDifference(timezoneId: String, date: Date = Date()) -> (offset: String, crossDay: String?) {
         guard let targetTimezone = TimeZone(identifier: timezoneId) else {
@@ -88,9 +62,7 @@ final class TimezoneService {
         let localTimezone = TimeZone.current
         let targetOffset = targetTimezone.secondsFromGMT(for: date)
         let localOffset = localTimezone.secondsFromGMT(for: date)
-        
-        let diffSeconds = targetOffset - localOffset
-        let diffHours = Double(diffSeconds) / 3600
+        let diffHours = Double(targetOffset - localOffset) / 3600
         
         return formatTimeDifference(diffHours: diffHours)
     }
@@ -103,9 +75,7 @@ final class TimezoneService {
         
         let sourceOffset = sourceTimezone.secondsFromGMT(for: date)
         let targetOffset = targetTimezone.secondsFromGMT(for: date)
-        
-        let diffSeconds = targetOffset - sourceOffset
-        let diffHours = Double(diffSeconds) / 3600
+        let diffHours = Double(targetOffset - sourceOffset) / 3600
         
         return formatTimeDifference(diffHours: diffHours)
     }
@@ -131,26 +101,25 @@ final class TimezoneService {
         return (offsetStr, crossDay)
     }
     
+    // MARK: - Time Conversion
+    
     func convertTime(sourceTimezoneId: String, targetTimezoneId: String, sourceDate: Date) -> Date? {
         guard let sourceTimezone = TimeZone(identifier: sourceTimezoneId),
               let targetTimezone = TimeZone(identifier: targetTimezoneId) else {
             return nil
         }
         
-        // 使用源时区的日历获取时间组件
         var sourceCalendar = Calendar.current
         sourceCalendar.timeZone = sourceTimezone
         
-        // 使用目标时区的日历
         var targetCalendar = Calendar.current
         targetCalendar.timeZone = targetTimezone
         
-        // 获取源日期在源时区的时间组件（年、月、日、时、分）
         let components = sourceCalendar.dateComponents([.year, .month, .day, .hour, .minute], from: sourceDate)
-        
-        // 用目标时区的日历重新创建日期
         return targetCalendar.date(from: components)
     }
+    
+    // MARK: - Timezone Info
     
     func getTimezoneInfo(timezoneId: String) -> TimezoneInfo? {
         guard let timezone = TimeZone(identifier: timezoneId) else {
@@ -173,24 +142,19 @@ final class TimezoneService {
             return nil
         }
         
-        // 当前是否处于夏令时
         if timezone.isDaylightSavingTime(for: date) {
             return "夏令时"
         }
         
-        // 当前不在夏令时，判断该时区是否使用夏令时制度
-        // 检查未来是否有夏令时切换点
         if timezone.nextDaylightSavingTimeTransition(after: date) != nil {
             return "冬令时"
         }
         
-        // 检查过去一年内是否有夏令时切换点（处理年末边界情况）
         let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: date) ?? date
         if timezone.nextDaylightSavingTimeTransition(after: oneYearAgo) != nil {
             return "冬令时"
         }
         
-        // 该时区不使用夏令时
         return nil
     }
     
