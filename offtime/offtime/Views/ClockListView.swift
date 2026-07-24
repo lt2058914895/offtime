@@ -6,7 +6,7 @@ struct ClockListView: View {
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
     @State private var cityToDelete: CityItem?
-    @State private var isDragging = false
+    @State private var editMode: EditMode = .inactive
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -31,8 +31,10 @@ struct ClockListView: View {
                         )
                     }
                     .onMove(perform: move)
+                    .onDelete(perform: confirmDelete)
                 }
                 .listStyle(.insetGrouped)
+                .environment(\.editMode, $editMode)
                 
                 if viewModel.cities.isEmpty && viewModel.viewState == .idle {
                     EmptyStateView()
@@ -45,6 +47,15 @@ struct ClockListView: View {
             .navigationTitle("世界时钟")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !viewModel.cities.isEmpty {
+                        Button(editMode == .active ? "完成" : "管理") {
+                            withAnimation {
+                                editMode = editMode == .active ? .inactive : .active
+                            }
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         path.append(AppRoute.cityPicker)
@@ -72,6 +83,14 @@ struct ClockListView: View {
             .onChange(of: appEnvironment.settings.use24Hour) { newValue in
                 viewModel.use24Hour = newValue
             }
+            .onChange(of: viewModel.cities.isEmpty) { isEmpty in
+                // 城市全部删除后自动退出编辑模式
+                if isEmpty && editMode == .active {
+                    withAnimation {
+                        editMode = .inactive
+                    }
+                }
+            }
             .alert("确认删除", isPresented: $isShowingDeleteConfirm) {
                 Button("取消", role: .cancel) {}
                 Button("删除", role: .destructive) {
@@ -90,7 +109,13 @@ struct ClockListView: View {
         viewModel.reorderCities(viewModel.cities)
     }
     
+    /// 编辑模式下滑动删除，先弹出确认弹窗再执行删除
+    private func confirmDelete(at offsets: IndexSet) {
+        guard let offset = offsets.first else { return }
+        cityToDelete = viewModel.cities[offset]
+        isShowingDeleteConfirm = true
     }
+}
 
 struct ClockListCell: View {
     let city: CityItem
@@ -156,6 +181,9 @@ struct ClockListCell: View {
         .contextMenu {
             Button("复制时间") {
                 onCopy()
+            }
+            Button("删除城市", role: .destructive) {
+                onDelete()
             }
         }
     }
