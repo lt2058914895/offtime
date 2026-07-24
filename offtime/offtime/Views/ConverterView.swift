@@ -204,9 +204,15 @@ struct ConverterView: View {
             
             Button(action: action) {
                 HStack {
-                    Text(city != nil ? "\(city!.cityName) (\(city!.cityEn))" : "选择城市")
-                        .font(.headline)
-                        .foregroundColor(city != nil ? Color(.label) : Color(.systemGray4))
+                    if let city {
+                        Text("\(city.cityName) (\(city.cityEn))")
+                            .font(.headline)
+                            .foregroundColor(Color(.label))
+                    } else {
+                        Text("选择城市")
+                            .font(.headline)
+                            .foregroundColor(Color(.systemGray4))
+                    }
                     
                     Spacer()
                     
@@ -222,22 +228,28 @@ struct ConverterView: View {
         }
     }
     
-    private var sourceDateFormatter: DateFormatter {
+    private static let sourceDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
-    }
+    }()
+    
+    private static let sourceTimeFormatter24: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+    
+    private static let sourceTimeFormatter12: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+        return formatter
+    }()
     
     private var sourceTimeFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        if viewModel.use24Hour {
-            formatter.dateFormat = "HH:mm"
-        } else {
-            formatter.dateFormat = "h:mm a"
-            formatter.amSymbol = "AM"
-            formatter.pmSymbol = "PM"
-        }
-        return formatter
+        viewModel.use24Hour ? Self.sourceTimeFormatter24 : Self.sourceTimeFormatter12
     }
     
     private var datePickerRow: some View {
@@ -269,7 +281,7 @@ struct ConverterView: View {
                         Image(systemName: "calendar")
                             .font(.callout)
                             .foregroundColor(Color(.secondaryLabel))
-                        Text(sourceDateFormatter.string(from: viewModel.sourceDate))
+                        Text(ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
                             .font(.body.weight(.semibold))
                             .foregroundColor(Color(.label))
                     }

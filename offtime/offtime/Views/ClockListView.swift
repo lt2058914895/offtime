@@ -31,7 +31,6 @@ struct ClockListView: View {
                         )
                     }
                     .onMove(perform: move)
-                    .onDelete(perform: delete)
                 }
                 .listStyle(.insetGrouped)
                 
@@ -70,9 +69,6 @@ struct ClockListView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
-            .onAppear {
-                viewModel.loadCities()
-            }
             .onChange(of: appEnvironment.settings.use24Hour) { newValue in
                 viewModel.use24Hour = newValue
             }
@@ -94,13 +90,7 @@ struct ClockListView: View {
         viewModel.reorderCities(viewModel.cities)
     }
     
-    private func delete(at offsets: IndexSet) {
-        for offset in offsets {
-            let city = viewModel.cities[offset]
-            viewModel.deleteCity(id: city.id)
-        }
     }
-}
 
 struct ClockListCell: View {
     let city: CityItem

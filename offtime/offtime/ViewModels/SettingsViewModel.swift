@@ -65,19 +65,21 @@ final class SettingsViewModel: ObservableObject {
         isCheckingUpdate = true
         updateMessage = nil
         
-        appSettingService.checkTzDataUpdate { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isCheckingUpdate = false
-                
-                switch result {
-                case .success(let version):
-                    if version > self?.tzDataVersion ?? "" {
-                        self?.updateMessage = "发现新版本: \(version)"
+        Task {
+            do {
+                let version = await appSettingService.checkTzDataUpdate()
+                await MainActor.run {
+                    self.isCheckingUpdate = false
+                    if version > self.tzDataVersion {
+                        self.updateMessage = "发现新版本: \(version)"
                     } else {
-                        self?.updateMessage = "已是最新版本"
+                        self.updateMessage = "已是最新版本"
                     }
-                case .failure:
-                    self?.updateMessage = "检查更新失败，请检查网络"
+                }
+            } catch {
+                await MainActor.run {
+                    self.isCheckingUpdate = false
+                    self.updateMessage = "检查更新失败，请检查网络"
                 }
             }
         }

@@ -144,8 +144,12 @@ final class ConverterViewModel: ObservableObject {
         let temp = sourceCity
         sourceCity = targetCity
         targetCity = temp
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.isSwapping = false
+        Task {
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3秒
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                self.isSwapping = false
+            }
         }
     }
     

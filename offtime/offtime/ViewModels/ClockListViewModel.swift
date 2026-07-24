@@ -136,24 +136,36 @@ final class ClockListViewModel: ObservableObject {
     }
     
     func getRelativeDate(city: CityItem) -> String {
-        let targetDateStr = timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? ""
-        let localDateStr = timezoneService.getLocalDate(timezoneId: TimeZone.current.identifier, date: currentDate) ?? ""
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        
-        guard let targetDate = formatter.date(from: targetDateStr),
-              let localDate = formatter.date(from: localDateStr) else {
-            return targetDateStr
+        guard let timezone = TimeZone(identifier: city.timezoneId) else {
+            return getLocalDate(city: city)
         }
         
-        let diff = Calendar.current.dateComponents([.day], from: localDate, to: targetDate).day ?? 0
+        let now = currentDate
+        let calendar = Calendar.current
+        
+        // 获取目标时区的"今天"日期组件
+        var targetCalendar = calendar
+        targetCalendar.timeZone = timezone
+        let targetDay = targetCalendar.dateComponents([.year, .month, .day], from: now)
+        
+        // 获取本地时区的"今天"日期组件
+        let localDay = calendar.dateComponents([.year, .month, .day], from: now)
+        
+        // 比较日期差异
+        let targetDate = calendar.date(from: targetDay)
+        let localDate = calendar.date(from: localDay)
+        
+        guard let t = targetDate, let l = localDate else {
+            return getLocalDate(city: city)
+        }
+        
+        let diff = calendar.dateComponents([.day], from: l, to: t).day ?? 0
         
         switch diff {
         case 0: return "今天"
         case 1: return "明天"
         case -1: return "昨天"
-        default: return targetDateStr
+        default: return getLocalDate(city: city)
         }
     }
     

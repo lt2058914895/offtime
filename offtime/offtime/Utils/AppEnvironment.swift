@@ -8,7 +8,21 @@ final class AppEnvironment: ObservableObject {
         localTzDataVersion: "2024a"
     )
     
+    /// 数据库初始化状态：nil 表示未开始，true 表示成功，false 表示失败
+    @Published var databaseReady: Bool? = nil
+    @Published var databaseErrorMessage: String? = nil
+    
     private let appSettingService = AppSettingService.shared
+    
+    func setupDatabase() {
+        do {
+            try DatabaseRepository.shared.setup()
+            databaseReady = true
+        } catch {
+            databaseReady = false
+            databaseErrorMessage = error.localizedDescription
+        }
+    }
     
     func loadSettings() {
         Task {

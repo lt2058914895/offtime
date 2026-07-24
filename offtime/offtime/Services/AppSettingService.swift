@@ -50,11 +50,8 @@ final class AppSettingService {
         try saveSettings(settings)
     }
     
-    func checkTzDataUpdate(completion: @escaping (Result<String, Error>) -> Void) {
-        completion(.success("2024a"))
-    }
-    
-    func downloadTzData(completion: @escaping (Result<Data, Error>) -> Void) {
-        completion(.success(Data()))
+    func checkTzDataUpdate() async -> String {
+        // TODO: 接入实际时区数据库更新检查
+        return "2024a"
     }
 }
