@@ -14,7 +14,7 @@ final class ClockListViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    var currentDate: Date = Date()
+    @Published var currentDate: Date = Date()
     private var timer: Timer?
     
     init() {
@@ -36,7 +36,9 @@ final class ClockListViewModel: ObservableObject {
     
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            self?.currentDate = Date()
+            DispatchQueue.main.async {
+                self?.currentDate = Date()
+            }
         }
     }
     
@@ -139,6 +141,10 @@ final class ClockListViewModel: ObservableObject {
     
     func isDaytime(city: CityItem) -> Bool {
         return timezoneService.isDaytime(timezoneId: city.timezoneId, date: currentDate)
+    }
+    
+    func getDSTStatus(city: CityItem) -> String? {
+        return timezoneService.getDSTStatus(timezoneId: city.timezoneId, date: currentDate)
     }
     
     func copyTimeText(city: CityItem) -> String {

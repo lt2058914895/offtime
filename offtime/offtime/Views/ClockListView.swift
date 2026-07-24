@@ -19,6 +19,7 @@ struct ClockListView: View {
                             date: viewModel.getLocalDate(city: city),
                             timeDifference: viewModel.getTimeDifference(city: city),
                             isDaytime: viewModel.isDaytime(city: city),
+                            dstStatus: viewModel.getDSTStatus(city: city),
                             onCopy: {
                                 let text = viewModel.copyTimeText(city: city)
                                 UIPasteboard.general.string = text
@@ -108,6 +109,7 @@ struct ClockListCell: View {
     let date: String
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
+    let dstStatus: String?
     let onCopy: () -> Void
     let onDelete: () -> Void
     
@@ -118,13 +120,22 @@ struct ClockListCell: View {
                 .font(.title)
             
             VStack(alignment: .leading, spacing: 4) {
-                HStack {
+                HStack(spacing: 4) {
                     Text(city.cityName)
                         .font(.title2)
                         .fontWeight(.semibold)
                     Text(city.cityEn)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    if let dstStatus = dstStatus {
+                        Text(dstStatus)
+                            .font(.caption2)
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 1)
+                            .background(dstStatus == "夏令时" ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
+                            .foregroundColor(dstStatus == "夏令时" ? .orange : .blue)
+                            .cornerRadius(3)
+                    }
                 }
                 
                 Text(date)

@@ -157,13 +157,41 @@ final class TimezoneService {
             return nil
         }
         
-        let offset = timezone.secondsFromGMT() / 3600
+        let offset = timezone.secondsFromGMT(for: Date()) / 3600
         
         return TimezoneInfo(
             id: timezoneId,
             name: timezone.localizedName(for: .standard, locale: Locale.current) ?? timezoneId,
             offset: Double(offset * 3600)
         )
+    }
+    
+    /// 获取城市的夏令时状态
+    /// - Returns: "夏令时" / "冬令时" / nil（不使用夏令时的地区返回nil）
+    func getDSTStatus(timezoneId: String, date: Date = Date()) -> String? {
+        guard let timezone = TimeZone(identifier: timezoneId) else {
+            return nil
+        }
+        
+        // 当前是否处于夏令时
+        if timezone.isDaylightSavingTime(for: date) {
+            return "夏令时"
+        }
+        
+        // 当前不在夏令时，判断该时区是否使用夏令时制度
+        // 检查未来是否有夏令时切换点
+        if timezone.nextDaylightSavingTimeTransition(after: date) != nil {
+            return "冬令时"
+        }
+        
+        // 检查过去一年内是否有夏令时切换点（处理年末边界情况）
+        let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: date) ?? date
+        if timezone.nextDaylightSavingTimeTransition(after: oneYearAgo) != nil {
+            return "冬令时"
+        }
+        
+        // 该时区不使用夏令时
+        return nil
     }
     
     func getAllAvailableTimezones() -> [TimezoneInfo] {
