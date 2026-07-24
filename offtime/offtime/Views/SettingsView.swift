@@ -16,6 +16,7 @@ struct SettingsView: View {
                     }
                     .onChange(of: viewModel.use24Hour) {
                         viewModel.toggle24Hour()
+                        appEnvironment.settings.use24Hour = viewModel.use24Hour
                     }
                     
                     Picker("外观主题", selection: $viewModel.themeMode) {

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ClockListView: View {
     @StateObject private var viewModel = ClockListViewModel()
+    @EnvironmentObject private var appEnvironment: AppEnvironment
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
     @State private var cityToDelete: CityItem?
@@ -71,6 +72,9 @@ struct ClockListView: View {
             .toast(message: $viewModel.errorMessage)
             .onAppear {
                 viewModel.loadCities()
+            }
+            .onChange(of: appEnvironment.settings.use24Hour) { newValue in
+                viewModel.use24Hour = newValue
             }
             .alert("确认删除", isPresented: $isShowingDeleteConfirm) {
                 Button("取消", role: .cancel) {}

@@ -13,6 +13,7 @@ final class ConverterViewModel: ObservableObject {
     
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
+    @Published var use24Hour: Bool = true
     
     private let timezoneService = TimezoneService.shared
     private let appSettingService = AppSettingService.shared
@@ -23,12 +24,20 @@ final class ConverterViewModel: ObservableObject {
     
     init() {
         loadCities()
+        loadUse24HourSetting()
         
         $sourceCity
             .combineLatest($targetCity, $sourceDate)
             .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
             .sink { [weak self] source, target, date in
                 self?.convertTime(source: source, target: target, date: date)
+            }
+            .store(in: &cancellables)
+        
+        $use24Hour
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.refreshFormat()
             }
             .store(in: &cancellables)
     }
@@ -55,6 +64,23 @@ final class ConverterViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    private func loadUse24HourSetting() {
+        Task {
+            do {
+                let settings = try appSettingService.loadSettings()
+                await MainActor.run {
+                    self.use24Hour = settings.use24Hour
+                }
+            } catch {
+                // 使用默认值
+            }
+        }
+    }
+    
+    func refreshFormat() {
+        convertTime(source: sourceCity, target: targetCity, date: sourceDate)
     }
     
     private func convertTime(source: CityItem?, target: CityItem?, date: Date) {
@@ -94,18 +120,12 @@ final class ConverterViewModel: ObservableObject {
         }
         
         // 用目标时区格式化结果
-        do {
-            let settings = try appSettingService.loadSettings()
-            if settings.use24Hour {
-                resultTime = timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate) ?? "时间解析失败"
-            } else {
-                resultTime = timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate) ?? "时间解析失败"
-            }
-            resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "日期解析失败"
-        } catch {
+        if use24Hour {
             resultTime = timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate) ?? "时间解析失败"
-            resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "日期解析失败"
+        } else {
+            resultTime = timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate) ?? "时间解析失败"
         }
+        resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "日期解析失败"
         
         // 计算源时区和目标时区之间的时差
         let sourceOffset = sourceTimezone.secondsFromGMT(for: absoluteDate)

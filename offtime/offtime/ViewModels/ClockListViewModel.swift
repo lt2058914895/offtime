@@ -6,6 +6,7 @@ final class ClockListViewModel: ObservableObject {
     @Published var cities: [CityItem] = []
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
+    @Published var use24Hour: Bool = true
     
     private let cityService = CityService.shared
     private let timezoneService = TimezoneService.shared
@@ -19,6 +20,14 @@ final class ClockListViewModel: ObservableObject {
     init() {
         startTimer()
         loadCities()
+        loadUse24HourSetting()
+        
+        $use24Hour
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
     
     deinit {
@@ -46,6 +55,19 @@ final class ClockListViewModel: ObservableObject {
                     self.viewState = .failure("数据库读取失败")
                     self.errorMessage = "数据库读取失败，请尝试重启App"
                 }
+            }
+        }
+    }
+    
+    private func loadUse24HourSetting() {
+        Task {
+            do {
+                let settings = try appSettingService.loadSettings()
+                await MainActor.run {
+                    self.use24Hour = settings.use24Hour
+                }
+            } catch {
+                // 使用默认值
             }
         }
     }
@@ -100,15 +122,10 @@ final class ClockListViewModel: ObservableObject {
     }
     
     func getLocalTime(city: CityItem) -> String {
-        do {
-            let settings = try appSettingService.loadSettings()
-            if settings.use24Hour {
-                return timezoneService.getLocalTime24(timezoneId: city.timezoneId, date: currentDate) ?? "时间解析失败"
-            } else {
-                return timezoneService.getLocalTime12(timezoneId: city.timezoneId, date: currentDate) ?? "时间解析失败"
-            }
-        } catch {
+        if use24Hour {
             return timezoneService.getLocalTime24(timezoneId: city.timezoneId, date: currentDate) ?? "时间解析失败"
+        } else {
+            return timezoneService.getLocalTime12(timezoneId: city.timezoneId, date: currentDate) ?? "时间解析失败"
         }
     }
     

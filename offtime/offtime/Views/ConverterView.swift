@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
+    @EnvironmentObject private var appEnvironment: AppEnvironment
     @State private var path = NavigationPath()
     @State private var showDatePicker = false
     @State private var showTimePicker = false
@@ -23,6 +24,13 @@ struct ConverterView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("时区转换器")
             .navigationBarTitleDisplayMode(.large)
+            .onChange(of: appEnvironment.settings.use24Hour) { newValue in
+                viewModel.use24Hour = newValue
+            }
+            .onAppear {
+                viewModel.use24Hour = appEnvironment.settings.use24Hour
+                viewModel.refreshFormat()
+            }
             .toast(message: $viewModel.errorMessage)
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
@@ -222,7 +230,13 @@ struct ConverterView: View {
     
     private var sourceTimeFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
+        if viewModel.use24Hour {
+            formatter.dateFormat = "HH:mm"
+        } else {
+            formatter.dateFormat = "h:mm a"
+            formatter.amSymbol = "AM"
+            formatter.pmSymbol = "PM"
+        }
         return formatter
     }
     
