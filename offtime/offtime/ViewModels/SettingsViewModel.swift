@@ -6,9 +6,6 @@ final class SettingsViewModel: ObservableObject {
     @Published var themeMode: ThemeMode = .system
     @Published var tzDataVersion: String = "2024a"
     
-    @Published var isCheckingUpdate: Bool = false
-    @Published var updateMessage: String?
-    
     @Published var errorMessage: String?
     
     private let appSettingService = AppSettingService.shared
@@ -61,30 +58,6 @@ final class SettingsViewModel: ObservableObject {
         }
     }
     
-    func checkTzDataUpdate() {
-        isCheckingUpdate = true
-        updateMessage = nil
-        
-        Task {
-            do {
-                let version = await appSettingService.checkTzDataUpdate()
-                await MainActor.run {
-                    self.isCheckingUpdate = false
-                    if version > self.tzDataVersion {
-                        self.updateMessage = "发现新版本: \(version)"
-                    } else {
-                        self.updateMessage = "已是最新版本"
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    self.isCheckingUpdate = false
-                    self.updateMessage = "检查更新失败，请检查网络"
-                }
-            }
-        }
-    }
-    
     func exportCities() -> Data? {
         do {
             return try CityService.shared.exportCities()
@@ -106,9 +79,5 @@ final class SettingsViewModel: ObservableObject {
     
     func dismissError() {
         errorMessage = nil
-    }
-    
-    func dismissUpdateMessage() {
-        updateMessage = nil
     }
 }

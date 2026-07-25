@@ -39,18 +39,6 @@ struct SettingsView: View {
                         Text(viewModel.tzDataVersion)
                             .foregroundColor(.secondary)
                     }
-                    
-                    Button(action: {
-                        viewModel.checkTzDataUpdate()
-                    }) {
-                        HStack {
-                            Text("检查更新")
-                            if viewModel.isCheckingUpdate {
-                                ProgressView()
-                                    .scaleEffect(0.8)
-                            }
-                        }
-                    }
                 }
                 
                 Section("数据管理") {
@@ -104,7 +92,6 @@ struct SettingsView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
-            .toast(message: $viewModel.updateMessage)
             // SwiftUI 原生文件导出
             .fileExporter(
                 isPresented: $isPresentingFileExporter,
@@ -219,6 +206,39 @@ struct WebView: UIViewRepresentable {
             }
             decisionHandler(.allow)
         }
+
+        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+            showError(webView, error: error)
+        }
+
+        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+            showError(webView, error: error)
+        }
+
+        private func showError(_ webView: WKWebView, error: Error) {
+            let nsError = error as NSError
+            guard nsError.domain == NSURLErrorDomain else { return }
+            DispatchQueue.main.async {
+                let html = """
+                <!DOCTYPE html>
+                <html lang="zh-CN">
+                <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+                <style>
+                    body{font-family:-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#f5f5f5;color:#333;}
+                    .box{text-align:center;padding:40px 24px;}
+                    .icon{font-size:48px;margin-bottom:16px;}
+                    h2{font-size:18px;font-weight:600;margin-bottom:8px;}
+                    p{font-size:14px;color:#999;line-height:1.6;}
+                </style></head>
+                <body><div class="box">
+                    <div class="icon">📡</div>
+                    <h2>无法加载页面</h2>
+                    <p>请检查网络连接后重试</p>
+                </div></body></html>
+                """
+                webView.loadHTMLString(html, baseURL: nil)
+            }
+        }
     }
 }
 
@@ -262,7 +282,7 @@ struct AboutPageView: View {
                     .font(.body)
                     .foregroundColor(.secondary)
                 
-                Text("版本 1.0.0")
+                Text("版本 \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
