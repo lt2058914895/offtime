@@ -4,6 +4,26 @@ extension View {
     func toast(message: Binding<String?>) -> some View {
         self.modifier(ToastModifier(message: message))
     }
+    
+    /// iPad 适配：在 regular 横向尺寸下限制内容最大宽度并居中
+    func readableContentPadding() -> some View {
+        modifier(ReadableContentModifier())
+    }
+}
+
+/// iPad 内容宽度限制修饰器
+struct ReadableContentModifier: ViewModifier {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
+    func body(content: Content) -> some View {
+        if horizontalSizeClass == .regular {
+            content
+                .frame(maxWidth: 700)
+                .frame(maxWidth: .infinity)
+        } else {
+            content
+        }
+    }
 }
 
 struct ToastModifier: ViewModifier {

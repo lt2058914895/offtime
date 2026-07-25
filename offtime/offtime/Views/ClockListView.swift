@@ -35,6 +35,7 @@ struct ClockListView: View {
                 }
                 .listStyle(.insetGrouped)
                 .environment(\.editMode, $editMode)
+                .readableContentPadding()
                 
                 if viewModel.cities.isEmpty && viewModel.viewState == .idle {
                     EmptyStateView()
@@ -213,6 +214,7 @@ struct EmptyStateView: View {
                 .foregroundColor(.secondary)
         }
         .padding()
+        .readableContentPadding()
     }
 }
 
@@ -229,6 +231,7 @@ struct LoadingView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
         .opacity(0.8)
+        .readableContentPadding()
     }
 }
 

@@ -20,6 +20,7 @@ struct ConverterView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 20)
+                .readableContentPadding()
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("时区转换器")

@@ -58,6 +58,7 @@ struct MainTabView: View {
                     Text("设置")
                 }
         }
+        .modifier(SidebarAdaptableTabStyle())
         .onAppear {
             appEnvironment.loadSettings()
         }
@@ -96,6 +97,19 @@ struct DatabaseErrorView: View {
             .padding(.top, 8)
         }
         .padding()
+    }
+}
+
+/// iOS 18+ iPad 侧边栏 Tab 样式，iOS 17 使用默认样式
+struct SidebarAdaptableTabStyle: ViewModifier {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *), horizontalSizeClass == .regular {
+            content.tabViewStyle(.sidebarAdaptable)
+        } else {
+            content
+        }
     }
 }
 
