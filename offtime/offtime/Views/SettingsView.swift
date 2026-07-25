@@ -76,6 +76,12 @@ struct SettingsView: View {
                     }
                     
                     Button(action: {
+                        path.append(AppRoute.supportPage)
+                    }) {
+                        Text("问题反馈")
+                    }
+                    
+                    Button(action: {
                         path.append(AppRoute.aboutPage)
                     }) {
                         Text("关于 OffTime")
@@ -89,6 +95,8 @@ struct SettingsView: View {
                 switch route {
                 case .privacyPage:
                     PrivacyPageView()
+                case .supportPage:
+                    SupportPageView()
                 case .aboutPage:
                     AboutPageView()
                 default:
@@ -177,51 +185,64 @@ struct JSONFileDocument: FileDocument {
     }
 }
 
+// MARK: - WebView Wrapper
+
+import WebKit
+
+struct WebView: UIViewRepresentable {
+    let url: URL
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.navigationDelegate = context.coordinator
+        return webView
+    }
+
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        if webView.url != url {
+            webView.load(URLRequest(url: url))
+        }
+    }
+
+    func makeCoordinator() -> WebViewCoordinator {
+        WebViewCoordinator()
+    }
+
+    class WebViewCoordinator: NSObject, WKNavigationDelegate {
+        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            if navigationAction.navigationType == .linkActivated, let url = navigationAction.request.url {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                    decisionHandler(.cancel)
+                    return
+                }
+            }
+            decisionHandler(.allow)
+        }
+    }
+}
+
 // MARK: - Privacy & About Pages
 
 struct PrivacyPageView: View {
+    private let privacyURL = URL(string: "https://lt2058914895.github.io/offtime/privacy.html")!
+
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                Text("隐私说明")
-                    .font(.title)
-                    .fontWeight(.bold)
-                
-                Text("OffTime 是一款离线世界时钟应用，我们尊重您的隐私。")
-                    .font(.body)
-                
-                Divider()
-                
-                Text("数据存储")
-                    .font(.headline)
-                
-                Text("所有城市数据和应用设置均存储在您的设备本地，不会上传到任何服务器。")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                
-                Divider()
-                
-                Text("定位权限")
-                    .font(.headline)
-                
-                Text("定位权限仅用于自动检测您所在时区，默认关闭。即使拒绝定位权限，也不影响核心功能使用。")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                
-                Divider()
-                
-                Text("网络请求")
-                    .font(.headline)
-                
-                Text("除手动检查时区数据库更新外，应用不会发起任何网络请求，无埋点、无统计上报。")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-            }
-            .padding()
-        }
-        .navigationTitle("隐私说明")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
+        WebView(url: privacyURL)
+            .navigationTitle("隐私说明")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .tabBar)
+    }
+}
+
+struct SupportPageView: View {
+    private let supportURL = URL(string: "https://lt2058914895.github.io/offtime/support.html")!
+
+    var body: some View {
+        WebView(url: supportURL)
+            .navigationTitle("问题反馈")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .tabBar)
     }
 }
 

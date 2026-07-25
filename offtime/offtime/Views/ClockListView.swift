@@ -73,6 +73,8 @@ struct ClockListView: View {
                     })
                 case .privacyPage:
                     PrivacyPageView()
+                case .supportPage:
+                    SupportPageView()
                 case .aboutPage:
                     AboutPageView()
                 case .citySelector:
