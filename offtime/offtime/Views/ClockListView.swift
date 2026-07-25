@@ -3,39 +3,22 @@ import SwiftUI
 struct ClockListView: View {
     @StateObject private var viewModel = ClockListViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
     @State private var cityToDelete: CityItem?
     @State private var editMode: EditMode = .inactive
     
+    private var isIPad: Bool { horizontalSizeClass == .regular }
+    
     var body: some View {
         NavigationStack(path: $path) {
             ZStack {
-                List {
-                    ForEach($viewModel.cities) { $city in
-                        ClockListCell(
-                            city: city,
-                            time: viewModel.getLocalTime(city: city),
-                            date: viewModel.getLocalDate(city: city),
-                            timeDifference: viewModel.getTimeDifference(city: city),
-                            isDaytime: viewModel.isDaytime(city: city),
-                            dstStatus: viewModel.getDSTStatus(city: city),
-                            onCopy: {
-                                let text = viewModel.copyTimeText(city: city)
-                                UIPasteboard.general.string = text
-                            },
-                            onDelete: {
-                                cityToDelete = city
-                                isShowingDeleteConfirm = true
-                            }
-                        )
-                    }
-                    .onMove(perform: move)
-                    .onDelete(perform: confirmDelete)
+                if isIPad {
+                    ipadLayout
+                } else {
+                    iphoneLayout
                 }
-                .listStyle(.insetGrouped)
-                .environment(\.editMode, $editMode)
-                .readableContentPadding()
                 
                 if viewModel.cities.isEmpty && viewModel.viewState == .idle {
                     EmptyStateView()
@@ -105,6 +88,66 @@ struct ClockListView: View {
                 Text("确定要删除这个城市吗？")
             }
         }
+    }
+    
+    // MARK: - iPhone 布局（单列列表）
+    private var iphoneLayout: some View {
+        List {
+            ForEach($viewModel.cities) { $city in
+                ClockListCell(
+                    city: city,
+                    time: viewModel.getLocalTime(city: city),
+                    date: viewModel.getLocalDate(city: city),
+                    timeDifference: viewModel.getTimeDifference(city: city),
+                    isDaytime: viewModel.isDaytime(city: city),
+                    dstStatus: viewModel.getDSTStatus(city: city),
+                    onCopy: {
+                        let text = viewModel.copyTimeText(city: city)
+                        UIPasteboard.general.string = text
+                    },
+                    onDelete: {
+                        cityToDelete = city
+                        isShowingDeleteConfirm = true
+                    }
+                )
+            }
+            .onMove(perform: move)
+            .onDelete(perform: confirmDelete)
+        }
+        .listStyle(.insetGrouped)
+        .environment(\.editMode, $editMode)
+    }
+    
+    // MARK: - iPad 布局（多列网格）
+    private var ipadLayout: some View {
+        ScrollView {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16)
+            ], spacing: 16) {
+                ForEach(viewModel.cities) { city in
+                    ClockGridCell(
+                        city: city,
+                        time: viewModel.getLocalTime(city: city),
+                        date: viewModel.getLocalDate(city: city),
+                        timeDifference: viewModel.getTimeDifference(city: city),
+                        isDaytime: viewModel.isDaytime(city: city),
+                        dstStatus: viewModel.getDSTStatus(city: city),
+                        onCopy: {
+                            let text = viewModel.copyTimeText(city: city)
+                            UIPasteboard.general.string = text
+                        },
+                        onDelete: {
+                            cityToDelete = city
+                            isShowingDeleteConfirm = true
+                        }
+                    )
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+        }
+        .background(Color(.systemGroupedBackground))
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -198,6 +241,90 @@ struct ClockListCell: View {
     }
 }
 
+// MARK: - iPad 网格卡片
+struct ClockGridCell: View {
+    let city: CityItem
+    let time: String
+    let date: String
+    let timeDifference: (offset: String, crossDay: String?)
+    let isDaytime: Bool
+    let dstStatus: String?
+    let onCopy: () -> Void
+    let onDelete: () -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // 顶部：城市名 + 日夜图标
+            HStack {
+                Image(systemName: isDaytime ? "sun.max" : "moon")
+                    .foregroundColor(isDaytime ? .yellow : .blue)
+                    .font(.title3)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 4) {
+                        Text(city.cityName)
+                            .font(.body)
+                            .fontWeight(.semibold)
+                        Text(city.cityEn)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    if let dstStatus = dstStatus {
+                        Text(dstStatus)
+                            .font(.caption2)
+                            .padding(.horizontal, 3)
+                            .padding(.vertical, 1)
+                            .background(dstStatus == "夏令时" ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
+                            .foregroundColor(dstStatus == "夏令时" ? .orange : .blue)
+                            .cornerRadius(3)
+                    }
+                }
+                Spacer()
+            }
+            
+            Divider()
+            
+            // 中部：时间
+            Text(time)
+                .font(.title2)
+                .fontWeight(.bold)
+                .monospacedDigit()
+            
+            // 底部：日期 + 时差
+            HStack {
+                Text(date)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Spacer()
+                HStack(spacing: 2) {
+                    if let crossDay = timeDifference.crossDay {
+                        Text(crossDay)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Text(timeDifference.offset)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundColor(timeDifferenceColor)
+                }
+            }
+        }
+        .padding(16)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(12)
+        .contextMenu {
+            Button("复制时间") { onCopy() }
+            Button("删除城市", role: .destructive) { onDelete() }
+        }
+    }
+    
+    private var timeDifferenceColor: Color {
+        let offset = timeDifference.offset
+        if offset == "0h" { return .secondary }
+        return offset.hasPrefix("+") ? .green : .red
+    }
+}
+
 struct EmptyStateView: View {
     var body: some View {
         VStack(spacing: 16) {
@@ -214,7 +341,6 @@ struct EmptyStateView: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .readableContentPadding()
     }
 }
 
@@ -231,7 +357,6 @@ struct LoadingView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
         .opacity(0.8)
-        .readableContentPadding()
     }
 }
 

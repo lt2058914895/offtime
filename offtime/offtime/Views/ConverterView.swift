@@ -3,24 +3,36 @@ import SwiftUI
 struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var path = NavigationPath()
     @State private var showDatePicker = false
     @State private var showTimePicker = false
     @State private var isSelectingSource = true
     
+    private var isIPad: Bool { horizontalSizeClass == .regular }
+    
     var body: some View {
         NavigationStack(path: $path) {
             ScrollView {
-                VStack(spacing: 16) {
-                    sourceCard
-                    
-                    swapButton
-                    
-                    targetCard
+                if isIPad {
+                    // iPad：源/目标卡片横向并排
+                    HStack(alignment: .center, spacing: 16) {
+                        sourceCard
+                        swapButton
+                        targetCard
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 20)
+                } else {
+                    // iPhone：纵向排列
+                    VStack(spacing: 16) {
+                        sourceCard
+                        swapButton
+                        targetCard
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 20)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 20)
-                .readableContentPadding()
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("时区转换器")
@@ -121,7 +133,7 @@ struct ConverterView: View {
                 viewModel.swapCities()
             }
         }) {
-            Image(systemName: "arrow.up.arrow.down")
+            Image(systemName: isIPad ? "arrow.left.arrow.right" : "arrow.up.arrow.down")
                 .font(.body.weight(.semibold))
                 .foregroundColor(Color(.systemGray2))
                 .frame(width: 36, height: 36)

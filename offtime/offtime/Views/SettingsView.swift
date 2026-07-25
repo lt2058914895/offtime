@@ -77,7 +77,6 @@ struct SettingsView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .readableContentPadding()
             .navigationTitle("设置")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: AppRoute.self) { route in
@@ -298,7 +297,6 @@ struct AboutPageView: View {
                     .multilineTextAlignment(.center)
             }
             .padding()
-            .readableContentPadding()
         }
         .navigationTitle("关于")
         .navigationBarTitleDisplayMode(.inline)

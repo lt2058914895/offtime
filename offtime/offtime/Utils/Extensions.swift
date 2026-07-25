@@ -11,18 +11,12 @@ extension View {
     }
 }
 
-/// iPad 内容宽度限制修饰器
+/// iPad 内容宽度限制修饰器（已弃用宽度限制，各视图独立适配 iPad 布局）
 struct ReadableContentModifier: ViewModifier {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     func body(content: Content) -> some View {
-        if horizontalSizeClass == .regular {
-            content
-                .frame(maxWidth: 700)
-                .frame(maxWidth: .infinity)
-        } else {
-            content
-        }
+        content
     }
 }
 
