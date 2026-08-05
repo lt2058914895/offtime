@@ -10,10 +10,11 @@ final class TimezoneService {
     // MARK: - Private Helpers
     
     /// 创建线程安全的 DateFormatter（每次调用创建新实例，避免数据竞争）
-    private func makeFormatter(timezone: TimeZone, dateFormat: String) -> DateFormatter {
+    private func makeFormatter(timezone: TimeZone, dateFormat: String, locale: Locale = .current) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.timeZone = timezone
         formatter.dateFormat = dateFormat
+        formatter.locale = locale
         formatter.amSymbol = "AM"
         formatter.pmSymbol = "PM"
         return formatter
@@ -34,6 +35,11 @@ final class TimezoneService {
     func getLocalDate(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd").string(from: date)
+    }
+    
+    func getLocalWeekday(timezoneId: String, date: Date = Date()) -> String? {
+        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        return makeFormatter(timezone: timezone, dateFormat: "EEEE", locale: Locale(identifier: "zh_CN")).string(from: date)
     }
     
     func getLocalDateTime(timezoneId: String, date: Date = Date()) -> String? {

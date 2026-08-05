@@ -135,6 +135,10 @@ final class ClockListViewModel: ObservableObject {
         return timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? "日期解析失败"
     }
     
+    func getLocalWeekday(city: CityItem) -> String {
+        return timezoneService.getLocalWeekday(timezoneId: city.timezoneId, date: currentDate) ?? ""
+    }
+    
     func getRelativeDate(city: CityItem) -> String {
         guard let timezone = TimeZone(identifier: city.timezoneId) else {
             return getLocalDate(city: city)

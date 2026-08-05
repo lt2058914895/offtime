@@ -98,6 +98,7 @@ struct ClockListView: View {
                     city: city,
                     time: viewModel.getLocalTime(city: city),
                     date: viewModel.getLocalDate(city: city),
+                    weekday: viewModel.getLocalWeekday(city: city),
                     timeDifference: viewModel.getTimeDifference(city: city),
                     isDaytime: viewModel.isDaytime(city: city),
                     dstStatus: viewModel.getDSTStatus(city: city),
@@ -130,6 +131,7 @@ struct ClockListView: View {
                         city: city,
                         time: viewModel.getLocalTime(city: city),
                         date: viewModel.getLocalDate(city: city),
+                        weekday: viewModel.getLocalWeekday(city: city),
                         timeDifference: viewModel.getTimeDifference(city: city),
                         isDaytime: viewModel.isDaytime(city: city),
                         dstStatus: viewModel.getDSTStatus(city: city),
@@ -167,6 +169,7 @@ struct ClockListCell: View {
     let city: CityItem
     let time: String
     let date: String
+    let weekday: String
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
@@ -203,6 +206,11 @@ struct ClockListCell: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
+                    if !weekday.isEmpty {
+                        Text(weekday)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                     Spacer()
                     Text(time)
                         .font(.title3)
@@ -246,6 +254,7 @@ struct ClockGridCell: View {
     let city: CityItem
     let time: String
     let date: String
+    let weekday: String
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
@@ -290,11 +299,16 @@ struct ClockGridCell: View {
                 .fontWeight(.bold)
                 .monospacedDigit()
             
-            // 底部：日期 + 时差
+            // 底部：日期 + 星期 + 时差
             HStack {
                 Text(date)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                if !weekday.isEmpty {
+                    Text(weekday)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
                 Spacer()
                 HStack(spacing: 2) {
                     if let crossDay = timeDifference.crossDay {
