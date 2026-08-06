@@ -97,6 +97,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 690C5C523010918200CF6812;
 			minimizedProjectReferenceProxies = 1;
@@ -262,9 +263,9 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "世界时钟";
-				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "用于导入/导出城市列表文件";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "可选：用于自动定位获取本地时区，不会上传位置信息";
+				INFOPLIST_KEY_CFBundleDisplayName = "OffTime";
+				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "Used to import/export city list files";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional: Used to automatically obtain local timezone. Location data will not be uploaded.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -296,9 +297,9 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "世界时钟";
-				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "用于导入/导出城市列表文件";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "可选：用于自动定位获取本地时区，不会上传位置信息";
+				INFOPLIST_KEY_CFBundleDisplayName = "OffTime";
+				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "Used to import/export city list files";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Optional: Used to automatically obtain local timezone. Location data will not be uploaded.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

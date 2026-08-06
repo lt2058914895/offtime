@@ -19,7 +19,7 @@ struct CitySelectorView: View {
                 }
             )
         }
-        .navigationTitle("选择城市")
+        .navigationTitle(String(localized: "city.selector.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onChange(of: searchText) { newValue in

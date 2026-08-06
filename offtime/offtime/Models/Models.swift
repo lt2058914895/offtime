@@ -29,9 +29,9 @@ enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
     
     var displayName: String {
         switch self {
-        case .system: return "跟随系统"
-        case .light: return "浅色"
-        case .dark: return "深色"
+        case .system: return String(localized: "theme.system")
+        case .light: return String(localized: "theme.light")
+        case .dark: return String(localized: "theme.dark")
         }
     }
 }

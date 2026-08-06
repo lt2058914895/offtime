@@ -35,7 +35,7 @@ struct ConverterView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("时区转换器")
+            .navigationTitle(String(localized: "converter.title"))
             .navigationBarTitleDisplayMode(.large)
             .onChange(of: appEnvironment.settings.use24Hour) { newValue in
                 viewModel.use24Hour = newValue
@@ -67,7 +67,7 @@ struct ConverterView: View {
     private var sourceCard: some View {
         CardView {
             VStack(spacing: 12) {
-                cityButton(title: "起点城市", city: viewModel.sourceCity, action: {
+                cityButton(title: String(localized: "converter.source.city"), city: viewModel.sourceCity, action: {
                     isSelectingSource = true
                     path.append(AppRoute.citySelector)
                 })
@@ -91,11 +91,11 @@ struct ConverterView: View {
                     Spacer()
                 }
                 .padding()
-                .navigationTitle("选择日期")
+                .navigationTitle(String(localized: "converter.select.date"))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("完成") { showDatePicker = false }
+                        Button(String(localized: "common.done")) { showDatePicker = false }
                     }
                 }
             }
@@ -115,11 +115,11 @@ struct ConverterView: View {
                     Spacer()
                 }
                 .padding()
-                .navigationTitle("选择时间")
+                .navigationTitle(String(localized: "converter.select.time"))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("完成") { showTimePicker = false }
+                        Button(String(localized: "common.done")) { showTimePicker = false }
                     }
                 }
             }
@@ -147,7 +147,7 @@ struct ConverterView: View {
     private var targetCard: some View {
         CardView {
             VStack(spacing: 12) {
-                cityButton(title: "目标城市", city: viewModel.targetCity, action: {
+                cityButton(title: String(localized: "converter.target.city"), city: viewModel.targetCity, action: {
                     isSelectingSource = false
                     path.append(AppRoute.citySelector)
                 })
@@ -161,7 +161,7 @@ struct ConverterView: View {
     
     private var resultDateTimeRow: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("日期时间")
+            Text(String(localized: "converter.datetime"))
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(Color(.systemGray3))
@@ -196,7 +196,7 @@ struct ConverterView: View {
                     if let crossDay = viewModel.crossDay {
                         Text(crossDay)
                             .font(.body.weight(.semibold))
-                            .foregroundColor(crossDay == "明日" ? Color.orange : Color.blue)
+                            .foregroundColor(crossDay == String(localized: "clock.tomorrow") ? Color.orange : Color.blue)
                     }
                     if !viewModel.timeDifference.isEmpty {
                         Text(viewModel.timeDifference)
@@ -222,7 +222,7 @@ struct ConverterView: View {
                             .font(.headline)
                             .foregroundColor(Color(.label))
                     } else {
-                        Text("选择城市")
+                        Text(String(localized: "converter.select.city"))
                             .font(.headline)
                             .foregroundColor(Color(.systemGray4))
                     }
@@ -268,7 +268,7 @@ struct ConverterView: View {
     private var datePickerRow: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("日期时间")
+                Text(String(localized: "converter.datetime"))
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(Color(.systemGray3))
@@ -281,7 +281,7 @@ struct ConverterView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "clock.arrow.circlepath")
                             .font(.caption)
-                        Text("当前时间")
+                        Text(String(localized: "converter.current.time"))
                             .font(.caption)
                     }
                     .foregroundColor(.accentColor)

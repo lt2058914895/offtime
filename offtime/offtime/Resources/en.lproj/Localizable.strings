@@ -1,0 +1,114 @@
+/* OffTime - English Localization */
+
+// MARK: - Tab Bar
+"tab.clock" = "Clock";
+"tab.converter" = "Convert";
+"tab.settings" = "Settings";
+
+// MARK: - Common
+"common.loading" = "Loading...";
+"common.cancel" = "Cancel";
+"common.done" = "Done";
+"common.delete" = "Delete";
+"common.retry" = "Retry";
+"common.success" = "Success";
+
+// MARK: - Database Error
+"db.init.failed" = "Database initialization failed";
+"db.unknown.error" = "Unknown error";
+"db.read.failed" = "Failed to read database";
+"db.read.failed.restart" = "Failed to read database, please try restarting the app";
+"db.open.failed" = "Database open failed";
+"db.not.initialized" = "Database not initialized";
+"db.prepare.failed" = "SQL prepare failed";
+"db.step.failed" = "SQL execution failed";
+
+// MARK: - Clock List
+"clock.title" = "World Clock";
+"clock.manage" = "Manage";
+"clock.empty.title" = "No Cities";
+"clock.empty.subtitle" = "Tap + to add cities worldwide";
+"clock.confirm.delete" = "Confirm Delete";
+"clock.confirm.delete.message" = "Are you sure you want to delete this city?";
+"clock.copy.time" = "Copy Time";
+"clock.delete.city" = "Delete City";
+"clock.dst.summer" = "DST";
+"clock.dst.winter" = "Winter Time";
+"clock.tomorrow" = "Tomorrow";
+"clock.yesterday" = "Yesterday";
+"clock.today" = "Today";
+"clock.time.parse.failed" = "Time parse failed";
+"clock.date.parse.failed" = "Date parse failed";
+"clock.reorder.failed" = "Reorder failed";
+"clock.city.exists" = "City already exists";
+"clock.add.failed" = "Failed to add city";
+"clock.delete.failed" = "Failed to delete city";
+
+// MARK: - City Picker
+"city.picker.title" = "Add City";
+"city.selector.title" = "Select City";
+"city.search.placeholder" = "Search city";
+"city.no.results" = "No cities found";
+"city.try.different" = "Try different keywords";
+"city.data.not.found" = "City data file not found";
+"city.data.load.failed" = "Failed to load city data";
+
+// MARK: - Continent Names
+"continent.hot" = "Popular";
+"continent.asia" = "Asia";
+"continent.europe" = "Europe";
+"continent.america" = "Americas";
+"continent.oceania" = "Oceania";
+"continent.africa" = "Africa";
+
+// MARK: - Converter
+"converter.title" = "Time Converter";
+"converter.source.city" = "Source City";
+"converter.target.city" = "Target City";
+"converter.select.city" = "Select City";
+"converter.datetime" = "Date & Time";
+"converter.current.time" = "Current Time";
+"converter.select.date" = "Select Date";
+"converter.select.time" = "Select Time";
+"converter.select.city.hint" = "Please select a city";
+"converter.timezone.parse.failed" = "Timezone parse failed";
+"converter.convert.failed" = "Time conversion failed";
+"converter.load.cities.failed" = "Failed to load cities";
+"converter.add.city.failed" = "Failed to add city";
+
+// MARK: - Settings
+"settings.title" = "Settings";
+"settings.display" = "Display";
+"settings.24hour" = "24-Hour Format";
+"settings.theme" = "Appearance";
+"settings.tz.database" = "Timezone Database";
+"settings.version" = "Version";
+"settings.data.management" = "Data Management";
+"settings.export.cities" = "Export City List";
+"settings.import.cities" = "Import City List";
+"settings.about" = "About";
+"settings.privacy" = "Privacy Policy";
+"settings.support" = "Feedback";
+"settings.about.offtime" = "About OffTime";
+"settings.load.failed" = "Failed to load settings";
+"settings.save.failed" = "Failed to save settings";
+"settings.save.theme.failed" = "Failed to save theme";
+"settings.export.failed" = "Export failed";
+"settings.export.success" = "Export successful";
+"settings.import.failed" = "Import failed, invalid file format";
+"settings.import.success" = "Import successful";
+
+// MARK: - Theme
+"theme.system" = "System";
+"theme.light" = "Light";
+"theme.dark" = "Dark";
+
+// MARK: - About
+"about.title" = "About";
+"about.offtime" = "Offline World Clock";
+"about.intro" = "Introduction";
+"about.description" = "Built-in IANA tzdata timezone database, works offline without network or NTP. Calculates timezone locally using device system time, handles daylight saving time automatically.";
+
+// MARK: - Web Error
+"web.load.failed" = "Unable to load page";
+"web.check.network" = "Please check your network connection and try again";

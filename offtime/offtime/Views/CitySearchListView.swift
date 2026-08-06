@@ -14,7 +14,7 @@ struct CitySearchListView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
-                    TextField("搜索城市", text: $searchText)
+                    TextField(String(localized: "city.search.placeholder"), text: $searchText)
                 }
                 .padding(.vertical, 8)
             }
@@ -68,11 +68,11 @@ struct CitySearchNoResultsView: View {
                 .font(.system(size: 48))
                 .foregroundColor(.secondary)
             
-            Text("未找到城市")
+            Text(String(localized: "city.no.results"))
                 .font(.title)
                 .foregroundColor(.secondary)
             
-            Text("请更换关键词")
+            Text(String(localized: "city.try.different"))
                 .font(.body)
                 .foregroundColor(.secondary)
         }

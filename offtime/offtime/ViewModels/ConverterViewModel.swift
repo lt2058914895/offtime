@@ -60,7 +60,7 @@ final class ConverterViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "加载城市失败"
+                    self.errorMessage = String(localized: "converter.load.cities.failed")
                 }
             }
         }
@@ -85,7 +85,7 @@ final class ConverterViewModel: ObservableObject {
     
     private func convertTime(source: CityItem?, target: CityItem?, date: Date) {
         guard let source = source, let target = target else {
-            resultTime = "请选择城市"
+            resultTime = String(localized: "converter.select.city.hint")
             resultDate = ""
             timeDifference = ""
             crossDay = nil
@@ -94,7 +94,7 @@ final class ConverterViewModel: ObservableObject {
         
         guard let sourceTimezone = TimeZone(identifier: source.timezoneId),
               let targetTimezone = TimeZone(identifier: target.timezoneId) else {
-            resultTime = "时区解析失败"
+            resultTime = String(localized: "converter.timezone.parse.failed")
             resultDate = ""
             timeDifference = ""
             crossDay = nil
@@ -112,7 +112,7 @@ final class ConverterViewModel: ObservableObject {
         // 关键：用源时区日历将时间组件重新解释为绝对时间
         // 这表示"用户选择的17:42是源时区（上海）的17:42"
         guard let absoluteDate = sourceCalendar.date(from: components) else {
-            resultTime = "时间转换失败"
+            resultTime = String(localized: "converter.convert.failed")
             resultDate = ""
             timeDifference = ""
             crossDay = nil
@@ -121,11 +121,11 @@ final class ConverterViewModel: ObservableObject {
         
         // 用目标时区格式化结果
         if use24Hour {
-            resultTime = timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate) ?? "时间解析失败"
+            resultTime = timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate) ?? String(localized: "clock.time.parse.failed")
         } else {
-            resultTime = timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate) ?? "时间解析失败"
+            resultTime = timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate) ?? String(localized: "clock.time.parse.failed")
         }
-        resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "日期解析失败"
+        resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? String(localized: "clock.date.parse.failed")
         
         // 计算源时区和目标时区之间的时差（复用 TimezoneService）
         let diff = timezoneService.getTimeDifferenceBetween(
@@ -188,7 +188,7 @@ final class ConverterViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "添加城市失败"
+                    self.errorMessage = String(localized: "converter.add.city.failed")
                 }
             }
         }

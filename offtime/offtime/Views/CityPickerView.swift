@@ -18,7 +18,7 @@ struct CityPickerView: View {
                 }
             )
         }
-        .navigationTitle("添加城市")
+        .navigationTitle(String(localized: "city.picker.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .onChange(of: searchText) { newValue in
@@ -31,7 +31,7 @@ struct CityPickerView: View {
         Task {
             let exists = await viewModel.checkCityExists(cityName: city.cityName)
             if exists {
-                toastMessage = "该城市已存在"
+                toastMessage = String(localized: "clock.city.exists")
                 return
             }
             

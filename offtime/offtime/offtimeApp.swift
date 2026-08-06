@@ -18,7 +18,7 @@ struct offtimeApp: App {
                         appEnvironment.setupDatabase()
                     }
                 } else {
-                    ProgressView("加载中...")
+                    ProgressView(String(localized: "common.loading"))
                 }
             }
             .environmentObject(appEnvironment)
@@ -43,19 +43,19 @@ struct MainTabView: View {
             ClockListView()
                 .tabItem {
                     Image(systemName: "clock")
-                    Text("时钟")
+                    Text(String(localized: "tab.clock"))
                 }
             
             ConverterView()
                 .tabItem {
                     Image(systemName: "repeat")
-                    Text("转换")
+                    Text(String(localized: "tab.converter"))
                 }
             
             SettingsView()
                 .tabItem {
                     Image(systemName: "gear")
-                    Text("设置")
+                    Text(String(localized: "tab.settings"))
                 }
         }
         .modifier(SidebarAdaptableTabStyle())
@@ -76,18 +76,18 @@ struct DatabaseErrorView: View {
                 .font(.system(size: 48))
                 .foregroundColor(.orange)
             
-            Text("数据库初始化失败")
+            Text(String(localized: "db.init.failed"))
                 .font(.title2)
                 .fontWeight(.semibold)
             
-            Text(errorMessage ?? "未知错误")
+            Text(errorMessage ?? String(localized: "db.unknown.error"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
             
             Button(action: onRetry) {
-                Text("重试")
+                Text(String(localized: "common.retry"))
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(width: 120, height: 44)

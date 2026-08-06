@@ -354,13 +354,13 @@ enum DatabaseError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .openFailed(let msg):
-            return "数据库打开失败: \(msg)"
+            return String(localized: "db.open.failed") + ": \(msg)"
         case .notInitialized:
-            return "数据库未初始化"
+            return String(localized: "db.not.initialized")
         case .prepareFailed(let msg):
-            return "SQL准备失败: \(msg)"
+            return String(localized: "db.prepare.failed") + ": \(msg)"
         case .stepFailed(let msg):
-            return "SQL执行失败: \(msg)"
+            return String(localized: "db.step.failed") + ": \(msg)"
         }
     }
 }

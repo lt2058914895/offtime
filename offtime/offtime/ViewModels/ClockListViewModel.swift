@@ -54,8 +54,8 @@ final class ClockListViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.viewState = .failure("数据库读取失败")
-                    self.errorMessage = "数据库读取失败，请尝试重启App"
+                    self.viewState = .failure(String(localized: "db.read.failed"))
+                    self.errorMessage = String(localized: "db.read.failed.restart")
                 }
             }
         }
@@ -83,11 +83,11 @@ final class ClockListViewModel: ObservableObject {
                 }
             } catch CityError.alreadyExists {
                 await MainActor.run {
-                    self.errorMessage = "该城市已存在"
+                    self.errorMessage = String(localized: "clock.city.exists")
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "添加城市失败"
+                    self.errorMessage = String(localized: "clock.add.failed")
                 }
             }
         }
@@ -102,7 +102,7 @@ final class ClockListViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "删除城市失败"
+                    self.errorMessage = String(localized: "clock.delete.failed")
                 }
             }
         }
@@ -117,7 +117,7 @@ final class ClockListViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "排序失败"
+                    self.errorMessage = String(localized: "clock.reorder.failed")
                 }
             }
         }
@@ -125,14 +125,14 @@ final class ClockListViewModel: ObservableObject {
     
     func getLocalTime(city: CityItem) -> String {
         if use24Hour {
-            return timezoneService.getLocalTime24(timezoneId: city.timezoneId, date: currentDate) ?? "时间解析失败"
+            return timezoneService.getLocalTime24(timezoneId: city.timezoneId, date: currentDate) ?? String(localized: "clock.time.parse.failed")
         } else {
-            return timezoneService.getLocalTime12(timezoneId: city.timezoneId, date: currentDate) ?? "时间解析失败"
+            return timezoneService.getLocalTime12(timezoneId: city.timezoneId, date: currentDate) ?? String(localized: "clock.time.parse.failed")
         }
     }
     
     func getLocalDate(city: CityItem) -> String {
-        return timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? "日期解析失败"
+        return timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? String(localized: "clock.date.parse.failed")
     }
     
     func getLocalWeekday(city: CityItem) -> String {
@@ -166,9 +166,9 @@ final class ClockListViewModel: ObservableObject {
         let diff = calendar.dateComponents([.day], from: l, to: t).day ?? 0
         
         switch diff {
-        case 0: return "今天"
-        case 1: return "明天"
-        case -1: return "昨天"
+        case 0: return String(localized: "clock.today")
+        case 1: return String(localized: "clock.tomorrow")
+        case -1: return String(localized: "clock.yesterday")
         default: return getLocalDate(city: city)
         }
     }

@@ -39,7 +39,7 @@ final class TimezoneService {
     
     func getLocalWeekday(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "EEEE", locale: Locale(identifier: "zh_CN")).string(from: date)
+        return makeFormatter(timezone: timezone, dateFormat: "EEEE").string(from: date)
     }
     
     func getLocalDateTime(timezoneId: String, date: Date = Date()) -> String? {
@@ -95,12 +95,12 @@ final class TimezoneService {
         } else if diffHours > 0 {
             offsetStr = "+\(Int(diffHours))h"
             if diffHours >= 24 {
-                crossDay = "明日"
+                crossDay = String(localized: "clock.tomorrow")
             }
         } else {
             offsetStr = "\(Int(diffHours))h"
             if diffHours <= -24 {
-                crossDay = "昨日"
+                crossDay = String(localized: "clock.yesterday")
             }
         }
         
@@ -149,16 +149,16 @@ final class TimezoneService {
         }
         
         if timezone.isDaylightSavingTime(for: date) {
-            return "夏令时"
+            return String(localized: "clock.dst.summer")
         }
         
         if timezone.nextDaylightSavingTimeTransition(after: date) != nil {
-            return "冬令时"
+            return String(localized: "clock.dst.winter")
         }
         
         let oneYearAgo = Calendar.current.date(byAdding: .year, value: -1, to: date) ?? date
         if timezone.nextDaylightSavingTimeTransition(after: oneYearAgo) != nil {
-            return "冬令时"
+            return String(localized: "clock.dst.winter")
         }
         
         return nil

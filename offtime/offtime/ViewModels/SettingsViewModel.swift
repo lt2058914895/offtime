@@ -25,7 +25,7 @@ final class SettingsViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "加载设置失败"
+                    self.errorMessage = String(localized: "settings.load.failed")
                 }
             }
         }
@@ -37,7 +37,7 @@ final class SettingsViewModel: ObservableObject {
                 try appSettingService.updateUse24Hour(use24Hour)
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "保存设置失败"
+                    self.errorMessage = String(localized: "settings.save.failed")
                 }
             }
         }
@@ -52,7 +52,7 @@ final class SettingsViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = "保存主题失败"
+                    self.errorMessage = String(localized: "settings.save.theme.failed")
                 }
             }
         }
@@ -62,7 +62,7 @@ final class SettingsViewModel: ObservableObject {
         do {
             return try CityService.shared.exportCities()
         } catch {
-            errorMessage = "导出失败"
+            errorMessage = String(localized: "settings.export.failed")
             return nil
         }
     }
@@ -72,7 +72,7 @@ final class SettingsViewModel: ObservableObject {
             try CityService.shared.importCities(from: data)
             return true
         } catch {
-            errorMessage = "导入失败，文件格式错误"
+            errorMessage = String(localized: "settings.import.failed")
             return false
         }
     }

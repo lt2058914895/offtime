@@ -30,7 +30,7 @@ final class CityPickerViewModel: ObservableObject {
         viewState = .loading
         
         guard let url = Bundle.main.url(forResource: "cities", withExtension: "json") else {
-            viewState = .failure("城市数据文件未找到")
+            viewState = .failure(String(localized: "city.data.not.found"))
             return
         }
         
@@ -41,19 +41,38 @@ final class CityPickerViewModel: ObservableObject {
             cityGroups = groupByContinent(allCities)
             viewState = .idle
         } catch {
-            viewState = .failure("城市数据加载失败")
-            errorMessage = "城市数据加载失败"
+            viewState = .failure(String(localized: "city.data.load.failed"))
+            errorMessage = String(localized: "city.data.load.failed")
         }
     }
     
     // MARK: - Group & Filter
     
-    private let continentOrder = ["热门", "亚洲", "欧洲", "美洲", "大洋洲", "非洲"]
+    private let continentOrder = [
+        "热门",
+        "亚洲",
+        "欧洲",
+        "美洲",
+        "大洋洲",
+        "非洲"
+    ]
+    
+    private func localizedContinentName(_ continent: String) -> String {
+        switch continent {
+        case "热门": return String(localized: "continent.hot")
+        case "亚洲": return String(localized: "continent.asia")
+        case "欧洲": return String(localized: "continent.europe")
+        case "美洲": return String(localized: "continent.america")
+        case "大洋洲": return String(localized: "continent.oceania")
+        case "非洲": return String(localized: "continent.africa")
+        default: return continent
+        }
+    }
     
     private func groupByContinent(_ cities: [CitySuggestion]) -> [ContinentGroup] {
         let groups = Dictionary(grouping: cities, by: { $0.continent })
         return continentOrder.compactMap { continent in
-            groups[continent].map { ContinentGroup(name: continent, cities: $0) }
+            groups[continent].map { ContinentGroup(name: localizedContinentName(continent), cities: $0) }
         }
     }
     

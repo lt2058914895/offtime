@@ -1,0 +1,114 @@
+/* OffTime - 简体中文本地化 */
+
+// MARK: - Tab Bar
+"tab.clock" = "时钟";
+"tab.converter" = "转换";
+"tab.settings" = "设置";
+
+// MARK: - Common
+"common.loading" = "加载中...";
+"common.cancel" = "取消";
+"common.done" = "完成";
+"common.delete" = "删除";
+"common.retry" = "重试";
+"common.success" = "成功";
+
+// MARK: - Database Error
+"db.init.failed" = "数据库初始化失败";
+"db.unknown.error" = "未知错误";
+"db.read.failed" = "数据库读取失败";
+"db.read.failed.restart" = "数据库读取失败，请尝试重启App";
+"db.open.failed" = "数据库打开失败";
+"db.not.initialized" = "数据库未初始化";
+"db.prepare.failed" = "SQL准备失败";
+"db.step.failed" = "SQL执行失败";
+
+// MARK: - Clock List
+"clock.title" = "世界时钟";
+"clock.manage" = "管理";
+"clock.empty.title" = "暂无城市";
+"clock.empty.subtitle" = "点击右上角添加全球城市";
+"clock.confirm.delete" = "确认删除";
+"clock.confirm.delete.message" = "确定要删除这个城市吗？";
+"clock.copy.time" = "复制时间";
+"clock.delete.city" = "删除城市";
+"clock.dst.summer" = "夏令时";
+"clock.dst.winter" = "冬令时";
+"clock.tomorrow" = "明日";
+"clock.yesterday" = "昨日";
+"clock.today" = "今天";
+"clock.time.parse.failed" = "时间解析失败";
+"clock.date.parse.failed" = "日期解析失败";
+"clock.reorder.failed" = "排序失败";
+"clock.city.exists" = "该城市已存在";
+"clock.add.failed" = "添加城市失败";
+"clock.delete.failed" = "删除城市失败";
+
+// MARK: - City Picker
+"city.picker.title" = "添加城市";
+"city.selector.title" = "选择城市";
+"city.search.placeholder" = "搜索城市";
+"city.no.results" = "未找到城市";
+"city.try.different" = "请更换关键词";
+"city.data.not.found" = "城市数据文件未找到";
+"city.data.load.failed" = "城市数据加载失败";
+
+// MARK: - Continent Names
+"continent.hot" = "热门";
+"continent.asia" = "亚洲";
+"continent.europe" = "欧洲";
+"continent.america" = "美洲";
+"continent.oceania" = "大洋洲";
+"continent.africa" = "非洲";
+
+// MARK: - Converter
+"converter.title" = "时区转换器";
+"converter.source.city" = "起点城市";
+"converter.target.city" = "目标城市";
+"converter.select.city" = "选择城市";
+"converter.datetime" = "日期时间";
+"converter.current.time" = "当前时间";
+"converter.select.date" = "选择日期";
+"converter.select.time" = "选择时间";
+"converter.select.city.hint" = "请选择城市";
+"converter.timezone.parse.failed" = "时区解析失败";
+"converter.convert.failed" = "时间转换失败";
+"converter.load.cities.failed" = "加载城市失败";
+"converter.add.city.failed" = "添加城市失败";
+
+// MARK: - Settings
+"settings.title" = "设置";
+"settings.display" = "显示设置";
+"settings.24hour" = "24小时制";
+"settings.theme" = "外观主题";
+"settings.tz.database" = "时区数据库";
+"settings.version" = "版本";
+"settings.data.management" = "数据管理";
+"settings.export.cities" = "导出城市列表";
+"settings.import.cities" = "导入城市列表";
+"settings.about" = "关于";
+"settings.privacy" = "隐私说明";
+"settings.support" = "问题反馈";
+"settings.about.offtime" = "关于 OffTime";
+"settings.load.failed" = "加载设置失败";
+"settings.save.failed" = "保存设置失败";
+"settings.save.theme.failed" = "保存主题失败";
+"settings.export.failed" = "导出失败";
+"settings.export.success" = "导出成功";
+"settings.import.failed" = "导入失败，文件格式错误";
+"settings.import.success" = "导入成功";
+
+// MARK: - Theme
+"theme.system" = "跟随系统";
+"theme.light" = "浅色";
+"theme.dark" = "深色";
+
+// MARK: - About
+"about.title" = "关于";
+"about.offtime" = "离线世界时钟";
+"about.intro" = "简介";
+"about.description" = "内置 IANA tzdata 时区数据库，不依赖网络、不依赖网络授时。依靠设备系统时间本地计算时区时间，自动处理夏令时。";
+
+// MARK: - Web Error
+"web.load.failed" = "无法加载页面";
+"web.check.network" = "请检查网络连接后重试";

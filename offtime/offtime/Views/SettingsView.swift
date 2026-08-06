@@ -12,16 +12,16 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack(path: $path) {
             List {
-                Section("显示设置") {
+                Section(String(localized: "settings.display")) {
                     Toggle(isOn: $viewModel.use24Hour) {
-                        Text("24小时制")
+                        Text(String(localized: "settings.24hour"))
                     }
                     .onChange(of: viewModel.use24Hour) {
                         viewModel.toggle24Hour()
                         appEnvironment.settings.use24Hour = viewModel.use24Hour
                     }
                     
-                    Picker("外观主题", selection: $viewModel.themeMode) {
+                    Picker(String(localized: "settings.theme"), selection: $viewModel.themeMode) {
                         ForEach(ThemeMode.allCases) { mode in
                             Text(mode.displayName).tag(mode)
                         }
@@ -32,52 +32,52 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section("时区数据库") {
+                Section(String(localized: "settings.tz.database")) {
                     HStack {
-                        Text("版本")
+                        Text(String(localized: "settings.version"))
                         Spacer()
                         Text(viewModel.tzDataVersion)
                             .foregroundColor(.secondary)
                     }
                 }
                 
-                Section("数据管理") {
+                Section(String(localized: "settings.data.management")) {
                     Button(action: {
                         prepareExportFile()
                         isPresentingFileExporter = true
                     }) {
-                        Text("导出城市列表")
+                        Text(String(localized: "settings.export.cities"))
                     }
                     
                     Button(action: {
                         isPresentingFileImporter = true
                     }) {
-                        Text("导入城市列表")
+                        Text(String(localized: "settings.import.cities"))
                     }
                 }
                 
-                Section("关于") {
+                Section(String(localized: "settings.about")) {
                     Button(action: {
                         path.append(AppRoute.privacyPage)
                     }) {
-                        Text("隐私说明")
+                        Text(String(localized: "settings.privacy"))
                     }
                     
                     Button(action: {
                         path.append(AppRoute.supportPage)
                     }) {
-                        Text("问题反馈")
+                        Text(String(localized: "settings.support"))
                     }
                     
                     Button(action: {
                         path.append(AppRoute.aboutPage)
                     }) {
-                        Text("关于 OffTime")
+                        Text(String(localized: "settings.about.offtime"))
                     }
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("设置")
+            .navigationTitle(String(localized: "settings.title"))
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
@@ -101,9 +101,9 @@ struct SettingsView: View {
             ) { result in
                 switch result {
                 case .success:
-                    viewModel.errorMessage = "导出成功"
+                    viewModel.errorMessage = String(localized: "settings.export.success")
                 case .failure(let error):
-                    viewModel.errorMessage = "导出失败: \(error.localizedDescription)"
+                    viewModel.errorMessage = String(localized: "settings.export.failed") + ": \(error.localizedDescription)"
                 }
                 // 清理临时文件
                 if let url = exportFileURL {
@@ -123,13 +123,13 @@ struct SettingsView: View {
                     do {
                         let data = try Data(contentsOf: url)
                         if viewModel.importCities(from: data) {
-                            viewModel.errorMessage = "导入成功"
+                            viewModel.errorMessage = String(localized: "settings.import.success")
                         }
                     } catch {
-                        viewModel.errorMessage = "导入失败，文件格式错误"
+                        viewModel.errorMessage = String(localized: "settings.import.failed")
                     }
                 case .failure:
-                    viewModel.errorMessage = "导入失败"
+                    viewModel.errorMessage = String(localized: "settings.import.failed")
                 }
             }
         }
@@ -137,7 +137,7 @@ struct SettingsView: View {
     
     private func prepareExportFile() {
         guard let data = viewModel.exportCities() else {
-            viewModel.errorMessage = "导出失败"
+            viewModel.errorMessage = String(localized: "settings.export.failed")
             return
         }
         
@@ -146,7 +146,7 @@ struct SettingsView: View {
             try data.write(to: fileURL)
             exportFileURL = fileURL
         } catch {
-            viewModel.errorMessage = "导出失败"
+            viewModel.errorMessage = String(localized: "settings.export.failed")
         }
     }
 }
@@ -221,7 +221,7 @@ struct WebView: UIViewRepresentable {
             DispatchQueue.main.async {
                 let html = """
                 <!DOCTYPE html>
-                <html lang="zh-CN">
+                <html lang="en">
                 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
                 <style>
                     body{font-family:-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#f5f5f5;color:#333;}
@@ -232,8 +232,8 @@ struct WebView: UIViewRepresentable {
                 </style></head>
                 <body><div class="box">
                     <div class="icon">📡</div>
-                    <h2>无法加载页面</h2>
-                    <p>请检查网络连接后重试</p>
+                    <h2>\(String(localized: "web.load.failed"))</h2>
+                    <p>\(String(localized: "web.check.network"))</p>
                 </div></body></html>
                 """
                 webView.loadHTMLString(html, baseURL: nil)
@@ -249,7 +249,7 @@ struct PrivacyPageView: View {
 
     var body: some View {
         WebView(url: privacyURL)
-            .navigationTitle("隐私说明")
+            .navigationTitle(String(localized: "settings.privacy"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .tabBar)
     }
@@ -260,7 +260,7 @@ struct SupportPageView: View {
 
     var body: some View {
         WebView(url: supportURL)
-            .navigationTitle("问题反馈")
+            .navigationTitle(String(localized: "settings.support"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .tabBar)
     }
@@ -278,27 +278,27 @@ struct AboutPageView: View {
                     .font(.title)
                     .fontWeight(.bold)
                 
-                Text("离线世界时钟")
+                Text(String(localized: "about.offtime"))
                     .font(.body)
                     .foregroundColor(.secondary)
                 
-                Text("版本 \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
+                Text("\(String(localized: "settings.version")) \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
                 Divider()
                 
-                Text("简介")
+                Text(String(localized: "about.intro"))
                     .font(.headline)
                 
-                Text("内置 IANA tzdata 时区数据库，不依赖网络、不依赖网络授时。依靠设备系统时间本地计算时区时间，自动处理夏令时。")
+                Text(String(localized: "about.description"))
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
             .padding()
         }
-        .navigationTitle("关于")
+        .navigationTitle(String(localized: "about.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
     }

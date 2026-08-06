@@ -28,12 +28,12 @@ struct ClockListView: View {
                     LoadingView()
                 }
             }
-            .navigationTitle("世界时钟")
+            .navigationTitle(String(localized: "clock.title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if !viewModel.cities.isEmpty {
-                        Button(editMode == .active ? "完成" : "管理") {
+                        Button(editMode == .active ? String(localized: "common.done") : String(localized: "clock.manage")) {
                             withAnimation {
                                 editMode = editMode == .active ? .inactive : .active
                             }
@@ -77,15 +77,15 @@ struct ClockListView: View {
                     }
                 }
             }
-            .alert("确认删除", isPresented: $isShowingDeleteConfirm) {
-                Button("取消", role: .cancel) {}
-                Button("删除", role: .destructive) {
+            .alert(String(localized: "clock.confirm.delete"), isPresented: $isShowingDeleteConfirm) {
+                Button(String(localized: "common.cancel"), role: .cancel) {}
+                Button(String(localized: "common.delete"), role: .destructive) {
                     if let city = cityToDelete {
                         viewModel.deleteCity(id: city.id)
                     }
                 }
             } message: {
-                Text("确定要删除这个城市吗？")
+                Text(String(localized: "clock.confirm.delete.message"))
             }
         }
     }
@@ -195,8 +195,8 @@ struct ClockListCell: View {
                             .font(.caption2)
                             .padding(.horizontal, 3)
                             .padding(.vertical, 1)
-                            .background(dstStatus == "夏令时" ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
-                            .foregroundColor(dstStatus == "夏令时" ? .orange : .blue)
+                            .background(dstStatus == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
+                            .foregroundColor(dstStatus == String(localized: "clock.dst.summer") ? .orange : .blue)
                             .cornerRadius(3)
                     }
                 }
@@ -233,10 +233,10 @@ struct ClockListCell: View {
         }
         .padding(.vertical, 12)
         .contextMenu {
-            Button("复制时间") {
+            Button(String(localized: "clock.copy.time")) {
                 onCopy()
             }
-            Button("删除城市", role: .destructive) {
+            Button(String(localized: "clock.delete.city"), role: .destructive) {
                 onDelete()
             }
         }
@@ -283,8 +283,8 @@ struct ClockGridCell: View {
                             .font(.caption2)
                             .padding(.horizontal, 3)
                             .padding(.vertical, 1)
-                            .background(dstStatus == "夏令时" ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
-                            .foregroundColor(dstStatus == "夏令时" ? .orange : .blue)
+                            .background(dstStatus == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
+                            .foregroundColor(dstStatus == String(localized: "clock.dst.summer") ? .orange : .blue)
                             .cornerRadius(3)
                     }
                 }
@@ -327,8 +327,8 @@ struct ClockGridCell: View {
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
         .contextMenu {
-            Button("复制时间") { onCopy() }
-            Button("删除城市", role: .destructive) { onDelete() }
+            Button(String(localized: "clock.copy.time")) { onCopy() }
+            Button(String(localized: "clock.delete.city"), role: .destructive) { onDelete() }
         }
     }
     
@@ -346,11 +346,11 @@ struct EmptyStateView: View {
                 .font(.system(size: 64))
                 .foregroundColor(.secondary)
             
-            Text("暂无城市")
+            Text(String(localized: "clock.empty.title"))
                 .font(.title)
                 .foregroundColor(.secondary)
             
-            Text("点击右上角添加全球城市")
+            Text(String(localized: "clock.empty.subtitle"))
                 .font(.body)
                 .foregroundColor(.secondary)
         }
@@ -363,7 +363,7 @@ struct LoadingView: View {
         VStack {
             ProgressView()
                 .scaleEffect(1.5)
-            Text("加载中...")
+            Text(String(localized: "common.loading"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .padding(.top, 8)
