@@ -14,8 +14,6 @@ final class ClockListViewModel: ObservableObject {
     private let timezoneService = TimezoneService.shared
     private let appSettingService = AppSettingService.shared
     
-    private var cancellables = Set<AnyCancellable>()
-    
     @Published var currentDate: Date = Date()
     private var timer: Timer?
     
@@ -23,13 +21,6 @@ final class ClockListViewModel: ObservableObject {
         startTimer()
         loadCities()
         loadUse24HourSetting()
-        
-        $use24Hour
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
     }
     
     deinit {
@@ -207,40 +198,6 @@ final class ClockListViewModel: ObservableObject {
     
     func getLocalWeekday(city: CityItem) -> String {
         return timezoneService.getLocalWeekday(timezoneId: city.timezoneId, date: currentDate) ?? ""
-    }
-    
-    func getRelativeDate(city: CityItem) -> String {
-        guard let timezone = TimeZone(identifier: city.timezoneId) else {
-            return getLocalDate(city: city)
-        }
-        
-        let now = currentDate
-        let calendar = Calendar.current
-        
-        // 获取目标时区的"今天"日期组件
-        var targetCalendar = calendar
-        targetCalendar.timeZone = timezone
-        let targetDay = targetCalendar.dateComponents([.year, .month, .day], from: now)
-        
-        // 获取本地时区的"今天"日期组件
-        let localDay = calendar.dateComponents([.year, .month, .day], from: now)
-        
-        // 比较日期差异
-        let targetDate = calendar.date(from: targetDay)
-        let localDate = calendar.date(from: localDay)
-        
-        guard let t = targetDate, let l = localDate else {
-            return getLocalDate(city: city)
-        }
-        
-        let diff = calendar.dateComponents([.day], from: l, to: t).day ?? 0
-        
-        switch diff {
-        case 0: return String(localized: "clock.today")
-        case 1: return String(localized: "clock.tomorrow")
-        case -1: return String(localized: "clock.yesterday")
-        default: return getLocalDate(city: city)
-        }
     }
     
     func getTimeDifference(city: CityItem) -> (offset: String, crossDay: String?) {

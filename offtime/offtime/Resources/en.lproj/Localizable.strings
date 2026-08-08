@@ -129,3 +129,16 @@
 // MARK: - Web Error
 "web.load.failed" = "Failed to load page";
 "web.check.network" = "Please check your network connection and try again";
+
+// MARK: - Accessibility & Sharing
+"accessibility.add.city" = "Add City";
+"accessibility.daytime" = "Daytime";
+"accessibility.nighttime" = "Nighttime";
+"accessibility.selected" = "Selected";
+"accessibility.unselected" = "Not selected";
+"accessibility.swap.cities" = "Swap source and target cities";
+"clock.share.time" = "Share Time";
+"converter.share.result" = "Share conversion result";
+"settings.share.app" = "Share App";
+"share.app.subject" = "Offline World Clock";
+"share.app.body" = "timezones at a glance for cross-border chats and travel, works entirely offline";

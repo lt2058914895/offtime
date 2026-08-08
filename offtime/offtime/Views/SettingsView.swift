@@ -8,6 +8,18 @@ struct SettingsView: View {
     @State private var isPresentingFileExporter = false
     @State private var isPresentingFileImporter = false
     @State private var exportFileURL: URL?
+
+    /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接
+    private let appStoreID = "6794565774"
+    private var appStoreURL: URL { URL(string: "https://apps.apple.com/app/id\(appStoreID)")! }
+
+    /// App 显示名：读取 Info.plist 的 CFBundleDisplayName（会自动取当前语言的本地化值，
+    /// 中文=世界时钟、英文=OffTime），跟随系统语言，避免硬编码。
+    private var appDisplayName: String {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String)
+            ?? (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String)
+            ?? "OffTime"
+    }
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -48,6 +60,15 @@ struct SettingsView: View {
                 }
                 
                 Section(String(localized: "settings.about")) {
+                    // item 用纯文本而非 URL：避免系统抓取 App Store 链接的 OG 预览（会显示通用的 "Today - App Store" 营销文案），
+                    // 直接分享以「本地化 App 显示名」开头的推荐文案 + 下载链接。
+                    ShareLink(
+                        item: appDisplayName + " — " + String(localized: "share.app.body") + "\n" + appStoreURL.absoluteString,
+                        subject: Text(String(localized: "share.app.subject"))
+                    ) {
+                        Text(String(localized: "settings.share.app"))
+                    }
+                    
                     Button(action: {
                         path.append(AppRoute.privacyPage)
                     }) {

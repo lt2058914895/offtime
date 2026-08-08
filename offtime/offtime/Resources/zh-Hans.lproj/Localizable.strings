@@ -129,3 +129,16 @@
 // MARK: - Web Error
 "web.load.failed" = "无法加载页面";
 "web.check.network" = "请检查网络连接后重试";
+
+// MARK: - Accessibility & Sharing
+"accessibility.add.city" = "添加城市";
+"accessibility.daytime" = "白天";
+"accessibility.nighttime" = "夜晚";
+"accessibility.selected" = "已选中";
+"accessibility.unselected" = "未选中";
+"accessibility.swap.cities" = "交换起终点城市";
+"clock.share.time" = "分享时间";
+"converter.share.result" = "分享转换结果";
+"settings.share.app" = "分享 App";
+"share.app.subject" = "离线世界时钟";
+"share.app.body" = "跨境沟通、国际出行,时区一目了然,离线也能用";

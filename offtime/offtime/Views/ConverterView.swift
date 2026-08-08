@@ -37,6 +37,15 @@ struct ConverterView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle(String(localized: "converter.title"))
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    ShareLink(item: conversionShareText) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .accessibilityLabel(String(localized: "converter.share.result"))
+                    .disabled(viewModel.sourceCity == nil || viewModel.targetCity == nil)
+                }
+            }
             .onChange(of: appEnvironment.settings.use24Hour) { newValue in
                 viewModel.use24Hour = newValue
             }
@@ -142,6 +151,7 @@ struct ConverterView: View {
                 .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
         }
         .scaleEffect(viewModel.isSwapping ? 0.9 : 1.0)
+        .accessibilityLabel(String(localized: "accessibility.swap.cities"))
     }
     
     private var targetCard: some View {
@@ -166,42 +176,79 @@ struct ConverterView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color(.systemGray3))
             
-            HStack {
-                HStack(spacing: 6) {
-                    Image(systemName: "calendar")
-                        .font(.callout)
-                        .foregroundColor(Color(.secondaryLabel))
-                    Text(viewModel.resultDate)
-                        .font(.body.weight(.semibold))
-                        .foregroundColor(Color(.label))
-                }
-                
-                Spacer()
-                
-                HStack(spacing: 6) {
-                    Image(systemName: "clock")
-                        .font(.callout)
-                        .foregroundColor(Color(.secondaryLabel))
-                    Text(viewModel.resultTime)
-                        .font(.body.weight(.semibold))
-                        .foregroundColor(Color(.label))
-                }
-                
-                Spacer()
-                
-                HStack(spacing: 4) {
-                    Image(systemName: "globe")
-                        .font(.callout)
-                        .foregroundColor(Color(.secondaryLabel))
-                    if let crossDay = viewModel.crossDay {
-                        Text(crossDay)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(crossDay == String(localized: "clock.tomorrow") ? Color.orange : Color.blue)
-                    }
-                    if !viewModel.timeDifference.isEmpty {
-                        Text(viewModel.timeDifference)
+            // 大字 Dynamic Type 下 HStack 放不下时自动回退 VStack，避免溢出
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    HStack(spacing: 6) {
+                        Image(systemName: "calendar")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text(viewModel.resultDate)
                             .font(.body.weight(.semibold))
                             .foregroundColor(Color(.label))
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 6) {
+                        Image(systemName: "clock")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text(viewModel.resultTime)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(Color(.label))
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 4) {
+                        Image(systemName: "globe")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        if let crossDay = viewModel.crossDay {
+                            Text(crossDay)
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(crossDay == String(localized: "clock.tomorrow") ? Color.orange : Color.blue)
+                        }
+                        if !viewModel.timeDifference.isEmpty {
+                            Text(viewModel.timeDifference)
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(Color(.label))
+                        }
+                    }
+                }
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "calendar")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text(viewModel.resultDate)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(Color(.label))
+                    }
+                    HStack(spacing: 6) {
+                        Image(systemName: "clock")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        Text(viewModel.resultTime)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(Color(.label))
+                    }
+                    HStack(spacing: 4) {
+                        Image(systemName: "globe")
+                            .font(.callout)
+                            .foregroundColor(Color(.secondaryLabel))
+                        if let crossDay = viewModel.crossDay {
+                            Text(crossDay)
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(crossDay == String(localized: "clock.tomorrow") ? Color.orange : Color.blue)
+                        }
+                        if !viewModel.timeDifference.isEmpty {
+                            Text(viewModel.timeDifference)
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(Color(.label))
+                        }
                     }
                 }
             }
@@ -265,6 +312,15 @@ struct ConverterView: View {
         viewModel.use24Hour ? Self.sourceTimeFormatter24 : Self.sourceTimeFormatter12
     }
     
+    /// 分享文案：「源城市 源日期 源时间 = 目标城市 目标日期 目标时间」
+    private var conversionShareText: String {
+        let srcName = viewModel.sourceCity?.cityName ?? ""
+        let srcDate = Self.sourceDateFormatter.string(from: viewModel.sourceDate)
+        let srcTime = sourceTimeFormatter.string(from: viewModel.sourceDate)
+        let tgtName = viewModel.targetCity?.cityName ?? ""
+        return "\(srcName) \(srcDate) \(srcTime) = \(tgtName) \(viewModel.resultDate) \(viewModel.resultTime)"
+    }
+    
     private var datePickerRow: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -305,6 +361,7 @@ struct ConverterView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(String(localized: "converter.select.date") + ": " + ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
                 
                 Button(action: { showTimePicker = true }) {
                     HStack(spacing: 6) {
@@ -322,6 +379,7 @@ struct ConverterView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(String(localized: "converter.select.time") + ": " + sourceTimeFormatter.string(from: viewModel.sourceDate))
             }
         }
     }

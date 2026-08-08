@@ -12,6 +12,8 @@ struct ClockListView: View {
     /// 避免 SwiftUI 通过双向绑定回写状态引起渲染循环 / 挂死。
     @State private var isEditing = false
     @State private var isShowingBatchDeleteConfirm = false
+    /// 长按城市「分享时间」要分享的文案（非空时弹出 ShareSheet）
+    @State private var shareItem: ShareTextItem?
     
     private var isIPad: Bool { horizontalSizeClass == .regular }
     
@@ -48,6 +50,7 @@ struct ClockListView: View {
                     }) {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel(String(localized: "accessibility.add.city"))
                 }
             }
             .navigationDestination(for: AppRoute.self) { route in
@@ -112,6 +115,9 @@ struct ClockListView: View {
             } message: {
                 Text(String(localized: "clock.confirm.delete.selected.message") + " (\(viewModel.selectedCityIds.count))")
             }
+            .sheet(item: $shareItem) { item in
+                ShareSheet(text: item.text)
+            }
         }
     }
     
@@ -175,6 +181,9 @@ struct ClockListView: View {
                             let text = viewModel.copyTimeText(city: city)
                             UIPasteboard.general.string = text
                         },
+                        onShare: {
+                            shareItem = ShareTextItem(text: viewModel.copyTimeText(city: city))
+                        },
                         onDelete: {
                             cityToDelete = city
                             isShowingDeleteConfirm = true
@@ -220,6 +229,9 @@ struct ClockListView: View {
                                 let text = viewModel.copyTimeText(city: city)
                                 UIPasteboard.general.string = text
                             },
+                            onShare: {
+                                shareItem = ShareTextItem(text: viewModel.copyTimeText(city: city))
+                            },
                             onDelete: {
                                 cityToDelete = city
                                 isShowingDeleteConfirm = true
@@ -263,6 +275,7 @@ struct ClockListCell: View {
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
     let onCopy: () -> Void
+    let onShare: () -> Void
     let onDelete: () -> Void
     
     var body: some View {
@@ -273,12 +286,14 @@ struct ClockListCell: View {
                     .font(.title3)
                     .foregroundColor(isSelected ? .red : .secondary)
                     .frame(width: 24, height: 24)
+                    .accessibilityLabel(String(localized: isSelected ? "accessibility.selected" : "accessibility.unselected"))
             }
             
             Image(isDaytime ? "day" : "night")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 22, height: 22)
+                .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
@@ -338,6 +353,9 @@ struct ClockListCell: View {
             Button(String(localized: "clock.copy.time")) {
                 onCopy()
             }
+            Button(String(localized: "clock.share.time")) {
+                onShare()
+            }
             Button(String(localized: "clock.delete.city"), role: .destructive) {
                 onDelete()
             }
@@ -364,6 +382,7 @@ struct ClockGridCell: View {
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
     let onCopy: () -> Void
+    let onShare: () -> Void
     let onDelete: () -> Void
     
     var body: some View {
@@ -374,6 +393,7 @@ struct ClockGridCell: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 22, height: 22)
+                    .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
                 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
@@ -399,6 +419,7 @@ struct ClockGridCell: View {
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                         .font(.title3)
                         .foregroundColor(isSelected ? .red : .secondary)
+                        .accessibilityLabel(String(localized: isSelected ? "accessibility.selected" : "accessibility.unselected"))
                 }
             }
             
@@ -447,6 +468,7 @@ struct ClockGridCell: View {
         }
         .contextMenu {
             Button(String(localized: "clock.copy.time")) { onCopy() }
+            Button(String(localized: "clock.share.time")) { onShare() }
             Button(String(localized: "clock.delete.city"), role: .destructive) { onDelete() }
         }
     }
@@ -456,6 +478,12 @@ struct ClockGridCell: View {
         if offset == "0h" { return .secondary }
         return offset.hasPrefix("+") ? .green : .red
     }
+}
+
+/// 用于 `.sheet(item:)` 的分享文案包装（String 非 Identifiable）
+struct ShareTextItem: Identifiable {
+    let id = UUID()
+    let text: String
 }
 
 struct EmptyStateView: View {

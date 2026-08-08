@@ -5,52 +5,76 @@ final class TimezoneService {
     
     private let calendar = Calendar.current
     
-    private init() {}
+    /// 线程安全的 TimeZone 缓存：避免每秒每城市重复调用 `TimeZone(identifier:)` 解析
+    private let timezoneCache = NSCache<NSString, NSTimeZone>()
+    /// 线程安全的 DateFormatter 缓存：key = "timezoneId|dateFormat|localeIdentifier"
+    private let formatterCache = NSCache<NSString, DateFormatter>()
+    
+    private init() {
+        // 缓存成本按对象数量计，时钟类 App 实际涉及的时区有限（通常 < 50）
+        timezoneCache.countLimit = 64
+        formatterCache.countLimit = 256
+    }
     
     // MARK: - Private Helpers
     
-    /// 创建线程安全的 DateFormatter（每次调用创建新实例，避免数据竞争）
+    /// 带缓存的 TimeZone 查询：miss 时解析并存入缓存
+    private func timezone(for id: String) -> TimeZone? {
+        if let cached = timezoneCache.object(forKey: id as NSString) {
+            return cached as TimeZone
+        }
+        guard let tz = TimeZone(identifier: id) else { return nil }
+        timezoneCache.setObject(tz as NSTimeZone, forKey: id as NSString)
+        return tz
+    }
+    
+    /// 创建/复用线程安全的 DateFormatter（缓存键含时区+格式+locale，locale 变更会自动 miss 重建）
     private func makeFormatter(timezone: TimeZone, dateFormat: String, locale: Locale = .current) -> DateFormatter {
+        let cacheKey = "\(timezone.identifier)|\(dateFormat)|\(locale.identifier)" as NSString
+        if let cached = formatterCache.object(forKey: cacheKey) {
+            return cached
+        }
         let formatter = DateFormatter()
         formatter.timeZone = timezone
         formatter.dateFormat = dateFormat
         formatter.locale = locale
         formatter.amSymbol = "AM"
         formatter.pmSymbol = "PM"
+        formatterCache.setObject(formatter, forKey: cacheKey)
         return formatter
     }
     
     // MARK: - Time Formatting
     
     func getLocalTime24(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "HH:mm").string(from: date)
     }
     
     func getLocalTime12(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "h:mm a").string(from: date)
     }
     
     func getLocalDate(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd").string(from: date)
     }
     
     func getLocalWeekday(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "EEEE").string(from: date)
     }
     
     func getLocalDateTime(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else { return nil }
+        guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd HH:mm").string(from: date)
     }
     
     // MARK: - Daytime Detection
     
     func isDaytime(timezoneId: String, date: Date = Date()) -> Bool {
-        guard let timezone = TimeZone(identifier: timezoneId) else { return true }
+        guard let timezone = timezone(for: timezoneId) else { return true }
         let hourStr = makeFormatter(timezone: timezone, dateFormat: "HH").string(from: date)
         if let hour = Int(hourStr) {
             return hour >= 6 && hour < 18
@@ -61,7 +85,7 @@ final class TimezoneService {
     // MARK: - Time Difference
     
     func getTimeDifference(timezoneId: String, date: Date = Date()) -> (offset: String, crossDay: String?) {
-        guard let targetTimezone = TimeZone(identifier: timezoneId) else {
+        guard let targetTimezone = timezone(for: timezoneId) else {
             return ("", nil)
         }
         
@@ -74,8 +98,8 @@ final class TimezoneService {
     }
     
     func getTimeDifferenceBetween(sourceTimezoneId: String, targetTimezoneId: String, date: Date = Date()) -> (offset: String, crossDay: String?) {
-        guard let sourceTimezone = TimeZone(identifier: sourceTimezoneId),
-              let targetTimezone = TimeZone(identifier: targetTimezoneId) else {
+        guard let sourceTimezone = timezone(for: sourceTimezoneId),
+              let targetTimezone = timezone(for: targetTimezoneId) else {
             return ("", nil)
         }
         
@@ -110,8 +134,8 @@ final class TimezoneService {
     // MARK: - Time Conversion
     
     func convertTime(sourceTimezoneId: String, targetTimezoneId: String, sourceDate: Date) -> Date? {
-        guard let sourceTimezone = TimeZone(identifier: sourceTimezoneId),
-              let targetTimezone = TimeZone(identifier: targetTimezoneId) else {
+        guard let sourceTimezone = timezone(for: sourceTimezoneId),
+              let targetTimezone = timezone(for: targetTimezoneId) else {
             return nil
         }
         
@@ -128,7 +152,7 @@ final class TimezoneService {
     // MARK: - Timezone Info
     
     func getTimezoneInfo(timezoneId: String) -> TimezoneInfo? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
+        guard let timezone = timezone(for: timezoneId) else {
             return nil
         }
         
@@ -144,7 +168,7 @@ final class TimezoneService {
     /// 获取城市的夏令时状态
     /// - Returns: "夏令时" / "冬令时" / nil（不使用夏令时的地区返回nil）
     func getDSTStatus(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = TimeZone(identifier: timezoneId) else {
+        guard let timezone = timezone(for: timezoneId) else {
             return nil
         }
         
