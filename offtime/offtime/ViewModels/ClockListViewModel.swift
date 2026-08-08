@@ -37,11 +37,25 @@ final class ClockListViewModel: ObservableObject {
     }
     
     private func startTimer() {
+        // 已在运行则不重复启动，避免叠加多个 Timer
+        guard timer == nil else { return }
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.currentDate = Date()
             }
         }
+    }
+    
+    /// 暂停定时器（App 进入后台时调用），停止每秒的时区重算，省电防发热
+    func pauseTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    /// 恢复定时器并立即刷新一次时间，避免从后台返回后短暂显示过期时间
+    func resumeTimer() {
+        currentDate = Date()
+        startTimer()
     }
     
     func loadCities() {

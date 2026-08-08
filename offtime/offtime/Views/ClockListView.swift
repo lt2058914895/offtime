@@ -4,6 +4,7 @@ struct ClockListView: View {
     @StateObject private var viewModel = ClockListViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.scenePhase) private var scenePhase
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
     @State private var cityToDelete: CityItem?
@@ -77,6 +78,20 @@ struct ClockListView: View {
                         isEditing = false
                     }
                     viewModel.clearSelection()
+                }
+            }
+            .onChange(of: scenePhase) { phase in
+                // 后台暂停每秒时区重算（省电防发热）；激活时立即刷新一次时间并恢复定时器，
+                // 避免从后台返回后短暂显示过期时间。inactive 为过渡态（控制中心/多任务切换器）不处理，避免频繁启停。
+                switch phase {
+                case .active:
+                    viewModel.resumeTimer()
+                case .background:
+                    viewModel.pauseTimer()
+                case .inactive:
+                    break
+                @unknown default:
+                    break
                 }
             }
             .alert(String(localized: "clock.confirm.delete"), isPresented: $isShowingDeleteConfirm) {
