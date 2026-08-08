@@ -5,6 +5,8 @@ struct ClockListView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.scenePhase) private var scenePhase
+    /// 当前选中的 Tab（由 MainTabView 传入），用于「仅时钟 Tab 才运行 Timer」
+    @Binding var activeTab: AppTab
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
     @State private var cityToDelete: CityItem?
@@ -14,8 +16,23 @@ struct ClockListView: View {
     @State private var isShowingBatchDeleteConfirm = false
     /// 长按城市「分享时间」要分享的文案（非空时弹出 ShareSheet）
     @State private var shareItem: ShareTextItem?
-    
+
     private var isIPad: Bool { horizontalSizeClass == .regular }
+
+    /// Timer 只在「App 在前台」且「当前是时钟 Tab」时运行：
+    /// 切到转换/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
+    private var shouldRunTimer: Bool {
+        scenePhase == .active && activeTab == .clock
+    }
+
+    /// 根据 shouldRunTimer 启停 Timer
+    private func updateTimer() {
+        if shouldRunTimer {
+            viewModel.resumeTimer()
+        } else {
+            viewModel.pauseTimer()
+        }
+    }
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -79,19 +96,14 @@ struct ClockListView: View {
                     viewModel.clearSelection()
                 }
             }
-            .onChange(of: scenePhase) { phase in
-                // 后台暂停每秒时区重算（省电防发热）；激活时立即刷新一次时间并恢复定时器，
-                // 避免从后台返回后短暂显示过期时间。inactive 为过渡态（控制中心/多任务切换器）不处理，避免频繁启停。
-                switch phase {
-                case .active:
-                    viewModel.resumeTimer()
-                case .background:
-                    viewModel.pauseTimer()
-                case .inactive:
-                    break
-                @unknown default:
-                    break
-                }
+            .onAppear {
+                // 兜底：首次显示时按当前状态校正 Timer（onChange 首次不触发）
+                updateTimer()
+            }
+            .onChange(of: shouldRunTimer) { _ in
+                // Timer 仅在「前台 + 时钟 Tab」运行：切到其它 Tab 或进后台时暂停，
+                // 回到时钟 Tab 或前台时恢复（resumeTimer 会先刷新一次时间，避免过期显示）。
+                updateTimer()
             }
             .alert(String(localized: "clock.confirm.delete"), isPresented: $isShowingDeleteConfirm) {
                 Button(String(localized: "common.cancel"), role: .cancel) {}
@@ -518,5 +530,5 @@ struct LoadingView: View {
 }
 
 #Preview {
-    ClockListView()
+    ClockListView(activeTab: .constant(.clock))
 }

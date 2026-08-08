@@ -35,6 +35,13 @@ enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
     }
 }
 
+/// 底层 Tab 标识，用于 TabView selection 绑定，驱动「仅时钟 Tab 运行 Timer」等逻辑
+enum AppTab: Hashable {
+    case clock
+    case converter
+    case settings
+}
+
 enum AppRoute: Hashable {
     case cityPicker
     case citySelector

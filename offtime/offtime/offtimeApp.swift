@@ -41,26 +41,30 @@ struct offtimeApp: App {
 
 struct MainTabView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
-    
+    @State private var selectedTab: AppTab = .clock
+
     var body: some View {
-        TabView {
-            ClockListView()
+        TabView(selection: $selectedTab) {
+            ClockListView(activeTab: $selectedTab)
                 .tabItem {
                     Image(systemName: "clock")
                     Text(String(localized: "tab.clock"))
                 }
-            
+                .tag(AppTab.clock)
+
             ConverterView()
                 .tabItem {
                     Image(systemName: "repeat")
                     Text(String(localized: "tab.converter"))
                 }
-            
+                .tag(AppTab.converter)
+
             SettingsView()
                 .tabItem {
                     Image(systemName: "gear")
                     Text(String(localized: "tab.settings"))
                 }
+                .tag(AppTab.settings)
         }
         .modifier(SidebarAdaptableTabStyle())
         .onAppear {
