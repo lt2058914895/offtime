@@ -7,6 +7,8 @@ final class ClockListViewModel: ObservableObject {
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
     @Published var use24Hour: Bool = Locale.systemUses24Hour
+    /// 管理模式下被勾选待删除的城市 ID
+    @Published var selectedCityIds: Set<UUID> = []
     
     private let cityService = CityService.shared
     private let timezoneService = TimezoneService.shared
@@ -103,6 +105,60 @@ final class ClockListViewModel: ObservableObject {
             } catch {
                 await MainActor.run {
                     self.errorMessage = String(localized: "clock.delete.failed")
+                }
+            }
+        }
+    }
+
+    // MARK: - 管理模式批量选择
+
+    /// 是否所有城市均被选中（列表非空时才有意义）
+    var allSelected: Bool {
+        !cities.isEmpty && selectedCityIds.count == cities.count
+    }
+
+    func toggleSelection(id: UUID) {
+        if selectedCityIds.contains(id) {
+            selectedCityIds.remove(id)
+        } else {
+            selectedCityIds.insert(id)
+        }
+    }
+
+    /// 全选当前所有城市
+    func selectAllCities() {
+        selectedCityIds = Set(cities.map { $0.id })
+    }
+
+    /// 清空所有勾选
+    func clearSelection() {
+        selectedCityIds.removeAll()
+    }
+
+    /// 全选 / 取消全选切换
+    func toggleSelectAll() {
+        if allSelected {
+            clearSelection()
+        } else {
+            selectAllCities()
+        }
+    }
+
+    /// 删除所有被勾选的城市（事务性，失败整体回滚）
+    func deleteSelectedCities() {
+        let ids = Array(selectedCityIds)
+        guard !ids.isEmpty else { return }
+        Task {
+            do {
+                try cityService.deleteCities(ids: ids)
+                await MainActor.run {
+                    self.selectedCityIds.removeAll()
+                    self.loadCities()
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = String(localized: "clock.delete.failed")
+                    self.loadCities()
                 }
             }
         }

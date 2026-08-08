@@ -78,27 +78,8 @@ final class DatabaseRepository {
         }
     }
     
-    // MARK: - Transaction Support
-    
-    func performTransaction(_ block: () throws -> Void) throws {
-        try dbQueue.sync {
-            guard let db = db else {
-                throw DatabaseError.notInitialized
-            }
-            try executeStatement("BEGIN TRANSACTION;")
-            do {
-                try block()
-                try executeStatement("COMMIT;")
-            } catch {
-                // 回滚事务，忽略回滚本身的错误
-                try? executeStatement("ROLLBACK;")
-                throw error
-            }
-        }
-    }
-    
     // MARK: - City CRUD
-    
+
     func addCity(_ city: CityRecord) throws {
         try dbQueue.sync {
             guard let db = db else {
@@ -137,20 +118,56 @@ final class DatabaseRepository {
                 throw DatabaseError.notInitialized
             }
             let sql = "DELETE FROM user_city WHERE id = ?;"
-            
+
             var statement: OpaquePointer?
             defer { sqlite3_finalize(statement) }
-            
+
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
                 let msg = String(cString: sqlite3_errmsg(db))
                 throw DatabaseError.prepareFailed(message: msg)
             }
-            
+
             sqlite3_bind_text(statement, 1, id, -1, SQLITE_TRANSIENT)
-            
+
             if sqlite3_step(statement) != SQLITE_DONE {
                 let msg = String(cString: sqlite3_errmsg(db))
                 throw DatabaseError.stepFailed(message: msg)
+            }
+        }
+    }
+
+    /// 批量删除城市。必须在「单次」dbQueue.sync 内完成整段事务，
+    /// 不能复用 performTransaction + deleteCity 的组合——那会在串行队列上 sync 套 sync，死锁。
+    func deleteCities(ids: [String]) throws {
+        guard !ids.isEmpty else { return }
+        try dbQueue.sync {
+            guard let db = db else {
+                throw DatabaseError.notInitialized
+            }
+            let sql = "DELETE FROM user_city WHERE id = ?;"
+            var statement: OpaquePointer?
+            defer { sqlite3_finalize(statement) }
+
+            if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
+            }
+
+            try executeStatement("BEGIN TRANSACTION;")
+            do {
+                for id in ids {
+                    sqlite3_reset(statement)
+                    sqlite3_clear_bindings(statement)
+                    sqlite3_bind_text(statement, 1, id, -1, SQLITE_TRANSIENT)
+                    if sqlite3_step(statement) != SQLITE_DONE {
+                        let msg = String(cString: sqlite3_errmsg(db))
+                        throw DatabaseError.stepFailed(message: msg)
+                    }
+                }
+                try executeStatement("COMMIT;")
+            } catch {
+                try? executeStatement("ROLLBACK;")
+                throw error
             }
         }
     }
@@ -215,6 +232,44 @@ final class DatabaseRepository {
             if sqlite3_step(statement) != SQLITE_DONE {
                 let msg = String(cString: sqlite3_errmsg(db))
                 throw DatabaseError.stepFailed(message: msg)
+            }
+        }
+    }
+
+    /// 原子性地批量更新排序：在「单次」dbQueue.sync 内完成整段事务，
+    /// 任一更新失败则整体回滚，避免半更新导致排序错乱。
+    /// 不能在事务块里再调用 updateCitySortIndex 等各自 dbQueue.sync 的方法——串行队列 sync 套 sync 死锁。
+    func updateSortIndices(_ idIndexPairs: [(id: String, sortIndex: Int)]) throws {
+        guard !idIndexPairs.isEmpty else { return }
+        try dbQueue.sync {
+            guard let db = db else {
+                throw DatabaseError.notInitialized
+            }
+            let sql = "UPDATE user_city SET sort_index = ? WHERE id = ?;"
+            var statement: OpaquePointer?
+            defer { sqlite3_finalize(statement) }
+
+            if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
+            }
+
+            try executeStatement("BEGIN TRANSACTION;")
+            do {
+                for pair in idIndexPairs {
+                    sqlite3_reset(statement)
+                    sqlite3_clear_bindings(statement)
+                    sqlite3_bind_int(statement, 1, Int32(pair.sortIndex))
+                    sqlite3_bind_text(statement, 2, pair.id, -1, SQLITE_TRANSIENT)
+                    if sqlite3_step(statement) != SQLITE_DONE {
+                        let msg = String(cString: sqlite3_errmsg(db))
+                        throw DatabaseError.stepFailed(message: msg)
+                    }
+                }
+                try executeStatement("COMMIT;")
+            } catch {
+                try? executeStatement("ROLLBACK;")
+                throw error
             }
         }
     }
@@ -331,15 +386,73 @@ final class DatabaseRepository {
             let sql = "DELETE FROM user_city;"
             var statement: OpaquePointer?
             defer { sqlite3_finalize(statement) }
-            
+
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
                 let msg = String(cString: sqlite3_errmsg(db))
                 throw DatabaseError.prepareFailed(message: msg)
             }
-            
+
             if sqlite3_step(statement) != SQLITE_DONE {
                 let msg = String(cString: sqlite3_errmsg(db))
                 throw DatabaseError.stepFailed(message: msg)
+            }
+        }
+    }
+
+    /// 原子性地用给定列表替换全部城市（先清空再批量插入）。
+    /// 必须在「单次」dbQueue.sync 内完成整段事务，不能在事务块里再调用 deleteAllCities/addCity
+    /// 等各自 dbQueue.sync 的方法——那会在串行队列上 sync 套 sync，死锁。
+    func replaceAllCities(_ records: [CityRecord]) throws {
+        try dbQueue.sync {
+            guard let db = db else {
+                throw DatabaseError.notInitialized
+            }
+
+            try executeStatement("BEGIN TRANSACTION;")
+            do {
+                // 1. 清空
+                let deleteSQL = "DELETE FROM user_city;"
+                var deleteStmt: OpaquePointer?
+                defer { sqlite3_finalize(deleteStmt) }
+                if sqlite3_prepare_v2(db, deleteSQL, -1, &deleteStmt, nil) != SQLITE_OK {
+                    let msg = String(cString: sqlite3_errmsg(db))
+                    throw DatabaseError.prepareFailed(message: msg)
+                }
+                if sqlite3_step(deleteStmt) != SQLITE_DONE {
+                    let msg = String(cString: sqlite3_errmsg(db))
+                    throw DatabaseError.stepFailed(message: msg)
+                }
+
+                // 2. 批量插入（复用 prepared statement）
+                let insertSQL = """
+                INSERT INTO user_city (id, city_name, city_en, timezone_id, sort_index, is_top)
+                VALUES (?, ?, ?, ?, ?, ?);
+                """
+                var insertStmt: OpaquePointer?
+                defer { sqlite3_finalize(insertStmt) }
+                if sqlite3_prepare_v2(db, insertSQL, -1, &insertStmt, nil) != SQLITE_OK {
+                    let msg = String(cString: sqlite3_errmsg(db))
+                    throw DatabaseError.prepareFailed(message: msg)
+                }
+                for record in records {
+                    sqlite3_reset(insertStmt)
+                    sqlite3_clear_bindings(insertStmt)
+                    sqlite3_bind_text(insertStmt, 1, record.id, -1, SQLITE_TRANSIENT)
+                    sqlite3_bind_text(insertStmt, 2, record.cityName, -1, SQLITE_TRANSIENT)
+                    sqlite3_bind_text(insertStmt, 3, record.cityEn, -1, SQLITE_TRANSIENT)
+                    sqlite3_bind_text(insertStmt, 4, record.timezoneId, -1, SQLITE_TRANSIENT)
+                    sqlite3_bind_int(insertStmt, 5, Int32(record.sortIndex))
+                    sqlite3_bind_int(insertStmt, 6, Int32(record.isTop))
+                    if sqlite3_step(insertStmt) != SQLITE_DONE {
+                        let msg = String(cString: sqlite3_errmsg(db))
+                        throw DatabaseError.stepFailed(message: msg)
+                    }
+                }
+
+                try executeStatement("COMMIT;")
+            } catch {
+                try? executeStatement("ROLLBACK;")
+                throw error
             }
         }
     }

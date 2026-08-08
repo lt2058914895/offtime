@@ -32,6 +32,9 @@
 "clock.confirm.delete.message" = "确定要删除这个城市吗？";
 "clock.copy.time" = "复制时间";
 "clock.delete.city" = "删除城市";
+"clock.select.all" = "全选";
+"clock.deselect.all" = "取消全选";
+"clock.confirm.delete.selected.message" = "确定要删除选中的城市吗？";
 "clock.dst.summer" = "夏令时";
 "clock.dst.winter" = "冬令时";
 "clock.tomorrow" = "明日";

@@ -29,6 +29,12 @@ final class CityService {
     func deleteCity(id: UUID) throws {
         try repository.deleteCity(id: id.uuidString)
     }
+
+    /// 批量删除城市，事务保证原子性：任一删除失败则整体回滚。
+    /// 直接调用 Repository 的单次 sync 事务方法，避免在事务块里再调用各自 dbQueue.sync 的 deleteCity 嵌套 sync 死锁。
+    func deleteCities(ids: [UUID]) throws {
+        try repository.deleteCities(ids: ids.map { $0.uuidString })
+    }
     
     func getAllCities() throws -> [CityItem] {
         let records = try repository.getAllCities()
@@ -58,9 +64,10 @@ final class CityService {
     }
     
     func reorderCities(_ cities: [CityItem]) throws {
-        for (index, city) in cities.enumerated() {
-            try repository.updateCitySortIndex(id: city.id.uuidString, sortIndex: index)
+        let idIndexPairs = cities.enumerated().map { (index, city) in
+            (id: city.id.uuidString, sortIndex: index)
         }
+        try repository.updateSortIndices(idIndexPairs)
     }
     
     private func getMaxSortIndex() throws -> Int {
@@ -75,25 +82,23 @@ final class CityService {
         return try encoder.encode(cities)
     }
     
-    /// 使用事务保护导入操作，确保原子性：失败时回滚，原有数据不丢失
+    /// 使用事务保护导入操作，确保原子性：失败时回滚，原有数据不丢失。
+    /// 直接调用 Repository 的单次 sync 事务方法，避免在事务块里再调用各自 dbQueue.sync 的 deleteAllCities/addCity 嵌套 sync 死锁。
     func importCities(from data: Data) throws {
         let decoder = JSONDecoder()
         let cities = try decoder.decode([CityItem].self, from: data)
-        
-        try repository.performTransaction {
-            try repository.deleteAllCities()
-            for (index, city) in cities.enumerated() {
-                let record = CityRecord(
-                    id: city.id.uuidString,
-                    cityName: city.cityName,
-                    cityEn: city.cityEn,
-                    timezoneId: city.timezoneId,
-                    sortIndex: index,
-                    isTop: city.isTop ? 1 : 0
-                )
-                try repository.addCity(record)
-            }
+
+        let records = cities.enumerated().map { index, city in
+            CityRecord(
+                id: city.id.uuidString,
+                cityName: city.cityName,
+                cityEn: city.cityEn,
+                timezoneId: city.timezoneId,
+                sortIndex: index,
+                isTop: city.isTop ? 1 : 0
+            )
         }
+        try repository.replaceAllCities(records)
     }
 
     // MARK: - First Launch Seeding

@@ -7,7 +7,10 @@ struct ClockListView: View {
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
     @State private var cityToDelete: CityItem?
-    @State private var editMode: EditMode = .inactive
+    /// 我们自己的编辑模式开关(单一数据源)。List 的原生 editMode 通过 .constant 只读传入，
+    /// 避免 SwiftUI 通过双向绑定回写状态引起渲染循环 / 挂死。
+    @State private var isEditing = false
+    @State private var isShowingBatchDeleteConfirm = false
     
     private var isIPad: Bool { horizontalSizeClass == .regular }
     
@@ -29,14 +32,12 @@ struct ClockListView: View {
                 }
             }
             .navigationTitle(String(localized: "clock.title"))
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if !viewModel.cities.isEmpty {
-                        Button(editMode == .active ? String(localized: "common.done") : String(localized: "clock.manage")) {
-                            withAnimation {
-                                editMode = editMode == .active ? .inactive : .active
-                            }
+                        Button(isEditing ? String(localized: "common.done") : String(localized: "clock.manage")) {
+                            toggleEditMode()
                         }
                     }
                 }
@@ -70,11 +71,12 @@ struct ClockListView: View {
                 viewModel.use24Hour = newValue
             }
             .onChange(of: viewModel.cities.isEmpty) { isEmpty in
-                // 城市全部删除后自动退出编辑模式
-                if isEmpty && editMode == .active {
+                // 城市全部删除后自动退出编辑模式并清空勾选
+                if isEmpty && isEditing {
                     withAnimation {
-                        editMode = .inactive
+                        isEditing = false
                     }
+                    viewModel.clearSelection()
                 }
             }
             .alert(String(localized: "clock.confirm.delete"), isPresented: $isShowingDeleteConfirm) {
@@ -87,47 +89,61 @@ struct ClockListView: View {
             } message: {
                 Text(String(localized: "clock.confirm.delete.message"))
             }
+            .alert(String(localized: "clock.confirm.delete"), isPresented: $isShowingBatchDeleteConfirm) {
+                Button(String(localized: "common.cancel"), role: .cancel) {}
+                Button(String(localized: "common.delete"), role: .destructive) {
+                    viewModel.deleteSelectedCities()
+                }
+            } message: {
+                Text(String(localized: "clock.confirm.delete.selected.message") + " (\(viewModel.selectedCityIds.count))")
+            }
         }
+    }
+    
+    // MARK: - 管理模式顶部操作栏（全选 / 删除）
+    private var editActionBar: some View {
+        HStack(spacing: 12) {
+            Button {
+                viewModel.toggleSelectAll()
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: viewModel.allSelected ? "checkmark.circle.fill" : "circle")
+                    Text(String(localized: "clock.select.all"))
+                }
+            }
+            Spacer()
+            Button {
+                isShowingBatchDeleteConfirm = true
+            } label: {
+                HStack(spacing: 5) {
+                    Image(systemName: "trash")
+                    Text(String(localized: "common.delete"))
+                    if !viewModel.selectedCityIds.isEmpty {
+                        Text("(\(viewModel.selectedCityIds.count))")
+                    }
+                }
+                .font(.body)
+                .fontWeight(.medium)
+                .foregroundColor(viewModel.selectedCityIds.isEmpty ? .secondary : .red)
+            }
+            .disabled(viewModel.selectedCityIds.isEmpty)
+        }
+        .font(.body)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(Color(.systemBackground))
     }
     
     // MARK: - iPhone 布局（单列列表）
     private var iphoneLayout: some View {
-        List {
-            ForEach($viewModel.cities) { $city in
-                ClockListCell(
-                    city: city,
-                    time: viewModel.getLocalTime(city: city),
-                    date: viewModel.getLocalDate(city: city),
-                    weekday: viewModel.getLocalWeekday(city: city),
-                    timeDifference: viewModel.getTimeDifference(city: city),
-                    isDaytime: viewModel.isDaytime(city: city),
-                    dstStatus: viewModel.getDSTStatus(city: city),
-                    onCopy: {
-                        let text = viewModel.copyTimeText(city: city)
-                        UIPasteboard.general.string = text
-                    },
-                    onDelete: {
-                        cityToDelete = city
-                        isShowingDeleteConfirm = true
-                    }
-                )
+        VStack(spacing: 0) {
+            if isEditing {
+                editActionBar
+                Divider()
             }
-            .onMove(perform: move)
-            .onDelete(perform: confirmDelete)
-        }
-        .listStyle(.insetGrouped)
-        .environment(\.editMode, $editMode)
-    }
-    
-    // MARK: - iPad 布局（多列网格）
-    private var ipadLayout: some View {
-        ScrollView {
-            LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: 16),
-                GridItem(.flexible(), spacing: 16)
-            ], spacing: 16) {
-                ForEach(viewModel.cities) { city in
-                    ClockGridCell(
+            List {
+                ForEach($viewModel.cities) { $city in
+                    ClockListCell(
                         city: city,
                         time: viewModel.getLocalTime(city: city),
                         date: viewModel.getLocalDate(city: city),
@@ -135,6 +151,11 @@ struct ClockListView: View {
                         timeDifference: viewModel.getTimeDifference(city: city),
                         isDaytime: viewModel.isDaytime(city: city),
                         dstStatus: viewModel.getDSTStatus(city: city),
+                        isEditMode: isEditing,
+                        isSelected: viewModel.selectedCityIds.contains(city.id),
+                        onToggleSelection: {
+                            viewModel.toggleSelection(id: city.id)
+                        },
                         onCopy: {
                             let text = viewModel.copyTimeText(city: city)
                             UIPasteboard.general.string = text
@@ -145,11 +166,57 @@ struct ClockListView: View {
                         }
                     )
                 }
+                .onMove(perform: move)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .listStyle(.insetGrouped)
+            // 只读 .constant：让 List 的 .onMove 手柄照常显示，但禁止 SwiftUI 回写 editMode，
+            // 否则会在我们更新选中状态 / 自定义布局时触发渲染循环挂死。
+            .environment(\.editMode, .constant(isEditing ? .active : .inactive))
         }
-        .background(Color(.systemGroupedBackground))
+    }
+    
+    // MARK: - iPad 布局（多列网格）
+    private var ipadLayout: some View {
+        VStack(spacing: 0) {
+            if isEditing {
+                editActionBar
+                Divider()
+            }
+            ScrollView {
+                LazyVGrid(columns: [
+                    GridItem(.flexible(), spacing: 16),
+                    GridItem(.flexible(), spacing: 16)
+                ], spacing: 16) {
+                    ForEach(viewModel.cities) { city in
+                        ClockGridCell(
+                            city: city,
+                            time: viewModel.getLocalTime(city: city),
+                            date: viewModel.getLocalDate(city: city),
+                            weekday: viewModel.getLocalWeekday(city: city),
+                            timeDifference: viewModel.getTimeDifference(city: city),
+                            isDaytime: viewModel.isDaytime(city: city),
+                            dstStatus: viewModel.getDSTStatus(city: city),
+                            isEditMode: isEditing,
+                            isSelected: viewModel.selectedCityIds.contains(city.id),
+                            onToggleSelection: {
+                                viewModel.toggleSelection(id: city.id)
+                            },
+                            onCopy: {
+                                let text = viewModel.copyTimeText(city: city)
+                                UIPasteboard.general.string = text
+                            },
+                            onDelete: {
+                                cityToDelete = city
+                                isShowingDeleteConfirm = true
+                            }
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+            }
+            .background(Color(.systemGroupedBackground))
+        }
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -157,11 +224,15 @@ struct ClockListView: View {
         viewModel.reorderCities(viewModel.cities)
     }
     
-    /// 编辑模式下滑动删除，先弹出确认弹窗再执行删除
-    private func confirmDelete(at offsets: IndexSet) {
-        guard let offset = offsets.first else { return }
-        cityToDelete = viewModel.cities[offset]
-        isShowingDeleteConfirm = true
+    /// 切换管理模式；退出时清空勾选，避免残留选中状态
+    private func toggleEditMode() {
+        let willBeActive = !isEditing
+        withAnimation {
+            isEditing = willBeActive
+        }
+        if !willBeActive {
+            viewModel.clearSelection()
+        }
     }
 }
 
@@ -173,11 +244,22 @@ struct ClockListCell: View {
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
+    var isEditMode: Bool = false
+    var isSelected: Bool = false
+    var onToggleSelection: () -> Void = {}
     let onCopy: () -> Void
     let onDelete: () -> Void
     
     var body: some View {
-        HStack(alignment: .center, spacing: 16) {
+        HStack(alignment: .center, spacing: isEditMode ? 12 : 16) {
+            // 管理模式下的勾选圆圈：空心圆 / 勾选填充（红色提示删除）
+            if isEditMode {
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundColor(isSelected ? .red : .secondary)
+                    .frame(width: 24, height: 24)
+            }
+            
             Image(isDaytime ? "day" : "night")
                 .resizable()
                 .scaledToFit()
@@ -233,6 +315,10 @@ struct ClockListCell: View {
             }
         }
         .padding(.vertical, 12)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isEditMode { onToggleSelection() }
+        }
         .contextMenu {
             Button(String(localized: "clock.copy.time")) {
                 onCopy()
@@ -259,12 +345,15 @@ struct ClockGridCell: View {
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
+    var isEditMode: Bool = false
+    var isSelected: Bool = false
+    var onToggleSelection: () -> Void = {}
     let onCopy: () -> Void
     let onDelete: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // 顶部：城市名 + 日夜图标
+            // 顶部：城市名 + 日夜图标 + 管理模式勾选圆圈
             HStack {
                 Image(isDaytime ? "day" : "night")
                     .resizable()
@@ -291,6 +380,11 @@ struct ClockGridCell: View {
                     }
                 }
                 Spacer()
+                if isEditMode {
+                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                        .font(.title3)
+                        .foregroundColor(isSelected ? .red : .secondary)
+                }
             }
             
             Divider()
@@ -328,6 +422,14 @@ struct ClockGridCell: View {
         .padding(16)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.red, lineWidth: isSelected ? 2 : 0)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isEditMode { onToggleSelection() }
+        }
         .contextMenu {
             Button(String(localized: "clock.copy.time")) { onCopy() }
             Button(String(localized: "clock.delete.city"), role: .destructive) { onDelete() }
