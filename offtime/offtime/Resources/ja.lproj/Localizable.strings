@@ -1,0 +1,137 @@
+/* OffTime - 日本語ローカライズ */
+
+// MARK: - Tab Bar
+"tab.clock" = "時計";
+"tab.converter" = "変換";
+"tab.settings" = "設定";
+
+// MARK: - Common
+"common.loading" = "読み込み中...";
+"common.cancel" = "キャンセル";
+"common.done" = "完了";
+"common.delete" = "削除";
+"common.retry" = "再試行";
+"common.success" = "成功";
+
+// MARK: - Database Error
+"db.init.failed" = "データベースの初期化に失敗しました";
+"db.unknown.error" = "不明なエラー";
+"db.read.failed" = "データベースの読み込みに失敗しました";
+"db.read.failed.restart" = "データベースの読み込みに失敗しました。アプリを再起動してください";
+"db.open.failed" = "データベースを開けませんでした";
+"db.not.initialized" = "データベースが初期化されていません";
+"db.prepare.failed" = "SQL準備に失敗しました";
+"db.step.failed" = "SQL実行に失敗しました";
+
+// MARK: - Clock List
+"clock.title" = "世界時計";
+"clock.manage" = "管理";
+"clock.empty.title" = "都市がありません";
+"clock.empty.subtitle" = "右上の + をタップして世界の都市を追加してください";
+"clock.confirm.delete" = "削除の確認";
+"clock.confirm.delete.message" = "この都市を削除しますか？";
+"clock.copy.time" = "時刻をコピー";
+"clock.delete.city" = "都市を削除";
+"clock.select.all" = "すべて選択";
+"clock.deselect.all" = "選択を解除";
+"clock.confirm.delete.selected.message" = "選択した都市を削除しますか？";
+"clock.dst.summer" = "夏時間";
+"clock.dst.winter" = "冬時間";
+"clock.tomorrow" = "明日";
+"clock.yesterday" = "昨日";
+"clock.today" = "今日";
+"clock.time.parse.failed" = "時刻の解析に失敗しました";
+"clock.date.parse.failed" = "日付の解析に失敗しました";
+"clock.reorder.failed" = "並べ替えに失敗しました";
+"clock.city.exists" = "この都市はすでに存在します";
+"clock.add.failed" = "都市の追加に失敗しました";
+"clock.delete.failed" = "都市の削除に失敗しました";
+
+// MARK: - City Picker
+"city.picker.title" = "都市を追加";
+"city.selector.title" = "都市を選択";
+"city.search.placeholder" = "都市を検索";
+"city.no.results" = "都市が見つかりません";
+"city.try.different" = "別のキーワードをお試しください";
+"city.data.not.found" = "都市データファイルが見つかりません";
+"city.data.load.failed" = "都市データの読み込みに失敗しました";
+
+// MARK: - Continent Names
+"continent.hot" = "人気";
+"continent.asia" = "アジア";
+"continent.europe" = "ヨーロッパ";
+"continent.america" = "アメリカ大陸";
+"continent.oceania" = "オセアニア";
+"continent.africa" = "アフリカ";
+
+// MARK: - Converter
+"converter.title" = "時刻コンバーター";
+"converter.source.city" = "元の都市";
+"converter.target.city" = "対象の都市";
+"converter.select.city" = "都市を選択";
+"converter.datetime" = "日付と時刻";
+"converter.current.time" = "現在時刻";
+"converter.select.date" = "日付を選択";
+"converter.select.time" = "時刻を選択";
+"converter.select.city.hint" = "都市を選択してください";
+"converter.timezone.parse.failed" = "タイムゾーンの解析に失敗しました";
+"converter.convert.failed" = "時刻の変換に失敗しました";
+"converter.load.cities.failed" = "都市の読み込みに失敗しました";
+"converter.add.city.failed" = "都市の追加に失敗しました";
+
+// MARK: - Settings
+"settings.title" = "設定";
+"settings.display" = "表示設定";
+"settings.24hour" = "24時間表示";
+"settings.theme" = "外観";
+"settings.version" = "バージョン";
+"settings.data.management" = "データ管理";
+"settings.export.cities" = "都市リストをエクスポート";
+"settings.import.cities" = "都市リストをインポート";
+"settings.about" = "このアプリについて";
+"settings.support" = "フィードバック";
+"settings.load.failed" = "設定の読み込みに失敗しました";
+"settings.save.failed" = "設定の保存に失敗しました";
+"settings.save.theme.failed" = "テーマの保存に失敗しました";
+"settings.export.failed" = "エクスポートに失敗しました";
+"settings.export.success" = "エクスポートしました";
+"settings.import.failed" = "インポートに失敗しました。ファイル形式が正しくありません";
+"settings.import.success" = "インポートしました";
+
+// MARK: - Theme
+"theme.system" = "システムに合わせる";
+"theme.light" = "ライト";
+"theme.dark" = "ダーク";
+
+// MARK: - Onboarding
+"onboarding.welcome.title" = "OffTime へようこそ";
+"onboarding.welcome.subtitle" = "国際交流・海外旅行で、タイムゾーンを一目で確認";
+"onboarding.cities.title" = "よく見る都市を追加";
+"onboarding.cities.subtitle" = "お住まいの地域の都市は登録済みです。よく確認する都市を追加してください。";
+"onboarding.features.title" = "その他の機能";
+"onboarding.features.converter" = "時刻コンバーター";
+"onboarding.features.converter.desc" = "どの都市間でもすばやく時刻を換算";
+"onboarding.features.format" = "12/24時間切り替え";
+"onboarding.features.format.desc" = "設定から時刻表示を切り替えられます";
+"onboarding.features.theme" = "ダークモード";
+"onboarding.features.theme.desc" = "システムに合わせるか、手動で切り替え";
+"onboarding.next" = "次へ";
+"onboarding.start" = "はじめる";
+
+// MARK: - Web Error
+"web.load.failed" = "ページを読み込めませんでした";
+"web.check.network" = "ネットワーク接続を確認して、もう一度お試しください";
+
+// MARK: - Accessibility & Sharing
+"accessibility.add.city" = "都市を追加";
+"accessibility.daytime" = "昼間";
+"accessibility.nighttime" = "夜間";
+"accessibility.selected" = "選択中";
+"accessibility.unselected" = "未選択";
+"accessibility.swap.cities" = "元の都市と対象の都市を入れ替え";
+"clock.share.time" = "時刻を共有";
+"converter.share.result" = "変換結果を共有";
+"settings.share.app" = "アプリを共有";
+"settings.rate.app" = "App Store で評価";
+"share.app.subject" = "オフライン世界時計";
+"share.app.body" = "国際交流や海外旅行でタイムゾーンを一目確認。完全オフラインで使えます";
