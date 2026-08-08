@@ -178,9 +178,10 @@ struct ClockListCell: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
-            Image(systemName: isDaytime ? "sun.max" : "moon")
-                .foregroundColor(isDaytime ? .yellow : .blue)
-                .font(.title3)
+            Image(isDaytime ? "day" : "night")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 22, height: 22)
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
@@ -265,9 +266,10 @@ struct ClockGridCell: View {
         VStack(alignment: .leading, spacing: 12) {
             // 顶部：城市名 + 日夜图标
             HStack {
-                Image(systemName: isDaytime ? "sun.max" : "moon")
-                    .foregroundColor(isDaytime ? .yellow : .blue)
-                    .font(.title3)
+                Image(isDaytime ? "day" : "night")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
                 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
