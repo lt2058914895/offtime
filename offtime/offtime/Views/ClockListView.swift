@@ -60,12 +60,8 @@ struct ClockListView: View {
                         viewModel.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
                         path.removeLast()
                     })
-                case .privacyPage:
-                    PrivacyPageView()
                 case .supportPage:
                     SupportPageView()
-                case .aboutPage:
-                    AboutPageView()
                 case .citySelector:
                     EmptyView()
                 }

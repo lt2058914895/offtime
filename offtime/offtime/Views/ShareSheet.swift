@@ -1,13 +1,23 @@
 import SwiftUI
 import UIKit
 
-/// 系统分享面板包装：用于上下文菜单等无法直接放置 `ShareLink` 的场景。
-/// 转换器工具栏、设置页等内联位置优先使用 `ShareLink`，无需本组件。
+/// 系统分享面板包装：用于上下文菜单、设置页等需要 `UIActivityViewController` 的场景。
+/// 直接把 item 交给系统，由各渠道（微信/Message/邮件等）自行抓取 URL 生成应用名/图标卡片预览，
+/// 比 SwiftUI `ShareLink(item: URL)` 更可控（后者会触发 App Store 通用 OG 模板 "Today - App Store"）。
 struct ShareSheet: UIViewControllerRepresentable {
-    let text: String
+    let items: [Any]
+
+    init(items: [Any]) {
+        self.items = items
+    }
+
+    /// 便捷初始化：分享纯文本
+    init(text: String) {
+        self.items = [text]
+    }
 
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}

@@ -84,14 +84,12 @@
 "settings.display" = "显示设置";
 "settings.24hour" = "24小时制";
 "settings.theme" = "外观主题";
-"settings.version" = "版本";
+"settings.version" = "版本号";
 "settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";
 "settings.about" = "关于";
-"settings.privacy" = "隐私说明";
 "settings.support" = "问题反馈";
-"settings.about.offtime" = "关于 OffTime";
 "settings.load.failed" = "加载设置失败";
 "settings.save.failed" = "保存设置失败";
 "settings.save.theme.failed" = "保存主题失败";
@@ -104,12 +102,6 @@
 "theme.system" = "跟随系统";
 "theme.light" = "浅色";
 "theme.dark" = "深色";
-
-// MARK: - About
-"about.title" = "关于";
-"about.offtime" = "离线世界时钟";
-"about.intro" = "简介";
-"about.description" = "使用系统提供的 IANA 时区数据库（随 iOS 更新），不依赖网络、不依赖网络授时。依靠设备系统时间本地计算时区时间，自动处理夏令时。";
 
 // MARK: - Onboarding
 "onboarding.welcome.title" = "欢迎使用 OffTime";
@@ -140,5 +132,6 @@
 "clock.share.time" = "分享时间";
 "converter.share.result" = "分享转换结果";
 "settings.share.app" = "分享 App";
+"settings.rate.app" = "去 App Store 评分";
 "share.app.subject" = "离线世界时钟";
 "share.app.body" = "跨境沟通、国际出行,时区一目了然,离线也能用";

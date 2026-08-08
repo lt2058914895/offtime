@@ -9,9 +9,14 @@ struct SettingsView: View {
     @State private var isPresentingFileImporter = false
     @State private var exportFileURL: URL?
 
-    /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接
+    /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接与评分跳转
     private let appStoreID = "6794565774"
     private var appStoreURL: URL { URL(string: "https://apps.apple.com/app/id\(appStoreID)")! }
+
+    /// App Store 写评论页 URL：itms-apps scheme 会直接拉起 App Store app 的写评论界面
+    private var writeReviewURL: URL {
+        URL(string: "itms-apps://itunes.apple.com/app/id\(appStoreID)?action=write-review")!
+    }
 
     /// App 显示名：读取 Info.plist 的 CFBundleDisplayName（会自动取当前语言的本地化值，
     /// 中文=世界时钟、英文=OffTime），跟随系统语言，避免硬编码。
@@ -19,6 +24,31 @@ struct SettingsView: View {
         (Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String)
             ?? (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String)
             ?? "OffTime"
+    }
+
+    /// 分享 App 的正文：本地化 App 显示名 + 推荐文案 + 下载链接。
+    /// 用纯文本而非 URL：apps.apple.com 链接的 OG 元数据是站点级通用模板（"Today - App Store"），
+    /// 无论 ShareLink(item: URL) 还是 UIActivityViewController(items: [url]) 都会被渠道抓成该通用文案；
+    /// 纯文本不走 OG 抓取，文案完全可控，链接在文本中仍可点击。
+    private var shareAppMessage: String {
+        "\(appDisplayName) — \(String(localized: "share.app.body"))\n\(appStoreURL.absoluteString)"
+    }
+
+    /// 版本号：读 CFBundleShortVersionString，如 "1.0"
+    private var versionText: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+    }
+
+    /// 版本行：info 图标 + 版本号，纯只读展示
+    private var versionRow: some View {
+        HStack {
+            Label(String(localized: "settings.version"), systemImage: "info.circle.fill")
+                .foregroundColor(.secondary)
+            Spacer()
+            Text(versionText)
+                .foregroundColor(.secondary)
+        }
+        .accessibilityElement(children: .combine)
     }
     
     var body: some View {
@@ -60,32 +90,40 @@ struct SettingsView: View {
                 }
                 
                 Section(String(localized: "settings.about")) {
-                    // item 用纯文本而非 URL：避免系统抓取 App Store 链接的 OG 预览（会显示通用的 "Today - App Store" 营销文案），
-                    // 直接分享以「本地化 App 显示名」开头的推荐文案 + 下载链接。
+                    // 纯文本分享：apps.apple.com URL 的 OG 是通用 "Today - App Store" 模板，
+                    // 任何方式分享 URL 都会被抓成该文案；改用纯文本（应用名 + 推荐语 + 链接）绕过 OG。
                     ShareLink(
-                        item: appDisplayName + " — " + String(localized: "share.app.body") + "\n" + appStoreURL.absoluteString,
+                        item: shareAppMessage,
                         subject: Text(String(localized: "share.app.subject"))
                     ) {
-                        Text(String(localized: "settings.share.app"))
+                        Label(String(localized: "settings.share.app"), systemImage: "square.and.arrow.up")
                     }
-                    
+                    .accessibilityLabel(String(localized: "settings.share.app"))
+
+                    // 直接跳 App Store 写评论页：itms-apps scheme 拉起 App Store app，
+                    // 不用 in-app 弹窗，确保每次点击都能真正进入评分界面。
                     Button(action: {
-                        path.append(AppRoute.privacyPage)
+                        UIApplication.shared.open(writeReviewURL)
                     }) {
-                        Text(String(localized: "settings.privacy"))
+                        HStack {
+                            Label(String(localized: "settings.rate.app"), systemImage: "star.fill")
+                            Spacer()
+                            Text("★★★★★")
+                                .foregroundColor(.orange)
+                        }
                     }
-                    
+                    .accessibilityLabel(String(localized: "settings.rate.app"))
+
                     Button(action: {
                         path.append(AppRoute.supportPage)
                     }) {
-                        Text(String(localized: "settings.support"))
+                        Label(String(localized: "settings.support"), systemImage: "envelope.fill")
                     }
-                    
-                    Button(action: {
-                        path.append(AppRoute.aboutPage)
-                    }) {
-                        Text(String(localized: "settings.about.offtime"))
-                    }
+                }
+
+                // 版本号单独一个 section，纯只读展示
+                Section {
+                    versionRow
                 }
             }
             .listStyle(.insetGrouped)
@@ -93,12 +131,8 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
-                case .privacyPage:
-                    PrivacyPageView()
                 case .supportPage:
                     SupportPageView()
-                case .aboutPage:
-                    AboutPageView()
                 default:
                     EmptyView()
                 }
@@ -254,18 +288,7 @@ struct WebView: UIViewRepresentable {
     }
 }
 
-// MARK: - Privacy & About Pages
-
-struct PrivacyPageView: View {
-    private let privacyURL = URL(string: "https://lt2058914895.github.io/offtime/privacy.html")!
-
-    var body: some View {
-        WebView(url: privacyURL)
-            .navigationTitle(String(localized: "settings.privacy"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .tabBar)
-    }
-}
+// MARK: - Support Page
 
 struct SupportPageView: View {
     private let supportURL = URL(string: "https://lt2058914895.github.io/offtime/support.html")!
@@ -275,44 +298,6 @@ struct SupportPageView: View {
             .navigationTitle(String(localized: "settings.support"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .tabBar)
-    }
-}
-
-struct AboutPageView: View {
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                Image(systemName: "globe")
-                    .font(.system(size: 64))
-                    .foregroundColor(.accentColor)
-                
-                Text("OffTime")
-                    .font(.title)
-                    .fontWeight(.bold)
-                
-                Text(String(localized: "about.offtime"))
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                
-                Text("\(String(localized: "settings.version")) \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Divider()
-                
-                Text(String(localized: "about.intro"))
-                    .font(.headline)
-                
-                Text(String(localized: "about.description"))
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding()
-        }
-        .navigationTitle(String(localized: "about.title"))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
     }
 }
 

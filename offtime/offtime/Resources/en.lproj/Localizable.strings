@@ -89,9 +89,7 @@
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";
 "settings.about" = "About";
-"settings.privacy" = "Privacy Policy";
 "settings.support" = "Feedback";
-"settings.about.offtime" = "About OffTime";
 "settings.load.failed" = "Failed to load settings";
 "settings.save.failed" = "Failed to save settings";
 "settings.save.theme.failed" = "Failed to save theme";
@@ -104,12 +102,6 @@
 "theme.system" = "System";
 "theme.light" = "Light";
 "theme.dark" = "Dark";
-
-// MARK: - About
-"about.title" = "About";
-"about.offtime" = "Offline World Clock";
-"about.intro" = "Introduction";
-"about.description" = "Uses the system-provided IANA tzdata (updated with iOS), works offline without network or NTP. Calculates timezone locally using device system time, handles daylight saving time automatically.";
 
 // MARK: - Onboarding
 "onboarding.welcome.title" = "Welcome to OffTime";
@@ -140,5 +132,6 @@
 "clock.share.time" = "Share Time";
 "converter.share.result" = "Share conversion result";
 "settings.share.app" = "Share App";
+"settings.rate.app" = "Rate on App Store";
 "share.app.subject" = "Offline World Clock";
 "share.app.body" = "timezones at a glance for cross-border chats and travel, works entirely offline";
