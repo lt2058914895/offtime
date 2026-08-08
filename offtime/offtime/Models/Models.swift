@@ -18,7 +18,6 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
 struct AppSettings: Equatable, Codable {
     var use24Hour: Bool
     var themeMode: ThemeMode
-    var localTzDataVersion: String
 }
 
 enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {

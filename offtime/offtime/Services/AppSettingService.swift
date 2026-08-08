@@ -10,8 +10,7 @@ final class AppSettingService {
     
     private let defaultSettings = AppSettings(
         use24Hour: true,
-        themeMode: .system,
-        localTzDataVersion: "2024a"
+        themeMode: .system
     )
     
     func loadSettings() throws -> AppSettings {
@@ -42,16 +41,5 @@ final class AppSettingService {
         var settings = try loadSettings()
         settings.themeMode = mode
         try saveSettings(settings)
-    }
-    
-    func updateTzDataVersion(_ version: String) throws {
-        var settings = try loadSettings()
-        settings.localTzDataVersion = version
-        try saveSettings(settings)
-    }
-    
-    func checkTzDataUpdate() async -> String {
-        // TODO: 接入实际时区数据库更新检查
-        return "2024a"
     }
 }

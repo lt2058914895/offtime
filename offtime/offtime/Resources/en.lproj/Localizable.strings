@@ -81,7 +81,6 @@
 "settings.display" = "Display";
 "settings.24hour" = "24-Hour Format";
 "settings.theme" = "Appearance";
-"settings.tz.database" = "Timezone Database";
 "settings.version" = "Version";
 "settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";
@@ -107,7 +106,7 @@
 "about.title" = "About";
 "about.offtime" = "Offline World Clock";
 "about.intro" = "Introduction";
-"about.description" = "Built-in IANA tzdata timezone database, works offline without network or NTP. Calculates timezone locally using device system time, handles daylight saving time automatically.";
+"about.description" = "Uses the system-provided IANA tzdata (updated with iOS), works offline without network or NTP. Calculates timezone locally using device system time, handles daylight saving time automatically.";
 
 // MARK: - Web Error
 "web.load.failed" = "Unable to load page";

@@ -32,15 +32,6 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section(String(localized: "settings.tz.database")) {
-                    HStack {
-                        Text(String(localized: "settings.version"))
-                        Spacer()
-                        Text(viewModel.tzDataVersion)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
                 Section(String(localized: "settings.data.management")) {
                     Button(action: {
                         prepareExportFile()

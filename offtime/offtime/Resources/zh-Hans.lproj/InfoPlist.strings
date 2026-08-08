@@ -2,4 +2,3 @@
 
 "CFBundleDisplayName" = "世界时钟";
 "NSDocumentPickerUsageDescription" = "用于导入/导出城市列表文件";
-"NSLocationWhenInUseUsageDescription" = "可选：用于自动定位获取本地时区，不会上传位置信息";

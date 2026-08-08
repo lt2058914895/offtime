@@ -4,7 +4,6 @@ import Combine
 final class SettingsViewModel: ObservableObject {
     @Published var use24Hour: Bool = true
     @Published var themeMode: ThemeMode = .system
-    @Published var tzDataVersion: String = "2024a"
     
     @Published var errorMessage: String?
     
@@ -21,7 +20,6 @@ final class SettingsViewModel: ObservableObject {
                 await MainActor.run {
                     self.use24Hour = settings.use24Hour
                     self.themeMode = settings.themeMode
-                    self.tzDataVersion = settings.localTzDataVersion
                 }
             } catch {
                 await MainActor.run {

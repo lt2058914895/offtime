@@ -81,7 +81,6 @@
 "settings.display" = "显示设置";
 "settings.24hour" = "24小时制";
 "settings.theme" = "外观主题";
-"settings.tz.database" = "时区数据库";
 "settings.version" = "版本";
 "settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
@@ -107,7 +106,7 @@
 "about.title" = "关于";
 "about.offtime" = "离线世界时钟";
 "about.intro" = "简介";
-"about.description" = "内置 IANA tzdata 时区数据库，不依赖网络、不依赖网络授时。依靠设备系统时间本地计算时区时间，自动处理夏令时。";
+"about.description" = "使用系统提供的 IANA 时区数据库（随 iOS 更新），不依赖网络、不依赖网络授时。依靠设备系统时间本地计算时区时间，自动处理夏令时。";
 
 // MARK: - Web Error
 "web.load.failed" = "无法加载页面";

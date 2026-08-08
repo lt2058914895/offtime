@@ -2,4 +2,3 @@
 
 "CFBundleDisplayName" = "OffTime";
 "NSDocumentPickerUsageDescription" = "Used to import/export city list files";
-"NSLocationWhenInUseUsageDescription" = "Optional: Used to automatically obtain local timezone. Location data will not be uploaded.";

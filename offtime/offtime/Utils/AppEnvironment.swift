@@ -4,8 +4,7 @@ import Combine
 final class AppEnvironment: ObservableObject {
     @Published var settings: AppSettings = AppSettings(
         use24Hour: true,
-        themeMode: .system,
-        localTzDataVersion: "2024a"
+        themeMode: .system
     )
     
     /// 数据库初始化状态：nil 表示未开始，true 表示成功，false 表示失败
@@ -17,6 +16,8 @@ final class AppEnvironment: ObservableObject {
     func setupDatabase() {
         do {
             try DatabaseRepository.shared.setup()
+            // 首启依据设备系统时区自动加入默认城市；失败不阻塞启动
+            try? CityService.shared.seedDefaultCityIfFirstLaunch()
             databaseReady = true
         } catch {
             databaseReady = false
