@@ -4,27 +4,33 @@ struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var path = NavigationPath()
     @State private var showDatePicker = false
     @State private var showTimePicker = false
     @State private var isSelectingSource = true
+    /// swap 按钮尺寸随 body Dynamic Type 同步缩放，避免图标在大字下撑出固定圆形
+    @ScaledMetric(relativeTo: .body) private var swapButtonSize: CGFloat = 44
     
     private var isIPad: Bool { horizontalSizeClass == .regular }
+    /// iPhone 横屏（compact vertical）：改走横向布局，充分利用宽度，避免两卡片纵向堆叠
+    private var isLandscape: Bool { verticalSizeClass == .compact }
+    private var usesHorizontalLayout: Bool { isIPad || isLandscape }
     
     var body: some View {
         NavigationStack(path: $path) {
             ScrollView {
-                if isIPad {
-                    // iPad：源/目标卡片横向并排
+                if usesHorizontalLayout {
+                    // iPad 或 iPhone 横屏：源/目标卡片横向并排，充分利用宽度
                     HStack(alignment: .center, spacing: 16) {
                         sourceCard
                         swapButton
                         targetCard
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 20)
+                    .padding(.horizontal, isIPad ? 24 : 16)
+                    .padding(.vertical, 16)
                 } else {
-                    // iPhone：纵向排列
+                    // iPhone 竖屏：纵向排列
                     VStack(spacing: 16) {
                         sourceCard
                         swapButton
@@ -108,7 +114,7 @@ struct ConverterView: View {
                     }
                 }
             }
-            .presentationDetents([.medium])
+            .presentationDetents([.medium, .large])
         }
         .sheet(isPresented: $showTimePicker) {
             NavigationStack {
@@ -132,7 +138,7 @@ struct ConverterView: View {
                     }
                 }
             }
-            .presentationDetents([.medium])
+            .presentationDetents([.medium, .large])
         }
     }
     
@@ -142,14 +148,18 @@ struct ConverterView: View {
                 viewModel.swapCities()
             }
         }) {
-            Image(systemName: isIPad ? "arrow.left.arrow.right" : "arrow.up.arrow.down")
+            Image(systemName: usesHorizontalLayout ? "arrow.left.arrow.right" : "arrow.up.arrow.down")
                 .font(.body.weight(.semibold))
                 .foregroundColor(Color(.systemGray2))
-                .frame(width: 36, height: 36)
+                // 尺寸随 body Dynamic Type 同步缩放，图标与圆形始终保持比例，不再裁切
+                .frame(width: swapButtonSize, height: swapButtonSize)
                 .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(Circle())
                 .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+                .contentShape(Circle()) // 确保整个圆形区域可点
         }
+        // 封顶到 accessibility3：图标按钮视觉无需无限放大，VoiceOver 由 accessibilityLabel 兜底
+        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .scaleEffect(viewModel.isSwapping ? 0.9 : 1.0)
         .accessibilityLabel(String(localized: "accessibility.swap.cities"))
     }
@@ -260,7 +270,7 @@ struct ConverterView: View {
             Text(title)
                 .font(.body)
                 .fontWeight(.semibold)
-                .foregroundColor(Color(.systemGray5))
+                .foregroundColor(Color(.systemGray2))
             
             Button(action: action) {
                 HStack {
@@ -268,6 +278,8 @@ struct ConverterView: View {
                         Text("\(city.cityName) (\(city.cityEn))")
                             .font(.headline)
                             .foregroundColor(Color(.label))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     } else {
                         Text(String(localized: "converter.select.city"))
                             .font(.headline)
@@ -323,65 +335,102 @@ struct ConverterView: View {
     
     private var datePickerRow: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(String(localized: "converter.datetime"))
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(Color(.systemGray3))
-                
-                Spacer()
-                
-                Button(action: {
-                    viewModel.sourceDate = viewModel.currentSourceCityDate()
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .font(.caption)
-                        Text(String(localized: "converter.current.time"))
-                            .font(.caption)
-                    }
-                    .foregroundColor(.accentColor)
+            // 表头：窄横屏 / 大字下标签与「当前时间」按钮放不下时自动回退纵向
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    datePickerLabel
+                    Spacer()
+                    currentTimeButton
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    datePickerLabel
+                    currentTimeButton
                 }
             }
             
-            HStack(spacing: 12) {
-                Button(action: { showDatePicker = true }) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "calendar")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text(ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(Color(.label))
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 8)
-                    .background(Color(.systemGray5))
-                    .cornerRadius(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            // 大字 Dynamic Type 或窄屏（横屏 SE 等）放不下并排时，自动回退纵向
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 12) {
+                    dateButton
+                    timeButton
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(String(localized: "converter.select.date") + ": " + ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
-                
-                Button(action: { showTimePicker = true }) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "clock")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text(sourceTimeFormatter.string(from: viewModel.sourceDate))
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(Color(.label))
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 8)
-                    .background(Color(.systemGray5))
-                    .cornerRadius(8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(spacing: 12) {
+                    dateButton
+                    timeButton
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(String(localized: "converter.select.time") + ": " + sourceTimeFormatter.string(from: viewModel.sourceDate))
             }
         }
+    }
+
+    private var datePickerLabel: some View {
+        Text(String(localized: "converter.datetime"))
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .foregroundColor(Color(.systemGray3))
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+    }
+
+    private var currentTimeButton: some View {
+        Button(action: {
+            viewModel.sourceDate = viewModel.currentSourceCityDate()
+        }) {
+            HStack(spacing: 4) {
+                Image(systemName: "clock.arrow.circlepath")
+                    .font(.caption)
+                Text(String(localized: "converter.current.time"))
+                    .font(.caption)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+            .foregroundColor(.accentColor)
+        }
+    }
+
+    /// 日期选择按钮（大字下文字允许缩放避免溢出）
+    private var dateButton: some View {
+        Button(action: { showDatePicker = true }) {
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .font(.callout)
+                    .foregroundColor(Color(.secondaryLabel))
+                Text(ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(Color(.label))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(Color(.systemGray5))
+            .cornerRadius(8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "converter.select.date") + ": " + ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
+    }
+
+    /// 时间选择按钮（大字下文字允许缩放避免溢出）
+    private var timeButton: some View {
+        Button(action: { showTimePicker = true }) {
+            HStack(spacing: 6) {
+                Image(systemName: "clock")
+                    .font(.callout)
+                    .foregroundColor(Color(.secondaryLabel))
+                Text(sourceTimeFormatter.string(from: viewModel.sourceDate))
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(Color(.label))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(Color(.systemGray5))
+            .cornerRadius(8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "converter.select.time") + ": " + sourceTimeFormatter.string(from: viewModel.sourceDate))
     }
 }
 
