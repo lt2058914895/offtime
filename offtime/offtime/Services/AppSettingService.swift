@@ -9,7 +9,7 @@ final class AppSettingService {
     private init() {}
     
     private let defaultSettings = AppSettings(
-        use24Hour: true,
+        use24Hour: Locale.systemUses24Hour,
         themeMode: .system
     )
     
@@ -41,5 +41,17 @@ final class AppSettingService {
         var settings = try loadSettings()
         settings.themeMode = mode
         try saveSettings(settings)
+    }
+
+    // MARK: - Onboarding
+
+    private let onboardingKey = "onboarding_completed"
+
+    func isOnboardingCompleted() -> Bool {
+        (try? repository.getConfig(key: onboardingKey)) == "1"
+    }
+
+    func setOnboardingCompleted() {
+        try? repository.saveConfig(key: onboardingKey, value: "1")
     }
 }

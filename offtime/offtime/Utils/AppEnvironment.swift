@@ -3,26 +3,35 @@ import Combine
 
 final class AppEnvironment: ObservableObject {
     @Published var settings: AppSettings = AppSettings(
-        use24Hour: true,
+        use24Hour: Locale.systemUses24Hour,
         themeMode: .system
     )
     
     /// 数据库初始化状态：nil 表示未开始，true 表示成功，false 表示失败
     @Published var databaseReady: Bool? = nil
     @Published var databaseErrorMessage: String? = nil
-    
+    /// 是否已完成首启引导（新用户为 false，老用户/已完成用户为 true）
+    @Published var onboardingCompleted: Bool = false
+
     private let appSettingService = AppSettingService.shared
-    
+
     func setupDatabase() {
         do {
             try DatabaseRepository.shared.setup()
-            // 首启依据设备系统时区自动加入默认城市；失败不阻塞启动
-            try? CityService.shared.seedDefaultCityIfFirstLaunch()
+            // 首启依据设备系统时区自动加入默认城市；返回是否为首次启动
+            let isFirstLaunch = (try? CityService.shared.seedDefaultCityIfFirstLaunch()) ?? false
+            // 老用户（非首次启动）直接跳过引导；新用户显示引导直至完成
+            onboardingCompleted = !isFirstLaunch || appSettingService.isOnboardingCompleted()
             databaseReady = true
         } catch {
             databaseReady = false
             databaseErrorMessage = error.localizedDescription
         }
+    }
+
+    func completeOnboarding() {
+        appSettingService.setOnboardingCompleted()
+        onboardingCompleted = true
     }
     
     func loadSettings() {

@@ -100,10 +100,12 @@ final class CityService {
 
     /// 首次启动时根据设备系统时区自动加入一个默认城市，避免空列表。
     /// 仅根据 `TimeZone.current` 推断，不请求定位权限、不联网。幂等：通过 app_config 的标志位保证只执行一次。
-    func seedDefaultCityIfFirstLaunch() throws {
+    /// - Returns: 是否为首次启动（标志位此前未设置）
+    @discardableResult
+    func seedDefaultCityIfFirstLaunch() throws -> Bool {
         let seededKey = "first_launch_seeded"
         if let flag = try? repository.getConfig(key: seededKey), flag == "1" {
-            return
+            return false
         }
         // 仅当用户当前没有任何城市时才自动加入，避免给已在使用的老用户突然加城市
         let existing = try getAllCities()
@@ -113,6 +115,7 @@ final class CityService {
             try addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
         }
         try repository.saveConfig(key: seededKey, value: "1")
+        return true
     }
 
     /// 在内置城市列表中查找与指定时区匹配的城市；找不到则用时区标识符派生名称。

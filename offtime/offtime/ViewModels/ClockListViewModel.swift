@@ -6,7 +6,7 @@ final class ClockListViewModel: ObservableObject {
     @Published var cities: [CityItem] = []
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
-    @Published var use24Hour: Bool = true
+    @Published var use24Hour: Bool = Locale.systemUses24Hour
     
     private let cityService = CityService.shared
     private let timezoneService = TimezoneService.shared

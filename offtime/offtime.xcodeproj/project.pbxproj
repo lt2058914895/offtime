@@ -263,7 +263,7 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "OffTime";
+				INFOPLIST_KEY_CFBundleDisplayName = OffTime;
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "Used to import/export city list files";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
@@ -296,7 +296,7 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "OffTime";
+				INFOPLIST_KEY_CFBundleDisplayName = OffTime;
 				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "Used to import/export city list files";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";

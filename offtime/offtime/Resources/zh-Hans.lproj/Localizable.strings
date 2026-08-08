@@ -108,6 +108,21 @@
 "about.intro" = "简介";
 "about.description" = "使用系统提供的 IANA 时区数据库（随 iOS 更新），不依赖网络、不依赖网络授时。依靠设备系统时间本地计算时区时间，自动处理夏令时。";
 
+// MARK: - Onboarding
+"onboarding.welcome.title" = "欢迎使用 OffTime";
+"onboarding.welcome.subtitle" = "跨境沟通、国际出行，时区一目了然";
+"onboarding.cities.title" = "添加你关心的城市";
+"onboarding.cities.subtitle" = "已为你加入本地城市，再添加几个常关注的城市吧";
+"onboarding.features.title" = "更多功能";
+"onboarding.features.converter" = "时区转换器";
+"onboarding.features.converter.desc" = "任意城市间快速换算时间";
+"onboarding.features.format" = "12/24 小时切换";
+"onboarding.features.format.desc" = "在设置中切换时间显示格式";
+"onboarding.features.theme" = "深色模式";
+"onboarding.features.theme.desc" = "跟随系统或手动切换外观";
+"onboarding.next" = "下一步";
+"onboarding.start" = "开始使用";
+
 // MARK: - Web Error
 "web.load.failed" = "无法加载页面";
 "web.check.network" = "请检查网络连接后重试";

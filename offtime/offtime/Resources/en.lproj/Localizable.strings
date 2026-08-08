@@ -108,6 +108,21 @@
 "about.intro" = "Introduction";
 "about.description" = "Uses the system-provided IANA tzdata (updated with iOS), works offline without network or NTP. Calculates timezone locally using device system time, handles daylight saving time automatically.";
 
+// MARK: - Onboarding
+"onboarding.welcome.title" = "Welcome to OffTime";
+"onboarding.welcome.subtitle" = "Cross-border communication and international travel — time zones at a glance";
+"onboarding.cities.title" = "Add cities you track";
+"onboarding.cities.subtitle" = "Your local city is already added. Add a few more you check often.";
+"onboarding.features.title" = "More features";
+"onboarding.features.converter" = "Time Converter";
+"onboarding.features.converter.desc" = "Quickly convert time between any cities";
+"onboarding.features.format" = "12/24-Hour Toggle";
+"onboarding.features.format.desc" = "Switch the time format in Settings";
+"onboarding.features.theme" = "Dark Mode";
+"onboarding.features.theme.desc" = "Follow the system or pick manually";
+"onboarding.next" = "Next";
+"onboarding.start" = "Get Started";
+
 // MARK: - Web Error
-"web.load.failed" = "Unable to load page";
+"web.load.failed" = "Failed to load page";
 "web.check.network" = "Please check your network connection and try again";

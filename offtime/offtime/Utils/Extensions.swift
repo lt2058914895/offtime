@@ -11,6 +11,16 @@ extension View {
     }
 }
 
+extension Locale {
+    /// 系统当前是否使用 24 小时制。基于 locale 时间格式模板 "j" 推断，
+    /// "j" 在 12 小时制 locale 下会展开为含 "a"（AM/PM）的格式，反之不含。
+    /// 反映用户在系统设置中的"24小时制"开关。
+    static var systemUses24Hour: Bool {
+        let format = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current)
+        return !(format?.contains("a") ?? true)
+    }
+}
+
 /// iPad 内容宽度限制修饰器（已弃用宽度限制，各视图独立适配 iPad 布局）
 struct ReadableContentModifier: ViewModifier {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass

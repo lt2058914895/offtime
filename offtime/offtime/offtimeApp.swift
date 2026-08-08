@@ -12,7 +12,11 @@ struct offtimeApp: App {
         WindowGroup {
             Group {
                 if appEnvironment.databaseReady == true {
-                    MainTabView()
+                    if appEnvironment.onboardingCompleted {
+                        MainTabView()
+                    } else {
+                        OnboardingView()
+                    }
                 } else if appEnvironment.databaseReady == false {
                     DatabaseErrorView(errorMessage: appEnvironment.databaseErrorMessage) {
                         appEnvironment.setupDatabase()
