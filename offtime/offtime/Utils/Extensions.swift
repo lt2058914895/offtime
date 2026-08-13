@@ -4,11 +4,6 @@ extension View {
     func toast(message: Binding<String?>) -> some View {
         self.modifier(ToastModifier(message: message))
     }
-    
-    /// iPad 适配：在 regular 横向尺寸下限制内容最大宽度并居中
-    func readableContentPadding() -> some View {
-        modifier(ReadableContentModifier())
-    }
 }
 
 extension Locale {
@@ -18,15 +13,6 @@ extension Locale {
     static var systemUses24Hour: Bool {
         let format = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current)
         return !(format?.contains("a") ?? true)
-    }
-}
-
-/// iPad 内容宽度限制修饰器（已弃用宽度限制，各视图独立适配 iPad 布局）
-struct ReadableContentModifier: ViewModifier {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    
-    func body(content: Content) -> some View {
-        content
     }
 }
 

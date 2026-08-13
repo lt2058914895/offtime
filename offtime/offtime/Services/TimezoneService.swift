@@ -187,10 +187,4 @@ final class TimezoneService {
         
         return nil
     }
-    
-    func getAllAvailableTimezones() -> [TimezoneInfo] {
-        return TimeZone.knownTimeZoneIdentifiers.compactMap { id in
-            getTimezoneInfo(timezoneId: id)
-        }
-    }
 }
