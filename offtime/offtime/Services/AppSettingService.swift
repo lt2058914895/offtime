@@ -1,54 +1,22 @@
 import Foundation
 
+/// 设置服务兼容层：所有读写已迁移至 AppEnvironment + UserDefaults。
+/// 保留此文件仅为过渡期兼容，新代码请直接使用 AppEnvironment.settings。
+@available(*, deprecated, message: "请使用 AppEnvironment.settings 和 AppEnvironment.updateSettings()")
 final class AppSettingService {
     static let shared = AppSettingService()
-    
-    private let repository = DatabaseRepository.shared
-    private let configKey = "app_settings"
-    
     private init() {}
     
-    private let defaultSettings = AppSettings.defaults
-    
     func loadSettings() throws -> AppSettings {
-        if let json = try repository.getConfig(key: configKey) {
-            if let data = json.data(using: .utf8) {
-                let decoder = JSONDecoder()
-                return try decoder.decode(AppSettings.self, from: data)
-            }
-        }
-        return defaultSettings
+        let use24Hour = UserDefaults.standard.object(forKey: "settings_use24Hour") as? Bool
+            ?? Locale.systemUses24Hour
+        let themeRaw = UserDefaults.standard.integer(forKey: "settings_themeMode")
+        let themeMode = ThemeMode(rawValue: themeRaw) ?? .system
+        return AppSettings(use24Hour: use24Hour, themeMode: themeMode)
     }
     
     func saveSettings(_ settings: AppSettings) throws {
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(settings)
-        if let json = String(data: data, encoding: .utf8) {
-            try repository.saveConfig(key: configKey, value: json)
-        }
-    }
-    
-    func updateUse24Hour(_ value: Bool) throws {
-        var settings = try loadSettings()
-        settings.use24Hour = value
-        try saveSettings(settings)
-    }
-    
-    func updateThemeMode(_ mode: ThemeMode) throws {
-        var settings = try loadSettings()
-        settings.themeMode = mode
-        try saveSettings(settings)
-    }
-
-    // MARK: - Onboarding
-
-    private let onboardingKey = "onboarding_completed"
-
-    func isOnboardingCompleted() -> Bool {
-        (try? repository.getConfig(key: onboardingKey)) == "1"
-    }
-
-    func setOnboardingCompleted() {
-        try? repository.saveConfig(key: onboardingKey, value: "1")
+        UserDefaults.standard.set(settings.use24Hour, forKey: "settings_use24Hour")
+        UserDefaults.standard.set(settings.themeMode.rawValue, forKey: "settings_themeMode")
     }
 }

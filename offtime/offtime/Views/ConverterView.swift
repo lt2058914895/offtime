@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
@@ -74,11 +75,11 @@ struct ConverterView: View {
                 switch route {
                 case .citySelector:
                     CitySelectorView(onCitySelected: { city in
-                        let item = CityItem(id: UUID(), cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, sortIndex: 0)
+                        let model = CityModel(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
                         if isSelectingSource {
-                            viewModel.sourceCity = item
+                            viewModel.sourceCity = model
                         } else {
-                            viewModel.targetCity = item
+                            viewModel.targetCity = model
                         }
                         path.removeLast()
                     })
@@ -276,7 +277,7 @@ struct ConverterView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func cityButton(title: String, city: CityItem?, action: @escaping () -> Void) -> some View {
+    private func cityButton(title: String, city: CityModel?, action: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.body)

@@ -1,9 +1,11 @@
 import Foundation
 import Combine
+import SwiftData
 
+@MainActor
 final class ConverterViewModel: ObservableObject {
-    @Published var sourceCity: CityItem?
-    @Published var targetCity: CityItem?
+    @Published var sourceCity: CityModel?
+    @Published var targetCity: CityModel?
     @Published var sourceDate: Date = Date()
     
     @Published var resultTime: String = ""
@@ -16,15 +18,13 @@ final class ConverterViewModel: ObservableObject {
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     
     private let timezoneService = TimezoneService.shared
-    private let appSettingService = AppSettingService.shared
     private let cityService = CityService.shared
     
-    @Published var availableCities: [CityItem] = []
+    @Published var availableCities: [CityModel] = []
     @Published var isSwapping: Bool = false
     
     init() {
         loadCities()
-        loadUse24HourSetting()
         
         $sourceCity
             .combineLatest($targetCity, $sourceDate)
@@ -45,37 +45,18 @@ final class ConverterViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     func loadCities() {
-        Task {
-            do {
-                let cities = try cityService.getAllCities()
-                await MainActor.run {
-                    self.availableCities = cities
-                    
-                    if self.sourceCity == nil && !cities.isEmpty {
-                        self.sourceCity = cities.first
-                    }
-                    if self.targetCity == nil && cities.count > 1 {
-                        self.targetCity = cities[1]
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "converter.load.cities.failed")
-                }
+        do {
+            let cities = try cityService.getAllCities()
+            availableCities = cities
+            
+            if sourceCity == nil && !cities.isEmpty {
+                sourceCity = cities.first
             }
-        }
-    }
-    
-    private func loadUse24HourSetting() {
-        Task {
-            do {
-                let settings = try appSettingService.loadSettings()
-                await MainActor.run {
-                    self.use24Hour = settings.use24Hour
-                }
-            } catch {
-                // 使用默认值
+            if targetCity == nil && cities.count > 1 {
+                targetCity = cities[1]
             }
+        } catch {
+            errorMessage = String(localized: "converter.load.cities.failed")
         }
     }
     
@@ -83,7 +64,7 @@ final class ConverterViewModel: ObservableObject {
         convertTime(source: sourceCity, target: targetCity, date: sourceDate)
     }
     
-    private func convertTime(source: CityItem?, target: CityItem?, date: Date) {
+    private func convertTime(source: CityModel?, target: CityModel?, date: Date) {
         guard let source = source, let target = target else {
             resultTime = String(localized: "converter.select.city.hint")
             resultDate = ""
@@ -169,28 +150,22 @@ final class ConverterViewModel: ObservableObject {
     }
     
     func addCity(cityName: String, cityEn: String, timezoneId: String) {
-        Task {
-            do {
-                let exists = try cityService.hasCity(cityName: cityName, timezoneId: timezoneId)
-                if !exists {
-                    try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
-                }
-                // 重新加载城市列表
-                let cities = try cityService.getAllCities()
-                await MainActor.run {
-                    self.availableCities = cities
-                    if self.sourceCity == nil && !cities.isEmpty {
-                        self.sourceCity = cities.first
-                    }
-                    if self.targetCity == nil && cities.count > 1 {
-                        self.targetCity = cities[1]
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "converter.add.city.failed")
-                }
+        do {
+            let exists = try cityService.hasCity(cityName: cityName, timezoneId: timezoneId)
+            if !exists {
+                try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
             }
+            // 重新加载城市列表
+            let cities = try cityService.getAllCities()
+            availableCities = cities
+            if sourceCity == nil && !cities.isEmpty {
+                sourceCity = cities.first
+            }
+            if targetCity == nil && cities.count > 1 {
+                targetCity = cities[1]
+            }
+        } catch {
+            errorMessage = String(localized: "converter.add.city.failed")
         }
     }
 }

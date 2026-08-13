@@ -544,3 +544,18 @@ enum DatabaseError: Error, LocalizedError {
         }
     }
 }
+
+// MARK: - SQLite 数据记录类型（仅用于旧数据迁移）
+
+struct CityRecord: Codable {
+    var id: String
+    var cityName: String
+    var cityEn: String
+    var timezoneId: String
+    var sortIndex: Int
+}
+
+struct AppConfigRecord: Codable {
+    var key: String
+    var value: String
+}

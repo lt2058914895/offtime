@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct ClockListView: View {
     @StateObject private var viewModel = ClockListViewModel()
@@ -9,7 +10,7 @@ struct ClockListView: View {
     @Binding var activeTab: AppTab
     @State private var path = NavigationPath()
     @State private var isShowingDeleteConfirm = false
-    @State private var cityToDelete: CityItem?
+    @State private var cityToDelete: CityModel?
     /// 我们自己的编辑模式开关(单一数据源)。List 的原生 editMode 通过 .constant 只读传入，
     /// 避免 SwiftUI 通过双向绑定回写状态引起渲染循环 / 挂死。
     @State private var isEditing = false
@@ -283,7 +284,7 @@ struct ClockListView: View {
 }
 
 struct ClockListCell: View {
-    let city: CityItem
+    let city: CityModel
     let time: String
     let date: String
     let weekday: String
@@ -390,7 +391,7 @@ struct ClockListCell: View {
 
 // MARK: - iPad 网格卡片
 struct ClockGridCell: View {
-    let city: CityItem
+    let city: CityModel
     let time: String
     let date: String
     let weekday: String

@@ -1,59 +1,39 @@
 import Foundation
 import Combine
 
+@MainActor
 final class SettingsViewModel: ObservableObject {
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     @Published var themeMode: ThemeMode = AppSettings.defaults.themeMode
     
     @Published var errorMessage: String?
     
-    private let appSettingService = AppSettingService.shared
-    
     init() {
         loadSettings()
     }
     
     private func loadSettings() {
-        Task {
-            do {
-                let settings = try appSettingService.loadSettings()
-                await MainActor.run {
-                    self.use24Hour = settings.use24Hour
-                    self.themeMode = settings.themeMode
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "settings.load.failed")
-                }
-            }
+        if let data = UserDefaults.standard.data(forKey: "app_settings"),
+           let settings = try? JSONDecoder().decode(AppSettings.self, from: data) {
+            use24Hour = settings.use24Hour
+            themeMode = settings.themeMode
+        }
+    }
+    
+    private func saveSettings() {
+        let settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode)
+        if let data = try? JSONEncoder().encode(settings) {
+            UserDefaults.standard.set(data, forKey: "app_settings")
         }
     }
     
     func toggle24Hour() {
-        Task {
-            do {
-                try appSettingService.updateUse24Hour(use24Hour)
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "settings.save.failed")
-                }
-            }
-        }
+        saveSettings()
     }
     
     func updateTheme(_ mode: ThemeMode) {
-        Task {
-            do {
-                try appSettingService.updateThemeMode(mode)
-                await MainActor.run {
-                    self.themeMode = mode
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "settings.save.theme.failed")
-                }
-            }
-        }
+        themeMode = mode
+        saveSettings()
     }
     
     func exportCities() -> Data? {

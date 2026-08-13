@@ -126,7 +126,7 @@ final class CityPickerViewModel: ObservableObject {
     /// 简化异步检查：直接在 Task 中调用同步方法
     func checkCityExists(cityName: String, timezoneId: String) async -> Bool {
         do {
-            return try cityService.hasCity(cityName: cityName, timezoneId: timezoneId)
+            return try await cityService.hasCity(cityName: cityName, timezoneId: timezoneId)
         } catch {
             return false
         }

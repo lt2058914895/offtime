@@ -1,36 +1,24 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct offtimeApp: App {
     @StateObject private var appEnvironment = AppEnvironment()
     
-    init() {
-        // 数据库初始化移至 AppEnvironment.setupDatabase()，避免 fatalError 崩溃
-    }
-    
     var body: some Scene {
         WindowGroup {
             Group {
-                if appEnvironment.databaseReady == true {
-                    if appEnvironment.onboardingCompleted {
-                        MainTabView()
-                    } else {
-                        OnboardingView()
-                    }
-                } else if appEnvironment.databaseReady == false {
-                    DatabaseErrorView(errorMessage: appEnvironment.databaseErrorMessage) {
-                        appEnvironment.setupDatabase()
-                    }
+                if appEnvironment.onboardingCompleted {
+                    MainTabView()
                 } else {
-                    ProgressView(String(localized: "common.loading"))
+                    OnboardingView()
                 }
             }
             .environmentObject(appEnvironment)
+            .modelContainer(appEnvironment.modelContainer)
             .preferredColorScheme(appEnvironment.colorScheme)
             .onAppear {
-                if appEnvironment.databaseReady == nil {
-                    appEnvironment.setupDatabase()
-                }
+                appEnvironment.setup()
             }
         }
     }
@@ -70,41 +58,6 @@ struct MainTabView: View {
     }
 }
 
-/// 数据库初始化失败时的错误页面，提供重试按钮
-struct DatabaseErrorView: View {
-    let errorMessage: String?
-    let onRetry: () -> Void
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 48))
-                .foregroundColor(.orange)
-            
-            Text(String(localized: "db.init.failed"))
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            Text(errorMessage ?? String(localized: "db.unknown.error"))
-                .font(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-            
-            Button(action: onRetry) {
-                Text(String(localized: "common.retry"))
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(width: 120, height: 44)
-                    .background(Color.accentColor)
-                    .cornerRadius(10)
-            }
-            .padding(.top, 8)
-        }
-        .padding()
-    }
-}
-
 /// iOS 18+ iPad 侧边栏 Tab 样式，iOS 17 使用默认样式
 struct SidebarAdaptableTabStyle: ViewModifier {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -121,4 +74,5 @@ struct SidebarAdaptableTabStyle: ViewModifier {
 #Preview {
     MainTabView()
         .environmentObject(AppEnvironment())
+        .modelContainer(for: CityModel.self, inMemory: true)
 }

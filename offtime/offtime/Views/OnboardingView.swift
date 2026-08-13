@@ -166,6 +166,7 @@ struct OnboardingView: View {
 }
 
 /// 引导页第 2 步的快捷添加城市状态
+@MainActor
 private final class OnboardingViewModel: ObservableObject {
     @Published var addedCityNames: Set<String> = []
 

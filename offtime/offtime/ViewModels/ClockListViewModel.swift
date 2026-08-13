@@ -1,10 +1,12 @@
 import Foundation
 import Combine
 import SwiftUI
+import SwiftData
 import os
 
+@MainActor
 final class ClockListViewModel: ObservableObject {
-    @Published var cities: [CityItem] = []
+    @Published var cities: [CityModel] = []
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
@@ -13,7 +15,6 @@ final class ClockListViewModel: ObservableObject {
     
     private let cityService = CityService.shared
     private let timezoneService = TimezoneService.shared
-    private let appSettingService = AppSettingService.shared
     private let logger = Logger(subsystem: "lt.offtime", category: "ClockListViewModel")
     
     @Published var currentDate: Date = Date()
@@ -22,7 +23,6 @@ final class ClockListViewModel: ObservableObject {
     init() {
         startTimer()
         loadCities()
-        loadUse24HourSetting()
     }
     
     deinit {
@@ -30,10 +30,7 @@ final class ClockListViewModel: ObservableObject {
     }
     
     private func startTimer() {
-        // 已在运行则不重复启动，避免叠加多个 Timer
         guard timer == nil else { return }
-        // UI 仅显示到分钟，无需每秒刷新。对齐到下一整分钟边界、之后每 60 秒触发一次，
-        // 并设置 tolerance 让系统合并唤醒，显著降低耗电与发热。
         let calendar = Calendar.current
         let nextMinute = calendar.nextDate(
             after: Date(),
@@ -51,13 +48,11 @@ final class ClockListViewModel: ObservableObject {
         self.timer = timer
     }
     
-    /// 暂停定时器（App 进入后台时调用），停止每秒的时区重算，省电防发热
     func pauseTimer() {
         timer?.invalidate()
         timer = nil
     }
     
-    /// 恢复定时器并立即刷新一次时间，避免从后台返回后短暂显示过期时间
     func resumeTimer() {
         currentDate = Date()
         startTimer()
@@ -65,93 +60,50 @@ final class ClockListViewModel: ObservableObject {
     
     func loadCities() {
         viewState = .loading
-        
-        Task {
-            do {
-                let cities = try cityService.getAllCities()
-                await MainActor.run {
-                    self.cities = cities
-                    self.viewState = .idle
-                }
-            } catch {
-                await MainActor.run {
-                    self.viewState = .failure(String(localized: "db.read.failed"))
-                    self.errorMessage = String(localized: "db.read.failed.restart")
-                }
-            }
+        do {
+            cities = try cityService.getAllCities()
+            viewState = .idle
+        } catch {
+            viewState = .failure(String(localized: "db.read.failed"))
+            errorMessage = String(localized: "db.read.failed.restart")
         }
     }
     
-    /// 静默重新加载城市列表（不触发 loading 态），用于导入后切回 Tab 的后台刷新
+    /// 静默重新加载城市列表
     func reloadCitiesSilently() {
-        Task {
-            do {
-                let cities = try cityService.getAllCities()
-                await MainActor.run {
-                    self.cities = cities
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "db.read.failed")
-                }
-            }
-        }
-    }
-
-    private func loadUse24HourSetting() {
-        Task {
-            do {
-                let settings = try appSettingService.loadSettings()
-                await MainActor.run {
-                    self.use24Hour = settings.use24Hour
-                }
-            } catch {
-                logger.error("加载 24 小时设置失败，使用默认值: \(error.localizedDescription)")
-            }
+        do {
+            cities = try cityService.getAllCities()
+        } catch {
+            errorMessage = String(localized: "db.read.failed")
         }
     }
     
     func addCity(cityName: String, cityEn: String, timezoneId: String) {
-        Task {
-            do {
-                try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
-                await MainActor.run {
-                    self.loadCities()
-                }
-            } catch CityError.alreadyExists {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "clock.city.exists")
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "clock.add.failed")
-                }
-            }
+        do {
+            try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
+            loadCities()
+        } catch CityError.alreadyExists {
+            errorMessage = String(localized: "clock.city.exists")
+        } catch {
+            errorMessage = String(localized: "clock.add.failed")
         }
     }
     
     func deleteCity(id: UUID) {
-        Task {
-            do {
-                try cityService.deleteCity(id: id)
-                await MainActor.run {
-                    self.loadCities()
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "clock.delete.failed")
-                }
-            }
+        do {
+            try cityService.deleteCity(id: id)
+            loadCities()
+        } catch {
+            errorMessage = String(localized: "clock.delete.failed")
         }
     }
-
+    
     // MARK: - 管理模式批量选择
-
-    /// 是否所有城市均被选中（列表非空时才有意义）
+    
     var allSelected: Bool {
         !cities.isEmpty && selectedCityIds.count == cities.count
     }
-
+    
     func toggleSelection(id: UUID) {
         if selectedCityIds.contains(id) {
             selectedCityIds.remove(id)
@@ -159,18 +111,15 @@ final class ClockListViewModel: ObservableObject {
             selectedCityIds.insert(id)
         }
     }
-
-    /// 全选当前所有城市
+    
     func selectAllCities() {
         selectedCityIds = Set(cities.map { $0.id })
     }
-
-    /// 清空所有勾选
+    
     func clearSelection() {
         selectedCityIds.removeAll()
     }
-
-    /// 全选 / 取消全选切换
+    
     func toggleSelectAll() {
         if allSelected {
             clearSelection()
@@ -178,43 +127,32 @@ final class ClockListViewModel: ObservableObject {
             selectAllCities()
         }
     }
-
-    /// 删除所有被勾选的城市（事务性，失败整体回滚）
+    
     func deleteSelectedCities() {
         let ids = Array(selectedCityIds)
         guard !ids.isEmpty else { return }
-        Task {
-            do {
-                try cityService.deleteCities(ids: ids)
-                await MainActor.run {
-                    self.selectedCityIds.removeAll()
-                    self.loadCities()
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "clock.delete.failed")
-                    self.loadCities()
-                }
-            }
+        do {
+            try cityService.deleteCities(ids: ids)
+            selectedCityIds.removeAll()
+            loadCities()
+        } catch {
+            errorMessage = String(localized: "clock.delete.failed")
+            loadCities()
         }
     }
     
-    func reorderCities(_ cities: [CityItem]) {
-        Task {
-            do {
-                try cityService.reorderCities(cities)
-                await MainActor.run {
-                    self.cities = cities
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = String(localized: "clock.reorder.failed")
-                }
-            }
+    func reorderCities(_ cities: [CityModel]) {
+        do {
+            try cityService.reorderCities(cities)
+            self.cities = cities
+        } catch {
+            errorMessage = String(localized: "clock.reorder.failed")
         }
     }
     
-    func getLocalTime(city: CityItem) -> String {
+    // MARK: - 时间格式化（委托 TimezoneService）
+    
+    func getLocalTime(city: CityModel) -> String {
         if use24Hour {
             return timezoneService.getLocalTime24(timezoneId: city.timezoneId, date: currentDate) ?? String(localized: "clock.time.parse.failed")
         } else {
@@ -222,27 +160,27 @@ final class ClockListViewModel: ObservableObject {
         }
     }
     
-    func getLocalDate(city: CityItem) -> String {
+    func getLocalDate(city: CityModel) -> String {
         return timezoneService.getLocalDate(timezoneId: city.timezoneId, date: currentDate) ?? String(localized: "clock.date.parse.failed")
     }
     
-    func getLocalWeekday(city: CityItem) -> String {
+    func getLocalWeekday(city: CityModel) -> String {
         return timezoneService.getLocalWeekday(timezoneId: city.timezoneId, date: currentDate) ?? ""
     }
     
-    func getTimeDifference(city: CityItem) -> (offset: String, crossDay: String?) {
+    func getTimeDifference(city: CityModel) -> (offset: String, crossDay: String?) {
         return timezoneService.getTimeDifference(timezoneId: city.timezoneId, date: currentDate)
     }
     
-    func isDaytime(city: CityItem) -> Bool {
+    func isDaytime(city: CityModel) -> Bool {
         return timezoneService.isDaytime(timezoneId: city.timezoneId, date: currentDate)
     }
     
-    func getDSTStatus(city: CityItem) -> String? {
+    func getDSTStatus(city: CityModel) -> String? {
         return timezoneService.getDSTStatus(timezoneId: city.timezoneId, date: currentDate)
     }
     
-    func copyTimeText(city: CityItem) -> String {
+    func copyTimeText(city: CityModel) -> String {
         let time = getLocalTime(city: city)
         let date = getLocalDate(city: city)
         return "\(city.cityName) \(date) \(time)"
