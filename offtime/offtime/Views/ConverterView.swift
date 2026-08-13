@@ -9,6 +9,8 @@ struct ConverterView: View {
     @State private var showDatePicker = false
     @State private var showTimePicker = false
     @State private var isSelectingSource = true
+    /// 上次见到的城市数据版本号，用于切回 Tab 时判断是否需要静默刷新
+    @State private var lastSeenCitiesRevision: Int = 0
     /// swap 按钮尺寸随 body Dynamic Type 同步缩放，避免图标在大字下撑出固定圆形
     @ScaledMetric(relativeTo: .body) private var swapButtonSize: CGFloat = 44
     
@@ -58,6 +60,14 @@ struct ConverterView: View {
             .onAppear {
                 viewModel.use24Hour = appEnvironment.settings.use24Hour
                 viewModel.refreshFormat()
+                if appEnvironment.citiesRevision != lastSeenCitiesRevision {
+                    lastSeenCitiesRevision = appEnvironment.citiesRevision
+                    viewModel.loadCities()
+                }
+            }
+            .onChange(of: appEnvironment.citiesRevision) { _, newValue in
+                lastSeenCitiesRevision = newValue
+                viewModel.loadCities()
             }
             .toast(message: $viewModel.errorMessage)
             .navigationDestination(for: AppRoute.self) { route in

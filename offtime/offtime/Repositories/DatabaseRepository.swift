@@ -326,27 +326,30 @@ final class DatabaseRepository {
         }
     }
     
-    func hasCity(cityName: String) throws -> Bool {
+    /// 判重改为 (cityName, timezoneId) 联合唯一：
+    /// 同时区不同写法（Tokyo / 東京）允许并存，不同时区同名城市不再误判，完全重复才阻止。
+    func hasCity(cityName: String, timezoneId: String) throws -> Bool {
         try dbQueue.sync {
             guard let db = db else {
                 throw DatabaseError.notInitialized
             }
-            let sql = "SELECT COUNT(*) FROM user_city WHERE city_name = ?;"
-            
+            let sql = "SELECT COUNT(*) FROM user_city WHERE city_name = ? AND timezone_id = ?;"
+
             var statement: OpaquePointer?
             defer { sqlite3_finalize(statement) }
-            
+
             if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
                 let msg = String(cString: sqlite3_errmsg(db))
                 throw DatabaseError.prepareFailed(message: msg)
             }
-            
+
             sqlite3_bind_text(statement, 1, cityName, -1, SQLITE_TRANSIENT)
-            
+            sqlite3_bind_text(statement, 2, timezoneId, -1, SQLITE_TRANSIENT)
+
             if sqlite3_step(statement) == SQLITE_ROW {
                 return sqlite3_column_int(statement, 0) > 0
             }
-            
+
             return false
         }
     }

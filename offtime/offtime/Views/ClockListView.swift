@@ -16,6 +16,8 @@ struct ClockListView: View {
     @State private var isShowingBatchDeleteConfirm = false
     /// 长按城市「分享时间」要分享的文案（非空时弹出 ShareSheet）
     @State private var shareItem: ShareTextItem?
+    /// 上次见到的城市数据版本号，用于切回 Tab 时判断是否需要静默刷新
+    @State private var lastSeenCitiesRevision: Int = 0
 
     private var isIPad: Bool { horizontalSizeClass == .regular }
 
@@ -99,6 +101,15 @@ struct ClockListView: View {
             .onAppear {
                 // 兜底：首次显示时按当前状态校正 Timer（onChange 首次不触发）
                 updateTimer()
+                // 导入等操作会递增 citiesRevision；切回本 Tab 时若发生变化则静默刷新
+                if appEnvironment.citiesRevision != lastSeenCitiesRevision {
+                    lastSeenCitiesRevision = appEnvironment.citiesRevision
+                    viewModel.reloadCitiesSilently()
+                }
+            }
+            .onChange(of: appEnvironment.citiesRevision) { _, newValue in
+                lastSeenCitiesRevision = newValue
+                viewModel.reloadCitiesSilently()
             }
             .onChange(of: shouldRunTimer) {
                 // Timer 仅在「前台 + 时钟 Tab」运行：切到其它 Tab 或进后台时暂停，

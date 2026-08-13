@@ -65,9 +65,9 @@ final class SettingsViewModel: ObservableObject {
         }
     }
     
-    func importCities(from data: Data) -> Bool {
+    func importCities(from data: Data, strategy: ImportStrategy) -> Bool {
         do {
-            try CityService.shared.importCities(from: data)
+            try CityService.shared.importCities(from: data, strategy: strategy)
             return true
         } catch {
             errorMessage = String(localized: "settings.import.failed")

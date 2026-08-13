@@ -97,6 +97,10 @@
 "settings.export.success" = "내보내기 성공";
 "settings.import.failed" = "가져오기 실패, 파일 형식이 올바르지 않습니다";
 "settings.import.success" = "가져오기 성공";
+"settings.import.confirm.title" = "도시 가져오기";
+"settings.import.merge" = "기존 도시에 병합";
+"settings.import.replace" = "모두 교체";
+"settings.import.confirm.message" = "교체는 현재 모든 도시를 삭제합니다. 병합은 기존 도시를 유지하고 새 도시를 추가합니다.";
 
 // MARK: - Theme
 "theme.system" = "시스템 설정 따르기";

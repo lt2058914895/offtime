@@ -8,6 +8,9 @@ struct SettingsView: View {
     @State private var isPresentingFileExporter = false
     @State private var isPresentingFileImporter = false
     @State private var exportFileURL: URL?
+    /// 导入流程：先读取文件数据到内存，再弹确认框让用户选择「合并 / 替换」策略
+    @State private var pendingImportData: Data?
+    @State private var showImportConfirm = false
 
     /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接与评分跳转
     private let appStoreID = "6794565774"
@@ -167,16 +170,42 @@ struct SettingsView: View {
                 case .success(let urls):
                     guard let url = urls.first else { return }
                     do {
-                        let data = try Data(contentsOf: url)
-                        if viewModel.importCities(from: data) {
-                            viewModel.errorMessage = String(localized: "settings.import.success")
-                        }
+                        // 先读取数据，再弹确认框让用户选择导入策略，避免直接覆盖现有城市
+                        pendingImportData = try Data(contentsOf: url)
+                        showImportConfirm = true
                     } catch {
                         viewModel.errorMessage = String(localized: "settings.import.failed")
                     }
                 case .failure:
                     viewModel.errorMessage = String(localized: "settings.import.failed")
                 }
+            }
+            .confirmationDialog(
+                String(localized: "settings.import.confirm.title"),
+                isPresented: $showImportConfirm,
+                titleVisibility: .visible
+            ) {
+                Button(String(localized: "settings.import.merge")) {
+                    guard let data = pendingImportData else { return }
+                    if viewModel.importCities(from: data, strategy: .merge) {
+                        appEnvironment.citiesRevision += 1
+                        viewModel.errorMessage = String(localized: "settings.import.success")
+                    }
+                    pendingImportData = nil
+                }
+                Button(String(localized: "settings.import.replace"), role: .destructive) {
+                    guard let data = pendingImportData else { return }
+                    if viewModel.importCities(from: data, strategy: .replace) {
+                        appEnvironment.citiesRevision += 1
+                        viewModel.errorMessage = String(localized: "settings.import.success")
+                    }
+                    pendingImportData = nil
+                }
+                Button(String(localized: "common.cancel"), role: .cancel) {
+                    pendingImportData = nil
+                }
+            } message: {
+                Text(String(localized: "settings.import.confirm.message"))
             }
         }
     }

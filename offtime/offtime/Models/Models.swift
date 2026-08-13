@@ -89,3 +89,19 @@ struct ContinentGroup: Equatable {
     let name: String
     let cities: [CitySuggestion]
 }
+
+// MARK: - Import / Export
+
+/// 导入策略：merge 保留现有城市并追加去重；replace 清空后整体写入。
+enum ImportStrategy {
+    case merge
+    case replace
+}
+
+/// 导出文件信封：带 schemaVersion，便于未来字段变更时做兼容判断。
+/// 导入时优先按此结构解码，失败则回退到旧的纯 [CityItem] 数组以兼容历史导出文件。
+struct CitiesExportEnvelope: Codable {
+    static let currentSchemaVersion = 1
+    var schemaVersion: Int
+    var cities: [CityItem]
+}

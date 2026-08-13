@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import os
 
 final class AppEnvironment: ObservableObject {
     @Published var settings: AppSettings = AppSettings.defaults
@@ -9,8 +10,11 @@ final class AppEnvironment: ObservableObject {
     @Published var databaseErrorMessage: String? = nil
     /// 是否已完成首启引导（新用户为 false，老用户/已完成用户为 true）
     @Published var onboardingCompleted: Bool = false
+    /// 城市数据版本号：导入/批量删除等改变城市列表的操作后递增，监听方据此刷新本地缓存
+    @Published var citiesRevision: Int = 0
 
     private let appSettingService = AppSettingService.shared
+    private let logger = Logger(subsystem: "lt.offtime", category: "AppEnvironment")
 
     func setupDatabase() {
         do {
@@ -39,7 +43,7 @@ final class AppEnvironment: ObservableObject {
                     self.settings = settings
                 }
             } catch {
-                // 使用默认设置
+                logger.error("加载设置失败，使用默认设置: \(error.localizedDescription)")
             }
         }
     }
@@ -52,7 +56,7 @@ final class AppEnvironment: ObservableObject {
                     self.settings = newSettings
                 }
             } catch {
-                // 保存失败，使用内存中的值
+                logger.error("保存设置失败，保留内存值: \(error.localizedDescription)")
             }
         }
     }

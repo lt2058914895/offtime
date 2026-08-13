@@ -97,6 +97,10 @@
 "settings.export.success" = "エクスポートしました";
 "settings.import.failed" = "インポートに失敗しました。ファイル形式が正しくありません";
 "settings.import.success" = "インポートしました";
+"settings.import.confirm.title" = "都市をインポート";
+"settings.import.merge" = "既存の都市に追加";
+"settings.import.replace" = "すべて置き換え";
+"settings.import.confirm.message" = "置き換えは現在の都市をすべて消去します。マージは既存の都市を保持し、新しい都市を追加します。";
 
 // MARK: - Theme
 "theme.system" = "システムに合わせる";

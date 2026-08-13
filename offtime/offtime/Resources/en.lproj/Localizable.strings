@@ -97,6 +97,10 @@
 "settings.export.success" = "Export successful";
 "settings.import.failed" = "Import failed, invalid file format";
 "settings.import.success" = "Import successful";
+"settings.import.confirm.title" = "Import Cities";
+"settings.import.merge" = "Merge with existing";
+"settings.import.replace" = "Replace all cities";
+"settings.import.confirm.message" = "Replace will clear all current cities. Merge will keep existing cities and add new ones.";
 
 // MARK: - Theme
 "theme.system" = "System";

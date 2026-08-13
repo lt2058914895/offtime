@@ -44,7 +44,7 @@ final class ConverterViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private func loadCities() {
+    func loadCities() {
         Task {
             do {
                 let cities = try cityService.getAllCities()
@@ -171,7 +171,7 @@ final class ConverterViewModel: ObservableObject {
     func addCity(cityName: String, cityEn: String, timezoneId: String) {
         Task {
             do {
-                let exists = try cityService.hasCity(cityName: cityName)
+                let exists = try cityService.hasCity(cityName: cityName, timezoneId: timezoneId)
                 if !exists {
                     try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
                 }

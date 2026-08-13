@@ -8,7 +8,7 @@ final class CityService {
     private init() {}
     
     func addCity(cityName: String, cityEn: String, timezoneId: String) throws {
-        let exists = try repository.hasCity(cityName: cityName)
+        let exists = try repository.hasCity(cityName: cityName, timezoneId: timezoneId)
         if exists {
             throw CityError.alreadyExists
         }
@@ -59,8 +59,8 @@ final class CityService {
         try repository.updateCityTop(id: id.uuidString, isTop: isTop)
     }
     
-    func hasCity(cityName: String) throws -> Bool {
-        try repository.hasCity(cityName: cityName)
+    func hasCity(cityName: String, timezoneId: String) throws -> Bool {
+        try repository.hasCity(cityName: cityName, timezoneId: timezoneId)
     }
     
     func reorderCities(_ cities: [CityItem]) throws {
@@ -72,18 +72,51 @@ final class CityService {
 
     func exportCities() throws -> Data {
         let cities = try getAllCities()
+        let envelope = CitiesExportEnvelope(
+            schemaVersion: CitiesExportEnvelope.currentSchemaVersion,
+            cities: cities
+        )
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        return try encoder.encode(cities)
+        return try encoder.encode(envelope)
     }
     
-    /// 使用事务保护导入操作，确保原子性：失败时回滚，原有数据不丢失。
-    /// 直接调用 Repository 的单次 sync 事务方法，避免在事务块里再调用各自 dbQueue.sync 的 deleteAllCities/addCity 嵌套 sync 死锁。
-    func importCities(from data: Data) throws {
+    /// 导入城市列表。支持两种策略：
+    /// - .replace: 清空后整体写入
+    /// - .merge: 保留现有城市，按 (cityName, timezoneId) 去重后追加
+    /// 优先按 CitiesExportEnvelope 解码并校验 schemaVersion；失败则回退旧格式（纯 [CityItem]）以兼容历史导出文件。
+    /// 直接调用 Repository 的单次 sync 事务方法，避免在事务块里再调用各自 dbQueue.sync 的方法嵌套 sync 死锁。
+    func importCities(from data: Data, strategy: ImportStrategy) throws {
         let decoder = JSONDecoder()
-        let cities = try decoder.decode([CityItem].self, from: data)
+        let importedCities: [CityItem]
+        if let envelope = try? decoder.decode(CitiesExportEnvelope.self, from: data) {
+            guard envelope.schemaVersion == CitiesExportEnvelope.currentSchemaVersion else {
+                throw CityError.unsupportedSchemaVersion
+            }
+            importedCities = envelope.cities
+        } else {
+            // 兼容历史导出文件（无 schemaVersion 的纯数组）
+            importedCities = try decoder.decode([CityItem].self, from: data)
+        }
 
-        let records = cities.enumerated().map { index, city in
+        let citiesToWrite: [CityItem]
+        switch strategy {
+        case .replace:
+            citiesToWrite = importedCities
+        case .merge:
+            let existing = try getAllCities()
+            let existingKeys = Set(existing.map { "\($0.cityName)|\($0.timezoneId)" })
+            var merged = existing
+            for city in importedCities {
+                let key = "\(city.cityName)|\(city.timezoneId)"
+                if !existingKeys.contains(key) {
+                    merged.append(city)
+                }
+            }
+            citiesToWrite = merged
+        }
+
+        let records = citiesToWrite.enumerated().map { index, city in
             CityRecord(
                 id: city.id.uuidString,
                 cityName: city.cityName,
@@ -138,4 +171,5 @@ enum CityError: Error, Equatable {
     case alreadyExists
     case notFound
     case databaseError(String)
+    case unsupportedSchemaVersion
 }

@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import os
 
 final class ClockListViewModel: ObservableObject {
     @Published var cities: [CityItem] = []
@@ -13,6 +14,7 @@ final class ClockListViewModel: ObservableObject {
     private let cityService = CityService.shared
     private let timezoneService = TimezoneService.shared
     private let appSettingService = AppSettingService.shared
+    private let logger = Logger(subsystem: "lt.offtime", category: "ClockListViewModel")
     
     @Published var currentDate: Date = Date()
     private var timer: Timer?
@@ -80,6 +82,22 @@ final class ClockListViewModel: ObservableObject {
         }
     }
     
+    /// 静默重新加载城市列表（不触发 loading 态），用于导入后切回 Tab 的后台刷新
+    func reloadCitiesSilently() {
+        Task {
+            do {
+                let cities = try cityService.getAllCities()
+                await MainActor.run {
+                    self.cities = cities
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = String(localized: "db.read.failed")
+                }
+            }
+        }
+    }
+
     private func loadUse24HourSetting() {
         Task {
             do {
@@ -88,7 +106,7 @@ final class ClockListViewModel: ObservableObject {
                     self.use24Hour = settings.use24Hour
                 }
             } catch {
-                // 使用默认值
+                logger.error("加载 24 小时设置失败，使用默认值: \(error.localizedDescription)")
             }
         }
     }

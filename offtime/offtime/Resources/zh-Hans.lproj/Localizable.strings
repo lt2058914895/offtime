@@ -97,6 +97,10 @@
 "settings.export.success" = "导出成功";
 "settings.import.failed" = "导入失败，文件格式错误";
 "settings.import.success" = "导入成功";
+"settings.import.confirm.title" = "导入城市";
+"settings.import.merge" = "合并到现有城市";
+"settings.import.replace" = "替换所有城市";
+"settings.import.confirm.message" = "替换将清空当前所有城市，合并将保留现有城市并追加新城市。";
 
 // MARK: - Theme
 "theme.system" = "跟随系统";
