@@ -13,18 +13,15 @@ final class SettingsViewModel: ObservableObject {
     }
     
     private func loadSettings() {
-        if let data = UserDefaults.standard.data(forKey: "app_settings"),
-           let settings = try? JSONDecoder().decode(AppSettings.self, from: data) {
-            use24Hour = settings.use24Hour
-            themeMode = settings.themeMode
-        }
+        use24Hour = UserDefaults.standard.object(forKey: "settings_use24Hour") as? Bool
+            ?? Locale.systemUses24Hour
+        let themeRaw = UserDefaults.standard.integer(forKey: "settings_themeMode")
+        themeMode = ThemeMode(rawValue: themeRaw) ?? .system
     }
     
     private func saveSettings() {
-        let settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode)
-        if let data = try? JSONEncoder().encode(settings) {
-            UserDefaults.standard.set(data, forKey: "app_settings")
-        }
+        UserDefaults.standard.set(use24Hour, forKey: "settings_use24Hour")
+        UserDefaults.standard.set(themeMode.rawValue, forKey: "settings_themeMode")
     }
     
     func toggle24Hour() {

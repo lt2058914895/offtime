@@ -32,77 +32,11 @@ final class AppEnvironment: ObservableObject {
         CityService.shared.modelContainer = modelContainer
     }
 
-    /// App 启动后调用：执行数据迁移、首启种子城市、判断引导状态
+    /// App 启动后调用：首启种子城市、加载引导状态与设置
     func setup() {
-        migrateFromSQLiteIfNeeded()
         seedDefaultCityIfFirstLaunch()
         loadOnboardingState()
         loadSettings()
-    }
-
-    // MARK: - SQLite → SwiftData 迁移
-
-    /// 检测旧 SQLite 数据库文件，如有则读取数据写入 SwiftData，完成后删除旧文件。
-    /// 幂等：通过 UserDefaults 标志位保证只执行一次。
-    private func migrateFromSQLiteIfNeeded() {
-        let migratedKey = "sqlite_migrated_to_swiftdata"
-        guard !UserDefaults.standard.bool(forKey: migratedKey) else { return }
-
-        let dbURL = FileManager.default
-            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
-            .first?
-            .appendingPathComponent("offtime.sqlite")
-
-        guard let url = dbURL, FileManager.default.fileExists(atPath: url.path) else {
-            // 无旧数据库，标记已迁移
-            UserDefaults.standard.set(true, forKey: migratedKey)
-            return
-        }
-
-        logger.info("检测到旧 SQLite 数据库，开始迁移至 SwiftData...")
-
-        // 使用旧 DatabaseRepository 读取数据
-        do {
-            try DatabaseRepository.shared.setup()
-            let records = try DatabaseRepository.shared.getAllCities()
-
-            let context = modelContainer.mainContext
-            for record in records {
-                let model = CityModel(
-                    id: UUID(uuidString: record.id) ?? UUID(),
-                    cityName: record.cityName,
-                    cityEn: record.cityEn,
-                    timezoneId: record.timezoneId,
-                    sortIndex: record.sortIndex
-                )
-                context.insert(model)
-            }
-            try context.save()
-
-            // 迁移 onboarding 状态
-            if let onboardingFlag = try? DatabaseRepository.shared.getConfig(key: "onboarding_completed"), onboardingFlag == "1" {
-                UserDefaults.standard.set(true, forKey: "onboarding_completed")
-            }
-
-            // 迁移设置
-            if let settingsJson = try? DatabaseRepository.shared.getConfig(key: "app_settings"),
-               let data = settingsJson.data(using: .utf8),
-               let settings = try? JSONDecoder().decode(AppSettings.self, from: data) {
-                UserDefaults.standard.set(settings.use24Hour, forKey: "settings_use24Hour")
-                UserDefaults.standard.set(settings.themeMode.rawValue, forKey: "settings_themeMode")
-            }
-
-            // 迁移首启标志
-            if let seededFlag = try? DatabaseRepository.shared.getConfig(key: "first_launch_seeded"), seededFlag == "1" {
-                UserDefaults.standard.set(true, forKey: "first_launch_seeded")
-            }
-
-            try? FileManager.default.removeItem(at: url)
-            UserDefaults.standard.set(true, forKey: migratedKey)
-            logger.info("SQLite → SwiftData 迁移完成，已迁移 \(records.count) 个城市")
-        } catch {
-            logger.error("SQLite 迁移失败: \(error.localizedDescription)，保留旧数据库")
-        }
     }
 
     // MARK: - 首启种子城市
