@@ -74,7 +74,7 @@ struct ConverterView: View {
                 switch route {
                 case .citySelector:
                     CitySelectorView(onCitySelected: { city in
-                        let item = CityItem(id: UUID(), cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, sortIndex: 0, isTop: false)
+                        let item = CityItem(id: UUID(), cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, sortIndex: 0)
                         if isSelectingSource {
                             viewModel.sourceCity = item
                         } else {

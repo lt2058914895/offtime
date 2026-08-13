@@ -22,6 +22,7 @@
 "db.not.initialized" = "数据库未初始化";
 "db.prepare.failed" = "SQL准备失败";
 "db.step.failed" = "SQL执行失败";
+"db.migration.failed" = "数据库升级失败";
 
 // MARK: - Clock List
 "clock.title" = "世界时钟";

@@ -19,8 +19,7 @@ final class CityService {
             cityName: cityName,
             cityEn: cityEn,
             timezoneId: timezoneId,
-            sortIndex: maxIndex + 1,
-            isTop: 0
+            sortIndex: maxIndex + 1
         )
         
         try repository.addCity(record)
@@ -45,18 +44,13 @@ final class CityService {
                 cityName: record.cityName,
                 cityEn: record.cityEn,
                 timezoneId: record.timezoneId,
-                sortIndex: record.sortIndex,
-                isTop: record.isTop == 1
+                sortIndex: record.sortIndex
             )
         }
     }
     
     func updateCitySortIndex(id: UUID, sortIndex: Int) throws {
         try repository.updateCitySortIndex(id: id.uuidString, sortIndex: sortIndex)
-    }
-    
-    func updateCityTop(id: UUID, isTop: Bool) throws {
-        try repository.updateCityTop(id: id.uuidString, isTop: isTop)
     }
     
     func hasCity(cityName: String, timezoneId: String) throws -> Bool {
@@ -122,8 +116,7 @@ final class CityService {
                 cityName: city.cityName,
                 cityEn: city.cityEn,
                 timezoneId: city.timezoneId,
-                sortIndex: index,
-                isTop: city.isTop ? 1 : 0
+                sortIndex: index
             )
         }
         try repository.replaceAllCities(records)

@@ -22,6 +22,7 @@
 "db.not.initialized" = "데이터베이스가 초기화되지 않았습니다";
 "db.prepare.failed" = "SQL 준비에 실패했습니다";
 "db.step.failed" = "SQL 실행에 실패했습니다";
+"db.migration.failed" = "데이터베이스 마이그레이션 실패";
 
 // MARK: - Clock List
 "clock.title" = "세계 시계";

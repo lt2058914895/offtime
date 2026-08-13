@@ -12,7 +12,6 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
     let cityEn: String
     let timezoneId: String
     var sortIndex: Int
-    var isTop: Bool
 }
 
 struct AppSettings: Equatable, Codable {
@@ -63,7 +62,6 @@ struct CityRecord: Codable {
     var cityEn: String
     var timezoneId: String
     var sortIndex: Int
-    var isTop: Int
 }
 
 struct AppConfigRecord: Codable {

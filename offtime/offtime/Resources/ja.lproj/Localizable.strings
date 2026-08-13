@@ -22,6 +22,7 @@
 "db.not.initialized" = "データベースが初期化されていません";
 "db.prepare.failed" = "SQL準備に失敗しました";
 "db.step.failed" = "SQL実行に失敗しました";
+"db.migration.failed" = "データベースの移行に失敗しました";
 
 // MARK: - Clock List
 "clock.title" = "世界時計";
