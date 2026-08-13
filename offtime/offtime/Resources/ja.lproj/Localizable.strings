@@ -53,6 +53,8 @@
 "city.selector.title" = "都市を選択";
 "city.search.placeholder" = "都市を検索";
 "city.no.results" = "都市が見つかりません";
+"city.hint.add" = "この都市を追加";
+"city.hint.select" = "この都市を選択";
 "city.try.different" = "別のキーワードをお試しください";
 "city.data.not.found" = "都市データファイルが見つかりません";
 "city.data.load.failed" = "都市データの読み込みに失敗しました";

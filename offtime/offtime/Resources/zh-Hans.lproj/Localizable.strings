@@ -53,6 +53,8 @@
 "city.selector.title" = "选择城市";
 "city.search.placeholder" = "搜索城市";
 "city.no.results" = "未找到城市";
+"city.hint.add" = "添加此城市";
+"city.hint.select" = "选择此城市";
 "city.try.different" = "请更换关键词";
 "city.data.not.found" = "城市数据文件未找到";
 "city.data.load.failed" = "城市数据加载失败";

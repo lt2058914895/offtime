@@ -273,8 +273,9 @@ struct ConverterView: View {
                 }
             }
         }
+        .accessibilityElement(children: .combine)
     }
-    
+
     private func cityButton(title: String, city: CityItem?, action: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)

@@ -53,6 +53,8 @@
 "city.selector.title" = "Select City";
 "city.search.placeholder" = "Search city";
 "city.no.results" = "No cities found";
+"city.hint.add" = "Add this city";
+"city.hint.select" = "Select this city";
 "city.try.different" = "Try different keywords";
 "city.data.not.found" = "City data file not found";
 "city.data.load.failed" = "Failed to load city data";

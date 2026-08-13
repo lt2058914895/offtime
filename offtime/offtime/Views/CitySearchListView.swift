@@ -15,6 +15,7 @@ struct CitySearchListView: View {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
                     TextField(String(localized: "city.search.placeholder"), text: $searchText)
+                        .accessibilityLabel(String(localized: "city.search.placeholder"))
                 }
                 .padding(.vertical, 8)
             }
@@ -42,6 +43,7 @@ struct CitySearchListView: View {
                             }
                             .padding(.vertical, 8)
                         }
+                        .accessibilityHint(showAddButton ? String(localized: "city.hint.add") : String(localized: "city.hint.select"))
                     }
                 }
             }
@@ -77,5 +79,6 @@ struct CitySearchNoResultsView: View {
                 .foregroundColor(.secondary)
         }
         .padding()
+        .accessibilityElement(children: .combine)
     }
 }

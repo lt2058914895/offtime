@@ -53,6 +53,8 @@
 "city.selector.title" = "도시 선택";
 "city.search.placeholder" = "도시 검색";
 "city.no.results" = "도시를 찾을 수 없습니다";
+"city.hint.add" = "이 도시 추가";
+"city.hint.select" = "이 도시 선택";
 "city.try.different" = "다른 키워드를 사용해 보세요";
 "city.data.not.found" = "도시 데이터 파일을 찾을 수 없습니다";
 "city.data.load.failed" = "도시 데이터 로드에 실패했습니다";
