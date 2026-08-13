@@ -13,7 +13,7 @@ final class ConverterViewModel: ObservableObject {
     
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
-    @Published var use24Hour: Bool = Locale.systemUses24Hour
+    @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     
     private let timezoneService = TimezoneService.shared
     private let appSettingService = AppSettingService.shared

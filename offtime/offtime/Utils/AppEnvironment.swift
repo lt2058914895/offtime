@@ -2,10 +2,7 @@ import SwiftUI
 import Combine
 
 final class AppEnvironment: ObservableObject {
-    @Published var settings: AppSettings = AppSettings(
-        use24Hour: Locale.systemUses24Hour,
-        themeMode: .system
-    )
+    @Published var settings: AppSettings = AppSettings.defaults
     
     /// 数据库初始化状态：nil 表示未开始，true 表示成功，false 表示失败
     @Published var databaseReady: Bool? = nil

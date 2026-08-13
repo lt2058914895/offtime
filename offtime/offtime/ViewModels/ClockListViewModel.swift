@@ -6,7 +6,7 @@ final class ClockListViewModel: ObservableObject {
     @Published var cities: [CityItem] = []
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
-    @Published var use24Hour: Bool = Locale.systemUses24Hour
+    @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     /// 管理模式下被勾选待删除的城市 ID
     @Published var selectedCityIds: Set<UUID> = []
     

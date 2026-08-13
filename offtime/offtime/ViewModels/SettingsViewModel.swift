@@ -2,8 +2,8 @@ import Foundation
 import Combine
 
 final class SettingsViewModel: ObservableObject {
-    @Published var use24Hour: Bool = Locale.systemUses24Hour
-    @Published var themeMode: ThemeMode = .system
+    @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
+    @Published var themeMode: ThemeMode = AppSettings.defaults.themeMode
     
     @Published var errorMessage: String?
     

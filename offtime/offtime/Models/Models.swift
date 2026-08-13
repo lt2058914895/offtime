@@ -20,6 +20,15 @@ struct AppSettings: Equatable, Codable {
     var themeMode: ThemeMode
 }
 
+extension AppSettings {
+    /// 全局默认设置：use24Hour 跟随系统 locale（"j" 模板推断），themeMode 跟随系统。
+    /// 集中此处避免散落在各 ViewModel / Service 中漂移。
+    static let defaults = AppSettings(
+        use24Hour: Locale.systemUses24Hour,
+        themeMode: .system
+    )
+}
+
 enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
     var id: Int { rawValue }
     case system = 0

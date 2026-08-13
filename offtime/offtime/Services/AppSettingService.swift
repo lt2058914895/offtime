@@ -8,10 +8,7 @@ final class AppSettingService {
     
     private init() {}
     
-    private let defaultSettings = AppSettings(
-        use24Hour: Locale.systemUses24Hour,
-        themeMode: .system
-    )
+    private let defaultSettings = AppSettings.defaults
     
     func loadSettings() throws -> AppSettings {
         if let json = try repository.getConfig(key: configKey) {

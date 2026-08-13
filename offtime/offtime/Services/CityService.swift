@@ -13,7 +13,7 @@ final class CityService {
             throw CityError.alreadyExists
         }
         
-        let maxIndex = try getMaxSortIndex()
+        let maxIndex = try repository.getMaxSortIndex()
         let record = CityRecord(
             id: UUID().uuidString,
             cityName: cityName,
@@ -69,12 +69,7 @@ final class CityService {
         }
         try repository.updateSortIndices(idIndexPairs)
     }
-    
-    private func getMaxSortIndex() throws -> Int {
-        let cities = try repository.getAllCities()
-        return cities.map { $0.sortIndex }.max() ?? -1
-    }
-    
+
     func exportCities() throws -> Data {
         let cities = try getAllCities()
         let encoder = JSONEncoder()

@@ -211,6 +211,33 @@ final class DatabaseRepository {
         }
     }
     
+    /// 获取当前最大的 sort_index。空表返回 -1，使下一个城市的 sort_index 为 0。
+    /// 用 SQL MAX 单语句替代曾经的 getAllCities().max() 全表读取。
+    func getMaxSortIndex() throws -> Int {
+        try dbQueue.sync {
+            guard let db = db else {
+                throw DatabaseError.notInitialized
+            }
+            let sql = "SELECT MAX(sort_index) FROM user_city;"
+            var statement: OpaquePointer?
+            defer { sqlite3_finalize(statement) }
+
+            if sqlite3_prepare_v2(db, sql, -1, &statement, nil) != SQLITE_OK {
+                let msg = String(cString: sqlite3_errmsg(db))
+                throw DatabaseError.prepareFailed(message: msg)
+            }
+
+            if sqlite3_step(statement) == SQLITE_ROW {
+                // 空表时 MAX 返回 NULL，返回 -1 以保证首城 sort_index = 0（与旧 max()??-1 行为一致）
+                if sqlite3_column_type(statement, 0) == SQLITE_NULL {
+                    return -1
+                }
+                return Int(sqlite3_column_int(statement, 0))
+            }
+            return -1
+        }
+    }
+
     func updateCitySortIndex(id: String, sortIndex: Int) throws {
         try dbQueue.sync {
             guard let db = db else {
