@@ -124,6 +124,7 @@
 "onboarding.features.theme.desc" = "跟随系统或手动切换外观";
 "onboarding.next" = "下一步";
 "onboarding.start" = "开始使用";
+"onboarding.skip" = "跳过";
 
 // MARK: - Web Error
 "web.load.failed" = "无法加载页面";

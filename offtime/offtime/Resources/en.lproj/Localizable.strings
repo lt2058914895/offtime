@@ -124,6 +124,7 @@
 "onboarding.features.theme.desc" = "Follow the system or pick manually";
 "onboarding.next" = "Next";
 "onboarding.start" = "Get Started";
+"onboarding.skip" = "Skip";
 
 // MARK: - Web Error
 "web.load.failed" = "Failed to load page";

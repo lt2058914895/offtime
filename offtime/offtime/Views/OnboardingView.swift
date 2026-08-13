@@ -15,6 +15,17 @@ struct OnboardingView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .background(Color(.systemBackground))
+        .overlay(alignment: .topTrailing) {
+            if page < 2 {
+                Button(String(localized: "onboarding.skip")) {
+                    appEnvironment.completeOnboarding()
+                }
+                .font(.body)
+                .foregroundColor(.secondary)
+                .padding(.trailing, 20)
+                .padding(.top, 8)
+            }
+        }
     }
 
     // MARK: - Step 1: 欢迎

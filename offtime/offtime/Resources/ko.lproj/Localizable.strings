@@ -124,6 +124,7 @@
 "onboarding.features.theme.desc" = "시스템 설정을 따르거나 직접 선택";
 "onboarding.next" = "다음";
 "onboarding.start" = "시작하기";
+"onboarding.skip" = "건너뛰기";
 
 // MARK: - Web Error
 "web.load.failed" = "페이지를 로드하지 못했습니다";

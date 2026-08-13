@@ -16,6 +16,35 @@ extension Locale {
     }
 }
 
+extension String {
+    /// 计算与目标字符串的编辑距离（Levenshtein Distance），用于模糊匹配
+    func levenshteinDistance(to target: String) -> Int {
+        let len1 = count
+        let len2 = target.count
+
+        var matrix = Array(repeating: Array(repeating: 0, count: len2 + 1), count: len1 + 1)
+
+        for i in 0...len1 { matrix[i][0] = i }
+        for j in 0...len2 { matrix[0][j] = j }
+
+        let arr1 = Array(self)
+        let arr2 = Array(target)
+
+        for i in 1...len1 {
+            for j in 1...len2 {
+                let cost = arr1[i - 1] == arr2[j - 1] ? 0 : 1
+                matrix[i][j] = Swift.min(
+                    matrix[i - 1][j] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j - 1] + cost
+                )
+            }
+        }
+
+        return matrix[len1][len2]
+    }
+}
+
 struct ToastModifier: ViewModifier {
     @Binding var message: String?
     @State private var dismissTask: Task<Void, Never>?

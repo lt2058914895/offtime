@@ -124,6 +124,7 @@
 "onboarding.features.theme.desc" = "システムに合わせるか、手動で切り替え";
 "onboarding.next" = "次へ";
 "onboarding.start" = "はじめる";
+"onboarding.skip" = "スキップ";
 
 // MARK: - Web Error
 "web.load.failed" = "ページを読み込めませんでした";

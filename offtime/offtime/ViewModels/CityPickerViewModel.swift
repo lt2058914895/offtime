@@ -26,45 +26,62 @@ final class CityPickerViewModel: ObservableObject {
     
     // MARK: - Load Cities from JSON
     
+    /// 城市数据静态缓存：首次加载后复用，避免 CityPickerView/CitySelectorView 重复 IO 与解码
+    private enum CityDataCache {
+        private static var cached: [CitySuggestion]?
+        private static let lock = NSLock()
+
+        static func load() -> [CitySuggestion]? {
+            lock.lock()
+            defer { lock.unlock() }
+            if let cached = cached { return cached }
+            guard let url = Bundle.main.url(forResource: "cities", withExtension: "json") else {
+                return nil
+            }
+            do {
+                let data = try Data(contentsOf: url)
+                let cities = try JSONDecoder().decode([CitySuggestion].self, from: data)
+                cached = cities
+                return cities
+            } catch {
+                return nil
+            }
+        }
+    }
+
     private func loadCities() {
         viewState = .loading
-        
-        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json") else {
+
+        guard let cities = CityDataCache.load() else {
             viewState = .failure(String(localized: "city.data.not.found"))
+            errorMessage = String(localized: "city.data.not.found")
             return
         }
-        
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            allCities = try decoder.decode([CitySuggestion].self, from: data)
-            cityGroups = groupByContinent(allCities)
-            viewState = .idle
-        } catch {
-            viewState = .failure(String(localized: "city.data.load.failed"))
-            errorMessage = String(localized: "city.data.load.failed")
-        }
+
+        allCities = cities
+        cityGroups = groupByContinent(allCities)
+        viewState = .idle
     }
     
     // MARK: - Group & Filter
     
     private let continentOrder = [
-        "热门",
-        "亚洲",
-        "欧洲",
-        "美洲",
-        "大洋洲",
-        "非洲"
+        "hot",
+        "asia",
+        "europe",
+        "america",
+        "oceania",
+        "africa"
     ]
-    
+
     private func localizedContinentName(_ continent: String) -> String {
         switch continent {
-        case "热门": return String(localized: "continent.hot")
-        case "亚洲": return String(localized: "continent.asia")
-        case "欧洲": return String(localized: "continent.europe")
-        case "美洲": return String(localized: "continent.america")
-        case "大洋洲": return String(localized: "continent.oceania")
-        case "非洲": return String(localized: "continent.africa")
+        case "hot": return String(localized: "continent.hot")
+        case "asia": return String(localized: "continent.asia")
+        case "europe": return String(localized: "continent.europe")
+        case "america": return String(localized: "continent.america")
+        case "oceania": return String(localized: "continent.oceania")
+        case "africa": return String(localized: "continent.africa")
         default: return continent
         }
     }
@@ -93,8 +110,8 @@ final class CityPickerViewModel: ObservableObject {
         // 如果没有精确匹配，尝试模糊匹配（编辑距离）
         if filtered.isEmpty {
             filtered = allCities.compactMap { city in
-                let nameDistance = levenshteinDistance(lowerText, city.cityName.lowercased())
-                let enDistance = levenshteinDistance(lowerText, city.cityEn.lowercased())
+                let nameDistance = lowerText.levenshteinDistance(to: city.cityName.lowercased())
+                let enDistance = lowerText.levenshteinDistance(to: city.cityEn.lowercased())
                 let minDistance = min(nameDistance, enDistance)
                 let threshold = max(1, lowerText.count / 2)
                 return minDistance <= threshold ? city : nil
@@ -102,37 +119,6 @@ final class CityPickerViewModel: ObservableObject {
         }
         
         cityGroups = filtered.isEmpty ? [] : groupByContinent(filtered)
-    }
-    
-    /// 计算两个字符串之间的编辑距离（Levenshtein Distance）
-    private func levenshteinDistance(_ s1: String, _ s2: String) -> Int {
-        let len1 = s1.count
-        let len2 = s2.count
-        
-        var matrix = Array(repeating: Array(repeating: 0, count: len2 + 1), count: len1 + 1)
-        
-        for i in 0...len1 {
-            matrix[i][0] = i
-        }
-        for j in 0...len2 {
-            matrix[0][j] = j
-        }
-        
-        let arr1 = Array(s1)
-        let arr2 = Array(s2)
-        
-        for i in 1...len1 {
-            for j in 1...len2 {
-                let cost = arr1[i-1] == arr2[j-1] ? 0 : 1
-                matrix[i][j] = min(
-                    matrix[i-1][j] + 1,
-                    matrix[i][j-1] + 1,
-                    matrix[i-1][j-1] + cost
-                )
-            }
-        }
-        
-        return matrix[len1][len2]
     }
     
     // MARK: - City Exists Check
