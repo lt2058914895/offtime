@@ -188,12 +188,20 @@ private final class OnboardingViewModel: ObservableObject {
     func toggle(_ city: QuickCity) {
         if isAdded(city) {
             if let existing = (try? cityService.getAllCities())?.first(where: { $0.cityName == city.cityName }) {
-                try? cityService.deleteCity(id: existing.id)
-                addedCityNames.remove(city.cityName)
+                do {
+                    try cityService.deleteCity(id: existing.id)
+                    addedCityNames.remove(city.cityName)
+                } catch {
+                    // 删除失败时保持 UI 与 DB 一致（仍显示已添加）
+                }
             }
         } else {
-            try? cityService.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
-            addedCityNames.insert(city.cityName)
+            do {
+                try cityService.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
+                addedCityNames.insert(city.cityName)
+            } catch {
+                // 添加失败（如重复）时不更新 UI，避免状态与 DB 不一致
+            }
         }
     }
 }
