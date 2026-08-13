@@ -84,10 +84,10 @@ struct ClockListView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
-            .onChange(of: appEnvironment.settings.use24Hour) { newValue in
+            .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
-            .onChange(of: viewModel.cities.isEmpty) { isEmpty in
+            .onChange(of: viewModel.cities.isEmpty) { _, isEmpty in
                 // 城市全部删除后自动退出编辑模式并清空勾选
                 if isEmpty && isEditing {
                     withAnimation {
@@ -100,7 +100,7 @@ struct ClockListView: View {
                 // 兜底：首次显示时按当前状态校正 Timer（onChange 首次不触发）
                 updateTimer()
             }
-            .onChange(of: shouldRunTimer) { _ in
+            .onChange(of: shouldRunTimer) {
                 // Timer 仅在「前台 + 时钟 Tab」运行：切到其它 Tab 或进后台时暂停，
                 // 回到时钟 Tab 或前台时恢复（resumeTimer 会先刷新一次时间，避免过期显示）。
                 updateTimer()

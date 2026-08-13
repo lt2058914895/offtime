@@ -52,7 +52,7 @@ struct ConverterView: View {
                     .disabled(viewModel.sourceCity == nil || viewModel.targetCity == nil)
                 }
             }
-            .onChange(of: appEnvironment.settings.use24Hour) { newValue in
+            .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
             .onAppear {
@@ -315,8 +315,7 @@ struct ConverterView: View {
     private static let sourceTimeFormatter12: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
-        formatter.amSymbol = "AM"
-        formatter.pmSymbol = "PM"
+        // amSymbol/pmSymbol 走系统 locale 自动本地化（午前/午後、오전/오후 等）
         return formatter
     }()
     

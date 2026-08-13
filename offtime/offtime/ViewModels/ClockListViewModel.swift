@@ -30,11 +30,23 @@ final class ClockListViewModel: ObservableObject {
     private func startTimer() {
         // 已在运行则不重复启动，避免叠加多个 Timer
         guard timer == nil else { return }
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+        // UI 仅显示到分钟，无需每秒刷新。对齐到下一整分钟边界、之后每 60 秒触发一次，
+        // 并设置 tolerance 让系统合并唤醒，显著降低耗电与发热。
+        let calendar = Calendar.current
+        let nextMinute = calendar.nextDate(
+            after: Date(),
+            matching: DateComponents(second: 0, nanosecond: 0),
+            matchingPolicy: .nextTime
+        ) ?? Date().addingTimeInterval(60)
+        let timer = Timer(timeInterval: 60, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.currentDate = Date()
             }
         }
+        timer.tolerance = 5
+        timer.fireDate = nextMinute
+        RunLoop.main.add(timer, forMode: .common)
+        self.timer = timer
     }
     
     /// 暂停定时器（App 进入后台时调用），停止每秒的时区重算，省电防发热

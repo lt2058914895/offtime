@@ -38,8 +38,8 @@ final class TimezoneService {
         formatter.timeZone = timezone
         formatter.dateFormat = dateFormat
         formatter.locale = locale
-        formatter.amSymbol = "AM"
-        formatter.pmSymbol = "PM"
+        // 不强制 amSymbol/pmSymbol：让 formatter 按当前 locale 自动本地化
+        // （中文=上午/下午、日文=午前/午後、韩文=오전/오후、英文=AM/PM）
         formatterCache.setObject(formatter, forKey: cacheKey)
         return formatter
     }

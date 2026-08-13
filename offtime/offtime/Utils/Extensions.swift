@@ -44,7 +44,7 @@ struct ToastModifier: ViewModifier {
                     }
                 }
             )
-            .onChange(of: message) { newValue in
+            .onChange(of: message) { _, newValue in
                 // 取消之前的定时任务，避免连续设置 toast 时提前消失
                 dismissTask?.cancel()
                 

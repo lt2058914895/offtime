@@ -22,7 +22,7 @@ struct CitySelectorView: View {
         .navigationTitle(String(localized: "city.selector.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .onChange(of: searchText) { newValue in
+        .onChange(of: searchText) { _, newValue in
             viewModel.searchText = newValue
         }
     }

@@ -32,7 +32,7 @@ struct offtimeApp: App {
                     appEnvironment.setupDatabase()
                 }
             }
-            .onChange(of: appEnvironment.settings.themeMode) { _ in
+            .onChange(of: appEnvironment.settings.themeMode) {
                 // 主题切换时刷新
             }
         }

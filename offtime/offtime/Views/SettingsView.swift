@@ -68,7 +68,7 @@ struct SettingsView: View {
                             Text(mode.displayName).tag(mode)
                         }
                     }
-                    .onChange(of: viewModel.themeMode) { newMode in
+                    .onChange(of: viewModel.themeMode) { _, newMode in
                         viewModel.updateTheme(newMode)
                         appEnvironment.settings.themeMode = newMode
                     }
