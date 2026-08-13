@@ -9,12 +9,12 @@ final class CityService {
     
     // MARK: - ModelContext 获取
     
-    /// 由 AppEnvironment.setup() 在启动时注入，避免 Service 层反向依赖 AppEnvironment
-    static var modelContainer: ModelContainer!
+    /// 由 AppEnvironment 在启动时注入
+    var modelContainer: ModelContainer!
     
     /// 便捷获取主上下文
     private var mainContext: ModelContext {
-        Self.modelContainer.mainContext
+        modelContainer.mainContext
     }
     
     // MARK: - City CRUD
@@ -75,7 +75,7 @@ final class CityService {
     
     func getAllCities(context: ModelContext? = nil) throws -> [CityModel] {
         let ctx = context ?? mainContext
-        var fetch = FetchDescriptor<CityModel>(sortBy: [SortDescriptor(\.sortIndex)])
+        let fetch = FetchDescriptor<CityModel>(sortBy: [SortDescriptor(\.sortIndex)])
         return try ctx.fetch(fetch)
     }
     

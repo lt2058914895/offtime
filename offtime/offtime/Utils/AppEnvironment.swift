@@ -29,7 +29,7 @@ final class AppEnvironment: ObservableObject {
             modelContainer = try! ModelContainer(for: Schema([CityModel.self]), configurations: [ModelConfiguration(isStoredInMemoryOnly: true)])
         }
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
-        CityService.modelContainer = modelContainer
+        CityService.shared.modelContainer = modelContainer
     }
 
     /// App 启动后调用：执行数据迁移、首启种子城市、判断引导状态
