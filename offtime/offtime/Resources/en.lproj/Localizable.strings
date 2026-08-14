@@ -14,15 +14,8 @@
 "common.success" = "Success";
 
 // MARK: - Database Error
-"db.init.failed" = "Database initialization failed";
-"db.unknown.error" = "Unknown error";
 "db.read.failed" = "Failed to read database";
 "db.read.failed.restart" = "Failed to read database, please try restarting the app";
-"db.open.failed" = "Database open failed";
-"db.not.initialized" = "Database not initialized";
-"db.prepare.failed" = "SQL prepare failed";
-"db.step.failed" = "SQL execution failed";
-"db.migration.failed" = "Database migration failed";
 
 // MARK: - Clock List
 "clock.title" = "World Clock";

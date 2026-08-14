@@ -14,15 +14,8 @@
 "common.success" = "성공";
 
 // MARK: - Database Error
-"db.init.failed" = "데이터베이스 초기화에 실패했습니다";
-"db.unknown.error" = "알 수 없는 오류";
 "db.read.failed" = "데이터베이스 읽기에 실패했습니다";
 "db.read.failed.restart" = "데이터베이스 읽기에 실패했습니다. 앱을 다시 시작해 보세요";
-"db.open.failed" = "데이터베이스를 열지 못했습니다";
-"db.not.initialized" = "데이터베이스가 초기화되지 않았습니다";
-"db.prepare.failed" = "SQL 준비에 실패했습니다";
-"db.step.failed" = "SQL 실행에 실패했습니다";
-"db.migration.failed" = "데이터베이스 마이그레이션 실패";
 
 // MARK: - Clock List
 "clock.title" = "세계 시계";

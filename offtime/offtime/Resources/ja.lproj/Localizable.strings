@@ -14,15 +14,8 @@
 "common.success" = "成功";
 
 // MARK: - Database Error
-"db.init.failed" = "データベースの初期化に失敗しました";
-"db.unknown.error" = "不明なエラー";
 "db.read.failed" = "データベースの読み込みに失敗しました";
 "db.read.failed.restart" = "データベースの読み込みに失敗しました。アプリを再起動してください";
-"db.open.failed" = "データベースを開けませんでした";
-"db.not.initialized" = "データベースが初期化されていません";
-"db.prepare.failed" = "SQL準備に失敗しました";
-"db.step.failed" = "SQL実行に失敗しました";
-"db.migration.failed" = "データベースの移行に失敗しました";
 
 // MARK: - Clock List
 "clock.title" = "世界時計";

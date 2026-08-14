@@ -14,15 +14,8 @@
 "common.success" = "成功";
 
 // MARK: - Database Error
-"db.init.failed" = "数据库初始化失败";
-"db.unknown.error" = "未知错误";
 "db.read.failed" = "数据库读取失败";
 "db.read.failed.restart" = "数据库读取失败，请尝试重启App";
-"db.open.failed" = "数据库打开失败";
-"db.not.initialized" = "数据库未初始化";
-"db.prepare.failed" = "SQL准备失败";
-"db.step.failed" = "SQL执行失败";
-"db.migration.failed" = "数据库升级失败";
 
 // MARK: - Clock List
 "clock.title" = "世界时钟";

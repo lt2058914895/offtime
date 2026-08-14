@@ -45,9 +45,11 @@ final class SettingsViewModel: ObservableObject {
     func importCities(from data: Data, strategy: ImportStrategy) -> Bool {
         do {
             try CityService.shared.importCities(from: data, strategy: strategy)
+            Haptics.success()
             return true
         } catch {
             errorMessage = String(localized: "settings.import.failed")
+            Haptics.error()
             return false
         }
     }

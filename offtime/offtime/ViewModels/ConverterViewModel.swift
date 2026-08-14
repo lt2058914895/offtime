@@ -125,6 +125,7 @@ final class ConverterViewModel: ObservableObject {
         let temp = sourceCity
         sourceCity = targetCity
         targetCity = temp
+        Haptics.medium()
         Task {
             try? await Task.sleep(nanoseconds: 300_000_000) // 0.3秒
             guard !Task.isCancelled else { return }

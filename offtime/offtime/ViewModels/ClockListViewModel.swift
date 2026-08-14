@@ -82,10 +82,13 @@ final class ClockListViewModel: ObservableObject {
         do {
             try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
             loadCities()
+            Haptics.success()
         } catch CityError.alreadyExists {
             errorMessage = String(localized: "clock.city.exists")
+            Haptics.warning()
         } catch {
             errorMessage = String(localized: "clock.add.failed")
+            Haptics.error()
         }
     }
     
@@ -93,8 +96,10 @@ final class ClockListViewModel: ObservableObject {
         do {
             try cityService.deleteCity(id: id)
             loadCities()
+            Haptics.medium()
         } catch {
             errorMessage = String(localized: "clock.delete.failed")
+            Haptics.error()
         }
     }
     
@@ -110,6 +115,7 @@ final class ClockListViewModel: ObservableObject {
         } else {
             selectedCityIds.insert(id)
         }
+        Haptics.selection()
     }
     
     func selectAllCities() {
@@ -135,9 +141,11 @@ final class ClockListViewModel: ObservableObject {
             try cityService.deleteCities(ids: ids)
             selectedCityIds.removeAll()
             loadCities()
+            Haptics.medium()
         } catch {
             errorMessage = String(localized: "clock.delete.failed")
             loadCities()
+            Haptics.error()
         }
     }
     
@@ -145,6 +153,7 @@ final class ClockListViewModel: ObservableObject {
         do {
             try cityService.reorderCities(cities)
             self.cities = cities
+            Haptics.light()
         } catch {
             errorMessage = String(localized: "clock.reorder.failed")
         }
