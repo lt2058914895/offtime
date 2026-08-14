@@ -9,13 +9,17 @@ final class CityModel {
     var cityEn: String
     var timezoneId: String
     var sortIndex: Int
+    var workStartHour: Int = 9
+    var workEndHour: Int = 18
     
-    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, sortIndex: Int = 0) {
+    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, sortIndex: Int = 0, workStartHour: Int = 9, workEndHour: Int = 18) {
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
         self.timezoneId = timezoneId
         self.sortIndex = sortIndex
+        self.workStartHour = workStartHour
+        self.workEndHour = workEndHour
     }
 }
 
@@ -29,7 +33,9 @@ extension CityModel {
             cityName: cityName,
             cityEn: cityEn,
             timezoneId: timezoneId,
-            sortIndex: sortIndex
+            sortIndex: sortIndex,
+            workStartHour: workStartHour,
+            workEndHour: workEndHour
         )
     }
 }
@@ -43,6 +49,29 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
     let cityEn: String
     let timezoneId: String
     var sortIndex: Int
+    var workStartHour: Int
+    var workEndHour: Int
+
+    init(id: UUID, cityName: String, cityEn: String, timezoneId: String, sortIndex: Int, workStartHour: Int = 9, workEndHour: Int = 18) {
+        self.id = id
+        self.cityName = cityName
+        self.cityEn = cityEn
+        self.timezoneId = timezoneId
+        self.sortIndex = sortIndex
+        self.workStartHour = workStartHour
+        self.workEndHour = workEndHour
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        cityName = try c.decode(String.self, forKey: .cityName)
+        cityEn = try c.decode(String.self, forKey: .cityEn)
+        timezoneId = try c.decode(String.self, forKey: .timezoneId)
+        sortIndex = try c.decodeIfPresent(Int.self, forKey: .sortIndex) ?? 0
+        workStartHour = try c.decodeIfPresent(Int.self, forKey: .workStartHour) ?? 9
+        workEndHour = try c.decodeIfPresent(Int.self, forKey: .workEndHour) ?? 18
+    }
 }
 
 // MARK: - 导入/导出信封
@@ -65,12 +94,16 @@ enum ViewState: Equatable {
 struct AppSettings: Equatable, Codable {
     var use24Hour: Bool
     var themeMode: ThemeMode
+    var localWorkStart: Int
+    var localWorkEnd: Int
 }
 
 extension AppSettings {
     static let defaults = AppSettings(
         use24Hour: Locale.systemUses24Hour,
-        themeMode: .system
+        themeMode: .system,
+        localWorkStart: 9,
+        localWorkEnd: 18
     )
 }
 
@@ -99,6 +132,7 @@ enum AppRoute: Hashable {
     case cityPicker
     case citySelector
     case supportPage
+    case cityDetail(UUID)
 }
 
 struct TimezoneInfo: Equatable {

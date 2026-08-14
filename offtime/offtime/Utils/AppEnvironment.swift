@@ -83,12 +83,16 @@ final class AppEnvironment: ObservableObject {
             ?? Locale.systemUses24Hour
         let themeRaw = UserDefaults.standard.integer(forKey: "settings_themeMode")
         let themeMode = ThemeMode(rawValue: themeRaw) ?? .system
-        settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode)
+        let localWorkStart = UserDefaults.standard.object(forKey: "settings_localWorkStart") as? Int ?? 9
+        let localWorkEnd = UserDefaults.standard.object(forKey: "settings_localWorkEnd") as? Int ?? 18
+        settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode, localWorkStart: localWorkStart, localWorkEnd: localWorkEnd)
     }
 
     func updateSettings(_ newSettings: AppSettings) {
         UserDefaults.standard.set(newSettings.use24Hour, forKey: "settings_use24Hour")
         UserDefaults.standard.set(newSettings.themeMode.rawValue, forKey: "settings_themeMode")
+        UserDefaults.standard.set(newSettings.localWorkStart, forKey: "settings_localWorkStart")
+        UserDefaults.standard.set(newSettings.localWorkEnd, forKey: "settings_localWorkEnd")
         settings = newSettings
     }
 

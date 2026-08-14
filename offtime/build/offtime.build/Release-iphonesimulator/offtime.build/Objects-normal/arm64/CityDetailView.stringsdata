@@ -1,0 +1,144 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CityDetailView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "0",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "6",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "12",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "18",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "24",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 38
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.local.work.hours",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 91
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.current.time",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 99
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.current.time",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 137
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.time.diff",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 141
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.contactable.period",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 169
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.contactable.now",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 173
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.rules.title",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 203
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.rules.1",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 206
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.rules.2",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 207
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.rules.3",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 208
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.work.start",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 232
+        }
+      },
+      {
+        "comment": "",
+        "key": "detail.work.end",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 241
+        }
+      }
+    ]
+  },
+  "version": 1
+}

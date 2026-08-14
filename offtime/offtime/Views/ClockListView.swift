@@ -84,11 +84,23 @@ struct ClockListView: View {
                     SupportPageView()
                 case .citySelector:
                     EmptyView()
+                case .cityDetail(let cityId):
+                    if let city = viewModel.cities.first(where: { $0.id == cityId }) {
+                        CityDetailView(city: city)
+                    } else {
+                        EmptyView()
+                    }
                 }
             }
             .toast(message: $viewModel.errorMessage)
             .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
+            }
+            .onChange(of: appEnvironment.settings.localWorkStart) { _, newValue in
+                viewModel.localWorkStart = newValue
+            }
+            .onChange(of: appEnvironment.settings.localWorkEnd) { _, newValue in
+                viewModel.localWorkEnd = newValue
             }
             .onChange(of: viewModel.cities.isEmpty) { _, isEmpty in
                 // 城市全部删除后自动退出编辑模式并清空勾选
@@ -102,6 +114,8 @@ struct ClockListView: View {
             .onAppear {
                 // 兜底：首次显示时按当前状态校正 Timer（onChange 首次不触发）
                 updateTimer()
+                viewModel.localWorkStart = appEnvironment.settings.localWorkStart
+                viewModel.localWorkEnd = appEnvironment.settings.localWorkEnd
                 // 导入等操作会递增 citiesRevision；切回本 Tab 时若发生变化则静默刷新
                 if appEnvironment.citiesRevision != lastSeenCitiesRevision {
                     lastSeenCitiesRevision = appEnvironment.citiesRevision
@@ -184,15 +198,16 @@ struct ClockListView: View {
             }
             List {
                 ForEach($viewModel.cities) { $city in
-                    ClockListCell(
-                        city: city,
-                        time: viewModel.getLocalTime(city: city),
-                        date: viewModel.getLocalDate(city: city),
-                        weekday: viewModel.getLocalWeekday(city: city),
-                        timeDifference: viewModel.getTimeDifference(city: city),
-                        isDaytime: viewModel.isDaytime(city: city),
-                        dstStatus: viewModel.getDSTStatus(city: city),
-                        isEditMode: isEditing,
+                   ClockListCell(
+                       city: city,
+                       time: viewModel.getLocalTime(city: city),
+                       date: viewModel.getLocalDate(city: city),
+                       weekday: viewModel.getLocalWeekday(city: city),
+                       timeDifference: viewModel.getTimeDifference(city: city),
+                       isDaytime: viewModel.isDaytime(city: city),
+                       dstStatus: viewModel.getDSTStatus(city: city),
+                        workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city),
+                       isEditMode: isEditing,
                         isSelected: viewModel.selectedCityIds.contains(city.id),
                         onToggleSelection: {
                             viewModel.toggleSelection(id: city.id)
@@ -207,6 +222,9 @@ struct ClockListView: View {
                         onDelete: {
                             cityToDelete = city
                             isShowingDeleteConfirm = true
+                        },
+                        onTap: {
+                            path.append(AppRoute.cityDetail(city.id))
                         }
                     )
                 }
@@ -232,15 +250,16 @@ struct ClockListView: View {
                     GridItem(.flexible(), spacing: 16)
                 ], spacing: 16) {
                     ForEach(viewModel.cities) { city in
-                        ClockGridCell(
-                            city: city,
-                            time: viewModel.getLocalTime(city: city),
-                            date: viewModel.getLocalDate(city: city),
-                            weekday: viewModel.getLocalWeekday(city: city),
-                            timeDifference: viewModel.getTimeDifference(city: city),
-                            isDaytime: viewModel.isDaytime(city: city),
-                            dstStatus: viewModel.getDSTStatus(city: city),
-                            isEditMode: isEditing,
+                       ClockGridCell(
+                           city: city,
+                           time: viewModel.getLocalTime(city: city),
+                           date: viewModel.getLocalDate(city: city),
+                           weekday: viewModel.getLocalWeekday(city: city),
+                           timeDifference: viewModel.getTimeDifference(city: city),
+                           isDaytime: viewModel.isDaytime(city: city),
+                           dstStatus: viewModel.getDSTStatus(city: city),
+                            workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city),
+                           isEditMode: isEditing,
                             isSelected: viewModel.selectedCityIds.contains(city.id),
                             onToggleSelection: {
                                 viewModel.toggleSelection(id: city.id)
@@ -255,6 +274,9 @@ struct ClockListView: View {
                             onDelete: {
                                 cityToDelete = city
                                 isShowingDeleteConfirm = true
+                            },
+                            onTap: {
+                                path.append(AppRoute.cityDetail(city.id))
                             }
                         )
                     }
@@ -291,12 +313,14 @@ struct ClockListCell: View {
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
+    let workingHoursOverlap: WorkingHoursOverlap
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
     let onCopy: () -> Void
     let onShare: () -> Void
     let onDelete: () -> Void
+    var onTap: () -> Void = {}
     
     var body: some View {
         HStack(alignment: .center, spacing: isEditMode ? 12 : 16) {
@@ -359,15 +383,18 @@ struct ClockListCell: View {
                         Text(timeDifference.offset)
                             .font(.caption)
                             .fontWeight(.medium)
-                            .foregroundColor(timeDifferenceColor)
-                    }
+                           .foregroundColor(timeDifferenceColor)
+                   }
+               }
+                if !isEditMode {
+                    WorkingHoursBar(overlap: workingHoursOverlap)
                 }
             }
         }
         .padding(.vertical, 12)
         .contentShape(Rectangle())
         .onTapGesture {
-            if isEditMode { onToggleSelection() }
+            if isEditMode { onToggleSelection() } else { onTap() }
         }
         .contextMenu {
             Button(String(localized: "clock.copy.time")) {
@@ -398,12 +425,14 @@ struct ClockGridCell: View {
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
+    let workingHoursOverlap: WorkingHoursOverlap
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
     let onCopy: () -> Void
     let onShare: () -> Void
     let onDelete: () -> Void
+    var onTap: () -> Void = {}
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -471,8 +500,11 @@ struct ClockGridCell: View {
                     Text(timeDifference.offset)
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(timeDifferenceColor)
-                }
+                       .foregroundColor(timeDifferenceColor)
+               }
+           }
+            if !isEditMode {
+                WorkingHoursBar(overlap: workingHoursOverlap)
             }
         }
         .padding(16)
@@ -484,7 +516,7 @@ struct ClockGridCell: View {
         )
         .contentShape(Rectangle())
         .onTapGesture {
-            if isEditMode { onToggleSelection() }
+            if isEditMode { onToggleSelection() } else { onTap() }
         }
         .contextMenu {
             Button(String(localized: "clock.copy.time")) { onCopy() }

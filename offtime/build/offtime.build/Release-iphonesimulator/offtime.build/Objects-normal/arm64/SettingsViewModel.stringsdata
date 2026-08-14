@@ -1,0 +1,24 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/SettingsViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "settings.import.failed",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 51
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.export.failed",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 40
+        }
+      }
+    ]
+  },
+  "version": 1
+}

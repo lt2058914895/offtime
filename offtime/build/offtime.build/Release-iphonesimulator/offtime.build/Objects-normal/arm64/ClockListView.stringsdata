@@ -1,0 +1,232 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/Views/ClockListView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "clock.title",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.confirm.delete",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 134
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.confirm.delete",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 144
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.done",
+        "location": {
+          "startingColumn": 62,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.manage",
+        "location": {
+          "startingColumn": 97,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "accessibility.add.city",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 73
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.cancel",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 135
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.delete",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 136
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.confirm.delete.message",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 142
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.cancel",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 145
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.delete",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 146
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.confirm.delete.selected.message",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 150
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.select.all",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 166
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.delete",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "(%lld)",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 177
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.dst.summer",
+        "location": {
+          "startingColumn": 72,
+          "startingLine": 355
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.dst.summer",
+        "location": {
+          "startingColumn": 77,
+          "startingLine": 356
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.copy.time",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 400
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.share.time",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 403
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.delete.city",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 406
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.dst.summer",
+        "location": {
+          "startingColumn": 72,
+          "startingLine": 461
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.dst.summer",
+        "location": {
+          "startingColumn": 77,
+          "startingLine": 462
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.copy.time",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 522
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.share.time",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 523
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.delete.city",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 524
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.empty.title",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 548
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.empty.subtitle",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 552
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.loading",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 565
+        }
+      }
+    ]
+  },
+  "version": 1
+}

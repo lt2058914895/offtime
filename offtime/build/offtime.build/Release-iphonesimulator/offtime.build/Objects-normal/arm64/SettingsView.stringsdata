@@ -1,0 +1,272 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/Views/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "share.app.body",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.version",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.title",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 133
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.confirm.title",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 184
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.display",
+        "location": {
+          "startingColumn": 43,
+          "startingLine": 60
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.data.management",
+        "location": {
+          "startingColumn": 43,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.about",
+        "location": {
+          "startingColumn": 43,
+          "startingLine": 95
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.theme",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.24hour",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.export.failed",
+        "location": {
+          "startingColumn": 56,
+          "startingLine": 215
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.export.failed",
+        "location": {
+          "startingColumn": 56,
+          "startingLine": 224
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.export.cities",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 85
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.cities",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 91
+        }
+      },
+      {
+        "comment": "",
+        "key": "share.app.subject",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 100
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.share.app",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 104
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.rate.app",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 118
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.share.app",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 102
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.rate.app",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "★★★★★",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.support",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 123
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.export.success",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 153
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.export.failed",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 155
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.failed",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 180
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.failed",
+        "location": {
+          "startingColumn": 68,
+          "startingLine": 177
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.merge",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 188
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.replace",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 196
+        }
+      },
+      {
+        "comment": "",
+        "key": "common.cancel",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 204
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.success",
+        "location": {
+          "startingColumn": 68,
+          "startingLine": 192
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.success",
+        "location": {
+          "startingColumn": 68,
+          "startingLine": 200
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.import.confirm.message",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 208
+        }
+      },
+      {
+        "comment": "",
+        "key": "web.load.failed",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 310
+        }
+      },
+      {
+        "comment": "",
+        "key": "web.check.network",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 311
+        }
+      },
+      {
+        "comment": "",
+        "key": "settings.support",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 327
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -41,6 +41,26 @@
 "clock.add.failed" = "Failed to add city";
 "clock.delete.failed" = "Failed to delete city";
 
+// MARK: - Working Hours
+"clock.working.now" = "Reachable";
+"clock.working.none" = "No overlap";
+"clock.working.next" = "Reachable at %@";
+
+// MARK: - City Detail
+"detail.local.work.hours" = "Local Work Hours";
+"detail.contactable.period" = "Contactable Period";
+"detail.contactable.now" = "Contactable now";
+"detail.contactable.none" = "No contactable hours today";
+"detail.current.time" = "Current Time";
+"detail.time.diff" = "Diff";
+"detail.work.start" = "Start";
+"detail.work.end" = "End";
+"detail.rules.title" = "Contactable Period Rules";
+"detail.rules.1" = "Defaults to local and target city work hours (9:00–18:00) as the contactable period.";
+"detail.rules.2" = "The contactable period is the overlap of both work hours.";
+"detail.rules.3" = "Adjust the work hours below to customize the contactable period.";
+"detail.hours" = "h";
+
 // MARK: - City Picker
 "city.picker.title" = "Add City";
 "city.selector.title" = "Select City";

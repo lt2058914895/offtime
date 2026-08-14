@@ -1,0 +1,130 @@
+{
+  "" : {
+    "const-values" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.swiftconstvalues",
+    "dependencies" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.d",
+    "diagnostics" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.dia",
+    "emit-module-dependencies" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master-emit-module.dia",
+    "swift-dependencies" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.swiftdeps"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/GeneratedAssetSymbols.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Models/SwiftDataModels.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SwiftDataModels.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SwiftDataModels.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SwiftDataModels.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Services/CityService.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityService.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityService.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityService.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Services/TimezoneService+WorkingHours.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/TimezoneService+WorkingHours.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/TimezoneService+WorkingHours.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/TimezoneService+WorkingHours.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Services/TimezoneService.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/TimezoneService.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/TimezoneService.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/TimezoneService.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Utils/AppEnvironment.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/AppEnvironment.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/AppEnvironment.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/AppEnvironment.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Utils/Extensions.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/Extensions.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/Extensions.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/Extensions.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Utils/Haptics.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/Haptics.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/Haptics.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/Haptics.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/CityDetailViewModel.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityDetailViewModel.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityDetailViewModel.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityDetailViewModel.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/CityPickerViewModel.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityPickerViewModel.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityPickerViewModel.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityPickerViewModel.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/ClockListViewModel.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ClockListViewModel.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ClockListViewModel.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ClockListViewModel.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/ConverterViewModel.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ConverterViewModel.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ConverterViewModel.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ConverterViewModel.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/SettingsViewModel.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SettingsViewModel.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SettingsViewModel.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SettingsViewModel.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CityDetailView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityDetailView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityDetailView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityDetailView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CityPickerView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityPickerView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityPickerView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CityPickerView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CitySearchListView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CitySearchListView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CitySearchListView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CitySearchListView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CitySelectorView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CitySelectorView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CitySelectorView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/CitySelectorView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/ClockListView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ClockListView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ClockListView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ClockListView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/ConverterView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ConverterView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ConverterView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ConverterView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/OnboardingView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/OnboardingView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/OnboardingView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/OnboardingView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/SettingsView.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/SettingsView.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/ShareSheet.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ShareSheet.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ShareSheet.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/ShareSheet.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/WorkingHoursBar.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/WorkingHoursBar.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/WorkingHoursBar.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/WorkingHoursBar.o"
+  },
+  "/Users/deppon/Desktop/offtime/offtime/offtime/offtimeApp.swift" : {
+    "index-unit-output-path" : "/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtimeApp.o",
+    "llvm-bc" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtimeApp.bc",
+    "object" : "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtimeApp.o"
+  }
+}

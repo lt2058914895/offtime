@@ -1,0 +1,72 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/ConverterViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "converter.load.cities.failed",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 59
+        }
+      },
+      {
+        "comment": "",
+        "key": "converter.convert.failed",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 96
+        }
+      },
+      {
+        "comment": "",
+        "key": "converter.timezone.parse.failed",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 78
+        }
+      },
+      {
+        "comment": "",
+        "key": "converter.select.city.hint",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.time.parse.failed",
+        "location": {
+          "startingColumn": 129,
+          "startingLine": 105
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.time.parse.failed",
+        "location": {
+          "startingColumn": 129,
+          "startingLine": 107
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.date.parse.failed",
+        "location": {
+          "startingColumn": 123,
+          "startingLine": 109
+        }
+      },
+      {
+        "comment": "",
+        "key": "converter.add.city.failed",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 169
+        }
+      }
+    ]
+  },
+  "version": 1
+}

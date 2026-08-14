@@ -1,0 +1,48 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/Views/WorkingHoursBar.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "clock.working.now",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.working.none",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.working.now",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.working.next",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.working.none",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 63
+        }
+      }
+    ]
+  },
+  "version": 1
+}

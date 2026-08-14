@@ -1,0 +1,120 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/Views/OnboardingView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "onboarding.skip",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.welcome.title",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.welcome.subtitle",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.cities.title",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 59
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.cities.subtitle",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.title",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 103
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.converter",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 109
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.converter.desc",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 110
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.format",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.format.desc",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 113
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.theme",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 115
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.features.theme.desc",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 116
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.start",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 125
+        }
+      },
+      {
+        "comment": "",
+        "key": "onboarding.next",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 156
+        }
+      }
+    ]
+  },
+  "version": 1
+}

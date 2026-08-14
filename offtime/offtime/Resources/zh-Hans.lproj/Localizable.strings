@@ -41,6 +41,26 @@
 "clock.add.failed" = "添加城市失败";
 "clock.delete.failed" = "删除城市失败";
 
+// MARK: - Working Hours
+"clock.working.now" = "可联系";
+"clock.working.none" = "无重叠";
+"clock.working.next" = "%@ 可联系";
+
+// MARK: - City Detail
+"detail.local.work.hours" = "本地工作时间";
+"detail.contactable.period" = "可联系时段";
+"detail.contactable.now" = "当前可联系";
+"detail.contactable.none" = "今日无可联系时段";
+"detail.current.time" = "当前时间";
+"detail.time.diff" = "时差";
+"detail.work.start" = "开始";
+"detail.work.end" = "结束";
+"detail.rules.title" = "可联系时间段规则";
+"detail.rules.1" = "默认使用本地与目标城市的工作时段（9:00–18:00）作为可联系时段。";
+"detail.rules.2" = "可联系时段为双方工作时段的交集。";
+"detail.rules.3" = "调整下方工作时间可自定义可联系时段。";
+"detail.hours" = "小时";
+
 // MARK: - City Picker
 "city.picker.title" = "添加城市";
 "city.selector.title" = "选择城市";

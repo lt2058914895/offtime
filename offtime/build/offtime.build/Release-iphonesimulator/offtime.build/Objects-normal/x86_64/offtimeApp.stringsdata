@@ -1,0 +1,32 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/offtimeApp.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "tab.clock",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "tab.converter",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "tab.settings",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 50
+        }
+      }
+    ]
+  },
+  "version": 1
+}

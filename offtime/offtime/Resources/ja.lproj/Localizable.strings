@@ -41,6 +41,26 @@
 "clock.add.failed" = "都市の追加に失敗しました";
 "clock.delete.failed" = "都市の削除に失敗しました";
 
+// MARK: - Working Hours
+"clock.working.now" = "連絡可能";
+"clock.working.none" = "重複なし";
+"clock.working.next" = "%@ に連絡可能";
+
+// MARK: - City Detail
+"detail.local.work.hours" = "現地の勤務時間";
+"detail.contactable.period" = "連絡可能時間帯";
+"detail.contactable.now" = "現在連絡可能";
+"detail.contactable.none" = "今日の連絡可能時間帯はありません";
+"detail.current.time" = "現在時刻";
+"detail.time.diff" = "時差";
+"detail.work.start" = "開始";
+"detail.work.end" = "終了";
+"detail.rules.title" = "連絡可能時間帯ルール";
+"detail.rules.1" = "既定では現地と対象都市の勤務時間（9:00–18:00）を連絡可能時間帯とします。";
+"detail.rules.2" = "連絡可能時間帯は双方の勤務時間の重複部分です。";
+"detail.rules.3" = "下の勤務時間を調整して連絡可能時間帯をカスタマイズできます。";
+"detail.hours" = "時間";
+
 // MARK: - City Picker
 "city.picker.title" = "都市を追加";
 "city.selector.title" = "都市を選択";

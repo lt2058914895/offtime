@@ -1,0 +1,16 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CitySelectorView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "city.selector.title",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 22
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,72 @@
+{
+  "source": "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/CityPickerViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "city.data.not.found",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "city.data.not.found",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "continent.hot",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 79
+        }
+      },
+      {
+        "comment": "",
+        "key": "continent.asia",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "continent.europe",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 81
+        }
+      },
+      {
+        "comment": "",
+        "key": "continent.america",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 82
+        }
+      },
+      {
+        "comment": "",
+        "key": "continent.oceania",
+        "location": {
+          "startingColumn": 50,
+          "startingLine": 83
+        }
+      },
+      {
+        "comment": "",
+        "key": "continent.africa",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 84
+        }
+      }
+    ]
+  },
+  "version": 1
+}

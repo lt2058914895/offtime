@@ -41,6 +41,26 @@
 "clock.add.failed" = "도시 추가에 실패했습니다";
 "clock.delete.failed" = "도시 삭제에 실패했습니다";
 
+// MARK: - Working Hours
+"clock.working.now" = "연락 가능";
+"clock.working.none" = "겹침 없음";
+"clock.working.next" = "%@ 연락 가능";
+
+// MARK: - City Detail
+"detail.local.work.hours" = "현지 근무 시간";
+"detail.contactable.period" = "연락 가능 시간대";
+"detail.contactable.now" = "현재 연락 가능";
+"detail.contactable.none" = "오늘 연락 가능 시간대 없음";
+"detail.current.time" = "현재 시간";
+"detail.time.diff" = "시차";
+"detail.work.start" = "시작";
+"detail.work.end" = "종료";
+"detail.rules.title" = "연락 가능 시간대 규칙";
+"detail.rules.1" = "기본값으로 현지 및 대상 도시의 근무 시간(9:00–18:00)을 연락 가능 시간대로 사용합니다.";
+"detail.rules.2" = "연락 가능 시간대는 양쪽 근무 시간의 겹치는 구간입니다.";
+"detail.rules.3" = "아래 근무 시간을 조정해 연락 가능 시간대를 사용자 정의할 수 있습니다.";
+"detail.hours" = "시간";
+
 // MARK: - City Picker
 "city.picker.title" = "도시 추가";
 "city.selector.title" = "도시 선택";

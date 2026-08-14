@@ -160,7 +160,9 @@ final class CityService {
                     cityName: item.cityName,
                     cityEn: item.cityEn,
                     timezoneId: item.timezoneId,
-                    sortIndex: index
+                    sortIndex: index,
+                    workStartHour: item.workStartHour,
+                    workEndHour: item.workEndHour
                 )
                 ctx.insert(model)
             }
@@ -178,7 +180,9 @@ final class CityService {
                         cityName: item.cityName,
                         cityEn: item.cityEn,
                         timezoneId: item.timezoneId,
-                        sortIndex: maxIndex
+                        sortIndex: maxIndex,
+                        workStartHour: item.workStartHour,
+                        workEndHour: item.workEndHour
                     )
                     ctx.insert(model)
                 }
