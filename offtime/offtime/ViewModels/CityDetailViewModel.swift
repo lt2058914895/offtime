@@ -21,6 +21,8 @@ final class CityDetailViewModel: ObservableObject {
         self.city = city
         self.targetWorkStart = city.workStartHour
         self.targetWorkEnd = city.workEndHour
+        self.localWorkStart = city.localWorkStart
+        self.localWorkEnd = city.localWorkEnd
         startTimer()
     }
 
@@ -125,9 +127,11 @@ final class CityDetailViewModel: ObservableObject {
         return parts.joined(separator: " ") + "（\(total)\(String(localized: "detail.hours"))）"
     }
 
-    func saveTargetWorkHours() {
+    func saveWorkHours() {
         city.workStartHour = targetWorkStart
         city.workEndHour = targetWorkEnd
+        city.localWorkStart = localWorkStart
+        city.localWorkEnd = localWorkEnd
         try? CityService.shared.modelContainer.mainContext.save()
     }
 }

@@ -11,8 +11,10 @@ final class CityModel {
     var sortIndex: Int
     var workStartHour: Int = 9
     var workEndHour: Int = 18
+    var localWorkStart: Int = 9
+    var localWorkEnd: Int = 18
     
-    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, sortIndex: Int = 0, workStartHour: Int = 9, workEndHour: Int = 18) {
+    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, sortIndex: Int = 0, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
@@ -20,6 +22,8 @@ final class CityModel {
         self.sortIndex = sortIndex
         self.workStartHour = workStartHour
         self.workEndHour = workEndHour
+        self.localWorkStart = localWorkStart
+        self.localWorkEnd = localWorkEnd
     }
 }
 
@@ -35,7 +39,9 @@ extension CityModel {
             timezoneId: timezoneId,
             sortIndex: sortIndex,
             workStartHour: workStartHour,
-            workEndHour: workEndHour
+            workEndHour: workEndHour,
+            localWorkStart: localWorkStart,
+            localWorkEnd: localWorkEnd
         )
     }
 }
@@ -51,8 +57,10 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
     var sortIndex: Int
     var workStartHour: Int
     var workEndHour: Int
+    var localWorkStart: Int
+    var localWorkEnd: Int
 
-    init(id: UUID, cityName: String, cityEn: String, timezoneId: String, sortIndex: Int, workStartHour: Int = 9, workEndHour: Int = 18) {
+    init(id: UUID, cityName: String, cityEn: String, timezoneId: String, sortIndex: Int, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
@@ -60,6 +68,8 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
         self.sortIndex = sortIndex
         self.workStartHour = workStartHour
         self.workEndHour = workEndHour
+        self.localWorkStart = localWorkStart
+        self.localWorkEnd = localWorkEnd
     }
 
     init(from decoder: Decoder) throws {
@@ -71,6 +81,8 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
         sortIndex = try c.decodeIfPresent(Int.self, forKey: .sortIndex) ?? 0
         workStartHour = try c.decodeIfPresent(Int.self, forKey: .workStartHour) ?? 9
         workEndHour = try c.decodeIfPresent(Int.self, forKey: .workEndHour) ?? 18
+        localWorkStart = try c.decodeIfPresent(Int.self, forKey: .localWorkStart) ?? 9
+        localWorkEnd = try c.decodeIfPresent(Int.self, forKey: .localWorkEnd) ?? 18
     }
 }
 
@@ -78,7 +90,7 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
 
 /// 导出文件信封：带 schemaVersion，便于未来字段变更时做兼容判断。
 struct CitiesExportEnvelope: Codable {
-    static let currentSchemaVersion = 1
+    static let currentSchemaVersion = 2
     var schemaVersion: Int
     var cities: [CityItem]
 }

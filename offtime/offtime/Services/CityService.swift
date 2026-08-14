@@ -162,7 +162,9 @@ final class CityService {
                     timezoneId: item.timezoneId,
                     sortIndex: index,
                     workStartHour: item.workStartHour,
-                    workEndHour: item.workEndHour
+                    workEndHour: item.workEndHour,
+                    localWorkStart: item.localWorkStart,
+                    localWorkEnd: item.localWorkEnd
                 )
                 ctx.insert(model)
             }
@@ -182,7 +184,9 @@ final class CityService {
                         timezoneId: item.timezoneId,
                         sortIndex: maxIndex,
                         workStartHour: item.workStartHour,
-                        workEndHour: item.workEndHour
+                        workEndHour: item.workEndHour,
+                        localWorkStart: item.localWorkStart,
+                        localWorkEnd: item.localWorkEnd
                     )
                     ctx.insert(model)
                 }

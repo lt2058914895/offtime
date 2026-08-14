@@ -79,15 +79,9 @@ struct CityDetailView: View {
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
             viewModel.use24Hour = appEnvironment.settings.use24Hour
-            viewModel.localWorkStart = appEnvironment.settings.localWorkStart
-            viewModel.localWorkEnd = appEnvironment.settings.localWorkEnd
         }
         .onDisappear {
-            viewModel.saveTargetWorkHours()
-            var settings = appEnvironment.settings
-            settings.localWorkStart = viewModel.localWorkStart
-            settings.localWorkEnd = viewModel.localWorkEnd
-            appEnvironment.updateSettings(settings)
+            viewModel.saveWorkHours()
             appEnvironment.citiesRevision += 1
         }
     }

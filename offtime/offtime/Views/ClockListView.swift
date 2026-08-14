@@ -96,12 +96,7 @@ struct ClockListView: View {
             .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
-            .onChange(of: appEnvironment.settings.localWorkStart) { _, newValue in
-                viewModel.localWorkStart = newValue
-            }
-            .onChange(of: appEnvironment.settings.localWorkEnd) { _, newValue in
-                viewModel.localWorkEnd = newValue
-            }
+
             .onChange(of: viewModel.cities.isEmpty) { _, isEmpty in
                 // 城市全部删除后自动退出编辑模式并清空勾选
                 if isEmpty && isEditing {
@@ -114,8 +109,7 @@ struct ClockListView: View {
             .onAppear {
                 // 兜底：首次显示时按当前状态校正 Timer（onChange 首次不触发）
                 updateTimer()
-                viewModel.localWorkStart = appEnvironment.settings.localWorkStart
-                viewModel.localWorkEnd = appEnvironment.settings.localWorkEnd
+
                 // 导入等操作会递增 citiesRevision；切回本 Tab 时若发生变化则静默刷新
                 if appEnvironment.citiesRevision != lastSeenCitiesRevision {
                     lastSeenCitiesRevision = appEnvironment.citiesRevision

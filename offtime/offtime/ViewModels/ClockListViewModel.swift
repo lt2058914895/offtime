@@ -10,8 +10,7 @@ final class ClockListViewModel: ObservableObject {
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
-    @Published var localWorkStart: Int = AppSettings.defaults.localWorkStart
-    @Published var localWorkEnd: Int = AppSettings.defaults.localWorkEnd
+
     /// 管理模式下被勾选待删除的城市 ID
     @Published var selectedCityIds: Set<UUID> = []
     
@@ -195,8 +194,8 @@ final class ClockListViewModel: ObservableObject {
         return timezoneService.getWorkingHoursOverlap(
             timezoneId: city.timezoneId,
             date: currentDate,
-            localWorkStart: localWorkStart,
-            localWorkEnd: localWorkEnd,
+            localWorkStart: city.localWorkStart,
+            localWorkEnd: city.localWorkEnd,
             targetWorkStart: city.workStartHour,
             targetWorkEnd: city.workEndHour
         )
