@@ -44,6 +44,7 @@
 // MARK: - Working Hours
 "clock.working.now" = "可联系";
 "clock.working.none" = "无重叠";
+"clock.working.ended" = "已结束";
 "clock.working.next" = "%@ 可联系";
 
 // MARK: - City Detail

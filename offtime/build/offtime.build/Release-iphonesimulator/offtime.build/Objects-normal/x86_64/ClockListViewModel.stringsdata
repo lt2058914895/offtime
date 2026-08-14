@@ -4,6 +4,30 @@
     "Localizable": [
       {
         "comment": "",
+        "key": "db.read.failed",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "db.read.failed.restart",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "db.read.failed",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 79
+        }
+      },
+      {
+        "comment": "",
         "key": "clock.city.exists",
         "location": {
           "startingColumn": 46,
@@ -16,14 +40,6 @@
         "location": {
           "startingColumn": 46,
           "startingLine": 92
-        }
-      },
-      {
-        "comment": "",
-        "key": "db.read.failed",
-        "location": {
-          "startingColumn": 46,
-          "startingLine": 79
         }
       },
       {
@@ -48,22 +64,6 @@
         "location": {
           "startingColumn": 46,
           "startingLine": 160
-        }
-      },
-      {
-        "comment": "",
-        "key": "db.read.failed",
-        "location": {
-          "startingColumn": 52,
-          "startingLine": 69
-        }
-      },
-      {
-        "comment": "",
-        "key": "db.read.failed.restart",
-        "location": {
-          "startingColumn": 46,
-          "startingLine": 70
         }
       },
       {

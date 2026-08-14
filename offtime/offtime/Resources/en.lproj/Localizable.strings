@@ -44,6 +44,7 @@
 // MARK: - Working Hours
 "clock.working.now" = "Reachable";
 "clock.working.none" = "No overlap";
+"clock.working.ended" = "Ended";
 "clock.working.next" = "Reachable at %@";
 
 // MARK: - City Detail

@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)"
 options: "acb2bd8720a2addfe6e634c704c743b35a409d7f67f026329542012dfe12b6b6"
-build_start_time: [1786689779, 634868000]
-build_end_time: [1786690023, 100493000]
+build_start_time: [1786693265, 757800000]
+build_end_time: [1786693414, 97283000]
 inputs:
   ? "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/DerivedSources/GeneratedAssetSymbols.swift"
   : [1786678470, 677059295]
@@ -17,7 +17,7 @@ inputs:
   "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/ClockListViewModel.swift": [1786675403, 23546201]
   "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/ConverterViewModel.swift": [1786672609, 823395068]
   "/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/SettingsViewModel.swift": [1786672609, 824617341]
-  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CityDetailView.swift": [1786689630, 439940309]
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CityDetailView.swift": [1786693162, 679894638]
   "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CityPickerView.swift": [1786605085, 119893320]
   "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CitySearchListView.swift": [1786605085, 120874501]
   "/Users/deppon/Desktop/offtime/offtime/offtime/Views/CitySelectorView.swift": [1786605085, 121860836]
@@ -26,5 +26,5 @@ inputs:
   "/Users/deppon/Desktop/offtime/offtime/offtime/Views/OnboardingView.swift": [1786612544, 565591190]
   "/Users/deppon/Desktop/offtime/offtime/offtime/Views/SettingsView.swift": [1786605085, 126052874]
   "/Users/deppon/Desktop/offtime/offtime/offtime/Views/ShareSheet.swift": [1786605085, 126458376]
-  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/WorkingHoursBar.swift": [1786673413, 973378677]
+  "/Users/deppon/Desktop/offtime/offtime/offtime/Views/WorkingHoursBar.swift": [1786691631, 727607592]
   "/Users/deppon/Desktop/offtime/offtime/offtime/offtimeApp.swift": [1786609971, 997877214]

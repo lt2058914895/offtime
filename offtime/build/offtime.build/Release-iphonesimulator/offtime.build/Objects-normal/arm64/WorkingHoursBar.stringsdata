@@ -12,10 +12,18 @@
       },
       {
         "comment": "",
+        "key": "clock.working.ended",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 24
+        }
+      },
+      {
+        "comment": "",
         "key": "clock.working.none",
         "location": {
           "startingColumn": 34,
-          "startingLine": 23
+          "startingLine": 26
         }
       },
       {
@@ -23,7 +31,7 @@
         "key": "clock.working.now",
         "location": {
           "startingColumn": 38,
-          "startingLine": 58
+          "startingLine": 61
         }
       },
       {
@@ -31,7 +39,15 @@
         "key": "clock.working.next",
         "location": {
           "startingColumn": 53,
-          "startingLine": 61
+          "startingLine": 64
+        }
+      },
+      {
+        "comment": "",
+        "key": "clock.working.ended",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 67
         }
       },
       {
@@ -39,7 +55,7 @@
         "key": "clock.working.none",
         "location": {
           "startingColumn": 34,
-          "startingLine": 63
+          "startingLine": 69
         }
       }
     ]

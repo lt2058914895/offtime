@@ -123,6 +123,12 @@ struct CityDetailView: View {
         }
     }
 
+    private var timeDifferenceColor: Color {
+        let offset = viewModel.timeDifference
+        if offset == "0h" { return .secondary }
+        return offset.hasPrefix("+") ? .green : .red
+    }
+
     // MARK: - Target Work Hours
 
     private var targetWorkHoursCard: some View {
@@ -156,7 +162,7 @@ struct CityDetailView: View {
                             Text(viewModel.timeDifference)
                                 .font(.caption)
                                 .fontWeight(.medium)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(timeDifferenceColor)
                         }
                     }
                 }
@@ -250,8 +256,10 @@ struct CityDetailView: View {
                     Text(String(format: "%02d:00", start.wrappedValue))
                         .monospacedDigit()
                 }
+                .fixedSize(horizontal: true, vertical: false)
             }
-            VStack(alignment: .leading, spacing: 4) {
+            .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .trailing, spacing: 4) {
                 Text(String(localized: "detail.work.end"))
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -259,8 +267,9 @@ struct CityDetailView: View {
                     Text(String(format: "%02d:00", end.wrappedValue))
                         .monospacedDigit()
                 }
+                .fixedSize(horizontal: true, vertical: false)
             }
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 

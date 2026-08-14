@@ -44,6 +44,7 @@
 // MARK: - Working Hours
 "clock.working.now" = "연락 가능";
 "clock.working.none" = "겹침 없음";
+"clock.working.ended" = "종료";
 "clock.working.next" = "%@ 연락 가능";
 
 // MARK: - City Detail

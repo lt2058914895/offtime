@@ -1,9 +1,9 @@
-"/Users/deppon/Desktop/offtime/offtime/offtime/Utils/Extensions.swift":
-  swiftsourceinfo: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime.swiftsourceinfo"
+"/Users/deppon/Desktop/offtime/offtime/offtime/ViewModels/CityPickerViewModel.swift":
+  objc-header: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-Swift.h"
   swiftmodule: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime.swiftmodule"
-  dependencies: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.d"
+  swiftsourceinfo: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime.swiftsourceinfo"
+  const-values: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.swiftconstvalues"
   swiftdoc: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime.swiftdoc"
   diagnostics: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.dia"
-  const-values: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.swiftconstvalues"
+  dependencies: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-master.d"
   abi-baseline-json: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime.abi.json"
-  objc-header: "/Users/deppon/Desktop/offtime/offtime/build/offtime.build/Release-iphonesimulator/offtime.build/Objects-normal/x86_64/offtime-Swift.h"

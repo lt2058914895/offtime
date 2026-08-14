@@ -44,6 +44,7 @@
 // MARK: - Working Hours
 "clock.working.now" = "連絡可能";
 "clock.working.none" = "重複なし";
+"clock.working.ended" = "終了";
 "clock.working.next" = "%@ に連絡可能";
 
 // MARK: - City Detail
