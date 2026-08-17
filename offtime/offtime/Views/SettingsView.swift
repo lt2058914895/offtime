@@ -346,11 +346,22 @@ struct WebView: UIViewRepresentable {
 
 struct SupportPageView: View {
     private let supportURL = URL(string: "https://lt2058914895.github.io/offtime/support.html")!
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         WebView(url: supportURL)
             .navigationTitle(String(localized: "settings.support"))
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+            }
             .toolbar(.hidden, for: .tabBar)
     }
 }

@@ -21,6 +21,16 @@ struct CitySelectorView: View {
         }
         .navigationTitle(String(localized: "city.selector.title"))
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+            }
+        }
         .toolbar(.hidden, for: .tabBar)
         .onChange(of: searchText) { _, newValue in
             viewModel.searchText = newValue
