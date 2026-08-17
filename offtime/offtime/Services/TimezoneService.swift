@@ -88,47 +88,68 @@ final class TimezoneService {
         guard let targetTimezone = timezone(for: timezoneId) else {
             return ("", nil)
         }
-        
+
         let localTimezone = TimeZone.current
         let targetOffset = targetTimezone.secondsFromGMT(for: date)
         let localOffset = localTimezone.secondsFromGMT(for: date)
-        let diffHours = Double(targetOffset - localOffset) / 3600
-        
-        return formatTimeDifference(diffHours: diffHours)
+        // 以分钟为单位保留半小时等非整数时区精度
+        let totalMinutes = (targetOffset - localOffset) / 60
+        let crossDay = crossDayLabel(localTimezone: localTimezone, targetTimezone: targetTimezone, date: date)
+
+        return (formatTimeDifference(totalMinutes: totalMinutes), crossDay)
     }
-    
+
     func getTimeDifferenceBetween(sourceTimezoneId: String, targetTimezoneId: String, date: Date = Date()) -> (offset: String, crossDay: String?) {
         guard let sourceTimezone = timezone(for: sourceTimezoneId),
               let targetTimezone = timezone(for: targetTimezoneId) else {
             return ("", nil)
         }
-        
+
         let sourceOffset = sourceTimezone.secondsFromGMT(for: date)
         let targetOffset = targetTimezone.secondsFromGMT(for: date)
-        let diffHours = Double(targetOffset - sourceOffset) / 3600
-        
-        return formatTimeDifference(diffHours: diffHours)
+        let totalMinutes = (targetOffset - sourceOffset) / 60
+        let crossDay = crossDayLabel(localTimezone: sourceTimezone, targetTimezone: targetTimezone, date: date)
+
+        return (formatTimeDifference(totalMinutes: totalMinutes), crossDay)
     }
-    
-    private func formatTimeDifference(diffHours: Double) -> (offset: String, crossDay: String?) {
-        var offsetStr: String
-        var crossDay: String?
-        
-        if diffHours == 0 {
-            offsetStr = "0h"
-        } else if diffHours > 0 {
-            offsetStr = "+\(Int(diffHours))h"
-            if diffHours >= 24 {
-                crossDay = String(localized: "clock.tomorrow")
-            }
-        } else {
-            offsetStr = "\(Int(diffHours))h"
-            if diffHours <= -24 {
-                crossDay = String(localized: "clock.yesterday")
-            }
+
+    /// 拼接时差字符串：保留半小时精度，整数时区不带冗余 0m。
+    /// - Parameter totalMinutes: 目标时区相对源时区的偏移分钟数（正=超前，负=滞后）
+    private func formatTimeDifference(totalMinutes: Int) -> String {
+        if totalMinutes == 0 {
+            return "0h"
         }
-        
-        return (offsetStr, crossDay)
+
+        let sign = totalMinutes > 0 ? "+" : "-"
+        let absolute = abs(totalMinutes)
+        let hours = absolute / 60
+        let minutes = absolute % 60
+        if minutes == 0 {
+            return "\(sign)\(hours)h"
+        }
+        return "\(sign)\(hours)h\(minutes)m"
+    }
+
+    /// 用日历日比较判跨天：比较 date 时刻在源/目标时区下所处的「日序」，
+    /// 避免用小时差推断在边界附近（如 +23h 但已跨日）误判。
+    private func crossDayLabel(localTimezone: TimeZone, targetTimezone: TimeZone, date: Date) -> String? {
+        var localCalendar = Calendar(identifier: .gregorian)
+        localCalendar.timeZone = localTimezone
+        var targetCalendar = Calendar(identifier: .gregorian)
+        targetCalendar.timeZone = targetTimezone
+
+        let localDay = localCalendar.dateInterval(of: .day, for: date)?.start
+        let targetDay = targetCalendar.dateInterval(of: .day, for: date)?.start
+
+        guard let localDay, let targetDay else { return nil }
+
+        let dayDiff = targetCalendar.dateComponents([.day], from: localDay, to: targetDay).day ?? 0
+        if dayDiff > 0 {
+            return String(localized: "clock.tomorrow")
+        } else if dayDiff < 0 {
+            return String(localized: "clock.yesterday")
+        }
+        return nil
     }
     
     // MARK: - Time Conversion

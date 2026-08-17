@@ -4,18 +4,47 @@ import SwiftUI
 /// 绿色段 = 本地与目标城市均在 9:00–18:00 工作时段；红色竖线 = 当前时刻。
 struct WorkingHoursBar: View {
     let overlap: WorkingHoursOverlap
+    /// 本地时区标识，用于把 nextOverlapDate 格式化为本地时间字符串
+    let localTimezoneId: String
 
     /// 当前本地小时（含分钟小数），用于色条上的"现在"标记
     private var currentHourValue: Double {
         overlap.currentLocalHour
     }
 
+    /// 把下一个重叠起点格式化为本地时间字符串，跨天带「明日/昨日」前缀
+    private func nextOverlapText(_ date: Date) -> String {
+        guard let localTz = TimeZone(identifier: localTimezoneId) else {
+            return ""
+        }
+        var localCalendar = Calendar(identifier: .gregorian)
+        localCalendar.timeZone = localTz
+
+        let formatter = DateFormatter()
+        formatter.timeZone = localTz
+        formatter.locale = Locale.current
+        formatter.dateFormat = "HH:mm"
+        let timeText = formatter.string(from: date)
+
+        // 比较目标日与今日的日序，判断是否跨天
+        let todayStart = localCalendar.dateInterval(of: .day, for: Date())?.start ?? Date()
+        let targetStart = localCalendar.dateInterval(of: .day, for: date)?.start ?? date
+        let dayDiff = localCalendar.dateComponents([.day], from: todayStart, to: targetStart).day ?? 0
+
+        if dayDiff > 0 {
+            return "\(String(localized: "clock.tomorrow")) \(timeText)"
+        } else if dayDiff < 0 {
+            return "\(String(localized: "clock.yesterday")) \(timeText)"
+        }
+        return timeText
+    }
+
     private var statusText: String {
         if overlap.isCurrentlyOverlapping {
             return String(localized: "clock.working.now")
         }
-        if let next = overlap.nextOverlapHour {
-            return String(format: "%02d:00", next)
+        if let next = overlap.nextOverlapDate {
+            return nextOverlapText(next)
         }
         if overlap.hourlyOverlap.contains(true) {
             return String(localized: "clock.working.ended")
@@ -57,8 +86,8 @@ struct WorkingHoursBar: View {
         if overlap.isCurrentlyOverlapping {
             return String(localized: "clock.working.now")
         }
-        if let next = overlap.nextOverlapHour {
-            return String(format: String(localized: "clock.working.next"), String(format: "%02d:00", next))
+        if let next = overlap.nextOverlapDate {
+            return String(format: String(localized: "clock.working.next"), nextOverlapText(next))
         }
         if overlap.hourlyOverlap.contains(true) {
             return String(localized: "clock.working.ended")

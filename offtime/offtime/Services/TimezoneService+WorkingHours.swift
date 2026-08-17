@@ -8,8 +8,8 @@ struct WorkingHoursOverlap: Equatable {
     let hourlyOverlap: [Bool]
     /// 当前时刻是否处于重叠时段。
     let isCurrentlyOverlapping: Bool
-    /// 下一个重叠起始小时（本地时间，0–23），nil 表示今日无重叠。
-    let nextOverlapHour: Int?
+    /// 下一个重叠起点的绝对时间（可能落在今日或明日），nil 表示未来 48 小时内无重叠。
+    let nextOverlapDate: Date?
     /// 当前本地时刻在 24 小时轴上的位置（含分钟小数），用于色条"现在"标记。
     let currentLocalHour: Double
 }
@@ -39,7 +39,7 @@ extension TimezoneService {
         let empty = WorkingHoursOverlap(
             hourlyOverlap: Array(repeating: false, count: 24),
             isCurrentlyOverlapping: false,
-            nextOverlapHour: nil,
+            nextOverlapDate: nil,
             currentLocalHour: currentLocalHourDouble
         )
 
@@ -56,7 +56,7 @@ extension TimezoneService {
 
         var hourlyOverlap: [Bool] = []
         var isCurrentlyOverlapping = false
-        var nextOverlapHour: Int? = nil
+        var nextOverlapDate: Date? = nil
 
         for hour in 0..<24 {
             guard let hourDate = localCalendar.date(byAdding: .hour, value: hour, to: localStartOfDay) else {
@@ -73,15 +73,33 @@ extension TimezoneService {
             if overlap && hour == currentLocalHourInt {
                 isCurrentlyOverlapping = true
             }
-            if overlap && nextOverlapHour == nil && hour >= currentLocalHourInt {
-                nextOverlapHour = hour
+            // 当日未来重叠起点：尚未设置且该小时在当前时刻及之后
+            if overlap && nextOverlapDate == nil && hour >= currentLocalHourInt {
+                nextOverlapDate = hourDate
+            }
+        }
+
+        // 当日已无未来重叠时，向前扫描次日，覆盖跨天重叠窗口（最多 48h）。
+        // 仅当当前不在重叠且当日没有未到的重叠时才需要，避免覆盖「今日还有」的提示。
+        if nextOverlapDate == nil && !isCurrentlyOverlapping {
+            for step in 1...48 {
+                guard let futureDate = localCalendar.date(byAdding: .hour, value: step, to: date) else { break }
+                let futureLocalHour = localCalendar.component(.hour, from: futureDate)
+                let futureTargetHour = targetCalendar.component(.hour, from: futureDate)
+                let localWorking = futureLocalHour >= localWorkStart && futureLocalHour < localWorkEnd
+                let targetWorking = futureTargetHour >= targetWorkStart && futureTargetHour < targetWorkEnd
+                if localWorking && targetWorking {
+                    // 对齐到该小时起点作为重叠起点
+                    nextOverlapDate = localCalendar.dateInterval(of: .hour, for: futureDate)?.start ?? futureDate
+                    break
+                }
             }
         }
 
         return WorkingHoursOverlap(
             hourlyOverlap: hourlyOverlap,
             isCurrentlyOverlapping: isCurrentlyOverlapping,
-            nextOverlapHour: nextOverlapHour,
+            nextOverlapDate: nextOverlapDate,
             currentLocalHour: currentLocalHourDouble
         )
     }

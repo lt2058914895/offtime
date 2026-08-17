@@ -204,6 +204,7 @@ struct ClockListView: View {
                        isDaytime: viewModel.isDaytime(city: city),
                        dstStatus: viewModel.getDSTStatus(city: city),
                         workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
+                       localTimezoneId: localTimezoneId,
                        isEditMode: isEditing,
                         isSelected: viewModel.selectedCityIds.contains(city.id),
                         onToggleSelection: {
@@ -256,6 +257,7 @@ struct ClockListView: View {
                            isDaytime: viewModel.isDaytime(city: city),
                            dstStatus: viewModel.getDSTStatus(city: city),
                             workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
+                       localTimezoneId: localTimezoneId,
                            isEditMode: isEditing,
                             isSelected: viewModel.selectedCityIds.contains(city.id),
                             onToggleSelection: {
@@ -311,6 +313,7 @@ struct ClockListCell: View {
     let isDaytime: Bool
     let dstStatus: String?
     let workingHoursOverlap: WorkingHoursOverlap
+    let localTimezoneId: String
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
@@ -384,7 +387,7 @@ struct ClockListCell: View {
                    }
                }
                 if !isEditMode {
-                    WorkingHoursBar(overlap: workingHoursOverlap)
+                    WorkingHoursBar(overlap: workingHoursOverlap, localTimezoneId: localTimezoneId)
                 }
             }
         }
@@ -423,6 +426,7 @@ struct ClockGridCell: View {
     let isDaytime: Bool
     let dstStatus: String?
     let workingHoursOverlap: WorkingHoursOverlap
+    let localTimezoneId: String
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
@@ -430,7 +434,7 @@ struct ClockGridCell: View {
     let onShare: () -> Void
     let onDelete: () -> Void
     var onTap: () -> Void = {}
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // 顶部：城市名 + 日夜图标 + 管理模式勾选圆圈
@@ -501,7 +505,7 @@ struct ClockGridCell: View {
                }
            }
             if !isEditMode {
-                WorkingHoursBar(overlap: workingHoursOverlap)
+                WorkingHoursBar(overlap: workingHoursOverlap, localTimezoneId: localTimezoneId)
             }
         }
         .padding(16)
