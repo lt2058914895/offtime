@@ -1,12 +1,14 @@
 import Foundation
 import Combine
+import SwiftData
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     @Published var themeMode: ThemeMode = AppSettings.defaults.themeMode
-    
     @Published var errorMessage: String?
+    
+    private let cityService = CityService.shared
     
     init() {
         loadSettings()

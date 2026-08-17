@@ -11,7 +11,7 @@ struct SettingsView: View {
     /// 导入流程：先读取文件数据到内存，再弹确认框让用户选择「合并 / 替换」策略
     @State private var pendingImportData: Data?
     @State private var showImportConfirm = false
-
+    
     /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接与评分跳转
     private let appStoreID = "6794565774"
     private var appStoreURL: URL { URL(string: "https://apps.apple.com/app/id\(appStoreID)")! }
@@ -57,6 +57,30 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack(path: $path) {
             List {
+                // MARK: - 当前城市
+                Section(String(localized: "settings.current.city")) {
+                    NavigationLink {
+                        CitySelectorView(onCitySelected: { city in
+                            appEnvironment.switchCurrentCity(city)
+                        })
+                    } label: {
+                        HStack {
+                            Image(systemName: "building.2.fill")
+                                .foregroundColor(.blue)
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(appEnvironment.settings.currentCityName ?? String(localized: "settings.current.city.none"))
+                                    .foregroundColor(appEnvironment.settings.currentCityName == nil ? .secondary : .primary)
+                                if let en = appEnvironment.settings.currentCityEn {
+                                    Text(en)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 Section(String(localized: "settings.display")) {
                     Toggle(isOn: $viewModel.use24Hour) {
                         Text(String(localized: "settings.24hour"))
@@ -207,6 +231,7 @@ struct SettingsView: View {
             } message: {
                 Text(String(localized: "settings.import.confirm.message"))
             }
+            
         }
     }
     

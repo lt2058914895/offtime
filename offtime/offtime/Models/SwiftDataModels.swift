@@ -106,16 +106,18 @@ enum ViewState: Equatable {
 struct AppSettings: Equatable, Codable {
     var use24Hour: Bool
     var themeMode: ThemeMode
-    var localWorkStart: Int
-    var localWorkEnd: Int
+    var currentCityTimezoneId: String?
+    var currentCityName: String?
+    var currentCityEn: String?
 }
 
 extension AppSettings {
     static let defaults = AppSettings(
         use24Hour: Locale.systemUses24Hour,
         themeMode: .system,
-        localWorkStart: 9,
-        localWorkEnd: 18
+        currentCityTimezoneId: TimeZone.current.identifier,
+        currentCityName: nil,
+        currentCityEn: nil
     )
 }
 

@@ -98,6 +98,9 @@
 
 // MARK: - Settings
 "settings.title" = "設定";
+"settings.current.city" = "現在の都市";
+"settings.current.city.none" = "未選択";
+"settings.current.city.picker.title" = "現在の都市を選択";
 "settings.display" = "表示設定";
 "settings.24hour" = "24時間表示";
 "settings.theme" = "外観";

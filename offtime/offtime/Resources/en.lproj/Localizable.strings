@@ -98,6 +98,9 @@
 
 // MARK: - Settings
 "settings.title" = "Settings";
+"settings.current.city" = "Current City";
+"settings.current.city.none" = "Not Selected";
+"settings.current.city.picker.title" = "Select Current City";
 "settings.display" = "Display";
 "settings.24hour" = "24-Hour Format";
 "settings.theme" = "Appearance";

@@ -178,8 +178,8 @@ final class ClockListViewModel: ObservableObject {
         return timezoneService.getLocalWeekday(timezoneId: city.timezoneId, date: currentDate) ?? ""
     }
     
-    func getTimeDifference(city: CityModel) -> (offset: String, crossDay: String?) {
-        return timezoneService.getTimeDifference(timezoneId: city.timezoneId, date: currentDate)
+    func getTimeDifference(city: CityModel, localTimezoneId: String) -> (offset: String, crossDay: String?) {
+        return timezoneService.getTimeDifferenceBetween(sourceTimezoneId: localTimezoneId, targetTimezoneId: city.timezoneId, date: currentDate)
     }
     
     func isDaytime(city: CityModel) -> Bool {
@@ -190,10 +190,11 @@ final class ClockListViewModel: ObservableObject {
         return timezoneService.getDSTStatus(timezoneId: city.timezoneId, date: currentDate)
     }
 
-    func getWorkingHoursOverlap(city: CityModel) -> WorkingHoursOverlap {
+    func getWorkingHoursOverlap(city: CityModel, localTimezoneId: String) -> WorkingHoursOverlap {
         return timezoneService.getWorkingHoursOverlap(
             timezoneId: city.timezoneId,
             date: currentDate,
+            localTimezoneId: localTimezoneId,
             localWorkStart: city.localWorkStart,
             localWorkEnd: city.localWorkEnd,
             targetWorkStart: city.workStartHour,

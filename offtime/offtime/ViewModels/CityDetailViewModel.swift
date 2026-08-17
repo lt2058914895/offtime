@@ -12,6 +12,7 @@ final class CityDetailViewModel: ObservableObject {
     @Published var targetWorkStart: Int
     @Published var targetWorkEnd: Int
     @Published var use24Hour: Bool = true
+    @Published var localTimezoneId: String = TimeZone.current.identifier
 
     let city: CityModel
     private let timezoneService = TimezoneService.shared
@@ -55,22 +56,22 @@ final class CityDetailViewModel: ObservableObject {
     }
 
     var localTime: String {
-        let localId = TimeZone.current.identifier
         if use24Hour {
-            return timezoneService.getLocalTime24(timezoneId: localId, date: currentDate) ?? "--:--"
+            return timezoneService.getLocalTime24(timezoneId: localTimezoneId, date: currentDate) ?? "--:--"
         }
-        return timezoneService.getLocalTime12(timezoneId: localId, date: currentDate) ?? "--:--"
+        return timezoneService.getLocalTime12(timezoneId: localTimezoneId, date: currentDate) ?? "--:--"
     }
 
     var timeDifference: String {
-        timezoneService.getTimeDifference(timezoneId: city.timezoneId, date: currentDate).offset
+        timezoneService.getTimeDifferenceBetween(sourceTimezoneId: localTimezoneId, targetTimezoneId: city.timezoneId, date: currentDate).offset
     }
 
     // MARK: - Timeline Data
 
     /// 本地当前时刻在 24 小时轴上的位置（含分钟小数）
     var localNowHour: Double {
-        let cal = Calendar.current
+        var cal = Calendar.current
+        cal.timeZone = TimeZone(identifier: localTimezoneId) ?? .current
         let h = cal.component(.hour, from: currentDate)
         let m = cal.component(.minute, from: currentDate)
         return Double(h) + Double(m) / 60.0
@@ -101,6 +102,7 @@ final class CityDetailViewModel: ObservableObject {
         timezoneService.getWorkingHoursOverlap(
             timezoneId: city.timezoneId,
             date: currentDate,
+            localTimezoneId: localTimezoneId,
             localWorkStart: localWorkStart,
             localWorkEnd: localWorkEnd,
             targetWorkStart: targetWorkStart,

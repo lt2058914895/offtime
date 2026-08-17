@@ -22,6 +22,11 @@ struct ClockListView: View {
 
     private var isIPad: Bool { horizontalSizeClass == .regular }
 
+    /// 当前城市时区：作为"本地"时区基准（设置页当前城市选择后全局生效）
+    private var localTimezoneId: String {
+        appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
+    }
+
     /// Timer 只在「App 在前台」且「当前是时钟 Tab」时运行：
     /// 切到转换/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
     private var shouldRunTimer: Bool {
@@ -96,7 +101,6 @@ struct ClockListView: View {
             .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
-
             .onChange(of: viewModel.cities.isEmpty) { _, isEmpty in
                 // 城市全部删除后自动退出编辑模式并清空勾选
                 if isEmpty && isEditing {
@@ -109,7 +113,6 @@ struct ClockListView: View {
             .onAppear {
                 // 兜底：首次显示时按当前状态校正 Timer（onChange 首次不触发）
                 updateTimer()
-
                 // 导入等操作会递增 citiesRevision；切回本 Tab 时若发生变化则静默刷新
                 if appEnvironment.citiesRevision != lastSeenCitiesRevision {
                     lastSeenCitiesRevision = appEnvironment.citiesRevision
@@ -197,10 +200,10 @@ struct ClockListView: View {
                        time: viewModel.getLocalTime(city: city),
                        date: viewModel.getLocalDate(city: city),
                        weekday: viewModel.getLocalWeekday(city: city),
-                       timeDifference: viewModel.getTimeDifference(city: city),
+                       timeDifference: viewModel.getTimeDifference(city: city, localTimezoneId: localTimezoneId),
                        isDaytime: viewModel.isDaytime(city: city),
                        dstStatus: viewModel.getDSTStatus(city: city),
-                        workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city),
+                        workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
                        isEditMode: isEditing,
                         isSelected: viewModel.selectedCityIds.contains(city.id),
                         onToggleSelection: {
@@ -249,10 +252,10 @@ struct ClockListView: View {
                            time: viewModel.getLocalTime(city: city),
                            date: viewModel.getLocalDate(city: city),
                            weekday: viewModel.getLocalWeekday(city: city),
-                           timeDifference: viewModel.getTimeDifference(city: city),
+                           timeDifference: viewModel.getTimeDifference(city: city, localTimezoneId: localTimezoneId),
                            isDaytime: viewModel.isDaytime(city: city),
                            dstStatus: viewModel.getDSTStatus(city: city),
-                            workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city),
+                            workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
                            isEditMode: isEditing,
                             isSelected: viewModel.selectedCityIds.contains(city.id),
                             onToggleSelection: {

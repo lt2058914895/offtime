@@ -83,17 +83,46 @@ final class AppEnvironment: ObservableObject {
             ?? Locale.systemUses24Hour
         let themeRaw = UserDefaults.standard.integer(forKey: "settings_themeMode")
         let themeMode = ThemeMode(rawValue: themeRaw) ?? .system
-        let localWorkStart = UserDefaults.standard.object(forKey: "settings_localWorkStart") as? Int ?? 9
-        let localWorkEnd = UserDefaults.standard.object(forKey: "settings_localWorkEnd") as? Int ?? 18
-        settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode, localWorkStart: localWorkStart, localWorkEnd: localWorkEnd)
+        let currentCityTimezoneId = UserDefaults.standard.string(forKey: "settings_currentCityTimezoneId")
+            ?? TimeZone.current.identifier
+        let currentCityName = UserDefaults.standard.string(forKey: "settings_currentCityName")
+        let currentCityEn = UserDefaults.standard.string(forKey: "settings_currentCityEn")
+        settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode, currentCityTimezoneId: currentCityTimezoneId, currentCityName: currentCityName, currentCityEn: currentCityEn)
+        
+        // 首次启动时，如果 currentCityName 为空，尝试从内置城市库匹配名称
+        if settings.currentCityName == nil, let tzId = settings.currentCityTimezoneId {
+            let (name, en) = CityService.matchCity(for: tzId)
+            var s = settings
+            s.currentCityName = name
+            s.currentCityEn = en
+            updateSettings(s)
+        }
     }
 
     func updateSettings(_ newSettings: AppSettings) {
         UserDefaults.standard.set(newSettings.use24Hour, forKey: "settings_use24Hour")
         UserDefaults.standard.set(newSettings.themeMode.rawValue, forKey: "settings_themeMode")
-        UserDefaults.standard.set(newSettings.localWorkStart, forKey: "settings_localWorkStart")
-        UserDefaults.standard.set(newSettings.localWorkEnd, forKey: "settings_localWorkEnd")
+        UserDefaults.standard.set(newSettings.currentCityTimezoneId, forKey: "settings_currentCityTimezoneId")
+        if let name = newSettings.currentCityName {
+            UserDefaults.standard.set(name, forKey: "settings_currentCityName")
+        } else {
+            UserDefaults.standard.removeObject(forKey: "settings_currentCityName")
+        }
+        if let en = newSettings.currentCityEn {
+            UserDefaults.standard.set(en, forKey: "settings_currentCityEn")
+        } else {
+            UserDefaults.standard.removeObject(forKey: "settings_currentCityEn")
+        }
         settings = newSettings
+    }
+
+    /// 切换当前城市：从城市库选择后更新时区、名称（工作时间由各城市详情页独立维护）
+    func switchCurrentCity(_ city: CitySuggestion) {
+        var newSettings = settings
+        newSettings.currentCityTimezoneId = city.timezoneId
+        newSettings.currentCityName = city.cityName
+        newSettings.currentCityEn = city.cityEn
+        updateSettings(newSettings)
     }
 
     var colorScheme: ColorScheme? {

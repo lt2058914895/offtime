@@ -7,10 +7,7 @@ struct WorkingHoursBar: View {
 
     /// 当前本地小时（含分钟小数），用于色条上的"现在"标记
     private var currentHourValue: Double {
-        let cal = Calendar.current
-        let h = cal.component(.hour, from: Date())
-        let m = cal.component(.minute, from: Date())
-        return Double(h) + Double(m) / 60.0
+        overlap.currentLocalHour
     }
 
     private var statusText: String {

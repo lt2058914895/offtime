@@ -79,6 +79,7 @@ struct CityDetailView: View {
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
             viewModel.use24Hour = appEnvironment.settings.use24Hour
+            viewModel.localTimezoneId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
         }
         .onDisappear {
             viewModel.saveWorkHours()

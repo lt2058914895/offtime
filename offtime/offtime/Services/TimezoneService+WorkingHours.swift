@@ -10,6 +10,8 @@ struct WorkingHoursOverlap: Equatable {
     let isCurrentlyOverlapping: Bool
     /// 下一个重叠起始小时（本地时间，0–23），nil 表示今日无重叠。
     let nextOverlapHour: Int?
+    /// 当前本地时刻在 24 小时轴上的位置（含分钟小数），用于色条"现在"标记。
+    let currentLocalHour: Double
 }
 
 extension TimezoneService {
@@ -22,22 +24,29 @@ extension TimezoneService {
     func getWorkingHoursOverlap(
         timezoneId: String,
         date: Date = Date(),
+        localTimezoneId: String = TimeZone.current.identifier,
         localWorkStart: Int = 9,
         localWorkEnd: Int = 18,
         targetWorkStart: Int = 9,
         targetWorkEnd: Int = 18
     ) -> WorkingHoursOverlap {
+        var localCalendar = Calendar.current
+        localCalendar.timeZone = TimeZone(identifier: localTimezoneId) ?? .current
+        let currentLocalHourInt = localCalendar.component(.hour, from: date)
+        let currentLocalMinute = localCalendar.component(.minute, from: date)
+        let currentLocalHourDouble = Double(currentLocalHourInt) + Double(currentLocalMinute) / 60.0
+
         let empty = WorkingHoursOverlap(
             hourlyOverlap: Array(repeating: false, count: 24),
             isCurrentlyOverlapping: false,
-            nextOverlapHour: nil
+            nextOverlapHour: nil,
+            currentLocalHour: currentLocalHourDouble
         )
 
         guard let targetTimezone = TimeZone(identifier: timezoneId) else {
             return empty
         }
 
-        let localCalendar = Calendar.current
         var targetCalendar = Calendar.current
         targetCalendar.timeZone = targetTimezone
 
@@ -45,7 +54,6 @@ extension TimezoneService {
             return empty
         }
 
-        let currentLocalHour = localCalendar.component(.hour, from: date)
         var hourlyOverlap: [Bool] = []
         var isCurrentlyOverlapping = false
         var nextOverlapHour: Int? = nil
@@ -62,10 +70,10 @@ extension TimezoneService {
             let overlap = localWorking && targetWorking
             hourlyOverlap.append(overlap)
 
-            if overlap && hour == currentLocalHour {
+            if overlap && hour == currentLocalHourInt {
                 isCurrentlyOverlapping = true
             }
-            if overlap && nextOverlapHour == nil && hour >= currentLocalHour {
+            if overlap && nextOverlapHour == nil && hour >= currentLocalHourInt {
                 nextOverlapHour = hour
             }
         }
@@ -73,7 +81,8 @@ extension TimezoneService {
         return WorkingHoursOverlap(
             hourlyOverlap: hourlyOverlap,
             isCurrentlyOverlapping: isCurrentlyOverlapping,
-            nextOverlapHour: nextOverlapHour
+            nextOverlapHour: nextOverlapHour,
+            currentLocalHour: currentLocalHourDouble
         )
     }
 
