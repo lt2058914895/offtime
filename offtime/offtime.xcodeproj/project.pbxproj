@@ -6,20 +6,69 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		024CF815D289B7FB2D77ECA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 690C5C533010918200CF6812 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 690C5C5A3010918200CF6812;
+			remoteInfo = offtime;
+		};
+		8DCB868A4874AFFF2330718F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 690C5C533010918200CF6812 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 690C5C5A3010918200CF6812;
+			remoteInfo = offtime;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		690C5C5B3010918200CF6812 /* offtime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = offtime.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E7F48B34B8B6D8D321C58F7 /* offtimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = offtimeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B754A053B4B8C469E5762938 /* offtimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = offtimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		690C5C5D3010918200CF6812 /* offtime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = offtime;
+			sourceTree = "<group>";
+		};
+		D739EF742E91EB5552BFE690 /* offtimeUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = offtimeUITests;
+			sourceTree = "<group>";
+		};
+		DCB07EE770D49393768472D3 /* offtimeTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = offtimeTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4601A26A2CB6D86CA7A81B55 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		690C5C583010918200CF6812 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92620EB3C595F33DD582004C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -35,6 +84,8 @@
 				690C5C5D3010918200CF6812 /* offtime */,
 				690C5C5C3010918200CF6812 /* Products */,
 				D0A8228B1206DDB69EE5D39A /* Frameworks */,
+				DCB07EE770D49393768472D3 /* offtimeTests */,
+				D739EF742E91EB5552BFE690 /* offtimeUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -42,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				690C5C5B3010918200CF6812 /* offtime.app */,
+				B754A053B4B8C469E5762938 /* offtimeTests.xctest */,
+				7E7F48B34B8B6D8D321C58F7 /* offtimeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,6 +129,48 @@
 			productReference = 690C5C5B3010918200CF6812 /* offtime.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7168D7E06BCAEBE9D9557AAE /* offtimeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5D698BCC5E7CAB6826AB917C /* Build configuration list for PBXNativeTarget "offtimeUITests" */;
+			buildPhases = (
+				E162053F75E891178C86D636 /* Sources */,
+				92620EB3C595F33DD582004C /* Frameworks */,
+				7BE5DC58C0650F2941DF2A7A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BDC270C5E86E0E8EC479B284 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D739EF742E91EB5552BFE690 /* offtimeUITests */,
+			);
+			name = offtimeUITests;
+			productName = offtimeUITests;
+			productReference = 7E7F48B34B8B6D8D321C58F7 /* offtimeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		BFA476F8B010086544950FD4 /* offtimeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3F9CA972AA86C447934F536 /* Build configuration list for PBXNativeTarget "offtimeTests" */;
+			buildPhases = (
+				B4495E0830095B22AE452E36 /* Sources */,
+				4601A26A2CB6D86CA7A81B55 /* Frameworks */,
+				899CF8A1CB7027D00EB868CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				405F072988B892E11D910C9E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DCB07EE770D49393768472D3 /* offtimeTests */,
+			);
+			name = offtimeTests;
+			productName = offtimeTests;
+			productReference = B754A053B4B8C469E5762938 /* offtimeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -88,6 +183,14 @@
 				TargetAttributes = {
 					690C5C5A3010918200CF6812 = {
 						CreatedOnToolsVersion = 26.4.1;
+					};
+					7168D7E06BCAEBE9D9557AAE = {
+						CreatedOnToolsVersion = 26.4.1;
+						TestTargetID = 690C5C5A3010918200CF6812;
+					};
+					BFA476F8B010086544950FD4 = {
+						CreatedOnToolsVersion = 26.4.1;
+						TestTargetID = 690C5C5A3010918200CF6812;
 					};
 				};
 			};
@@ -109,12 +212,28 @@
 			projectRoot = "";
 			targets = (
 				690C5C5A3010918200CF6812 /* offtime */,
+				BFA476F8B010086544950FD4 /* offtimeTests */,
+				7168D7E06BCAEBE9D9557AAE /* offtimeUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		690C5C593010918200CF6812 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BE5DC58C0650F2941DF2A7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899CF8A1CB7027D00EB868CB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -131,9 +250,89 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B4495E0830095B22AE452E36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E162053F75E891178C86D636 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		405F072988B892E11D910C9E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = offtime;
+			target = 690C5C5A3010918200CF6812 /* offtime */;
+			targetProxy = 024CF815D289B7FB2D77ECA7 /* PBXContainerItemProxy */;
+		};
+		BDC270C5E86E0E8EC479B284 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = offtime;
+			target = 690C5C5A3010918200CF6812 /* offtime */;
+			targetProxy = 8DCB868A4874AFFF2330718F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		33A5EE2C0BC8B21B9D4BF23F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = lt.offtime.offtimeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/offtime.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/offtime";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6699D674DEBDE987FEB79893 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = lt.offtime.offtimeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/offtime.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/offtime";
+			};
+			name = Debug;
+		};
 		690C5C643010918800CF6812 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -321,9 +520,67 @@
 			};
 			name = Release;
 		};
+		CE80D05DE2D8B90B9150C741 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = lt.offtime.offtimeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = offtime;
+			};
+			name = Debug;
+		};
+		F5A39CEDA45F1380A3DB255E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = lt.offtime.offtimeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = offtime;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5D698BCC5E7CAB6826AB917C /* Build configuration list for PBXNativeTarget "offtimeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5A39CEDA45F1380A3DB255E /* Release */,
+				CE80D05DE2D8B90B9150C741 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		690C5C563010918200CF6812 /* Build configuration list for PBXProject "offtime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -338,6 +595,15 @@
 			buildConfigurations = (
 				690C5C673010918800CF6812 /* Debug */,
 				690C5C683010918800CF6812 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3F9CA972AA86C447934F536 /* Build configuration list for PBXNativeTarget "offtimeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33A5EE2C0BC8B21B9D4BF23F /* Release */,
+				6699D674DEBDE987FEB79893 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

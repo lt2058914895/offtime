@@ -130,6 +130,7 @@ struct OnboardingView: View {
                     .background(Color.accentColor)
                     .cornerRadius(12)
             }
+            .accessibilityIdentifier("onboarding.start")
             .padding(.horizontal)
         }
         .padding(.horizontal)
