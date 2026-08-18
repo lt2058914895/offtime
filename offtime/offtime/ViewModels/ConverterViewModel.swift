@@ -63,6 +63,11 @@ final class ConverterViewModel: ObservableObject {
     func refreshFormat() {
         convertTime(source: sourceCity, target: targetCity, date: sourceDate)
     }
+
+    func isCityDaytime(_ city: CityModel?) -> Bool {
+        guard let city else { return true }
+        return timezoneService.isDaytime(timezoneId: city.timezoneId, date: Date())
+    }
     
     private func convertTime(source: CityModel?, target: CityModel?, date: Date) {
         guard let source = source, let target = target else {

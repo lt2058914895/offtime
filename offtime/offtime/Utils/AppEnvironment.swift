@@ -14,8 +14,11 @@ final class AppEnvironment: ObservableObject {
     @Published var onboardingCompleted: Bool = false
     /// 城市数据版本号：导入/批量删除等改变城市列表的操作后递增，监听方据此刷新本地缓存
     @Published var citiesRevision: Int = 0
+    /// 全局分钟时钟：列表与详情页共享，避免每个 ViewModel 重复注册 RunLoop Timer
+    @Published private(set) var currentDate = Date()
 
     private let logger = Logger(subsystem: "lt.offtime", category: "AppEnvironment")
+    private var minuteTimer: Timer?
 
     init() {
         do {
@@ -37,6 +40,33 @@ final class AppEnvironment: ObservableObject {
         seedDefaultCityIfFirstLaunch()
         loadOnboardingState()
         loadSettings()
+    }
+
+    // MARK: - 分钟时钟
+
+    func startMinuteClock() {
+        currentDate = Date()
+        guard minuteTimer == nil else { return }
+
+        let nextMinute = Calendar.current.nextDate(
+            after: Date(),
+            matching: DateComponents(second: 0, nanosecond: 0),
+            matchingPolicy: .nextTime
+        ) ?? Date().addingTimeInterval(60)
+        let timer = Timer(timeInterval: 60, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.currentDate = Date()
+            }
+        }
+        timer.tolerance = 5
+        timer.fireDate = nextMinute
+        RunLoop.main.add(timer, forMode: .common)
+        minuteTimer = timer
+    }
+
+    func stopMinuteClock() {
+        minuteTimer?.invalidate()
+        minuteTimer = nil
     }
 
     // MARK: - 首启种子城市

@@ -138,18 +138,25 @@ final class TimezoneService {
         var targetCalendar = Calendar(identifier: .gregorian)
         targetCalendar.timeZone = targetTimezone
 
-        let localDay = localCalendar.dateInterval(of: .day, for: date)?.start
-        let targetDay = targetCalendar.dateInterval(of: .day, for: date)?.start
+        let localDay = localCalendar.dateComponents([.year, .month, .day], from: date)
+        let targetDay = targetCalendar.dateComponents([.year, .month, .day], from: date)
 
-        guard let localDay, let targetDay else { return nil }
+        guard let localDayValue = calendarDayValue(localDay),
+              let targetDayValue = calendarDayValue(targetDay) else { return nil }
 
-        let dayDiff = targetCalendar.dateComponents([.day], from: localDay, to: targetDay).day ?? 0
-        if dayDiff > 0 {
+        if targetDayValue > localDayValue {
             return String(localized: "clock.tomorrow")
-        } else if dayDiff < 0 {
+        } else if targetDayValue < localDayValue {
             return String(localized: "clock.yesterday")
         }
         return nil
+    }
+
+    private func calendarDayValue(_ components: DateComponents) -> Int? {
+        guard let year = components.year,
+              let month = components.month,
+              let day = components.day else { return nil }
+        return year * 10_000 + month * 100 + day
     }
     
     // MARK: - Time Conversion

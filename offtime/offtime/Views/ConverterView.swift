@@ -91,7 +91,7 @@ struct ConverterView: View {
     }
     
     private var sourceCard: some View {
-        CardView {
+        CardView(isNight: !viewModel.isCityDaytime(viewModel.sourceCity)) {
             VStack(spacing: 12) {
                 cityButton(title: String(localized: "converter.source.city"), city: viewModel.sourceCity, action: {
                     isSelectingSource = true
@@ -176,7 +176,7 @@ struct ConverterView: View {
     }
     
     private var targetCard: some View {
-        CardView {
+        CardView(isNight: !viewModel.isCityDaytime(viewModel.targetCity)) {
             VStack(spacing: 12) {
                 cityButton(title: String(localized: "converter.target.city"), city: viewModel.targetCity, action: {
                     isSelectingSource = false
@@ -207,6 +207,9 @@ struct ConverterView: View {
                         Text(viewModel.resultDate)
                             .font(.body.weight(.semibold))
                             .foregroundColor(Color(.label))
+                        if let crossDay = viewModel.crossDay {
+                            CrossDayBadge(label: crossDay)
+                        }
                     }
                     
                     Spacer()
@@ -226,11 +229,6 @@ struct ConverterView: View {
                         Image(systemName: "globe")
                             .font(.callout)
                             .foregroundColor(Color(.secondaryLabel))
-                        if let crossDay = viewModel.crossDay {
-                            Text(crossDay)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(crossDay == String(localized: "clock.tomorrow") ? Color.orange : Color.blue)
-                        }
                         if !viewModel.timeDifference.isEmpty {
                             Text(viewModel.timeDifference)
                                 .font(.body.weight(.semibold))
@@ -247,6 +245,9 @@ struct ConverterView: View {
                         Text(viewModel.resultDate)
                             .font(.body.weight(.semibold))
                             .foregroundColor(Color(.label))
+                        if let crossDay = viewModel.crossDay {
+                            CrossDayBadge(label: crossDay)
+                        }
                     }
                     HStack(spacing: 6) {
                         Image(systemName: "clock")
@@ -260,11 +261,6 @@ struct ConverterView: View {
                         Image(systemName: "globe")
                             .font(.callout)
                             .foregroundColor(Color(.secondaryLabel))
-                        if let crossDay = viewModel.crossDay {
-                            Text(crossDay)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(crossDay == String(localized: "clock.tomorrow") ? Color.orange : Color.blue)
-                        }
                         if !viewModel.timeDifference.isEmpty {
                             Text(viewModel.timeDifference)
                                 .font(.body.weight(.semibold))
@@ -449,15 +445,24 @@ struct ConverterView: View {
 
 private struct CardView<Content: View>: View {
     let content: Content
+    let isNight: Bool
     
-    init(@ViewBuilder content: () -> Content) {
+    init(isNight: Bool = false, @ViewBuilder content: () -> Content) {
+        self.isNight = isNight
         self.content = content()
     }
     
     var body: some View {
         content
             .padding(16)
-            .background(Color(.secondarySystemGroupedBackground))
+            .background {
+                ZStack {
+                    Color(.secondarySystemGroupedBackground)
+                    if isNight {
+                        NightCardBackground()
+                    }
+                }
+            }
             .cornerRadius(16)
             .shadow(color: Color.black.opacity(0.03), radius: 4)
     }

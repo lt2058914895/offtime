@@ -16,7 +16,6 @@ final class CityDetailViewModel: ObservableObject {
 
     let city: CityModel
     private let timezoneService = TimezoneService.shared
-    private var timer: Timer?
 
     init(city: CityModel) {
         self.city = city
@@ -24,26 +23,6 @@ final class CityDetailViewModel: ObservableObject {
         self.targetWorkEnd = city.workEndHour
         self.localWorkStart = city.localWorkStart
         self.localWorkEnd = city.localWorkEnd
-        startTimer()
-    }
-
-    deinit { timer?.invalidate() }
-
-    private func startTimer() {
-        guard timer == nil else { return }
-        let calendar = Calendar.current
-        let nextMinute = calendar.nextDate(
-            after: Date(),
-            matching: DateComponents(second: 0, nanosecond: 0),
-            matchingPolicy: .nextTime
-        ) ?? Date().addingTimeInterval(60)
-        let t = Timer(timeInterval: 60, repeats: true) { [weak self] _ in
-            DispatchQueue.main.async { self?.currentDate = Date() }
-        }
-        t.tolerance = 5
-        t.fireDate = nextMinute
-        RunLoop.main.add(t, forMode: .common)
-        timer = t
     }
 
     // MARK: - Time Display
@@ -64,6 +43,14 @@ final class CityDetailViewModel: ObservableObject {
 
     var timeDifference: String {
         timezoneService.getTimeDifferenceBetween(sourceTimezoneId: localTimezoneId, targetTimezoneId: city.timezoneId, date: currentDate).offset
+    }
+
+    var isLocalCityDaytime: Bool {
+        timezoneService.isDaytime(timezoneId: localTimezoneId, date: currentDate)
+    }
+
+    var isTargetCityDaytime: Bool {
+        timezoneService.isDaytime(timezoneId: city.timezoneId, date: currentDate)
     }
 
     // MARK: - Timeline Data

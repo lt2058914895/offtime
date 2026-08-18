@@ -27,6 +27,18 @@ struct ClockListView: View {
         appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
     }
 
+    @ViewBuilder
+    private func cellBackground(isDaytime: Bool) -> some View {
+        if isDaytime {
+            Color(.secondarySystemGroupedBackground)
+        } else {
+            ZStack {
+                Color(.secondarySystemGroupedBackground)
+                NightCardBackground()
+            }
+        }
+    }
+
     /// Timer 只在「App 在前台」且「当前是时钟 Tab」时运行：
     /// 切到转换/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
     private var shouldRunTimer: Bool {
@@ -36,9 +48,9 @@ struct ClockListView: View {
     /// 根据 shouldRunTimer 启停 Timer
     private func updateTimer() {
         if shouldRunTimer {
-            viewModel.resumeTimer()
+            appEnvironment.startMinuteClock()
         } else {
-            viewModel.pauseTimer()
+            appEnvironment.stopMinuteClock()
         }
     }
     
@@ -98,6 +110,9 @@ struct ClockListView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
+            .onReceive(appEnvironment.$currentDate) { newValue in
+                viewModel.currentDate = newValue
+            }
             .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
@@ -125,7 +140,7 @@ struct ClockListView: View {
             }
             .onChange(of: shouldRunTimer) {
                 // Timer 仅在「前台 + 时钟 Tab」运行：切到其它 Tab 或进后台时暂停，
-                // 回到时钟 Tab 或前台时恢复（resumeTimer 会先刷新一次时间，避免过期显示）。
+                // 回到时钟 Tab 或前台时恢复，详情页复用同一个全局时钟。
                 updateTimer()
             }
             .alert(String(localized: "clock.confirm.delete"), isPresented: $isShowingDeleteConfirm) {
@@ -225,6 +240,7 @@ struct ClockListView: View {
                             path.append(AppRoute.cityDetail(city.id))
                         }
                     )
+                    .listRowBackground(cellBackground(isDaytime: viewModel.isDaytime(city: city)))
                 }
                 .onMove(perform: move)
             }
@@ -358,34 +374,33 @@ struct ClockListCell: View {
                     }
                 }
                 
-                HStack {
-                    Text(date)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                    if !weekday.isEmpty {
-                        Text(weekday)
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    HStack(spacing: 4) {
+                        Text(date)
                             .font(.subheadline)
+                            .fontWeight(.medium)
                             .foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    Text(time)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .monospacedDigit()
-                    Spacer()
-                    HStack(spacing: 2) {
                         if let crossDay = timeDifference.crossDay {
-                            Text(crossDay)
-                                .font(.caption)
+                            CrossDayBadge(label: crossDay)
+                        }
+                        if !weekday.isEmpty {
+                            Text(weekday)
+                                .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
+                    }
+                    Spacer()
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(time)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .monospacedDigit()
                         Text(timeDifference.offset)
                             .font(.caption)
                             .fontWeight(.medium)
-                           .foregroundColor(timeDifferenceColor)
-                   }
-               }
+                            .foregroundColor(timeDifferenceColor)
+                    }
+                }
                 if !isEditMode {
                     WorkingHoursBar(overlap: workingHoursOverlap, localTimezoneId: localTimezoneId)
                 }
@@ -482,34 +497,34 @@ struct ClockGridCell: View {
                 .monospacedDigit()
             
             // 底部：日期 + 星期 + 时差
-            HStack {
-                Text(date)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                if !weekday.isEmpty {
-                    Text(weekday)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+            HStack(alignment: .top, spacing: 8) {
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 4) {
+                        Text(date)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        if !weekday.isEmpty {
+                            Text(weekday)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    if let crossDay = timeDifference.crossDay {
+                        CrossDayBadge(label: crossDay)
+                    }
                 }
                 Spacer()
-                HStack(spacing: 2) {
-                    if let crossDay = timeDifference.crossDay {
-                        Text(crossDay)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    Text(timeDifference.offset)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                       .foregroundColor(timeDifferenceColor)
-               }
-           }
+                Text(timeDifference.offset)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(timeDifferenceColor)
+            }
             if !isEditMode {
                 WorkingHoursBar(overlap: workingHoursOverlap, localTimezoneId: localTimezoneId)
             }
         }
         .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(cardBackground)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -530,6 +545,18 @@ struct ClockGridCell: View {
         let offset = timeDifference.offset
         if offset == "0h" { return .secondary }
         return offset.hasPrefix("+") ? .green : .red
+    }
+
+    @ViewBuilder
+    private var cardBackground: some View {
+        if isDaytime {
+            Color(.secondarySystemGroupedBackground)
+        } else {
+            ZStack {
+                Color(.secondarySystemGroupedBackground)
+                NightCardBackground()
+            }
+        }
     }
 }
 

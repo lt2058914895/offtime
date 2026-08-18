@@ -10,6 +10,7 @@ final class ClockListViewModel: ObservableObject {
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
+    @Published var currentDate: Date = Date()
 
     /// 管理模式下被勾选待删除的城市 ID
     @Published var selectedCityIds: Set<UUID> = []
@@ -18,47 +19,10 @@ final class ClockListViewModel: ObservableObject {
     private let timezoneService = TimezoneService.shared
     private let logger = Logger(subsystem: "lt.offtime", category: "ClockListViewModel")
     
-    @Published var currentDate: Date = Date()
-    private var timer: Timer?
-    
     init() {
-        startTimer()
         loadCities()
     }
-    
-    deinit {
-        timer?.invalidate()
-    }
-    
-    private func startTimer() {
-        guard timer == nil else { return }
-        let calendar = Calendar.current
-        let nextMinute = calendar.nextDate(
-            after: Date(),
-            matching: DateComponents(second: 0, nanosecond: 0),
-            matchingPolicy: .nextTime
-        ) ?? Date().addingTimeInterval(60)
-        let timer = Timer(timeInterval: 60, repeats: true) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.currentDate = Date()
-            }
-        }
-        timer.tolerance = 5
-        timer.fireDate = nextMinute
-        RunLoop.main.add(timer, forMode: .common)
-        self.timer = timer
-    }
-    
-    func pauseTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    func resumeTimer() {
-        currentDate = Date()
-        startTimer()
-    }
-    
+
     func loadCities() {
         viewState = .loading
         do {
