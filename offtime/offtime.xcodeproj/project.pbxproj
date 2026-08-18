@@ -32,22 +32,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		690C5C5D3010918200CF6812 /* offtime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = offtime;
 			sourceTree = "<group>";
 		};
 		D739EF742E91EB5552BFE690 /* offtimeUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = offtimeUITests;
 			sourceTree = "<group>";
 		};
 		DCB07EE770D49393768472D3 /* offtimeTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = offtimeTests;
 			sourceTree = "<group>";
 		};

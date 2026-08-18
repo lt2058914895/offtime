@@ -2,7 +2,8 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "时钟";
-"tab.converter" = "转换";
+"tab.meeting" = "会议";
+"tab.travel" = "出行";
 "tab.settings" = "设置";
 
 // MARK: - Common
@@ -81,6 +82,26 @@
 "continent.oceania" = "大洋洲";
 "continent.africa" = "非洲";
 
+// MARK: - Meeting
+"meeting.title" = "跨城市会议";
+"meeting.subtitle" = "汇总多个城市的可联系时间，更快确定会议窗口。";
+"meeting.timeline.title" = "多城市工作时间";
+"meeting.timeline.description" = "同时查看参与者所在地的工作状态与重叠时段。";
+"meeting.suggestions.title" = "智能时间建议";
+"meeting.suggestions.description" = "根据工作时间为会议推荐更合适的开始时间。";
+"meeting.share.title" = "日历与分享";
+"meeting.share.description" = "把确定的会议时间整理成可分享的信息。";
+
+// MARK: - Travel
+"travel.title" = "国际出行助手";
+"travel.subtitle" = "掌握出发与抵达时间，减少时差干扰。";
+"travel.route.title" = "出发与抵达";
+"travel.route.description" = "比较出发地和目的地时间，理解行程跨越的日期。";
+"travel.jetlag.title" = "倒时差计划";
+"travel.jetlag.description" = "按目的地作息生成渐进调整建议。";
+"travel.arrival.title" = "到达提醒";
+"travel.arrival.description" = "在合适时间提醒休息、联系和处理事项。";
+
 // MARK: - Converter
 "converter.title" = "时区转换器";
 "converter.source.city" = "起点城市";
@@ -105,6 +126,7 @@
 "settings.24hour" = "24小时制";
 "settings.theme" = "外观主题";
 "settings.version" = "版本号";
+"settings.tools" = "工具";
 "settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";

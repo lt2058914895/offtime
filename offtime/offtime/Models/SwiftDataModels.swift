@@ -138,7 +138,8 @@ enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
 
 enum AppTab: Hashable {
     case clock
-    case converter
+    case meeting
+    case travel
     case settings
 }
 

@@ -2,7 +2,8 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "Clock";
-"tab.converter" = "Convert";
+"tab.meeting" = "Meetings";
+"tab.travel" = "Travel";
 "tab.settings" = "Settings";
 
 // MARK: - Common
@@ -81,6 +82,26 @@
 "continent.oceania" = "Oceania";
 "continent.africa" = "Africa";
 
+// MARK: - Meeting
+"meeting.title" = "Cross-City Meetings";
+"meeting.subtitle" = "Review contactable hours across cities and find a meeting window faster.";
+"meeting.timeline.title" = "Multi-City Working Hours";
+"meeting.timeline.description" = "Check participants’ work status and overlapping hours together.";
+"meeting.suggestions.title" = "Smart Time Suggestions";
+"meeting.suggestions.description" = "Recommend better meeting start times from working hours.";
+"meeting.share.title" = "Calendar & Sharing";
+"meeting.share.description" = "Turn the selected meeting time into shareable information.";
+
+// MARK: - Travel
+"travel.title" = "International Travel";
+"travel.subtitle" = "Track departure and arrival times with less jet-lag friction.";
+"travel.route.title" = "Departure & Arrival";
+"travel.route.description" = "Compare origin and destination times across trip dates.";
+"travel.jetlag.title" = "Jet-Lag Plan";
+"travel.jetlag.description" = "Get gradual adjustment suggestions for your destination.";
+"travel.arrival.title" = "Arrival Reminders";
+"travel.arrival.description" = "Remind yourself to rest, connect, and follow up at the right time.";
+
 // MARK: - Converter
 "converter.title" = "Time Converter";
 "converter.source.city" = "Source City";
@@ -105,6 +126,7 @@
 "settings.24hour" = "24-Hour Format";
 "settings.theme" = "Appearance";
 "settings.version" = "Version";
+"settings.tools" = "Tools";
 "settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";

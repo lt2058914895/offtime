@@ -2,7 +2,8 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "時計";
-"tab.converter" = "変換";
+"tab.meeting" = "会議";
+"tab.travel" = "旅行";
 "tab.settings" = "設定";
 
 // MARK: - Common
@@ -81,6 +82,26 @@
 "continent.oceania" = "オセアニア";
 "continent.africa" = "アフリカ";
 
+// MARK: - Meeting
+"meeting.title" = "都市をまたぐ会議";
+"meeting.subtitle" = "各都市の連絡可能な時間をまとめ、会議時間をすばやく決めます。";
+"meeting.timeline.title" = "複数都市の勤務時間";
+"meeting.timeline.description" = "参加者の勤務状態と重なる時間をまとめて確認します。";
+"meeting.suggestions.title" = "賢い時間の提案";
+"meeting.suggestions.description" = "勤務時間から開始しやすい会議時間を提案します。";
+"meeting.share.title" = "カレンダーと共有";
+"meeting.share.description" = "決定した会議時間を共有しやすい形に整えます。";
+
+// MARK: - Travel
+"travel.title" = "国際旅行アシスタント";
+"travel.subtitle" = "出発と到着の時間を把握し、時差ボケを軽減します。";
+"travel.route.title" = "出発と到着";
+"travel.route.description" = "出発地と到着地の時間を比較して日程のずれを確認します。";
+"travel.jetlag.title" = "時差ボケ対策";
+"travel.jetlag.description" = "現地の生活リズムに合わせた段階的な調整を提案します。";
+"travel.arrival.title" = "到着リマインダー";
+"travel.arrival.description" = "休憩、連絡、対応に適したタイミングを知らせます。";
+
 // MARK: - Converter
 "converter.title" = "時刻コンバーター";
 "converter.source.city" = "元の都市";
@@ -105,6 +126,7 @@
 "settings.24hour" = "24時間表示";
 "settings.theme" = "外観";
 "settings.version" = "バージョン";
+"settings.tools" = "ツール";
 "settings.data.management" = "データ管理";
 "settings.export.cities" = "都市リストをエクスポート";
 "settings.import.cities" = "都市リストをインポート";

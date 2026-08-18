@@ -10,6 +10,6 @@ final class OffTimeUITests: XCTestCase {
         }
 
         XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 5))
-        XCTAssertEqual(app.tabBars.buttons.count, 3)
+        XCTAssertEqual(app.tabBars.buttons.count, 4)
     }
 }

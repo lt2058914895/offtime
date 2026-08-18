@@ -4,6 +4,7 @@ import SwiftData
 struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var path = NavigationPath()
@@ -14,6 +15,11 @@ struct ConverterView: View {
     @State private var lastSeenCitiesRevision: Int = 0
     /// swap 按钮尺寸随 body Dynamic Type 同步缩放，避免图标在大字下撑出固定圆形
     @ScaledMetric(relativeTo: .body) private var swapButtonSize: CGFloat = 44
+    private let embedsNavigationStack: Bool
+
+    init(embedsNavigationStack: Bool = true) {
+        self.embedsNavigationStack = embedsNavigationStack
+    }
     
     private var isIPad: Bool { horizontalSizeClass == .regular }
     /// iPhone 横屏（compact vertical）：改走横向布局，充分利用宽度，避免两卡片纵向堆叠
@@ -21,7 +27,16 @@ struct ConverterView: View {
     private var usesHorizontalLayout: Bool { isIPad || isLandscape }
     
     var body: some View {
+        if embedsNavigationStack {
         NavigationStack(path: $path) {
+            converterContent
+        }
+        } else {
+            converterContent
+        }
+    }
+
+    private var converterContent: some View {
             ScrollView {
                 if usesHorizontalLayout {
                     // iPad 或 iPhone 横屏：源/目标卡片横向并排，充分利用宽度
@@ -45,8 +60,17 @@ struct ConverterView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle(String(localized: "converter.title"))
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     ShareLink(item: conversionShareText) {
                         Image(systemName: "square.and.arrow.up")
@@ -55,6 +79,7 @@ struct ConverterView: View {
                     .disabled(viewModel.sourceCity == nil || viewModel.targetCity == nil)
                 }
             }
+            .toolbar(.hidden, for: .tabBar)
             .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
@@ -87,7 +112,6 @@ struct ConverterView: View {
                     EmptyView()
                 }
             }
-        }
     }
     
     private var sourceCard: some View {

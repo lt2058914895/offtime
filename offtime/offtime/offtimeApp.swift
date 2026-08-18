@@ -37,12 +37,19 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.clock)
 
-            ConverterView()
+            MeetingView()
                 .tabItem {
-                    Image(systemName: "repeat")
-                    Text(String(localized: "tab.converter"))
+                    Image(systemName: "person.2")
+                    Text(String(localized: "tab.meeting"))
                 }
-                .tag(AppTab.converter)
+                .tag(AppTab.meeting)
+
+            TravelView()
+                .tabItem {
+                    Image(systemName: "airplane")
+                    Text(String(localized: "tab.travel"))
+                }
+                .tag(AppTab.travel)
 
             SettingsView()
                 .tabItem {

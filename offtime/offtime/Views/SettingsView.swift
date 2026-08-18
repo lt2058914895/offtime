@@ -81,6 +81,14 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section(String(localized: "settings.tools")) {
+                    NavigationLink {
+                        ConverterView(embedsNavigationStack: false)
+                    } label: {
+                        Label(String(localized: "converter.title"), systemImage: "repeat")
+                    }
+                }
+
                 Section(String(localized: "settings.display")) {
                     Toggle(isOn: $viewModel.use24Hour) {
                         Text(String(localized: "settings.24hour"))
