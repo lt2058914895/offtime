@@ -13,16 +13,34 @@ final class CityDetailViewModel: ObservableObject {
     @Published var targetWorkEnd: Int
     @Published var use24Hour: Bool = true
     @Published var localTimezoneId: String = TimeZone.current.identifier
+    @Published var reminderTime: Date
+    @Published var reminderWeekdaysOnly = true
+    @Published var isAddingReminder = false
+    @Published var reminders: [CityReminderGroup] = []
+    @Published var reminderStatus: String?
+    @Published private(set) var reminderStatusIsError = false
 
     let city: CityModel
     private let timezoneService = TimezoneService.shared
+    private let reminderService: CityReminderService
 
-    init(city: CityModel) {
+    init(
+        city: CityModel,
+        reminderService: CityReminderService = CityReminderService()
+    ) {
         self.city = city
+        self.reminderService = reminderService
         self.targetWorkStart = city.workStartHour
         self.targetWorkEnd = city.workEndHour
         self.localWorkStart = city.localWorkStart
         self.localWorkEnd = city.localWorkEnd
+
+        var targetCalendar = Calendar(identifier: .gregorian)
+        targetCalendar.timeZone = TimeZone(identifier: city.timezoneId) ?? .current
+        var reminderComponents = targetCalendar.dateComponents([.year, .month, .day], from: Date())
+        reminderComponents.hour = 9
+        reminderComponents.minute = 0
+        self.reminderTime = targetCalendar.date(from: reminderComponents) ?? Date()
     }
 
     // MARK: - Time Display
@@ -122,5 +140,71 @@ final class CityDetailViewModel: ObservableObject {
         city.localWorkStart = localWorkStart
         city.localWorkEnd = localWorkEnd
         try? CityService.shared.modelContainer.mainContext.save()
+    }
+
+    // MARK: - City Reminder
+
+    var formattedReminderTime: String {
+        String(format: "%02d:%02d", reminderHour, reminderMinute)
+    }
+
+    var isDuplicateReminderSelected: Bool {
+        reminders.contains {
+            $0.hour == reminderHour
+                && $0.minute == reminderMinute
+                && $0.weekdaysOnly == reminderWeekdaysOnly
+        }
+    }
+
+    func loadReminders() async {
+        reminders = await reminderService.reminders(for: city.id)
+    }
+
+    func addReminder() async {
+        isAddingReminder = true
+        reminderStatus = nil
+        defer { isAddingReminder = false }
+
+        guard !isDuplicateReminderSelected else {
+            reminderStatus = String(localized: "city.reminder.duplicate")
+            reminderStatusIsError = true
+            return
+        }
+
+        do {
+            try await reminderService.addReminder(
+                cityID: city.id,
+                cityName: city.cityName,
+                timezoneId: city.timezoneId,
+                hour: reminderHour,
+                minute: reminderMinute,
+                weekdaysOnly: reminderWeekdaysOnly
+            )
+            await loadReminders()
+            reminderStatus = nil
+            reminderStatusIsError = false
+        } catch {
+            reminderStatus = error.localizedDescription
+            reminderStatusIsError = true
+        }
+    }
+
+    func removeReminder(_ reminder: CityReminderGroup) async {
+        await reminderService.removeReminder(id: reminder.id)
+        await loadReminders()
+        reminderStatus = nil
+        reminderStatusIsError = false
+    }
+
+    private var reminderHour: Int {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: city.timezoneId) ?? .current
+        return calendar.component(.hour, from: reminderTime)
+    }
+
+    private var reminderMinute: Int {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: city.timezoneId) ?? .current
+        return calendar.component(.minute, from: reminderTime)
     }
 }

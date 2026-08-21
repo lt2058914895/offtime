@@ -59,6 +59,7 @@ struct CityDetailView: View {
                 localWorkHoursCard
                 targetWorkHoursCard
                 overlapCard
+                reminderCard
                 rulesCard
             }
             .padding()
@@ -80,6 +81,9 @@ struct CityDetailView: View {
         .onAppear {
             viewModel.use24Hour = appEnvironment.settings.use24Hour
             viewModel.localTimezoneId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
+            Task {
+                await viewModel.loadReminders()
+            }
         }
         .onReceive(appEnvironment.$currentDate) { newValue in
             viewModel.currentDate = newValue
@@ -210,6 +214,109 @@ struct CityDetailView: View {
                     .cornerRadius(10)
             }
         }
+    }
+
+    // MARK: - City Reminder
+
+    private var reminderCard: some View {
+        detailCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 10) {
+                    Image(systemName: "bell.badge")
+                        .font(.title2)
+                        .foregroundColor(.accentColor)
+                    Text(String(localized: "city.reminder.title"))
+                        .font(.headline)
+                    Spacer()
+                }
+
+                DatePicker(
+                    String(localized: "city.reminder.time"),
+                    selection: $viewModel.reminderTime,
+                    displayedComponents: .hourAndMinute
+                )
+                .environment(
+                    \.timeZone,
+                    TimeZone(identifier: viewModel.city.timezoneId) ?? .current
+                )
+
+                Toggle(
+                    String(localized: "city.reminder.weekdays.only"),
+                    isOn: $viewModel.reminderWeekdaysOnly
+                )
+
+                Text(String(localized: "city.reminder.multiple.description"))
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+
+                Button {
+                    Task {
+                        await viewModel.addReminder()
+                    }
+                } label: {
+                    Label(
+                        String(localized: "city.reminder.add"),
+                        systemImage: "plus.circle.fill"
+                    )
+                    .font(.subheadline.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(viewModel.isAddingReminder || viewModel.isDuplicateReminderSelected)
+
+                if viewModel.isDuplicateReminderSelected {
+                    Text(String(localized: "city.reminder.duplicate"))
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                if let status = viewModel.reminderStatus {
+                    Text(status)
+                        .font(.caption)
+                        .foregroundColor(viewModel.reminderStatusIsError ? .red : .secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                if !viewModel.reminders.isEmpty {
+                    Divider()
+
+                    ForEach(viewModel.reminders) { reminder in
+                        reminderRow(reminder)
+                    }
+                }
+            }
+        }
+    }
+
+    private func reminderRow(_ reminder: CityReminderGroup) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(String(format: "%02d:%02d", reminder.hour, reminder.minute))
+                    .font(.subheadline.weight(.semibold))
+                    .monospacedDigit()
+                Text(
+                    reminder.weekdaysOnly
+                        ? String(localized: "city.reminder.weekdays.only")
+                        : String(localized: "city.reminder.everyday")
+                )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Button {
+                Task {
+                    await viewModel.removeReminder(reminder)
+                }
+            } label: {
+                Image(systemName: "trash")
+                    .font(.subheadline)
+                    .foregroundColor(.red)
+            }
+            .buttonStyle(.borderless)
+            .accessibilityLabel(String(localized: "common.delete"))
+        }
+        .padding(.vertical, 2)
     }
 
     // MARK: - Rules

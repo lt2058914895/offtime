@@ -62,6 +62,16 @@
 "detail.rules.2" = "The contactable period is the overlap of both work hours.";
 "detail.rules.3" = "Adjust the work hours below to customize the contactable period.";
 "detail.hours" = "h";
+"city.reminder.title" = "City Time Reminder";
+"city.reminder.time" = "Target city time";
+"city.reminder.weekdays.only" = "Weekdays only";
+"city.reminder.everyday" = "Every day";
+"city.reminder.add" = "Add Reminder";
+"city.reminder.multiple.description" = "You can add multiple different times for one city. Change the time to add another.";
+"city.reminder.duplicate" = "A reminder already exists for this time";
+"city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
+"city.reminder.error.timezone" = "The selected city time zone is unavailable.";
+"city.reminder.notification.body.format" = "Current time %@";
 
 // MARK: - City Picker
 "city.picker.title" = "Add City";

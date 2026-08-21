@@ -62,6 +62,16 @@
 "detail.rules.2" = "可联系时段为双方工作时段的交集。";
 "detail.rules.3" = "调整下方工作时间可自定义可联系时段。";
 "detail.hours" = "小时";
+"city.reminder.title" = "城市时间提醒";
+"city.reminder.time" = "目标城市时间";
+"city.reminder.weekdays.only" = "仅工作日";
+"city.reminder.everyday" = "每天";
+"city.reminder.add" = "添加提醒";
+"city.reminder.multiple.description" = "可为同一城市添加多个不同时刻；修改时间可继续添加。";
+"city.reminder.duplicate" = "该时间已存在提醒";
+"city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
+"city.reminder.error.timezone" = "所选城市时区不可用";
+"city.reminder.notification.body.format" = "当前时间 %@";
 
 // MARK: - City Picker
 "city.picker.title" = "添加城市";

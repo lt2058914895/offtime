@@ -46,7 +46,7 @@ struct TravelAdviceSection: View {
             )
         }
         .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(Color.clear)
         .cornerRadius(16)
     }
 
@@ -63,7 +63,7 @@ struct TravelAdviceSection: View {
             adviceRow(icon: "timer", textKey: "travel.reminder.nap")
         }
         .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(Color.clear)
         .cornerRadius(16)
     }
 
@@ -80,10 +80,10 @@ struct TravelAdviceSection: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(titleKey)
                     .font(.caption.weight(.semibold))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.primary)
                 Text(textKey)
                     .font(.subheadline)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.secondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,10 +102,10 @@ struct TravelAdviceSection: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(titleKey)
                     .font(.caption.weight(.semibold))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.primary)
                 Text(text)
                     .font(.subheadline)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.secondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -119,7 +119,7 @@ struct TravelAdviceSection: View {
                 .frame(width: 22)
             Text(textKey)
                 .font(.subheadline)
-                .foregroundColor(.primary)
+                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
