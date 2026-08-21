@@ -115,7 +115,7 @@ struct ConverterView: View {
     }
     
     private var sourceCard: some View {
-        CardView(isNight: !viewModel.isCityDaytime(viewModel.sourceCity)) {
+        CardView {
             VStack(spacing: 12) {
                 cityButton(title: String(localized: "converter.source.city"), city: viewModel.sourceCity, action: {
                     isSelectingSource = true
@@ -200,7 +200,7 @@ struct ConverterView: View {
     }
     
     private var targetCard: some View {
-        CardView(isNight: !viewModel.isCityDaytime(viewModel.targetCity)) {
+        CardView {
             VStack(spacing: 12) {
                 cityButton(title: String(localized: "converter.target.city"), city: viewModel.targetCity, action: {
                     isSelectingSource = false
@@ -469,24 +469,15 @@ struct ConverterView: View {
 
 private struct CardView<Content: View>: View {
     let content: Content
-    let isNight: Bool
     
-    init(isNight: Bool = false, @ViewBuilder content: () -> Content) {
-        self.isNight = isNight
+    init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
     
     var body: some View {
         content
             .padding(16)
-            .background {
-                ZStack {
-                    Color(.secondarySystemGroupedBackground)
-                    if isNight {
-                        NightCardBackground()
-                    }
-                }
-            }
+            .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
             .shadow(color: Color.black.opacity(0.03), radius: 4)
     }

@@ -93,7 +93,7 @@ struct CityDetailView: View {
     // MARK: - Local Work Hours
 
     private var localWorkHoursCard: some View {
-        detailCard(isNight: !viewModel.isLocalCityDaytime) {
+        detailCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Image(systemName: "house")
@@ -130,7 +130,7 @@ struct CityDetailView: View {
     // MARK: - Target Work Hours
 
     private var targetWorkHoursCard: some View {
-        detailCard(isNight: !viewModel.isTargetCityDaytime) {
+        detailCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 10) {
                     Image(systemName: "building.2")
@@ -271,17 +271,10 @@ struct CityDetailView: View {
         }
     }
 
-    private func detailCard<Content: View>(isNight: Bool = false, @ViewBuilder content: () -> Content) -> some View {
+    private func detailCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         content()
             .padding(16)
-            .background {
-                ZStack {
-                    Color(.secondarySystemGroupedBackground)
-                    if isNight {
-                        NightCardBackground()
-                    }
-                }
-            }
+            .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
     }
 }

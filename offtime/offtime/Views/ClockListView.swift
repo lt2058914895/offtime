@@ -27,18 +27,6 @@ struct ClockListView: View {
         appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
     }
 
-    @ViewBuilder
-    private func cellBackground(isDaytime: Bool) -> some View {
-        if isDaytime {
-            Color(.secondarySystemGroupedBackground)
-        } else {
-            ZStack {
-                Color(.secondarySystemGroupedBackground)
-                NightCardBackground()
-            }
-        }
-    }
-
     /// Timer 只在「App 在前台」且「当前是时钟 Tab」时运行：
     /// 切到转换/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
     private var shouldRunTimer: Bool {
@@ -240,7 +228,7 @@ struct ClockListView: View {
                             path.append(AppRoute.cityDetail(city.id))
                         }
                     )
-                    .listRowBackground(cellBackground(isDaytime: viewModel.isDaytime(city: city)))
+                    .listRowBackground(Color(.secondarySystemGroupedBackground))
                 }
                 .onMove(perform: move)
             }
@@ -352,7 +340,7 @@ struct ClockListCell: View {
             Image(isDaytime ? "day" : "night")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 22, height: 22)
+                .frame(width: 28, height: 28)
                 .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
             
             VStack(alignment: .leading, spacing: 4) {
@@ -457,7 +445,7 @@ struct ClockGridCell: View {
                 Image(isDaytime ? "day" : "night")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 22, height: 22)
+                    .frame(width: 28, height: 28)
                     .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
                 
                 VStack(alignment: .leading, spacing: 2) {
@@ -524,7 +512,7 @@ struct ClockGridCell: View {
             }
         }
         .padding(16)
-        .background(cardBackground)
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -547,17 +535,6 @@ struct ClockGridCell: View {
         return offset.hasPrefix("+") ? .green : .red
     }
 
-    @ViewBuilder
-    private var cardBackground: some View {
-        if isDaytime {
-            Color(.secondarySystemGroupedBackground)
-        } else {
-            ZStack {
-                Color(.secondarySystemGroupedBackground)
-                NightCardBackground()
-            }
-        }
-    }
 }
 
 /// 用于 `.sheet(item:)` 的分享文案包装（String 非 Identifiable）
