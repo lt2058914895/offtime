@@ -3,7 +3,7 @@
 // MARK: - Tab Bar
 "tab.clock" = "시계";
 "tab.meeting" = "회의";
-"tab.travel" = "여행";
+"tab.travel" = "일정";
 "tab.settings" = "설정";
 
 // MARK: - Common
@@ -93,14 +93,66 @@
 "meeting.share.description" = "확정된 회의 시간을 공유하기 좋은 형태로 정리합니다.";
 
 // MARK: - Travel
-"travel.title" = "국제 여행 도우미";
-"travel.subtitle" = "출발과 도착 시간을 파악해 시차로 인한 불편을 줄입니다.";
-"travel.route.title" = "출발과 도착";
-"travel.route.description" = "출발지와 도착지 시간을 비교해 날짜 차이를 확인합니다.";
-"travel.jetlag.title" = "시차 적응 계획";
-"travel.jetlag.description" = "현지 생활 리듬에 맞춘 단계적 조정을 제안합니다.";
-"travel.arrival.title" = "도착 리마인더";
-"travel.arrival.description" = "휴식, 연락, 처리하기 좋은 시간을 알려줍니다.";
+"travel.title" = "일정과 시차 적응";
+"travel.subtitle" = "출발, 도착, 종료일을 입력해 날짜별 시차 적응 일정을 만듭니다.";
+"travel.origin.city" = "출발지";
+"travel.destination.city" = "도착지";
+"travel.departure.label" = "출발";
+"travel.arrival.label" = "도착";
+"travel.leg.format" = "구간 %d";
+"travel.schedule.wake" = "평소 기상";
+"travel.schedule.sleep" = "평소 취침";
+"travel.add.leg" = "다음 도시 추가";
+"travel.remove.leg" = "이 구간 삭제";
+"travel.end.date" = "일정 종료일";
+"travel.error.arrival" = "도착 시간은 출발 시간보다 늦어야 합니다.";
+"travel.error.trip.days" = "종료일은 최종 도착 후 30일 이내여야 합니다.";
+"travel.error.timezone" = "선택한 도시의 시간대를 사용할 수 없습니다.";
+"travel.error.sequence" = "각 구간의 출발 시간은 이전 도착 시간보다 늦어야 합니다.";
+"travel.error.discontinuous" = "이전 구간 도착 도시와 이 구간 출발 도시가 일치하지 않습니다.";
+"travel.error.leg.format" = "구간 %1$d: %2$@";
+"travel.error.unknown" = "일정 계획을 만들지 못했습니다.";
+"travel.summary.title" = "일정 요약";
+"travel.summary.difference" = "시차";
+"travel.summary.duration" = "비행 시간";
+"travel.summary.segment.time" = "일정 시간";
+"travel.segment.days.format" = "%d일";
+"travel.summary.recovery" = "회복 예상";
+"travel.timeline.title" = "날짜별 일정";
+"travel.timeline.destination" = "도착지";
+"travel.timeline.origin" = "출발지";
+"travel.day.format" = "%d일 차";
+"travel.day.arrival.format" = "%d일 차 · 도착일";
+"travel.timeline.remaining.format" = "이후 %1$d일은 %2$@ 기상, %3$@ 취침 유지";
+"travel.event.departure" = "출발";
+"travel.event.arrival" = "도착";
+"travel.event.wake" = "기상 권장";
+"travel.event.daylight" = "일광 / 활동";
+"travel.event.sleep" = "취침 권장";
+"travel.jetlag.title" = "수면 조정 조언";
+"travel.recovery.none" = "당일";
+"travel.recovery.small" = "1~2일";
+"travel.recovery.medium" = "2~4일";
+"travel.recovery.large" = "5~10일";
+"travel.phase.inflight" = "비행 중";
+"travel.phase.arrival" = "도착일";
+"travel.phase.followup" = "2일차부터";
+"travel.advice.followup" = "기상과 취침 시간을 고정하고 낮에는 햇빛을, 저녁에는 강한 빛을 피하세요.";
+"travel.advice.none" = "시차가 없으니 평소 수면 리듬을 유지하세요.";
+"travel.advice.small" = "시차 3시간 이하: 도착지 시간에 맞춰 식사하고 낮에 자연광을 쐬세요.";
+"travel.advice.medium" = "시차 4~6시간: 기내 낮잠은 90분 이하로, 현지 취침 시간 직전까지 깨어 있으세요.";
+"travel.advice.large" = "시차 6시간 초과: 도착지 밤에 맞춰 기내에서 3~5시간 자고 도착 첫날 낮잠은 30분 이하로 하세요.";
+"travel.advice.same" = "현재 리듬을 유지하고 도착 후 긴 보충 수면은 피하세요.";
+"travel.advice.behind" = "도착지가 늦은 경우: 수면을 늦추고 오후에 햇빛을 쐬며 고정된 취침 시간을 지키세요.";
+"travel.advice.ahead" = "도착지가 빠른 경우: 수면을 앞당기고 기내에서 도착지 밤에 잔 뒤 도착 후 오전 햇빛을 쐬세요.";
+"travel.arrival.title" = "핵심 리마인더";
+"travel.reminder.water" = "기내에서는 수분을 섭취하고 술과 카페인은 줄이세요.";
+"travel.reminder.light" = "낮에는 자연광을, 저녁에는 조도를 낮춰 생체 리듬을 전환하세요.";
+"travel.reminder.caffeine" = "도착 8시간 전부터는 카페인을 피하세요.";
+"travel.reminder.nap" = "도착 첫날 낮잠이 필요하면 30분 이하로 하세요.";
+"travel.city.shanghai" = "상하이";
+"travel.city.los_angeles" = "로스앤젤레스";
+"travel.city.new_york" = "뉴욕";
 
 // MARK: - Converter
 "converter.title" = "시간 변환기";

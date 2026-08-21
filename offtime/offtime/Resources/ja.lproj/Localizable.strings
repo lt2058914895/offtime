@@ -3,7 +3,7 @@
 // MARK: - Tab Bar
 "tab.clock" = "時計";
 "tab.meeting" = "会議";
-"tab.travel" = "旅行";
+"tab.travel" = "旅程";
 "tab.settings" = "設定";
 
 // MARK: - Common
@@ -93,14 +93,66 @@
 "meeting.share.description" = "決定した会議時間を共有しやすい形に整えます。";
 
 // MARK: - Travel
-"travel.title" = "国際旅行アシスタント";
-"travel.subtitle" = "出発と到着の時間を把握し、時差ボケを軽減します。";
-"travel.route.title" = "出発と到着";
-"travel.route.description" = "出発地と到着地の時間を比較して日程のずれを確認します。";
-"travel.jetlag.title" = "時差ボケ対策";
-"travel.jetlag.description" = "現地の生活リズムに合わせた段階的な調整を提案します。";
-"travel.arrival.title" = "到着リマインダー";
-"travel.arrival.description" = "休憩、連絡、対応に適したタイミングを知らせます。";
+"travel.title" = "旅程と時差ボケ対策";
+"travel.subtitle" = "出発・到着・終了日から、日別の時差ボケ対策スケジュールを作成します。";
+"travel.origin.city" = "出発地";
+"travel.destination.city" = "到着地";
+"travel.departure.label" = "出発";
+"travel.arrival.label" = "到着";
+"travel.leg.format" = "区間 %d";
+"travel.schedule.wake" = "普段の起床";
+"travel.schedule.sleep" = "普段の就寝";
+"travel.add.leg" = "次の都市を追加";
+"travel.remove.leg" = "この区間を削除";
+"travel.end.date" = "旅程終了日";
+"travel.error.arrival" = "到着時刻は出発時刻より後にしてください。";
+"travel.error.trip.days" = "終了日は最終到着から 30 日以内にしてください。";
+"travel.error.timezone" = "選択した都市のタイムゾーンを利用できません。";
+"travel.error.sequence" = "各区間の出発時刻は前の到着時刻より後にしてください。";
+"travel.error.discontinuous" = "前区間の到着都市とこの区間の出発都市が一致しません。";
+"travel.error.leg.format" = "区間 %1$d：%2$@";
+"travel.error.unknown" = "旅程プランの作成に失敗しました。";
+"travel.summary.title" = "旅程の概要";
+"travel.summary.difference" = "時差";
+"travel.summary.duration" = "飛行時間";
+"travel.summary.segment.time" = "旅程時間";
+"travel.segment.days.format" = "%d 日";
+"travel.summary.recovery" = "回復目安";
+"travel.timeline.title" = "日別スケジュール";
+"travel.timeline.destination" = "到着地";
+"travel.timeline.origin" = "出発地";
+"travel.day.format" = "%d 日目";
+"travel.day.arrival.format" = "%d 日目 · 到着日";
+"travel.timeline.remaining.format" = "残り %1$d 日は %2$@ 起床、%3$@ 就寝を維持";
+"travel.event.departure" = "出発";
+"travel.event.arrival" = "到着";
+"travel.event.wake" = "起床の目安";
+"travel.event.daylight" = "日光 / 活動時間";
+"travel.event.sleep" = "就寝の目安";
+"travel.jetlag.title" = "睡眠調整のアドバイス";
+"travel.recovery.none" = "当日";
+"travel.recovery.small" = "1〜2 日";
+"travel.recovery.medium" = "2〜4 日";
+"travel.recovery.large" = "5〜10 日";
+"travel.phase.inflight" = "機内";
+"travel.phase.arrival" = "到着日";
+"travel.phase.followup" = "2 日目以降";
+"travel.advice.followup" = "起床と就寝を固定し、日中は日光をとって夜は強い光を避けてください。";
+"travel.advice.none" = "時差がないため、いつもの睡眠リズムを続けてください。";
+"travel.advice.small" = "時差 3 時間以内：現地時間で食事と睡眠をとり、日中は日光を浴びてください。";
+"travel.advice.medium" = "時差 4〜6 時間：機内の仮眠は 90 分以内にし、現地の就寝時間近くまで起きて過ごしてください。";
+"travel.advice.large" = "時差 6 時間超：到着地の夜に合わせて機内で 3〜5 時間眠り、到着日の仮眠は 30 分以内にしてください。";
+"travel.advice.same" = "現在のリズムを保ち、到着後に長時間まとめて寝ないでください。";
+"travel.advice.behind" = "到着地が遅い場合：睡眠を後ろへずらし、午後に日光を浴びて固定した就寝時間を守ってください。";
+"travel.advice.ahead" = "到着地が早い場合：睡眠を前にずらし、機内では到着地の夜に眠り、到着後は午前中に日光を浴びてください。";
+"travel.arrival.title" = "重要なリマインダー";
+"travel.reminder.water" = "機内では水分をとり、アルコールとカフェインは控えめにしてください。";
+"travel.reminder.light" = "日中は日光をとり、夜は照明を暗くして体のリズムを切り替えてください。";
+"travel.reminder.caffeine" = "到着 8 時間前からはカフェインを避けてください。";
+"travel.reminder.nap" = "到着日に仮眠する場合は 30 分以内にしてください。";
+"travel.city.shanghai" = "上海";
+"travel.city.los_angeles" = "ロサンゼルス";
+"travel.city.new_york" = "ニューヨーク";
 
 // MARK: - Converter
 "converter.title" = "時刻コンバーター";

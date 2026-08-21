@@ -1,76 +1,63 @@
 import SwiftUI
 
 struct TravelView: View {
+    @StateObject private var viewModel = TravelViewModel()
+    @State private var selectedLegID: UUID?
+    @State private var selectingOrigin = true
+    @State private var showCitySelector = false
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    featureHero(
-                        icon: "airplane",
-                        titleKey: "travel.title",
-                        descriptionKey: "travel.subtitle"
+                    TravelInputSection(
+                        viewModel: viewModel,
+                        selectedLegID: $selectedLegID,
+                        selectingOrigin: $selectingOrigin,
+                        showCitySelector: $showCitySelector
                     )
 
-                    featureCard(
-                        icon: "arrow.triangle.branch",
-                        titleKey: "travel.route.title",
-                        descriptionKey: "travel.route.description"
-                    )
-                    featureCard(
-                        icon: "moon.zzz",
-                        titleKey: "travel.jetlag.title",
-                        descriptionKey: "travel.jetlag.description"
-                    )
-                    featureCard(
-                        icon: "bell.badge",
-                        titleKey: "travel.arrival.title",
-                        descriptionKey: "travel.arrival.description"
-                    )
+                    if let errorMessage = viewModel.errorMessage {
+                        TravelErrorView(message: errorMessage)
+                    } else if let itinerary = viewModel.itinerary {
+                        TravelSummarySection(itinerary: itinerary)
+
+                        if let plan = viewModel.activePlan {
+                            TravelTimelineSection(
+                                plan: plan,
+                                itinerary: itinerary,
+                                activeLegIndex: viewModel.activeLegIndex,
+                                onSelectLeg: viewModel.selectLeg
+                            )
+
+                            TravelAdviceSection(
+                                plan: plan,
+                                activeLegIndex: viewModel.activeLegIndex,
+                                legCount: itinerary.plans.count
+                            )
+                        }
+                    }
                 }
                 .padding(16)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle(String(localized: "tab.travel"))
-            .navigationBarTitleDisplayMode(.large)
-        }
-    }
+            .toolbar(.hidden, for: .navigationBar)
+            .sheet(isPresented: $showCitySelector) {
+                NavigationStack {
+                    CitySelectorView(onCitySelected: { city in
+                        guard let selectedLegID,
+                              let index = viewModel.legs.firstIndex(where: { $0.id == selectedLegID }) else {
+                            return
+                        }
 
-    private func featureHero(icon: String, titleKey: LocalizedStringKey, descriptionKey: LocalizedStringKey) -> some View {
-        VStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 34, weight: .semibold))
-                .foregroundStyle(Color.accentColor)
-            Text(titleKey)
-                .font(.title2.weight(.bold))
-                .multilineTextAlignment(.center)
-            Text(descriptionKey)
-                .font(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(20)
-        .background(Color.accentColor.opacity(0.10))
-        .cornerRadius(16)
-    }
-
-    private func featureCard(icon: String, titleKey: LocalizedStringKey, descriptionKey: LocalizedStringKey) -> some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(.accentColor)
-                .frame(width: 30)
-            VStack(alignment: .leading, spacing: 3) {
-                Text(titleKey)
-                    .font(.body.weight(.semibold))
-                Text(descriptionKey)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                        if selectingOrigin {
+                            viewModel.selectOrigin(city, legIndex: index)
+                        } else {
+                            viewModel.selectDestination(city, legIndex: index)
+                        }
+                    })
+                }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(16)
     }
 }

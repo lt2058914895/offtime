@@ -70,6 +70,26 @@ final class TimezoneService {
         guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd HH:mm").string(from: date)
     }
+
+    func getLocalizedTime(timezoneId: String, date: Date = Date()) -> String? {
+        guard let timezone = timezone(for: timezoneId) else { return nil }
+        let format = DateFormatter.dateFormat(
+            fromTemplate: "jmm",
+            options: 0,
+            locale: Locale.current
+        ) ?? "HH:mm"
+        return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
+    }
+
+    func getMonthDay(timezoneId: String, date: Date = Date()) -> String? {
+        guard let timezone = timezone(for: timezoneId) else { return nil }
+        let format = DateFormatter.dateFormat(
+            fromTemplate: "MMEd",
+            options: 0,
+            locale: Locale.current
+        ) ?? "MM/dd"
+        return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
+    }
     
     // MARK: - Daytime Detection
     

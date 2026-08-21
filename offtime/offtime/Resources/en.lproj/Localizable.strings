@@ -3,7 +3,7 @@
 // MARK: - Tab Bar
 "tab.clock" = "Clock";
 "tab.meeting" = "Meetings";
-"tab.travel" = "Travel";
+"tab.travel" = "Trips";
 "tab.settings" = "Settings";
 
 // MARK: - Common
@@ -93,14 +93,66 @@
 "meeting.share.description" = "Turn the selected meeting time into shareable information.";
 
 // MARK: - Travel
-"travel.title" = "International Travel";
-"travel.subtitle" = "Track departure and arrival times with less jet-lag friction.";
-"travel.route.title" = "Departure & Arrival";
-"travel.route.description" = "Compare origin and destination times across trip dates.";
-"travel.jetlag.title" = "Jet-Lag Plan";
-"travel.jetlag.description" = "Get gradual adjustment suggestions for your destination.";
-"travel.arrival.title" = "Arrival Reminders";
-"travel.arrival.description" = "Remind yourself to rest, connect, and follow up at the right time.";
+"travel.title" = "Trips & Jet-Lag Plan";
+"travel.subtitle" = "Enter departure, arrival, and end date to get a day-by-day jet-lag schedule.";
+"travel.origin.city" = "Origin";
+"travel.destination.city" = "Destination";
+"travel.departure.label" = "Departure";
+"travel.arrival.label" = "Arrival";
+"travel.leg.format" = "Leg %d";
+"travel.schedule.wake" = "Usual wake-up";
+"travel.schedule.sleep" = "Usual bedtime";
+"travel.add.leg" = "Add next city";
+"travel.remove.leg" = "Remove this leg";
+"travel.end.date" = "Trip end date";
+"travel.error.arrival" = "Arrival must be later than departure.";
+"travel.error.trip.days" = "The end date must be within 30 days of the final arrival.";
+"travel.error.timezone" = "The selected city time zone is unavailable.";
+"travel.error.sequence" = "Each departure must be later than the previous arrival.";
+"travel.error.discontinuous" = "The previous arrival city does not match this departure city.";
+"travel.error.leg.format" = "Leg %1$d: %2$@";
+"travel.error.unknown" = "Failed to create the trip plan.";
+"travel.summary.title" = "Trip Overview";
+"travel.summary.difference" = "Time difference";
+"travel.summary.duration" = "Flight duration";
+"travel.summary.segment.time" = "Trip time";
+"travel.segment.days.format" = "%d days";
+"travel.summary.recovery" = "Est. recovery";
+"travel.timeline.title" = "Daily Schedule";
+"travel.timeline.destination" = "Destination";
+"travel.timeline.origin" = "Origin";
+"travel.day.format" = "Day %d";
+"travel.day.arrival.format" = "Day %d · Arrival";
+"travel.timeline.remaining.format" = "Next %1$d days: keep waking at %2$@ and sleeping at %3$@";
+"travel.event.departure" = "Departure";
+"travel.event.arrival" = "Arrival";
+"travel.event.wake" = "Suggested wake-up";
+"travel.event.daylight" = "Daylight / activity";
+"travel.event.sleep" = "Suggested bedtime";
+"travel.jetlag.title" = "Sleep Adjustment";
+"travel.recovery.none" = "Same day";
+"travel.recovery.small" = "1–2 days";
+"travel.recovery.medium" = "2–4 days";
+"travel.recovery.large" = "5–10 days";
+"travel.phase.inflight" = "In flight";
+"travel.phase.arrival" = "Arrival day";
+"travel.phase.followup" = "From day 2";
+"travel.advice.followup" = "Keep wake and bedtime consistent, get daylight, and avoid bright evening light.";
+"travel.advice.none" = "There is no time difference. Keep your usual sleep schedule.";
+"travel.advice.small" = "Up to 3 hours difference: eat and sleep on destination time and get daylight during the day.";
+"travel.advice.medium" = "4–6 hours difference: nap for no more than 90 minutes in flight and stay awake until near your local bedtime.";
+"travel.advice.large" = "More than 6 hours difference: sleep 3–5 hours during the destination night in flight and cap arrival-day naps at 30 minutes.";
+"travel.advice.same" = "Keep your current rhythm and avoid a long recovery sleep after arrival.";
+"travel.advice.behind" = "The destination is behind: delay sleep, get afternoon daylight, and keep your fixed bedtime.";
+"travel.advice.ahead" = "The destination is ahead: move sleep earlier, sleep during the destination night in flight, and get morning daylight after arrival.";
+"travel.arrival.title" = "Key Reminders";
+"travel.reminder.water" = "Drink water in flight and limit alcohol and caffeine.";
+"travel.reminder.light" = "Get daylight during the day and dim lights in the evening.";
+"travel.reminder.caffeine" = "Avoid caffeine within 8 hours of arrival.";
+"travel.reminder.nap" = "If needed, keep arrival-day naps under 30 minutes.";
+"travel.city.shanghai" = "Shanghai";
+"travel.city.los_angeles" = "Los Angeles";
+"travel.city.new_york" = "New York";
 
 // MARK: - Converter
 "converter.title" = "Time Converter";

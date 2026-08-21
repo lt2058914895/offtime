@@ -29,9 +29,22 @@
 		B754A053B4B8C469E5762938 /* offtimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = offtimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AAAA00000000000000000001 /* Exceptions for "offtime" folder in "offtime" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 690C5C5A3010918200CF6812 /* offtime */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		690C5C5D3010918200CF6812 /* offtime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AAAA00000000000000000001 /* Exceptions for "offtime" folder in "offtime" target */,
+			);
 			path = offtime;
 			sourceTree = "<group>";
 		};
@@ -458,8 +471,8 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = offtime/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OffTime;
-				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "Used to import/export city list files";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -491,8 +504,8 @@
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = offtime/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OffTime;
-				INFOPLIST_KEY_NSDocumentPickerUsageDescription = "Used to import/export city list files";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
