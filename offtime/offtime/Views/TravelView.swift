@@ -41,7 +41,8 @@ struct TravelView: View {
                 .padding(16)
             }
             .background(Color(.systemGroupedBackground))
-            .toolbar(.hidden, for: .navigationBar)
+            .navigationTitle(String(localized: "tab.travel"))
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showCitySelector) {
                 NavigationStack {
                     CitySelectorView(onCitySelected: { city in

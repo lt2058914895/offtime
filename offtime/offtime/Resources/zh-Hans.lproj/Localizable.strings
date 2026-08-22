@@ -93,14 +93,62 @@
 "continent.africa" = "非洲";
 
 // MARK: - Meeting
-"meeting.title" = "跨城市会议";
-"meeting.subtitle" = "汇总多个城市的可联系时间，更快确定会议窗口。";
-"meeting.timeline.title" = "多城市工作时间";
-"meeting.timeline.description" = "同时查看参与者所在地的工作状态与重叠时段。";
-"meeting.suggestions.title" = "智能时间建议";
-"meeting.suggestions.description" = "根据工作时间为会议推荐更合适的开始时间。";
-"meeting.share.title" = "日历与分享";
-"meeting.share.description" = "把确定的会议时间整理成可分享的信息。";
+"meeting.participants.title" = "参与者";
+"meeting.participants.subtitle" = "勾选要一起安排会议的城市";
+"meeting.participants.hint" = "在时钟页添加更多城市，即可一起规划";
+"meeting.local.badge" = "本地";
+"meeting.settings.title" = "会议设置";
+"meeting.settings.duration" = "会议时长";
+"meeting.settings.duration.format" = "%d 分钟";
+"meeting.settings.range" = "会议日期(本地)";
+"meeting.slots.title" = "推荐档期";
+"meeting.slots.subtitle" = "按「全员工作 > 非睡眠 > 少数城市牺牲」排序";
+"meeting.slots.empty" = "所选日期暂无可生成档期";
+"meeting.slots.tier.all" = "全员可开会";
+"meeting.slots.tier.adjust" = "%d 个城市需调整";
+"meeting.slots.tier.sleeping" = "%d 个城市在睡眠";
+"meeting.date.today" = "今天";
+"meeting.date.tomorrow" = "明天";
+"meeting.slots.overlap.none" = "所选日期范围内无全员工作重叠时段";
+"meeting.slots.overlap.none.suggest" = "建议调整参与城市，或接受下方需牺牲的档期";
+"meeting.slots.overlap.short" = "全员重叠最长约 %d 分钟，不足会议时长";
+"meeting.slots.overlap.short.suggest" = "建议将时长缩短至 %d 分钟内，或接受下方需牺牲的档期";
+"meeting.slots.overlap.constraints" = "受限于：%@";
+"meeting.slots.constraint.start" = "%@（%@ 上班）";
+"meeting.slots.constraint.end" = "%@（%@ 下班）";
+"meeting.slots.constraints.join" = "、";
+"meeting.state.working" = "工作中";
+"meeting.state.offwork" = "非工作时间";
+"meeting.state.sleeping" = "睡眠中";
+"meeting.overlap.title" = "全天工作重叠";
+"meeting.overlap.subtitle" = "以你的本地时间为轴，红色为当前时刻";
+"meeting.overlap.hint" = "勾选至少 2 个城市查看重叠";
+"meeting.overlap.all" = "全员";
+"meeting.overlap.now" = "正在重叠";
+"meeting.overlap.next" = "下次";
+"meeting.overlap.none" = "今日无重叠";
+"meeting.detail.title" = "档期详情";
+"meeting.detail.subtitle" = "该时段在各城市的对应时间";
+"meeting.detail.range.hint" = "该时间范围内都可添加会议、可在下方手动选择会议开始时间";
+"meeting.detail.select.start" = "选择会议开始时间";
+"meeting.detail.add" = "添加到会议列表";
+"meeting.add.success" = "已添加到会议列表";
+"meeting.add.conflict" = "该时间与已有会议冲突，请选择其他时间";
+"meeting.add.conflict.title" = "无法添加会议";
+"meeting.add.conflict.view" = "去查看";
+"meeting.list.title" = "会议记录";
+"meeting.list.empty.title" = "暂无会议";
+"meeting.list.empty" = "从推荐档期添加到会议列表的会议将显示在这里。";
+"meeting.list.delete.confirm.title" = "删除会议？";
+"meeting.list.delete" = "删除";
+"meeting.list.filter.title" = "会议状态";
+"meeting.list.filter.upcoming" = "未开始";
+"meeting.list.filter.finished" = "已结束";
+"meeting.list.filter.empty" = "该分类暂无会议";
+"meeting.list.ongoing" = "进行中";
+"meeting.list.swipe.hint" = "往左滑动会议可删除";
+"meeting.day.before" = "昨日";
+"meeting.day.after" = "次日";
 
 // MARK: - Travel
 "travel.title" = "行程与倒时差计划";
@@ -165,7 +213,7 @@
 "travel.city.new_york" = "纽约";
 
 // MARK: - Converter
-"converter.title" = "时区转换器";
+"converter.title" = "时区转换";
 "converter.source.city" = "起点城市";
 "converter.target.city" = "目标城市";
 "converter.select.city" = "选择城市";
@@ -217,7 +265,7 @@
 "onboarding.cities.title" = "添加你关心的城市";
 "onboarding.cities.subtitle" = "已为你加入本地城市，再添加几个常关注的城市吧";
 "onboarding.features.title" = "更多功能";
-"onboarding.features.converter" = "时区转换器";
+"onboarding.features.converter" = "时区转换";
 "onboarding.features.converter.desc" = "任意城市间快速换算时间";
 "onboarding.features.format" = "12/24 小时切换";
 "onboarding.features.format.desc" = "在设置中切换时间显示格式";

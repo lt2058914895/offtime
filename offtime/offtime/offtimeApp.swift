@@ -4,6 +4,16 @@ import SwiftData
 @main
 struct offtimeApp: App {
     @StateObject private var appEnvironment = AppEnvironment()
+
+    init() {
+        // iOS 17 起 SwiftUI 的 .tint 不再控制分段控件选中段填充色，
+        // 改为通过外观代理统一设置为应用主题色（蓝色）。
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.accentColor)
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.foregroundColor: UIColor.white],
+            for: .selected
+        )
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -37,7 +47,7 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.clock)
 
-            MeetingView()
+            MeetingView(activeTab: $selectedTab)
                 .tabItem {
                     Image(systemName: "person.2")
                     Text(String(localized: "tab.meeting"))

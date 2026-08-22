@@ -27,10 +27,12 @@ struct ClockListView: View {
         appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
     }
 
-    /// Timer 只在「App 在前台」且「当前是时钟 Tab」时运行：
-    /// 切到转换/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
+    /// Timer 只在「App 在前台」且「当前是时钟/会议 Tab」时运行：
+    /// 切到行程/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
+    /// 会议页与时钟页共享同一套「分钟级刷新」，两页各自在 onAppear/onChange 中校正，
+    /// 由于两个 Tab 视为同一活跃域，不存在互相启停竞争。
     private var shouldRunTimer: Bool {
-        scenePhase == .active && activeTab == .clock
+        scenePhase == .active && (activeTab == .clock || activeTab == .meeting)
     }
 
     /// 根据 shouldRunTimer 启停 Timer

@@ -16,9 +16,13 @@ struct ConverterView: View {
     /// swap 按钮尺寸随 body Dynamic Type 同步缩放，避免图标在大字下撑出固定圆形
     @ScaledMetric(relativeTo: .body) private var swapButtonSize: CGFloat = 44
     private let embedsNavigationStack: Bool
+    /// 外部跳转预填（如会议页推荐的窗口），每次 id 变化都会重新应用一次
+    private let prefill: ConverterPrefill?
+    @State private var appliedPrefillID: UUID?
 
-    init(embedsNavigationStack: Bool = true) {
+    init(embedsNavigationStack: Bool = true, prefill: ConverterPrefill? = nil) {
         self.embedsNavigationStack = embedsNavigationStack
+        self.prefill = prefill
     }
     
     private var isIPad: Bool { horizontalSizeClass == .regular }
@@ -90,6 +94,10 @@ struct ConverterView: View {
                     lastSeenCitiesRevision = appEnvironment.citiesRevision
                     viewModel.loadCities()
                 }
+                applyPrefillIfNeeded()
+            }
+            .onChange(of: prefill) { _, _ in
+                applyPrefillIfNeeded()
             }
             .onChange(of: appEnvironment.citiesRevision) { _, newValue in
                 lastSeenCitiesRevision = newValue
@@ -462,6 +470,17 @@ struct ConverterView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "converter.select.time") + ": " + sourceTimeFormatter.string(from: viewModel.sourceDate))
+    }
+
+    /// 仅当 prefill id 未应用过时执行，避免切回 Tab 时重复覆盖用户手选
+    private func applyPrefillIfNeeded() {
+        guard let prefill, appliedPrefillID != prefill.id else { return }
+        appliedPrefillID = prefill.id
+        viewModel.applyPrefill(
+            sourceTimezoneId: prefill.sourceTimezoneId,
+            targetTimezoneId: prefill.targetTimezoneId,
+            date: prefill.date
+        )
     }
 }
 

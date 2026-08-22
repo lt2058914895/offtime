@@ -2,6 +2,26 @@ import Foundation
 import Combine
 import SwiftData
 
+/// 从会议页跳转转换器时的预填请求：指定源/目标时区与目标时刻（绝对时间）。
+struct ConverterPrefill: Equatable, Hashable {
+    let id: UUID
+    let sourceTimezoneId: String
+    let targetTimezoneId: String
+    let date: Date?
+
+    init(
+        id: UUID = UUID(),
+        sourceTimezoneId: String,
+        targetTimezoneId: String,
+        date: Date?
+    ) {
+        self.id = id
+        self.sourceTimezoneId = sourceTimezoneId
+        self.targetTimezoneId = targetTimezoneId
+        self.date = date
+    }
+}
+
 @MainActor
 final class ConverterViewModel: ObservableObject {
     @Published var sourceCity: CityModel?
@@ -125,6 +145,26 @@ final class ConverterViewModel: ObservableObject {
         viewState = .idle
     }
     
+    /// 应用外部跳转预填（如会议页推荐窗口）：按时区匹配已有城市，找不到时临时构建。
+    func applyPrefill(sourceTimezoneId: String, targetTimezoneId: String, date: Date?) {
+        let source = findOrMakeCity(timezoneId: sourceTimezoneId)
+        let target = findOrMakeCity(timezoneId: targetTimezoneId)
+        sourceCity = source
+        targetCity = target
+        if let date {
+            sourceDate = date
+        }
+        refreshFormat()
+    }
+
+    private func findOrMakeCity(timezoneId: String) -> CityModel {
+        if let match = availableCities.first(where: { $0.timezoneId == timezoneId }) {
+            return match
+        }
+        let (name, en) = CityService.matchCity(for: timezoneId)
+        return CityModel(cityName: name, cityEn: en, timezoneId: timezoneId)
+    }
+
     func swapCities() {
         isSwapping = true
         let temp = sourceCity

@@ -87,6 +87,12 @@ struct SettingsView: View {
                     } label: {
                         Label(String(localized: "converter.title"), systemImage: "repeat")
                     }
+
+                    NavigationLink {
+                        MeetingListView()
+                    } label: {
+                        Label(String(localized: "meeting.list.title"), systemImage: "calendar.badge.clock")
+                    }
                 }
 
                 Section(String(localized: "settings.display")) {
@@ -163,7 +169,7 @@ struct SettingsView: View {
             }
             .listStyle(.insetGrouped)
             .navigationTitle(String(localized: "settings.title"))
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
                 case .supportPage:

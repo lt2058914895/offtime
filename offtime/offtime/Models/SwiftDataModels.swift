@@ -46,6 +46,35 @@ extension CityModel {
     }
 }
 
+// MARK: - 已添加的会议
+
+/// SwiftData 持久化模型：用户从推荐档期加入的会议
+@Model
+final class MeetingModel {
+    var id: UUID
+    var startDate: Date
+    var durationMinutes: Int
+    var localTimezoneId: String
+    var participantNames: [String]
+    var createdAt: Date
+
+    init(
+        id: UUID = UUID(),
+        startDate: Date,
+        durationMinutes: Int,
+        localTimezoneId: String,
+        participantNames: [String],
+        createdAt: Date = Date()
+    ) {
+        self.id = id
+        self.startDate = startDate
+        self.durationMinutes = durationMinutes
+        self.localTimezoneId = localTimezoneId
+        self.participantNames = participantNames
+        self.createdAt = createdAt
+    }
+}
+
 // MARK: - CityItem 保留为 Codable 值类型，仅用于导入/导出 JSON 兼容
 
 /// 城市值类型，用于 JSON 导入/导出。运行时数据操作请使用 CityModel。
