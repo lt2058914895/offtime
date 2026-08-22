@@ -16,6 +16,8 @@ final class MeetingViewModel: ObservableObject {
     private let cityService: CityService
     private let timezoneService: TimezoneService
 
+    private static let lastSelectedIDsKey = "meeting_lastSelectedParticipantIDs"
+
     init(cityService: CityService? = nil) {
         self.cityService = cityService ?? .shared
         self.timezoneService = .shared
@@ -111,6 +113,21 @@ final class MeetingViewModel: ObservableObject {
         )
     }
 
+    /// 保存最近一次成功添加会议时的参与者选中状态，下次进入会议页时自动恢复。
+    func saveSelectedParticipantIDs() {
+        let ids = Array(selectedIDs)
+        UserDefaults.standard.set(ids, forKey: Self.lastSelectedIDsKey)
+    }
+
+    /// 加载上次保存的参与者选中 ID（仅在添加过会议后才有值）。
+    private func loadLastSelectedParticipantIDs() -> Set<String>? {
+        guard let ids = UserDefaults.standard.stringArray(forKey: Self.lastSelectedIDsKey),
+              !ids.isEmpty else {
+            return nil
+        }
+        return Set(ids)
+    }
+
     func loadParticipants(
         localTimezoneId: String,
         localCityName: String?,
@@ -158,8 +175,15 @@ final class MeetingViewModel: ObservableObject {
         let validIDs = Set(loaded.map(\.id))
         selectedIDs.formIntersection(validIDs)
         if selectedIDs.isEmpty {
-            let defaultCount = min(loaded.count, 3)
-            selectedIDs = Set(loaded.prefix(defaultCount).map(\.id))
+            // 优先恢复上次添加会议时保存的选中状态
+            if let savedIDs = loadLastSelectedParticipantIDs() {
+                selectedIDs = savedIDs.intersection(validIDs)
+            }
+            // 如果没有保存记录或保存的 ID 已失效，则默认选中前 3 个
+            if selectedIDs.isEmpty {
+                let defaultCount = min(loaded.count, 3)
+                selectedIDs = Set(loaded.prefix(defaultCount).map(\.id))
+            }
         }
 
         participants = loaded

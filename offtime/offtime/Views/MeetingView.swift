@@ -147,6 +147,7 @@ struct MeetingView: View {
         )
         modelContext.insert(meeting)
         try? modelContext.save()
+        viewModel.saveSelectedParticipantIDs()
         toastMessage = String(localized: "meeting.add.success")
         return true
     }
