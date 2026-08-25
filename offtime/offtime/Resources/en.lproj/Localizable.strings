@@ -236,6 +236,8 @@
 "settings.24hour" = "24-Hour Format";
 "settings.theme" = "Appearance";
 "settings.version" = "Version";
+"trip.empty.title" = "No Trips";
+"trip.empty" = "Trips are coming soon.";
 "settings.tools" = "Tools";
 "settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";

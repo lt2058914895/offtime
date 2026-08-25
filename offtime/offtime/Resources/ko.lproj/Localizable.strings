@@ -236,6 +236,8 @@
 "settings.24hour" = "24시간제";
 "settings.theme" = "테마";
 "settings.version" = "버전";
+"trip.empty.title" = "일정 없음";
+"trip.empty" = "일정 기능이 곧 제공됩니다.";
 "settings.tools" = "도구";
 "settings.data.management" = "데이터 관리";
 "settings.export.cities" = "도시 목록 내보내기";

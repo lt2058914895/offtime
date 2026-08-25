@@ -91,7 +91,13 @@ struct SettingsView: View {
                     NavigationLink {
                         MeetingListView()
                     } label: {
-                        Label(String(localized: "meeting.list.title"), systemImage: "calendar.badge.clock")
+                        Label(String(localized: "tab.meeting"), systemImage: "calendar.badge.clock")
+                    }
+
+                    NavigationLink {
+                        TripView()
+                    } label: {
+                        Label(String(localized: "tab.travel"), systemImage: "airplane")
                     }
                 }
 

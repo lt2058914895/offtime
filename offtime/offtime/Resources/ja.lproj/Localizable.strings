@@ -236,6 +236,8 @@
 "settings.24hour" = "24時間表示";
 "settings.theme" = "外観";
 "settings.version" = "バージョン";
+"trip.empty.title" = "旅程はありません";
+"trip.empty" = "旅程機能は近日公開予定です。";
 "settings.tools" = "ツール";
 "settings.data.management" = "データ管理";
 "settings.export.cities" = "都市リストをエクスポート";

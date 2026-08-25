@@ -108,21 +108,6 @@ final class AppEnvironment: ObservableObject {
         onboardingCompleted = true
     }
 
-    // MARK: - 最近一次添加会议的参与者
-
-    /// 保存最近一次成功添加会议时勾选的参与者 id
-    func saveLastMeetingParticipantIDs(_ ids: Set<String>) {
-        UserDefaults.standard.set(Array(ids), forKey: "last_meeting_participant_ids")
-    }
-
-    /// 最近一次成功添加会议时勾选的参与者 id；从未添加过会议时为 nil
-    var lastMeetingParticipantIDs: Set<String>? {
-        guard let ids = UserDefaults.standard.stringArray(forKey: "last_meeting_participant_ids") else {
-            return nil
-        }
-        return Set(ids)
-    }
-
     // MARK: - 设置
 
     func loadSettings() {
