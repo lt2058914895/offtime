@@ -103,6 +103,7 @@
 "meeting.settings.range" = "Meeting date (local)";
 "meeting.slots.title" = "Recommended Slots";
 "meeting.slots.subtitle" = "Sorted by \"all working > no sleep > fewer cities sacrifice\"";
+"meeting.slots.view" = "View";
 "meeting.slots.empty" = "No slots can be generated on this date";
 "meeting.slots.tier.all" = "Everyone can attend";
 "meeting.slots.tier.adjust" = "%d cities need to adjust";

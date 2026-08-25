@@ -103,6 +103,7 @@
 "meeting.settings.range" = "회의 날짜(로컬)";
 "meeting.slots.title" = "추천 시간대";
 "meeting.slots.subtitle" = "'전원 근무 > 비수면 > 소수 도시 희생' 순으로 표시";
+"meeting.slots.view" = "보기";
 "meeting.slots.empty" = "이 날짜에서는 시간대를 만들 수 없어요";
 "meeting.slots.tier.all" = "전원 참석 가능";
 "meeting.slots.tier.adjust" = "%d개 도시 조정 필요";

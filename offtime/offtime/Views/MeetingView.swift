@@ -52,8 +52,8 @@ struct MeetingView: View {
                 VStack(spacing: 16) {
                     participantsCard
                     settingsCard
-                    slotsCard
                     overlapCard
+                    slotsCard
                 }
                 .padding(16)
             }
@@ -231,15 +231,9 @@ struct MeetingView: View {
     private var settingsCard: some View {
         CardView {
             VStack(alignment: .leading, spacing: 14) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(String(localized: "meeting.settings.title"))
-                        .font(.headline)
-                }
-
                 VStack(alignment: .leading, spacing: 6) {
                     Text(String(localized: "meeting.settings.duration"))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.headline)
                     Picker(String(localized: "meeting.settings.duration"), selection: $viewModel.durationMinutes) {
                         ForEach([30, 60, 90, 120], id: \.self) { minutes in
                             Text(String(format: String(localized: "meeting.settings.duration.format"), minutes))
@@ -252,8 +246,7 @@ struct MeetingView: View {
 
                 HStack(spacing: 12) {
                     Text(String(localized: "meeting.settings.range"))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(.headline)
                     Spacer(minLength: 8)
                     Menu {
                         ForEach(viewModel.dateOptions, id: \.self) { option in
@@ -323,12 +316,9 @@ struct MeetingView: View {
                         .foregroundColor(.secondary)
                         .padding(.vertical, 8)
                 } else {
-                    VStack(spacing: 0) {
-                        ForEach(Array(viewModel.slotGroups.enumerated()), id: \.element.id) { index, group in
+                    VStack(spacing: 8) {
+                        ForEach(viewModel.slotGroups) { group in
                             slotGroupRow(group)
-                            if index < viewModel.slotGroups.count - 1 {
-                                Divider()
-                            }
                         }
                     }
                 }
@@ -382,20 +372,29 @@ struct MeetingView: View {
         Button {
             selectedGroup = group
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 Image(systemName: "calendar.badge.clock")
                     .font(.title3)
                     .foregroundColor(.accentColor)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(groupRangeText(group))
                         .font(.body.weight(.semibold))
+                        .lineLimit(1)
+                        .layoutPriority(1)
                 }
-                Spacer()
+                Spacer(minLength: 8)
                 slotTierBadge(group)
+                Text(String(localized: "meeting.slots.view"))
+                    .font(.caption.weight(.semibold))
+                    .foregroundColor(.accentColor)
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.semibold))
                     .foregroundColor(Color(.systemGray3))
             }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color(.systemGray6).opacity(0.55))
+            .cornerRadius(12)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -418,6 +417,8 @@ struct MeetingView: View {
         }
         return Text(text)
             .font(.caption2.weight(.semibold))
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
             .background(color.opacity(0.14))

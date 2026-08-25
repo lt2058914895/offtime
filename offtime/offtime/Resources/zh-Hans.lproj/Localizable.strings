@@ -103,6 +103,7 @@
 "meeting.settings.range" = "会议日期(本地)";
 "meeting.slots.title" = "推荐档期";
 "meeting.slots.subtitle" = "按「全员工作 > 非睡眠 > 少数城市牺牲」排序";
+"meeting.slots.view" = "查看";
 "meeting.slots.empty" = "所选日期暂无可生成档期";
 "meeting.slots.tier.all" = "全员可开会";
 "meeting.slots.tier.adjust" = "%d 个城市需调整";
