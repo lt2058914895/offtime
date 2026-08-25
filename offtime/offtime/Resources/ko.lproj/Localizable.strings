@@ -243,6 +243,7 @@
 "trip.list.title" = "내 일정";
 "trip.list.empty.title" = "일정 없음";
 "trip.list.empty" = "일정 탭에서 만들고 저장한 일정이 여기에 표시됩니다.";
+"trip.list.swipe.hint" = "일정을 왼쪽으로 스와이프하여 삭제하세요";
 "trip.status.ongoing" = "진행 중";
 "trip.status.upcoming" = "시작 전";
 "trip.status.finished" = "종료";

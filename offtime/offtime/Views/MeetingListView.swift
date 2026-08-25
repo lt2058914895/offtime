@@ -65,6 +65,8 @@ struct MeetingListView: View {
                             } header: {
                                 Text(String(localized: "meeting.list.swipe.hint"))
                                     .font(.caption2)
+                                    .frame(maxWidth: .infinity)
+                                    .multilineTextAlignment(.center)
                                     .textCase(nil)
                             }
                             ForEach(sections) { section in

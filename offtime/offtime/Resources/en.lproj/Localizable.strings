@@ -243,6 +243,7 @@
 "trip.list.title" = "My Trips";
 "trip.list.empty.title" = "No Trips";
 "trip.list.empty" = "Trips you create and save in the Trips tab will appear here.";
+"trip.list.swipe.hint" = "Swipe left on a trip to delete";
 "trip.status.ongoing" = "Ongoing";
 "trip.status.upcoming" = "Upcoming";
 "trip.status.finished" = "Finished";

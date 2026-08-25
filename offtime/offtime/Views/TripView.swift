@@ -29,6 +29,14 @@ struct TripView: View {
                 )
             } else {
                 List {
+                    Section {
+                    } header: {
+                        Text(String(localized: "trip.list.swipe.hint"))
+                            .font(.caption2)
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
+                            .textCase(nil)
+                    }
                     ForEach(grouped) { group in
                         Section {
                             ForEach(group.trips) { trip in

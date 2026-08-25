@@ -243,6 +243,7 @@
 "trip.list.title" = "旅程一覧";
 "trip.list.empty.title" = "旅程はありません";
 "trip.list.empty" = "「旅程」タブで作成・保存した旅程がここに表示されます。";
+"trip.list.swipe.hint" = "旅程を左にスワイプすると削除できます";
 "trip.status.ongoing" = "進行中";
 "trip.status.upcoming" = "未開始";
 "trip.status.finished" = "終了";
