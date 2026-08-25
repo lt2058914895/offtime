@@ -33,6 +33,8 @@ final class AppEnvironment: ObservableObject {
         }
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
         CityService.shared.modelContainer = modelContainer
+        // 首帧渲染前同步读取引导状态，避免非新用户进入 App 时引导页一闪而过
+        loadOnboardingState()
     }
 
     /// App 启动后调用：首启种子城市、加载引导状态与设置
@@ -104,6 +106,21 @@ final class AppEnvironment: ObservableObject {
     func completeOnboarding() {
         UserDefaults.standard.set(true, forKey: "onboarding_completed")
         onboardingCompleted = true
+    }
+
+    // MARK: - 最近一次添加会议的参与者
+
+    /// 保存最近一次成功添加会议时勾选的参与者 id
+    func saveLastMeetingParticipantIDs(_ ids: Set<String>) {
+        UserDefaults.standard.set(Array(ids), forKey: "last_meeting_participant_ids")
+    }
+
+    /// 最近一次成功添加会议时勾选的参与者 id；从未添加过会议时为 nil
+    var lastMeetingParticipantIDs: Set<String>? {
+        guard let ids = UserDefaults.standard.stringArray(forKey: "last_meeting_participant_ids") else {
+            return nil
+        }
+        return Set(ids)
     }
 
     // MARK: - 设置
