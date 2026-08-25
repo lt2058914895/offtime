@@ -22,14 +22,14 @@ final class AppEnvironment: ObservableObject {
 
     init() {
         do {
-            let schema = Schema([CityModel.self, MeetingModel.self])
+            let schema = Schema([CityModel.self, MeetingModel.self, TripModel.self])
             let config = ModelConfiguration(isStoredInMemoryOnly: false)
             modelContainer = try ModelContainer(for: schema, configurations: [config])
         } catch {
             // SwiftData 初始化失败时用空容器兜底，避免 App 崩溃；
             // 实际场景极少发生（iOS 17+ 系统框架保障）
             logger.error("SwiftData ModelContainer 创建失败: \(error.localizedDescription)")
-            modelContainer = try! ModelContainer(for: Schema([CityModel.self, MeetingModel.self]), configurations: [ModelConfiguration(isStoredInMemoryOnly: true)])
+            modelContainer = try! ModelContainer(for: Schema([CityModel.self, MeetingModel.self, TripModel.self]), configurations: [ModelConfiguration(isStoredInMemoryOnly: true)])
         }
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
         CityService.shared.modelContainer = modelContainer
@@ -42,6 +42,8 @@ final class AppEnvironment: ObservableObject {
         seedDefaultCityIfFirstLaunch()
         loadOnboardingState()
         loadSettings()
+        // 旧版 UserDefaults 单草稿 → SwiftData 行程（一次性迁移）
+        TripStore.shared.migrateLegacyDraftIfNeeded(context: modelContainer.mainContext)
     }
 
     // MARK: - 分钟时钟

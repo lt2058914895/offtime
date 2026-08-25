@@ -81,13 +81,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section(String(localized: "settings.tools")) {
-                    NavigationLink {
-                        ConverterView(embedsNavigationStack: false)
-                    } label: {
-                        Label(String(localized: "converter.title"), systemImage: "repeat")
-                    }
-
+                Section(String(localized: "settings.trips.meetings")) {
                     NavigationLink {
                         MeetingListView()
                     } label: {
@@ -98,6 +92,14 @@ struct SettingsView: View {
                         TripView()
                     } label: {
                         Label(String(localized: "tab.travel"), systemImage: "airplane")
+                    }
+                }
+
+                Section(String(localized: "settings.tools")) {
+                    NavigationLink {
+                        ConverterView(embedsNavigationStack: false)
+                    } label: {
+                        Label(String(localized: "converter.title"), systemImage: "repeat")
                     }
                 }
 

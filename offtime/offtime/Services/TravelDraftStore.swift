@@ -33,4 +33,8 @@ final class TravelDraftStore {
         }
         defaults.set(data, forKey: storageKey)
     }
+
+    func clear() {
+        defaults.removeObject(forKey: storageKey)
+    }
 }

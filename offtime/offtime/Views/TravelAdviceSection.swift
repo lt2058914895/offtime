@@ -1,18 +1,12 @@
 import SwiftUI
 
+/// 作息调整建议：一张卡片内突出「作息计划」，合并行程阶段建议与关键提醒。
 struct TravelAdviceSection: View {
     let plan: TravelPlan
     let activeLegIndex: Int
     let legCount: Int
 
     var body: some View {
-        VStack(spacing: 16) {
-            adviceCard
-            reminderCard
-        }
-    }
-
-    private var adviceCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             TravelSectionHeader(
                 icon: "moon.zzz",
@@ -29,6 +23,8 @@ struct TravelAdviceSection: View {
                     .clipShape(Capsule())
             }
 
+            schedulePlanBox
+
             adviceRow(
                 icon: "hourglass",
                 titleKey: "travel.phase.inflight",
@@ -44,18 +40,12 @@ struct TravelAdviceSection: View {
                 titleKey: "travel.phase.followup",
                 textKey: "travel.advice.followup"
             )
-        }
-        .padding(16)
-        .background(Color.clear)
-        .cornerRadius(16)
-    }
 
-    private var reminderCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            TravelSectionHeader(
-                icon: "bell.badge",
-                titleKey: "travel.arrival.title"
-            )
+            Divider()
+
+            Text(String(localized: "travel.arrival.title"))
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.secondary)
 
             adviceRow(icon: "drop", textKey: "travel.reminder.water")
             adviceRow(icon: "sun.max", textKey: "travel.reminder.light")
@@ -63,8 +53,29 @@ struct TravelAdviceSection: View {
             adviceRow(icon: "timer", textKey: "travel.reminder.nap")
         }
         .padding(16)
-        .background(Color.clear)
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(16)
+    }
+
+    /// 作息计划：目的地 + 固定起床/入睡时间，突出本段行程的关键作息。
+    private var schedulePlanBox: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(String(localized: "travel.schedule.plan"))
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.accentColor)
+            Text(String(
+                format: String(localized: "travel.schedule.plan.format"),
+                plan.destinationName,
+                plan.wakeTime.text,
+                plan.sleepTime.text
+            ))
+            .font(.subheadline.weight(.semibold))
+            .foregroundColor(.primary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Color.accentColor.opacity(0.10))
+        .cornerRadius(12)
     }
 
     private func adviceRow(
