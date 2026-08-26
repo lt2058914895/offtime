@@ -5,6 +5,9 @@ import Combine
 /// 行程列表：按「进行中 / 未开始 / 已结束」分组展示所有已保存行程。
 /// 可从设置页「行程」进入，也可从行程 Tab 的「我的行程」进入。
 struct TripView: View {
+    /// 冲突跳转时高亮的行程（可选）
+    var highlightTripID: UUID? = nil
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \TripModel.updatedAt, order: .reverse) private var trips: [TripModel]
@@ -113,6 +116,7 @@ struct TripView: View {
     private func row(for trip: TripModel) -> some View {
         let status = trip.status(at: now)
         let isFinished = status == .finished
+        let isHighlighted = trip.id == highlightTripID
 
         return NavigationLink {
             TravelView(initialTripID: trip.id, isEmbedded: true)
@@ -146,6 +150,7 @@ struct TripView: View {
             .padding(.vertical, 4)
             .opacity(isFinished ? 0.55 : 1)
         }
+        .listRowBackground(isHighlighted ? Color.orange.opacity(0.18) : nil)
     }
 
     private func icon(for status: TripStatus) -> String {

@@ -192,6 +192,48 @@ struct CitySuggestion: Equatable, Identifiable, Codable {
     let timezoneId: String
     let country: String
     let continent: String
+
+    init(
+        id: String,
+        cityName: String,
+        cityEn: String,
+        timezoneId: String,
+        country: String,
+        continent: String
+    ) {
+        self.id = id
+        self.cityName = cityName
+        self.cityEn = cityEn
+        self.timezoneId = timezoneId
+        self.country = country
+        self.continent = continent
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, cityName, cityEn, timezoneId, country, continent
+    }
+
+    /// 兼容旧数据：country 是后新增字段，旧行程 legsData 中缺失时回退为空字符串，
+    /// 避免整体解码失败导致行程卡片空白。
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        cityName = try container.decode(String.self, forKey: .cityName)
+        cityEn = try container.decode(String.self, forKey: .cityEn)
+        timezoneId = try container.decode(String.self, forKey: .timezoneId)
+        country = try container.decodeIfPresent(String.self, forKey: .country) ?? ""
+        continent = try container.decode(String.self, forKey: .continent)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(cityName, forKey: .cityName)
+        try container.encode(cityEn, forKey: .cityEn)
+        try container.encode(timezoneId, forKey: .timezoneId)
+        try container.encode(country, forKey: .country)
+        try container.encode(continent, forKey: .continent)
+    }
 }
 
 struct CountryGroup: Equatable, Identifiable {

@@ -69,10 +69,10 @@ struct TravelView: View {
         } message: {
             Text(String(localized: "trip.save.conflict"))
         }
-        .sheet(isPresented: $showConflictTrip) {
+        .fullScreenCover(isPresented: $showConflictTrip) {
             NavigationStack {
                 if let conflictTripID {
-                    TravelView(initialTripID: conflictTripID, isEmbedded: true)
+                    TripView(highlightTripID: conflictTripID)
                 }
             }
         }
