@@ -84,7 +84,7 @@ struct ClockListView: View {
                 switch route {
                 case .cityPicker:
                     CityPickerView(onCitySelected: { city in
-                        viewModel.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
+                        viewModel.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, country: city.country)
                         path.removeLast()
                     })
                 case .supportPage:
@@ -208,6 +208,7 @@ struct ClockListView: View {
                        timeDifference: viewModel.getTimeDifference(city: city, localTimezoneId: localTimezoneId),
                        isDaytime: viewModel.isDaytime(city: city),
                        dstStatus: viewModel.getDSTStatus(city: city),
+                        countryCode: viewModel.countryCode(for: city),
                         workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
                        localTimezoneId: localTimezoneId,
                        isEditMode: isEditing,
@@ -262,6 +263,7 @@ struct ClockListView: View {
                            timeDifference: viewModel.getTimeDifference(city: city, localTimezoneId: localTimezoneId),
                            isDaytime: viewModel.isDaytime(city: city),
                            dstStatus: viewModel.getDSTStatus(city: city),
+                            countryCode: viewModel.countryCode(for: city),
                             workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
                        localTimezoneId: localTimezoneId,
                            isEditMode: isEditing,
@@ -318,6 +320,7 @@ struct ClockListCell: View {
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
+    let countryCode: String
     let workingHoursOverlap: WorkingHoursOverlap
     let localTimezoneId: String
     var isEditMode: Bool = false
@@ -339,12 +342,6 @@ struct ClockListCell: View {
                     .accessibilityLabel(String(localized: isSelected ? "accessibility.selected" : "accessibility.unselected"))
             }
             
-            Image(isDaytime ? "day" : "night")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 28, height: 28)
-                .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
-            
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
                     Text(city.cityName)
@@ -360,7 +357,34 @@ struct ClockListCell: View {
                             .padding(.vertical, 1)
                             .background(dstStatus == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
                             .foregroundColor(dstStatus == String(localized: "clock.dst.summer") ? .orange : .blue)
-                            .cornerRadius(3)
+                        .cornerRadius(3)
+                    }
+                }
+
+                if !countryCode.isEmpty {
+                    HStack(spacing: 6) {
+                        Text(flagEmoji(for: countryCode))
+                            .font(.system(size: 13))
+                        Text(appCountryName(for: countryCode))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text("·")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(utcText(for: city.timezoneId))
+                            .font(.caption2.weight(.medium))
+                            .foregroundColor(.secondary)
+                            .monospacedDigit()
+                        Text("·")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(String(localized: "clock.time.difference"))
+                            .font(.caption2.weight(.medium))
+                            .foregroundColor(.secondary)
+                        Text(timeDifference.offset)
+                            .font(.caption2.weight(.medium))
+                            .foregroundColor(timeDifferenceColor)
+                            .monospacedDigit()
                     }
                 }
                 
@@ -380,15 +404,16 @@ struct ClockListCell: View {
                         }
                     }
                     Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
+                    HStack(alignment: .center, spacing: 5) {
                         Text(time)
                             .font(.title3)
                             .fontWeight(.semibold)
                             .monospacedDigit()
-                        Text(timeDifference.offset)
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(timeDifferenceColor)
+                        Image(isDaytime ? "day" : "night")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                            .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
                     }
                 }
                 if !isEditMode {
@@ -413,7 +438,7 @@ struct ClockListCell: View {
             }
         }
     }
-    
+
     private var timeDifferenceColor: Color {
         let offset = timeDifference.offset
         if offset == "0h" { return .secondary }
@@ -430,6 +455,7 @@ struct ClockGridCell: View {
     let timeDifference: (offset: String, crossDay: String?)
     let isDaytime: Bool
     let dstStatus: String?
+    let countryCode: String
     let workingHoursOverlap: WorkingHoursOverlap
     let localTimezoneId: String
     var isEditMode: Bool = false
@@ -442,14 +468,8 @@ struct ClockGridCell: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // 顶部：城市名 + 日夜图标 + 管理模式勾选圆圈
+            // 顶部：城市名 + 国家信息 + 管理模式勾选圆圈
             HStack {
-                Image(isDaytime ? "day" : "night")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 28, height: 28)
-                    .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
-                
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
                         Text(city.cityName)
@@ -468,6 +488,26 @@ struct ClockGridCell: View {
                             .foregroundColor(dstStatus == String(localized: "clock.dst.summer") ? .orange : .blue)
                             .cornerRadius(3)
                     }
+                    if !countryCode.isEmpty {
+                        HStack(spacing: 6) {
+                            Text(flagEmoji(for: countryCode))
+                                .font(.system(size: 13))
+                            Text(appCountryName(for: countryCode))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(utcText(for: city.timezoneId))
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(.secondary)
+                                .monospacedDigit()
+                            Text(String(localized: "clock.time.difference"))
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(.secondary)
+                            Text(timeDifference.offset)
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(timeDifferenceColor)
+                                .monospacedDigit()
+                        }
+                    }
                 }
                 Spacer()
                 if isEditMode {
@@ -480,11 +520,18 @@ struct ClockGridCell: View {
             
             Divider()
             
-            // 中部：时间
-            Text(time)
-                .font(.title2)
-                .fontWeight(.bold)
-                .monospacedDigit()
+            // 中部：时间 + 昼夜图标
+            HStack(alignment: .center, spacing: 8) {
+                Text(time)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .monospacedDigit()
+                Image(isDaytime ? "day" : "night")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
+            }
             
             // 底部：日期 + 星期 + 时差
             HStack(alignment: .top, spacing: 8) {
@@ -504,10 +551,6 @@ struct ClockGridCell: View {
                     }
                 }
                 Spacer()
-                Text(timeDifference.offset)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(timeDifferenceColor)
             }
             if !isEditMode {
                 WorkingHoursBar(overlap: workingHoursOverlap, localTimezoneId: localTimezoneId)
@@ -530,13 +573,12 @@ struct ClockGridCell: View {
             Button(String(localized: "clock.delete.city"), role: .destructive) { onDelete() }
         }
     }
-    
+
     private var timeDifferenceColor: Color {
         let offset = timeDifference.offset
         if offset == "0h" { return .secondary }
         return offset.hasPrefix("+") ? .green : .red
     }
-
 }
 
 /// 用于 `.sheet(item:)` 的分享文案包装（String 非 Identifiable）
@@ -578,6 +620,48 @@ struct LoadingView: View {
         .background(Color(.systemBackground))
         .opacity(0.8)
     }
+}
+
+// MARK: - 时钟卡片辅助
+
+/// 国家码 → 国旗 Emoji；非法/空返回 🌐 占位
+private func flagEmoji(for countryCode: String) -> String {
+    let upper = countryCode.uppercased()
+    guard upper.count == 2, upper.allSatisfy({ $0.isASCII && $0.isLetter }) else {
+        return "🌐"
+    }
+    let base: UInt32 = 127397
+    return upper.unicodeScalars
+        .compactMap { UnicodeScalar(base + $0.value) }
+        .reduce(into: "") { result, scalar in
+            result.unicodeScalars.append(scalar)
+        }
+}
+
+/// 当前 App 语言下的国家名
+private func appCountryName(for countryCode: String) -> String {
+    guard countryCode.count == 2 else { return "" }
+    let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+    let locale: Locale
+    switch language {
+    case "en": locale = Locale(identifier: "en_US")
+    case "ja": locale = Locale(identifier: "ja_JP")
+    case "ko": locale = Locale(identifier: "ko_KR")
+    default: locale = Locale(identifier: "zh_CN")
+    }
+    return locale.localizedString(forRegionCode: countryCode) ?? ""
+}
+
+/// 时区 ID → UTC 偏移文案，如 UTC+8
+private func utcText(for timezoneId: String) -> String {
+    guard let timeZone = TimeZone(identifier: timezoneId) else { return "" }
+    let seconds = timeZone.secondsFromGMT()
+    let hours = seconds / 3600
+    let minutes = abs(seconds % 3600) / 60
+    if minutes == 0 {
+        return String(format: "UTC%+d", hours)
+    }
+    return String(format: "UTC%+d:%02d", hours, minutes)
 }
 
 #Preview {

@@ -176,14 +176,15 @@ private final class OnboardingViewModel: ObservableObject {
         let cityName: String
         let cityEn: String
         let timezoneId: String
+        let country: String
     }
 
     /// 几个高频国际城市，供用户一键添加（名称/时区与 cities.json 保持一致）
     let quickCities: [QuickCity] = [
-        QuickCity(id: "America/New_York", cityName: "纽约", cityEn: "New York", timezoneId: "America/New_York"),
-        QuickCity(id: "Europe/London", cityName: "伦敦", cityEn: "London", timezoneId: "Europe/London"),
-        QuickCity(id: "Asia/Tokyo", cityName: "东京", cityEn: "Tokyo", timezoneId: "Asia/Tokyo"),
-        QuickCity(id: "Europe/Paris", cityName: "巴黎", cityEn: "Paris", timezoneId: "Europe/Paris"),
+        QuickCity(id: "America/New_York", cityName: "纽约", cityEn: "New York", timezoneId: "America/New_York", country: "US"),
+        QuickCity(id: "Europe/London", cityName: "伦敦", cityEn: "London", timezoneId: "Europe/London", country: "GB"),
+        QuickCity(id: "Asia/Tokyo", cityName: "东京", cityEn: "Tokyo", timezoneId: "Asia/Tokyo", country: "JP"),
+        QuickCity(id: "Europe/Paris", cityName: "巴黎", cityEn: "Paris", timezoneId: "Europe/Paris", country: "FR"),
     ]
 
     private let cityService = CityService.shared
@@ -210,7 +211,7 @@ private final class OnboardingViewModel: ObservableObject {
             }
         } else {
             do {
-                try cityService.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId)
+                try cityService.addCity(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, country: city.country)
                 addedCityNames.insert(city.cityName)
             } catch {
                 // 添加失败（如重复）时不更新 UI，避免状态与 DB 不一致

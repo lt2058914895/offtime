@@ -195,11 +195,11 @@ final class ConverterViewModel: ObservableObject {
         return Calendar.current.date(from: components) ?? Date()
     }
     
-    func addCity(cityName: String, cityEn: String, timezoneId: String) {
+    func addCity(cityName: String, cityEn: String, timezoneId: String, country: String = "") {
         do {
             let exists = try cityService.hasCity(cityEn: cityEn, timezoneId: timezoneId)
             if !exists {
-                try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId)
+                try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId, country: country)
             }
             // 重新加载城市列表
             let cities = try cityService.getAllCities()

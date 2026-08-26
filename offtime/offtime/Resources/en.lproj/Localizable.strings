@@ -32,6 +32,7 @@
 "clock.deselect.all" = "Deselect All";
 "clock.confirm.delete.selected.message" = "Are you sure you want to delete the selected cities?";
 "clock.dst.summer" = "DST";
+"clock.time.difference" = "Diff:";
 "clock.dst.winter" = "Winter Time";
 "clock.tomorrow" = "Tomorrow";
 "clock.yesterday" = "Yesterday";

@@ -8,17 +8,19 @@ final class CityModel {
     var cityName: String
     var cityEn: String
     var timezoneId: String
+    var country: String = ""
     var sortIndex: Int
     var workStartHour: Int = 9
     var workEndHour: Int = 18
     var localWorkStart: Int = 9
     var localWorkEnd: Int = 18
     
-    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, sortIndex: Int = 0, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
+    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, country: String = "", sortIndex: Int = 0, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
         self.timezoneId = timezoneId
+        self.country = country
         self.sortIndex = sortIndex
         self.workStartHour = workStartHour
         self.workEndHour = workEndHour
@@ -37,6 +39,7 @@ extension CityModel {
             cityName: cityName,
             cityEn: cityEn,
             timezoneId: timezoneId,
+            country: country,
             sortIndex: sortIndex,
             workStartHour: workStartHour,
             workEndHour: workEndHour,
@@ -83,17 +86,19 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
     let cityName: String
     let cityEn: String
     let timezoneId: String
+    let country: String
     var sortIndex: Int
     var workStartHour: Int
     var workEndHour: Int
     var localWorkStart: Int
     var localWorkEnd: Int
 
-    init(id: UUID, cityName: String, cityEn: String, timezoneId: String, sortIndex: Int, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
+    init(id: UUID, cityName: String, cityEn: String, timezoneId: String, country: String = "", sortIndex: Int, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
         self.timezoneId = timezoneId
+        self.country = country
         self.sortIndex = sortIndex
         self.workStartHour = workStartHour
         self.workEndHour = workEndHour
@@ -107,6 +112,7 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
         cityName = try c.decode(String.self, forKey: .cityName)
         cityEn = try c.decode(String.self, forKey: .cityEn)
         timezoneId = try c.decode(String.self, forKey: .timezoneId)
+        country = try c.decodeIfPresent(String.self, forKey: .country) ?? ""
         sortIndex = try c.decodeIfPresent(Int.self, forKey: .sortIndex) ?? 0
         workStartHour = try c.decodeIfPresent(Int.self, forKey: .workStartHour) ?? 9
         workEndHour = try c.decodeIfPresent(Int.self, forKey: .workEndHour) ?? 18

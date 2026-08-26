@@ -32,6 +32,7 @@
 "clock.deselect.all" = "選択を解除";
 "clock.confirm.delete.selected.message" = "選択した都市を削除しますか？";
 "clock.dst.summer" = "夏時間";
+"clock.time.difference" = "時差:";
 "clock.dst.winter" = "冬時間";
 "clock.tomorrow" = "明日";
 "clock.yesterday" = "昨日";

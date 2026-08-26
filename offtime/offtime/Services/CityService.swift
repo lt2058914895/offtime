@@ -19,7 +19,7 @@ final class CityService {
     
     // MARK: - City CRUD
     
-    func addCity(cityName: String, cityEn: String, timezoneId: String, context: ModelContext? = nil) throws {
+    func addCity(cityName: String, cityEn: String, timezoneId: String, country: String = "", context: ModelContext? = nil) throws {
         let ctx = context ?? mainContext
 
         // 判重：规范化英文名 + 时区 联合唯一（中文名不参与，避免同名不同城误判）
@@ -32,6 +32,7 @@ final class CityService {
             cityName: cityName,
             cityEn: cityEn,
             timezoneId: timezoneId,
+            country: country,
             sortIndex: maxSortIndex + 1
         )
         ctx.insert(city)
@@ -163,6 +164,7 @@ final class CityService {
                     cityName: item.cityName,
                     cityEn: item.cityEn,
                     timezoneId: item.timezoneId,
+                    country: item.country,
                     sortIndex: index,
                     workStartHour: item.workStartHour,
                     workEndHour: item.workEndHour,
@@ -185,6 +187,7 @@ final class CityService {
                         cityName: item.cityName,
                         cityEn: item.cityEn,
                         timezoneId: item.timezoneId,
+                        country: item.country,
                         sortIndex: maxIndex,
                         workStartHour: item.workStartHour,
                         workEndHour: item.workEndHour,
