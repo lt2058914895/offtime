@@ -4,12 +4,12 @@ import SwiftData
 struct ConverterView: View {
     @StateObject private var viewModel = ConverterViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var path = NavigationPath()
     @State private var showDatePicker = false
     @State private var showTimePicker = false
+    @State private var showCitySelector = false
     @State private var isSelectingSource = true
     /// 上次见到的城市数据版本号，用于切回 Tab 时判断是否需要静默刷新
     @State private var lastSeenCitiesRevision: Int = 0
@@ -65,16 +65,7 @@ struct ConverterView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle(String(localized: "converter.title"))
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                    }
-                }
-
                 ToolbarItem(placement: .navigationBarTrailing) {
                     ShareLink(item: conversionShareText) {
                         Image(systemName: "square.and.arrow.up")
@@ -83,7 +74,6 @@ struct ConverterView: View {
                     .disabled(viewModel.sourceCity == nil || viewModel.targetCity == nil)
                 }
             }
-            .toolbar(.hidden, for: .tabBar)
             .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
                 viewModel.use24Hour = newValue
             }
@@ -104,22 +94,6 @@ struct ConverterView: View {
                 viewModel.loadCities()
             }
             .toast(message: $viewModel.errorMessage)
-            .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                case .citySelector:
-                    CitySelectorView(onCitySelected: { city in
-                        let model = CityModel(cityName: city.cityName, cityEn: city.cityEn, timezoneId: city.timezoneId, country: city.country)
-                        if isSelectingSource {
-                            viewModel.sourceCity = model
-                        } else {
-                            viewModel.targetCity = model
-                        }
-                        path.removeLast()
-                    })
-                default:
-                    EmptyView()
-                }
-            }
     }
     
     private var sourceCard: some View {
@@ -127,7 +101,7 @@ struct ConverterView: View {
             VStack(spacing: 12) {
                 cityButton(title: String(localized: "converter.source.city"), city: viewModel.sourceCity, action: {
                     isSelectingSource = true
-                    path.append(AppRoute.citySelector)
+                    showCitySelector = true
                 })
                 
                 Divider()
@@ -183,6 +157,24 @@ struct ConverterView: View {
             }
             .presentationDetents([.medium, .large])
         }
+        .sheet(isPresented: $showCitySelector) {
+            NavigationStack {
+                CitySelectorView(onCitySelected: { city in
+                    let model = CityModel(
+                        cityName: city.cityName,
+                        cityEn: city.cityEn,
+                        timezoneId: city.timezoneId,
+                        country: city.country
+                    )
+                    if isSelectingSource {
+                        viewModel.sourceCity = model
+                    } else {
+                        viewModel.targetCity = model
+                    }
+                    showCitySelector = false
+                })
+            }
+        }
     }
     
     private var swapButton: some View {
@@ -212,7 +204,7 @@ struct ConverterView: View {
             VStack(spacing: 12) {
                 cityButton(title: String(localized: "converter.target.city"), city: viewModel.targetCity, action: {
                     isSelectingSource = false
-                    path.append(AppRoute.citySelector)
+                    showCitySelector = true
                 })
                 
                 Divider()

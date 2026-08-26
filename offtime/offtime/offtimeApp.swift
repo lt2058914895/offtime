@@ -47,6 +47,13 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.clock)
 
+            ConverterView()
+                .tabItem {
+                    Image(systemName: "repeat")
+                    Text(String(localized: "converter.title"))
+                }
+                .tag(AppTab.converter)
+
             MeetingView(activeTab: $selectedTab)
                 .tabItem {
                     Image(systemName: "person.2")
