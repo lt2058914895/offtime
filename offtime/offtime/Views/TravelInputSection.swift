@@ -227,6 +227,7 @@ struct TravelInputSection: View {
             cityName: "",
             cityEn: "",
             timezoneId: TimeZone.current.identifier,
+            country: "",
             continent: ""
         )
     }

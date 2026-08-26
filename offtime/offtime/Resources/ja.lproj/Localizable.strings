@@ -10,6 +10,7 @@
 "common.loading" = "読み込み中...";
 "common.cancel" = "キャンセル";
 "common.done" = "完了";
+"common.clear" = "クリア";
 "common.delete" = "削除";
 "common.retry" = "再試行";
 "common.success" = "成功";
@@ -76,7 +77,10 @@
 // MARK: - City Picker
 "city.picker.title" = "都市を追加";
 "city.selector.title" = "都市を選択";
-"city.search.placeholder" = "都市を検索";
+"city.search.placeholder" = "都市・国名を検索";
+"city.search.country" = "国名";
+"city.search.index" = "国名インデックス";
+"city.search.count" = "%d 件の都市が見つかりました";
 "city.no.results" = "都市が見つかりません";
 "city.hint.add" = "この都市を追加";
 "city.hint.select" = "この都市を選択";
@@ -91,6 +95,8 @@
 "continent.america" = "アメリカ大陸";
 "continent.oceania" = "オセアニア";
 "continent.africa" = "アフリカ";
+"continent.antarctica" = "南極観測基地";
+"continent.arctic" = "北極の町";
 
 // MARK: - Meeting
 "meeting.participants.title" = "参加者";

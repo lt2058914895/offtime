@@ -40,7 +40,7 @@ struct CityPickerView: View {
     
     private func selectCity(_ city: CitySuggestion) {
         Task {
-            let exists = await viewModel.checkCityExists(cityName: city.cityName, timezoneId: city.timezoneId)
+            let exists = await viewModel.checkCityExists(cityEn: city.cityEn, timezoneId: city.timezoneId)
             if exists {
                 toastMessage = String(localized: "clock.city.exists")
                 return

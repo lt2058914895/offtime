@@ -10,6 +10,7 @@
 "common.loading" = "Loading...";
 "common.cancel" = "Cancel";
 "common.done" = "Done";
+"common.clear" = "Clear";
 "common.delete" = "Delete";
 "common.retry" = "Retry";
 "common.success" = "Success";
@@ -76,7 +77,10 @@
 // MARK: - City Picker
 "city.picker.title" = "Add City";
 "city.selector.title" = "Select City";
-"city.search.placeholder" = "Search city";
+"city.search.placeholder" = "Search city or country";
+"city.search.country" = "Countries";
+"city.search.index" = "Country index";
+"city.search.count" = "%d cities found";
 "city.no.results" = "No cities found";
 "city.hint.add" = "Add this city";
 "city.hint.select" = "Select this city";
@@ -91,6 +95,8 @@
 "continent.america" = "Americas";
 "continent.oceania" = "Oceania";
 "continent.africa" = "Africa";
+"continent.antarctica" = "Antarctic Stations";
+"continent.arctic" = "Arctic Towns";
 
 // MARK: - Meeting
 "meeting.participants.title" = "Participants";

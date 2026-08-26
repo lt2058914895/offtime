@@ -1,267 +1,7970 @@
 [
-  {"id": "1", "cityName": "北京", "cityEn": "Beijing", "timezoneId": "Asia/Shanghai", "continent": "hot"},
-  {"id": "2", "cityName": "上海", "cityEn": "Shanghai", "timezoneId": "Asia/Shanghai", "continent": "hot"},
-  {"id": "3", "cityName": "香港", "cityEn": "Hong Kong", "timezoneId": "Asia/Hong_Kong", "continent": "hot"},
-  {"id": "4", "cityName": "台北", "cityEn": "Taipei", "timezoneId": "Asia/Taipei", "continent": "hot"},
-  {"id": "5", "cityName": "东京", "cityEn": "Tokyo", "timezoneId": "Asia/Tokyo", "continent": "hot"},
-  {"id": "6", "cityName": "新加坡", "cityEn": "Singapore", "timezoneId": "Asia/Singapore", "continent": "hot"},
-  {"id": "7", "cityName": "伦敦", "cityEn": "London", "timezoneId": "Europe/London", "continent": "hot"},
-  {"id": "8", "cityName": "纽约", "cityEn": "New York", "timezoneId": "America/New_York", "continent": "hot"},
-  {"id": "9", "cityName": "洛杉矶", "cityEn": "Los Angeles", "timezoneId": "America/Los_Angeles", "continent": "hot"},
-  {"id": "10", "cityName": "悉尼", "cityEn": "Sydney", "timezoneId": "Australia/Sydney", "continent": "hot"},
-  {"id": "11", "cityName": "首尔", "cityEn": "Seoul", "timezoneId": "Asia/Seoul", "continent": "asia"},
-  {"id": "12", "cityName": "曼谷", "cityEn": "Bangkok", "timezoneId": "Asia/Bangkok", "continent": "asia"},
-  {"id": "13", "cityName": "迪拜", "cityEn": "Dubai", "timezoneId": "Asia/Dubai", "continent": "asia"},
-  {"id": "14", "cityName": "孟买", "cityEn": "Mumbai", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "15", "cityName": "新德里", "cityEn": "New Delhi", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "16", "cityName": "马尼拉", "cityEn": "Manila", "timezoneId": "Asia/Manila", "continent": "asia"},
-  {"id": "17", "cityName": "雅加达", "cityEn": "Jakarta", "timezoneId": "Asia/Jakarta", "continent": "asia"},
-  {"id": "18", "cityName": "吉隆坡", "cityEn": "Kuala Lumpur", "timezoneId": "Asia/Kuala_Lumpur", "continent": "asia"},
-  {"id": "19", "cityName": "河内", "cityEn": "Hanoi", "timezoneId": "Asia/Ho_Chi_Minh", "continent": "asia"},
-  {"id": "20", "cityName": "胡志明市", "cityEn": "Ho Chi Minh City", "timezoneId": "Asia/Ho_Chi_Minh", "continent": "asia"},
-  {"id": "21", "cityName": "金边", "cityEn": "Phnom Penh", "timezoneId": "Asia/Phnom_Penh", "continent": "asia"},
-  {"id": "22", "cityName": "万象", "cityEn": "Vientiane", "timezoneId": "Asia/Vientiane", "continent": "asia"},
-  {"id": "23", "cityName": "仰光", "cityEn": "Yangon", "timezoneId": "Asia/Yangon", "continent": "asia"},
-  {"id": "24", "cityName": "大阪", "cityEn": "Osaka", "timezoneId": "Asia/Tokyo", "continent": "asia"},
-  {"id": "25", "cityName": "名古屋", "cityEn": "Nagoya", "timezoneId": "Asia/Tokyo", "continent": "asia"},
-  {"id": "26", "cityName": "札幌", "cityEn": "Sapporo", "timezoneId": "Asia/Tokyo", "continent": "asia"},
-  {"id": "27", "cityName": "釜山", "cityEn": "Busan", "timezoneId": "Asia/Seoul", "continent": "asia"},
-  {"id": "28", "cityName": "伊斯兰堡", "cityEn": "Islamabad", "timezoneId": "Asia/Karachi", "continent": "asia"},
-  {"id": "29", "cityName": "卡拉奇", "cityEn": "Karachi", "timezoneId": "Asia/Karachi", "continent": "asia"},
-  {"id": "30", "cityName": "达卡", "cityEn": "Dhaka", "timezoneId": "Asia/Dhaka", "continent": "asia"},
-  {"id": "31", "cityName": "加德满都", "cityEn": "Kathmandu", "timezoneId": "Asia/Kathmandu", "continent": "asia"},
-  {"id": "32", "cityName": "科伦坡", "cityEn": "Colombo", "timezoneId": "Asia/Colombo", "continent": "asia"},
-  {"id": "33", "cityName": "利雅得", "cityEn": "Riyadh", "timezoneId": "Asia/Riyadh", "continent": "asia"},
-  {"id": "34", "cityName": "多哈", "cityEn": "Doha", "timezoneId": "Asia/Qatar", "continent": "asia"},
-  {"id": "35", "cityName": "阿布扎比", "cityEn": "Abu Dhabi", "timezoneId": "Asia/Muscat", "continent": "asia"},
-  {"id": "36", "cityName": "马斯喀特", "cityEn": "Muscat", "timezoneId": "Asia/Muscat", "continent": "asia"},
-  {"id": "37", "cityName": "巴格达", "cityEn": "Baghdad", "timezoneId": "Asia/Baghdad", "continent": "asia"},
-  {"id": "38", "cityName": "德黑兰", "cityEn": "Tehran", "timezoneId": "Asia/Tehran", "continent": "asia"},
-  {"id": "39", "cityName": "耶路撒冷", "cityEn": "Jerusalem", "timezoneId": "Asia/Jerusalem", "continent": "asia"},
-  {"id": "40", "cityName": "安曼", "cityEn": "Amman", "timezoneId": "Asia/Amman", "continent": "asia"},
-  {"id": "41", "cityName": "贝鲁特", "cityEn": "Beirut", "timezoneId": "Asia/Beirut", "continent": "asia"},
-  {"id": "42", "cityName": "大马士革", "cityEn": "Damascus", "timezoneId": "Asia/Damascus", "continent": "asia"},
-  {"id": "43", "cityName": "塔什干", "cityEn": "Tashkent", "timezoneId": "Asia/Tashkent", "continent": "asia"},
-  {"id": "44", "cityName": "阿拉木图", "cityEn": "Almaty", "timezoneId": "Asia/Almaty", "continent": "asia"},
-  {"id": "45", "cityName": "阿斯塔纳", "cityEn": "Astana", "timezoneId": "Asia/Almaty", "continent": "asia"},
-  {"id": "46", "cityName": "比什凯克", "cityEn": "Bishkek", "timezoneId": "Asia/Bishkek", "continent": "asia"},
-  {"id": "47", "cityName": "杜尚别", "cityEn": "Dushanbe", "timezoneId": "Asia/Dushanbe", "continent": "asia"},
-  {"id": "48", "cityName": "乌兰巴托", "cityEn": "Ulaanbaatar", "timezoneId": "Asia/Ulaanbaatar", "continent": "asia"},
-  {"id": "49", "cityName": "加尔各答", "cityEn": "Kolkata", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "50", "cityName": "班加罗尔", "cityEn": "Bangalore", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "51", "cityName": "钦奈", "cityEn": "Chennai", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "52", "cityName": "海得拉巴", "cityEn": "Hyderabad", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "53", "cityName": "澳门", "cityEn": "Macau", "timezoneId": "Asia/Macau", "continent": "asia"},
-  {"id": "54", "cityName": "高雄", "cityEn": "Kaohsiung", "timezoneId": "Asia/Taipei", "continent": "asia"},
-  {"id": "55", "cityName": "成都", "cityEn": "Chengdu", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "56", "cityName": "广州", "cityEn": "Guangzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "57", "cityName": "深圳", "cityEn": "Shenzhen", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "58", "cityName": "杭州", "cityEn": "Hangzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "59", "cityName": "巴黎", "cityEn": "Paris", "timezoneId": "Europe/Paris", "continent": "europe"},
-  {"id": "60", "cityName": "柏林", "cityEn": "Berlin", "timezoneId": "Europe/Berlin", "continent": "europe"},
-  {"id": "61", "cityName": "罗马", "cityEn": "Rome", "timezoneId": "Europe/Rome", "continent": "europe"},
-  {"id": "62", "cityName": "马德里", "cityEn": "Madrid", "timezoneId": "Europe/Madrid", "continent": "europe"},
-  {"id": "63", "cityName": "阿姆斯特丹", "cityEn": "Amsterdam", "timezoneId": "Europe/Amsterdam", "continent": "europe"},
-  {"id": "64", "cityName": "莫斯科", "cityEn": "Moscow", "timezoneId": "Europe/Moscow", "continent": "europe"},
-  {"id": "65", "cityName": "萨格勒布", "cityEn": "Zagreb", "timezoneId": "Europe/Zagreb", "continent": "europe"},
-  {"id": "66", "cityName": "布达佩斯", "cityEn": "Budapest", "timezoneId": "Europe/Budapest", "continent": "europe"},
-  {"id": "67", "cityName": "布拉格", "cityEn": "Prague", "timezoneId": "Europe/Prague", "continent": "europe"},
-  {"id": "68", "cityName": "维也纳", "cityEn": "Vienna", "timezoneId": "Europe/Vienna", "continent": "europe"},
-  {"id": "69", "cityName": "华沙", "cityEn": "Warsaw", "timezoneId": "Europe/Warsaw", "continent": "europe"},
-  {"id": "70", "cityName": "斯德哥尔摩", "cityEn": "Stockholm", "timezoneId": "Europe/Stockholm", "continent": "europe"},
-  {"id": "71", "cityName": "哥本哈根", "cityEn": "Copenhagen", "timezoneId": "Europe/Copenhagen", "continent": "europe"},
-  {"id": "72", "cityName": "奥斯陆", "cityEn": "Oslo", "timezoneId": "Europe/Oslo", "continent": "europe"},
-  {"id": "73", "cityName": "赫尔辛基", "cityEn": "Helsinki", "timezoneId": "Europe/Helsinki", "continent": "europe"},
-  {"id": "74", "cityName": "布鲁塞尔", "cityEn": "Brussels", "timezoneId": "Europe/Brussels", "continent": "europe"},
-  {"id": "75", "cityName": "里斯本", "cityEn": "Lisbon", "timezoneId": "Europe/Lisbon", "continent": "europe"},
-  {"id": "76", "cityName": "雅典", "cityEn": "Athens", "timezoneId": "Europe/Athens", "continent": "europe"},
-  {"id": "77", "cityName": "日内瓦", "cityEn": "Geneva", "timezoneId": "Europe/Zurich", "continent": "europe"},
-  {"id": "78", "cityName": "苏黎世", "cityEn": "Zurich", "timezoneId": "Europe/Zurich", "continent": "europe"},
-  {"id": "79", "cityName": "爱丁堡", "cityEn": "Edinburgh", "timezoneId": "Europe/London", "continent": "europe"},
-  {"id": "80", "cityName": "都柏林", "cityEn": "Dublin", "timezoneId": "Europe/Dublin", "continent": "europe"},
-  {"id": "81", "cityName": "索菲亚", "cityEn": "Sofia", "timezoneId": "Europe/Sofia", "continent": "europe"},
-  {"id": "82", "cityName": "布加勒斯特", "cityEn": "Bucharest", "timezoneId": "Europe/Bucharest", "continent": "europe"},
-  {"id": "83", "cityName": "贝尔格莱德", "cityEn": "Belgrade", "timezoneId": "Europe/Belgrade", "continent": "europe"},
-  {"id": "84", "cityName": "卢森堡", "cityEn": "Luxembourg", "timezoneId": "Europe/Luxembourg", "continent": "europe"},
-  {"id": "85", "cityName": "慕尼黑", "cityEn": "Munich", "timezoneId": "Europe/Berlin", "continent": "europe"},
-  {"id": "86", "cityName": "法兰克福", "cityEn": "Frankfurt", "timezoneId": "Europe/Berlin", "continent": "europe"},
-  {"id": "87", "cityName": "汉堡", "cityEn": "Hamburg", "timezoneId": "Europe/Berlin", "continent": "europe"},
-  {"id": "88", "cityName": "米兰", "cityEn": "Milan", "timezoneId": "Europe/Rome", "continent": "europe"},
-  {"id": "89", "cityName": "巴塞罗那", "cityEn": "Barcelona", "timezoneId": "Europe/Madrid", "continent": "europe"},
-  {"id": "90", "cityName": "伊斯坦布尔", "cityEn": "Istanbul", "timezoneId": "Europe/Istanbul", "continent": "europe"},
-  {"id": "91", "cityName": "基辅", "cityEn": "Kyiv", "timezoneId": "Europe/Kyiv", "continent": "europe"},
-  {"id": "92", "cityName": "明斯克", "cityEn": "Minsk", "timezoneId": "Europe/Minsk", "continent": "europe"},
-  {"id": "93", "cityName": "圣彼得堡", "cityEn": "Saint Petersburg", "timezoneId": "Europe/Moscow", "continent": "europe"},
-  {"id": "94", "cityName": "雷克雅未克", "cityEn": "Reykjavik", "timezoneId": "Atlantic/Reykjavik", "continent": "europe"},
-  {"id": "95", "cityName": "瓦莱塔", "cityEn": "Valletta", "timezoneId": "Europe/Malta", "continent": "europe"},
-  {"id": "96", "cityName": "尼科西亚", "cityEn": "Nicosia", "timezoneId": "Asia/Nicosia", "continent": "europe"},
-  {"id": "97", "cityName": "芝加哥", "cityEn": "Chicago", "timezoneId": "America/Chicago", "continent": "america"},
-  {"id": "98", "cityName": "多伦多", "cityEn": "Toronto", "timezoneId": "America/Toronto", "continent": "america"},
-  {"id": "99", "cityName": "温哥华", "cityEn": "Vancouver", "timezoneId": "America/Vancouver", "continent": "america"},
-  {"id": "100", "cityName": "卡尔加里", "cityEn": "Calgary", "timezoneId": "America/Edmonton", "continent": "america"},
-  {"id": "101", "cityName": "圣保罗", "cityEn": "Sao Paulo", "timezoneId": "America/Sao_Paulo", "continent": "america"},
-  {"id": "102", "cityName": "墨西哥城", "cityEn": "Mexico City", "timezoneId": "America/Mexico_City", "continent": "america"},
-  {"id": "103", "cityName": "布宜诺斯艾利斯", "cityEn": "Buenos Aires", "timezoneId": "America/Argentina/Buenos_Aires", "continent": "america"},
-  {"id": "104", "cityName": "里约热内卢", "cityEn": "Rio de Janeiro", "timezoneId": "America/Sao_Paulo", "continent": "america"},
-  {"id": "105", "cityName": "利马", "cityEn": "Lima", "timezoneId": "America/Lima", "continent": "america"},
-  {"id": "106", "cityName": "波哥大", "cityEn": "Bogota", "timezoneId": "America/Bogota", "continent": "america"},
-  {"id": "107", "cityName": "圣地亚哥", "cityEn": "Santiago", "timezoneId": "America/Santiago", "continent": "america"},
-  {"id": "108", "cityName": "哈瓦那", "cityEn": "Havana", "timezoneId": "America/Havana", "continent": "america"},
-  {"id": "109", "cityName": "圣何塞", "cityEn": "San Jose", "timezoneId": "America/Costa_Rica", "continent": "america"},
-  {"id": "110", "cityName": "巴拿马城", "cityEn": "Panama City", "timezoneId": "America/Panama", "continent": "america"},
-  {"id": "111", "cityName": "蒙特雷", "cityEn": "Monterrey", "timezoneId": "America/Monterrey", "continent": "america"},
-  {"id": "112", "cityName": "瓜达拉哈拉", "cityEn": "Guadalajara", "timezoneId": "America/Mexico_City", "continent": "america"},
-  {"id": "113", "cityName": "迈阿密", "cityEn": "Miami", "timezoneId": "America/New_York", "continent": "america"},
-  {"id": "114", "cityName": "旧金山", "cityEn": "San Francisco", "timezoneId": "America/Los_Angeles", "continent": "america"},
-  {"id": "115", "cityName": "西雅图", "cityEn": "Seattle", "timezoneId": "America/Los_Angeles", "continent": "america"},
-  {"id": "116", "cityName": "丹佛", "cityEn": "Denver", "timezoneId": "America/Denver", "continent": "america"},
-  {"id": "117", "cityName": "休斯顿", "cityEn": "Houston", "timezoneId": "America/Chicago", "continent": "america"},
-  {"id": "118", "cityName": "亚特兰大", "cityEn": "Atlanta", "timezoneId": "America/New_York", "continent": "america"},
-  {"id": "119", "cityName": "波士顿", "cityEn": "Boston", "timezoneId": "America/New_York", "continent": "america"},
-  {"id": "120", "cityName": "华盛顿", "cityEn": "Washington D.C.", "timezoneId": "America/New_York", "continent": "america"},
-  {"id": "121", "cityName": "达拉斯", "cityEn": "Dallas", "timezoneId": "America/Chicago", "continent": "america"},
-  {"id": "122", "cityName": "凤凰城", "cityEn": "Phoenix", "timezoneId": "America/Phoenix", "continent": "america"},
-  {"id": "123", "cityName": "檀香山", "cityEn": "Honolulu", "timezoneId": "Pacific/Honolulu", "continent": "america"},
-  {"id": "124", "cityName": "安克雷奇", "cityEn": "Anchorage", "timezoneId": "America/Anchorage", "continent": "america"},
-  {"id": "125", "cityName": "蒙特利尔", "cityEn": "Montreal", "timezoneId": "America/Montreal", "continent": "america"},
-  {"id": "126", "cityName": "渥太华", "cityEn": "Ottawa", "timezoneId": "America/Toronto", "continent": "america"},
-  {"id": "127", "cityName": "基多", "cityEn": "Quito", "timezoneId": "America/Guayaquil", "continent": "america"},
-  {"id": "128", "cityName": "加拉加斯", "cityEn": "Caracas", "timezoneId": "America/Caracas", "continent": "america"},
-  {"id": "129", "cityName": "拉巴斯", "cityEn": "La Paz", "timezoneId": "America/La_Paz", "continent": "america"},
-  {"id": "130", "cityName": "蒙得维的亚", "cityEn": "Montevideo", "timezoneId": "America/Montevideo", "continent": "america"},
-  {"id": "131", "cityName": "奥克兰", "cityEn": "Auckland", "timezoneId": "Pacific/Auckland", "continent": "oceania"},
-  {"id": "132", "cityName": "墨尔本", "cityEn": "Melbourne", "timezoneId": "Australia/Melbourne", "continent": "oceania"},
-  {"id": "133", "cityName": "布里斯班", "cityEn": "Brisbane", "timezoneId": "Australia/Brisbane", "continent": "oceania"},
-  {"id": "134", "cityName": "珀斯", "cityEn": "Perth", "timezoneId": "Australia/Perth", "continent": "oceania"},
-  {"id": "135", "cityName": "阿德莱德", "cityEn": "Adelaide", "timezoneId": "Australia/Adelaide", "continent": "oceania"},
-  {"id": "136", "cityName": "惠灵顿", "cityEn": "Wellington", "timezoneId": "Pacific/Auckland", "continent": "oceania"},
-  {"id": "137", "cityName": "斐济", "cityEn": "Fiji", "timezoneId": "Pacific/Fiji", "continent": "oceania"},
-  {"id": "138", "cityName": "霍巴特", "cityEn": "Hobart", "timezoneId": "Australia/Hobart", "continent": "oceania"},
-  {"id": "139", "cityName": "达尔文", "cityEn": "Darwin", "timezoneId": "Australia/Darwin", "continent": "oceania"},
-  {"id": "140", "cityName": "堪培拉", "cityEn": "Canberra", "timezoneId": "Australia/Sydney", "continent": "oceania"},
-  {"id": "141", "cityName": "关岛", "cityEn": "Guam", "timezoneId": "Pacific/Guam", "continent": "oceania"},
-  {"id": "142", "cityName": "帕皮提", "cityEn": "Papeete", "timezoneId": "Pacific/Tahiti", "continent": "oceania"},
-  {"id": "143", "cityName": "开罗", "cityEn": "Cairo", "timezoneId": "Africa/Cairo", "continent": "africa"},
-  {"id": "144", "cityName": "约翰内斯堡", "cityEn": "Johannesburg", "timezoneId": "Africa/Johannesburg", "continent": "africa"},
-  {"id": "145", "cityName": "内罗毕", "cityEn": "Nairobi", "timezoneId": "Africa/Nairobi", "continent": "africa"},
-  {"id": "146", "cityName": "拉各斯", "cityEn": "Lagos", "timezoneId": "Africa/Lagos", "continent": "africa"},
-  {"id": "147", "cityName": "卡萨布兰卡", "cityEn": "Casablanca", "timezoneId": "Africa/Casablanca", "continent": "africa"},
-  {"id": "148", "cityName": "亚的斯亚贝巴", "cityEn": "Addis Ababa", "timezoneId": "Africa/Addis_Ababa", "continent": "africa"},
-  {"id": "149", "cityName": "达累斯萨拉姆", "cityEn": "Dar es Salaam", "timezoneId": "Africa/Dar_es_Salaam", "continent": "africa"},
-  {"id": "150", "cityName": "阿克拉", "cityEn": "Accra", "timezoneId": "Africa/Accra", "continent": "africa"},
-  {"id": "151", "cityName": "阿尔及尔", "cityEn": "Algiers", "timezoneId": "Africa/Algiers", "continent": "africa"},
-  {"id": "152", "cityName": "突尼斯", "cityEn": "Tunis", "timezoneId": "Africa/Tunis", "continent": "africa"},
-  {"id": "153", "cityName": "哈拉雷", "cityEn": "Harare", "timezoneId": "Africa/Harare", "continent": "africa"},
-  {"id": "154", "cityName": "坎帕拉", "cityEn": "Kampala", "timezoneId": "Africa/Kampala", "continent": "africa"},
-  {"id": "155", "cityName": "基加利", "cityEn": "Kigali", "timezoneId": "Africa/Kigali", "continent": "africa"},
-  {"id": "156", "cityName": "马普托", "cityEn": "Maputo", "timezoneId": "Africa/Maputo", "continent": "africa"},
-  {"id": "157", "cityName": "安卡拉", "cityEn": "Ankara", "timezoneId": "Europe/Istanbul", "continent": "asia"},
-  {"id": "158", "cityName": "利沃夫", "cityEn": "Lviv", "timezoneId": "Europe/Kyiv", "continent": "europe"},
-  {"id": "159", "cityName": "第比利斯", "cityEn": "Tbilisi", "timezoneId": "Asia/Tbilisi", "continent": "asia"},
-  {"id": "160", "cityName": "埃里温", "cityEn": "Yerevan", "timezoneId": "Asia/Yerevan", "continent": "asia"},
-  {"id": "161", "cityName": "巴库", "cityEn": "Baku", "timezoneId": "Asia/Baku", "continent": "asia"},
-  {"id": "162", "cityName": "科威特城", "cityEn": "Kuwait City", "timezoneId": "Asia/Kuwait", "continent": "asia"},
-  {"id": "163", "cityName": "麦纳麦", "cityEn": "Manama", "timezoneId": "Asia/Bahrain", "continent": "asia"},
-  {"id": "164", "cityName": "喀布尔", "cityEn": "Kabul", "timezoneId": "Asia/Kabul", "continent": "asia"},
-  {"id": "165", "cityName": "仰光", "cityEn": "Rangoon", "timezoneId": "Asia/Yangon", "continent": "asia"},
-  {"id": "166", "cityName": "金奈", "cityEn": "Madras", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "167", "cityName": "科泽科德", "cityEn": "Kozhikode", "timezoneId": "Asia/Kolkata", "continent": "asia"},
-  {"id": "168", "cityName": "拉合尔", "cityEn": "Lahore", "timezoneId": "Asia/Karachi", "continent": "asia"},
-  {"id": "169", "cityName": "南京", "cityEn": "Nanjing", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "170", "cityName": "武汉", "cityEn": "Wuhan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "171", "cityName": "西安", "cityEn": "Xian", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "172", "cityName": "重庆", "cityEn": "Chongqing", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "173", "cityName": "天津", "cityEn": "Tianjin", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "174", "cityName": "苏州", "cityEn": "Suzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "175", "cityName": "厦门", "cityEn": "Xiamen", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "176", "cityName": "青岛", "cityEn": "Qingdao", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "177", "cityName": "大连", "cityEn": "Dalian", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "178", "cityName": "长沙", "cityEn": "Changsha", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "179", "cityName": "昆明", "cityEn": "Kunming", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "180", "cityName": "哈尔滨", "cityEn": "Harbin", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "181", "cityName": "沈阳", "cityEn": "Shenyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "182", "cityName": "济南", "cityEn": "Jinan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "183", "cityName": "郑州", "cityEn": "Zhengzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "184", "cityName": "福州", "cityEn": "Fuzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "185", "cityName": "合肥", "cityEn": "Hefei", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "186", "cityName": "南昌", "cityEn": "Nanchang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "187", "cityName": "石家庄", "cityEn": "Shijiazhuang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "188", "cityName": "长春", "cityEn": "Changchun", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "189", "cityName": "南宁", "cityEn": "Nanning", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "190", "cityName": "贵阳", "cityEn": "Guiyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "191", "cityName": "兰州", "cityEn": "Lanzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "192", "cityName": "太原", "cityEn": "Taiyuan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "193", "cityName": "乌鲁木齐", "cityEn": "Urumqi", "timezoneId": "Asia/Urumqi", "continent": "asia"},
-  {"id": "194", "cityName": "拉萨", "cityEn": "Lhasa", "timezoneId": "Asia/Urumqi", "continent": "asia"},
-  {"id": "195", "cityName": "呼和浩特", "cityEn": "Hohhot", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "196", "cityName": "海口", "cityEn": "Haikou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "197", "cityName": "银川", "cityEn": "Yinchuan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "198", "cityName": "西宁", "cityEn": "Xining", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "199", "cityName": "无锡", "cityEn": "Wuxi", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "200", "cityName": "宁波", "cityEn": "Ningbo", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "201", "cityName": "佛山", "cityEn": "Foshan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "202", "cityName": "东莞", "cityEn": "Dongguan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "203", "cityName": "温州", "cityEn": "Wenzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "204", "cityName": "常州", "cityEn": "Changzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "205", "cityName": "泉州", "cityEn": "Quanzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "206", "cityName": "烟台", "cityEn": "Yantai", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "207", "cityName": "惠州", "cityEn": "Huizhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "208", "cityName": "中山", "cityEn": "Zhongshan", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "209", "cityName": "保定", "cityEn": "Baoding", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "210", "cityName": "南通", "cityEn": "Nantong", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "211", "cityName": "徐州", "cityEn": "Xuzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "212", "cityName": "扬州", "cityEn": "Yangzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "213", "cityName": "镇江", "cityEn": "Zhenjiang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "214", "cityName": "泰州", "cityEn": "Taizhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "215", "cityName": "盐城", "cityEn": "Yancheng", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "216", "cityName": "连云港", "cityEn": "Lianyungang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "217", "cityName": "淮安", "cityEn": "Huaian", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "218", "cityName": "嘉兴", "cityEn": "Jiaxing", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "219", "cityName": "绍兴", "cityEn": "Shaoxing", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "220", "cityName": "金华", "cityEn": "Jinhua", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "221", "cityName": "台州", "cityEn": "TaizhouZJ", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "222", "cityName": "芜湖", "cityEn": "Wuhu", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "223", "cityName": "漳州", "cityEn": "Zhangzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "224", "cityName": "潍坊", "cityEn": "Weifang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "225", "cityName": "临沂", "cityEn": "Linyi", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "226", "cityName": "宜昌", "cityEn": "Yichang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "227", "cityName": "襄阳", "cityEn": "Xiangyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "228", "cityName": "岳阳", "cityEn": "Yueyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "229", "cityName": "常德", "cityEn": "Changde", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "230", "cityName": "湛江", "cityEn": "Zhanjiang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "231", "cityName": "江门", "cityEn": "Jiangmen", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "232", "cityName": "茂名", "cityEn": "Maoming", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "233", "cityName": "珠海", "cityEn": "Zhuhai", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "234", "cityName": "汕头", "cityEn": "Shantou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "235", "cityName": "肇庆", "cityEn": "Zhaoqing", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "236", "cityName": "柳州", "cityEn": "Liuzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "237", "cityName": "桂林", "cityEn": "Guilin", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "238", "cityName": "三亚", "cityEn": "Sanya", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "239", "cityName": "大理", "cityEn": "Dali", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "240", "cityName": "丽江", "cityEn": "Lijiang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "241", "cityName": "九江", "cityEn": "Jiujiang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "242", "cityName": "赣州", "cityEn": "Ganzhou", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "243", "cityName": "洛阳", "cityEn": "Luoyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "244", "cityName": "大同", "cityEn": "Datong", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "245", "cityName": "咸阳", "cityEn": "Xianyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "246", "cityName": "绵阳", "cityEn": "Mianyang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "247", "cityName": "遵义", "cityEn": "Zunyi", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "248", "cityName": "曲靖", "cityEn": "Qujing", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "249", "cityName": "齐齐哈尔", "cityEn": "Qiqihar", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "250", "cityName": "牡丹江", "cityEn": "Mudanjiang", "timezoneId": "Asia/Shanghai", "continent": "asia"},
-  {"id": "251", "cityName": "喀什", "cityEn": "Kashgar", "timezoneId": "Asia/Urumqi", "continent": "asia"},
-  {"id": "252", "cityName": "阿姆斯特丹", "cityEn": "Amsterdam", "timezoneId": "Europe/Amsterdam", "continent": "europe"},
-  {"id": "253", "cityName": "鹿特丹", "cityEn": "Rotterdam", "timezoneId": "Europe/Amsterdam", "continent": "europe"},
-  {"id": "254", "cityName": "海牙", "cityEn": "The Hague", "timezoneId": "Europe/Amsterdam", "continent": "europe"},
-  {"id": "255", "cityName": "马赛", "cityEn": "Marseille", "timezoneId": "Europe/Paris", "continent": "europe"},
-  {"id": "256", "cityName": "里昂", "cityEn": "Lyon", "timezoneId": "Europe/Paris", "continent": "europe"},
-  {"id": "257", "cityName": "图卢兹", "cityEn": "Toulouse", "timezoneId": "Europe/Paris", "continent": "europe"},
-  {"id": "258", "cityName": "那不勒斯", "cityEn": "Naples", "timezoneId": "Europe/Rome", "continent": "europe"},
-  {"id": "259", "cityName": "都灵", "cityEn": "Turin", "timezoneId": "Europe/Rome", "continent": "europe"},
-  {"id": "260", "cityName": "瓦伦西亚", "cityEn": "Valencia", "timezoneId": "Europe/Madrid", "continent": "europe"},
-  {"id": "261", "cityName": "塞维利亚", "cityEn": "Seville", "timezoneId": "Europe/Madrid", "continent": "europe"},
-  {"id": "262", "cityName": "波尔图", "cityEn": "Porto", "timezoneId": "Europe/Lisbon", "continent": "europe"},
-  {"id": "263", "cityName": "曼彻斯特", "cityEn": "Manchester", "timezoneId": "Europe/London", "continent": "europe"},
-  {"id": "264", "cityName": "伯明翰", "cityEn": "Birmingham", "timezoneId": "Europe/London", "continent": "europe"},
-  {"id": "265", "cityName": "格拉斯哥", "cityEn": "Glasgow", "timezoneId": "Europe/London", "continent": "europe"}
+  {
+    "id": "1",
+    "cityName": "北京",
+    "cityEn": "Beijing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "hot"
+  },
+  {
+    "id": "2",
+    "cityName": "上海",
+    "cityEn": "Shanghai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "hot"
+  },
+  {
+    "id": "3",
+    "cityName": "香港",
+    "cityEn": "Hong Kong",
+    "timezoneId": "Asia/Hong_Kong",
+    "country": "HK",
+    "continent": "hot"
+  },
+  {
+    "id": "4",
+    "cityName": "台北",
+    "cityEn": "Taipei",
+    "timezoneId": "Asia/Taipei",
+    "country": "CN",
+    "continent": "hot"
+  },
+  {
+    "id": "5",
+    "cityName": "东京",
+    "cityEn": "Tokyo",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "hot"
+  },
+  {
+    "id": "6",
+    "cityName": "新加坡",
+    "cityEn": "Singapore",
+    "timezoneId": "Asia/Singapore",
+    "country": "SG",
+    "continent": "hot"
+  },
+  {
+    "id": "7",
+    "cityName": "伦敦",
+    "cityEn": "London",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "hot"
+  },
+  {
+    "id": "8",
+    "cityName": "纽约",
+    "cityEn": "New York",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "hot"
+  },
+  {
+    "id": "9",
+    "cityName": "洛杉矶",
+    "cityEn": "Los Angeles",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "hot"
+  },
+  {
+    "id": "10",
+    "cityName": "悉尼",
+    "cityEn": "Sydney",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "hot"
+  },
+  {
+    "id": "11",
+    "cityName": "首尔",
+    "cityEn": "Seoul",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "12",
+    "cityName": "曼谷",
+    "cityEn": "Bangkok",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "13",
+    "cityName": "迪拜",
+    "cityEn": "Dubai",
+    "timezoneId": "Asia/Dubai",
+    "country": "AE",
+    "continent": "asia"
+  },
+  {
+    "id": "14",
+    "cityName": "孟买",
+    "cityEn": "Mumbai",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "15",
+    "cityName": "新德里",
+    "cityEn": "New Delhi",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "16",
+    "cityName": "马尼拉",
+    "cityEn": "Manila",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "17",
+    "cityName": "雅加达",
+    "cityEn": "Jakarta",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "18",
+    "cityName": "吉隆坡",
+    "cityEn": "Kuala Lumpur",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "19",
+    "cityName": "河内",
+    "cityEn": "Hanoi",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "20",
+    "cityName": "胡志明市",
+    "cityEn": "Ho Chi Minh City",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "21",
+    "cityName": "金边",
+    "cityEn": "Phnom Penh",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "22",
+    "cityName": "万象",
+    "cityEn": "Vientiane",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "23",
+    "cityName": "仰光",
+    "cityEn": "Yangon",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "24",
+    "cityName": "大阪",
+    "cityEn": "Osaka",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "25",
+    "cityName": "名古屋",
+    "cityEn": "Nagoya",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "26",
+    "cityName": "札幌",
+    "cityEn": "Sapporo",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "27",
+    "cityName": "釜山",
+    "cityEn": "Busan",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "28",
+    "cityName": "伊斯兰堡",
+    "cityEn": "Islamabad",
+    "timezoneId": "Asia/Karachi",
+    "country": "PK",
+    "continent": "asia"
+  },
+  {
+    "id": "29",
+    "cityName": "卡拉奇",
+    "cityEn": "Karachi",
+    "timezoneId": "Asia/Karachi",
+    "country": "PK",
+    "continent": "asia"
+  },
+  {
+    "id": "30",
+    "cityName": "达卡",
+    "cityEn": "Dhaka",
+    "timezoneId": "Asia/Dhaka",
+    "country": "BD",
+    "continent": "asia"
+  },
+  {
+    "id": "31",
+    "cityName": "加德满都",
+    "cityEn": "Kathmandu",
+    "timezoneId": "Asia/Kathmandu",
+    "country": "NP",
+    "continent": "asia"
+  },
+  {
+    "id": "32",
+    "cityName": "科伦坡",
+    "cityEn": "Colombo",
+    "timezoneId": "Asia/Colombo",
+    "country": "LK",
+    "continent": "asia"
+  },
+  {
+    "id": "33",
+    "cityName": "利雅得",
+    "cityEn": "Riyadh",
+    "timezoneId": "Asia/Riyadh",
+    "country": "SA",
+    "continent": "asia"
+  },
+  {
+    "id": "34",
+    "cityName": "多哈",
+    "cityEn": "Doha",
+    "timezoneId": "Asia/Qatar",
+    "country": "QA",
+    "continent": "asia"
+  },
+  {
+    "id": "35",
+    "cityName": "阿布扎比",
+    "cityEn": "Abu Dhabi",
+    "timezoneId": "Asia/Dubai",
+    "country": "AE",
+    "continent": "asia"
+  },
+  {
+    "id": "36",
+    "cityName": "马斯喀特",
+    "cityEn": "Muscat",
+    "timezoneId": "Asia/Muscat",
+    "country": "OM",
+    "continent": "asia"
+  },
+  {
+    "id": "37",
+    "cityName": "巴格达",
+    "cityEn": "Baghdad",
+    "timezoneId": "Asia/Baghdad",
+    "country": "IQ",
+    "continent": "asia"
+  },
+  {
+    "id": "38",
+    "cityName": "德黑兰",
+    "cityEn": "Tehran",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "39",
+    "cityName": "耶路撒冷",
+    "cityEn": "Jerusalem",
+    "timezoneId": "Asia/Jerusalem",
+    "country": "IL",
+    "continent": "asia"
+  },
+  {
+    "id": "40",
+    "cityName": "安曼",
+    "cityEn": "Amman",
+    "timezoneId": "Asia/Amman",
+    "country": "JO",
+    "continent": "asia"
+  },
+  {
+    "id": "41",
+    "cityName": "贝鲁特",
+    "cityEn": "Beirut",
+    "timezoneId": "Asia/Beirut",
+    "country": "LB",
+    "continent": "asia"
+  },
+  {
+    "id": "42",
+    "cityName": "大马士革",
+    "cityEn": "Damascus",
+    "timezoneId": "Asia/Damascus",
+    "country": "SY",
+    "continent": "asia"
+  },
+  {
+    "id": "43",
+    "cityName": "塔什干",
+    "cityEn": "Tashkent",
+    "timezoneId": "Asia/Tashkent",
+    "country": "UZ",
+    "continent": "asia"
+  },
+  {
+    "id": "44",
+    "cityName": "阿拉木图",
+    "cityEn": "Almaty",
+    "timezoneId": "Asia/Almaty",
+    "country": "KZ",
+    "continent": "asia"
+  },
+  {
+    "id": "45",
+    "cityName": "阿斯塔纳",
+    "cityEn": "Astana",
+    "timezoneId": "Asia/Almaty",
+    "country": "KZ",
+    "continent": "asia"
+  },
+  {
+    "id": "46",
+    "cityName": "比什凯克",
+    "cityEn": "Bishkek",
+    "timezoneId": "Asia/Bishkek",
+    "country": "KG",
+    "continent": "asia"
+  },
+  {
+    "id": "47",
+    "cityName": "杜尚别",
+    "cityEn": "Dushanbe",
+    "timezoneId": "Asia/Dushanbe",
+    "country": "TJ",
+    "continent": "asia"
+  },
+  {
+    "id": "48",
+    "cityName": "乌兰巴托",
+    "cityEn": "Ulaanbaatar",
+    "timezoneId": "Asia/Ulaanbaatar",
+    "country": "MN",
+    "continent": "asia"
+  },
+  {
+    "id": "49",
+    "cityName": "加尔各答",
+    "cityEn": "Kolkata",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "50",
+    "cityName": "班加罗尔",
+    "cityEn": "Bangalore",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "51",
+    "cityName": "钦奈",
+    "cityEn": "Chennai",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "52",
+    "cityName": "海得拉巴",
+    "cityEn": "Hyderabad",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "53",
+    "cityName": "澳门",
+    "cityEn": "Macau",
+    "timezoneId": "Asia/Macau",
+    "country": "MO",
+    "continent": "asia"
+  },
+  {
+    "id": "54",
+    "cityName": "高雄",
+    "cityEn": "Kaohsiung",
+    "timezoneId": "Asia/Taipei",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "55",
+    "cityName": "成都",
+    "cityEn": "Chengdu",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "56",
+    "cityName": "广州",
+    "cityEn": "Guangzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "57",
+    "cityName": "深圳",
+    "cityEn": "Shenzhen",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "58",
+    "cityName": "杭州",
+    "cityEn": "Hangzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "59",
+    "cityName": "巴黎",
+    "cityEn": "Paris",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "60",
+    "cityName": "柏林",
+    "cityEn": "Berlin",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "61",
+    "cityName": "罗马",
+    "cityEn": "Rome",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "62",
+    "cityName": "马德里",
+    "cityEn": "Madrid",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "63",
+    "cityName": "阿姆斯特丹",
+    "cityEn": "Amsterdam",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "64",
+    "cityName": "莫斯科",
+    "cityEn": "Moscow",
+    "timezoneId": "Europe/Moscow",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "65",
+    "cityName": "萨格勒布",
+    "cityEn": "Zagreb",
+    "timezoneId": "Europe/Zagreb",
+    "country": "HR",
+    "continent": "europe"
+  },
+  {
+    "id": "66",
+    "cityName": "布达佩斯",
+    "cityEn": "Budapest",
+    "timezoneId": "Europe/Budapest",
+    "country": "HU",
+    "continent": "europe"
+  },
+  {
+    "id": "67",
+    "cityName": "布拉格",
+    "cityEn": "Prague",
+    "timezoneId": "Europe/Prague",
+    "country": "CZ",
+    "continent": "europe"
+  },
+  {
+    "id": "68",
+    "cityName": "维也纳",
+    "cityEn": "Vienna",
+    "timezoneId": "Europe/Vienna",
+    "country": "AT",
+    "continent": "europe"
+  },
+  {
+    "id": "69",
+    "cityName": "华沙",
+    "cityEn": "Warsaw",
+    "timezoneId": "Europe/Warsaw",
+    "country": "PL",
+    "continent": "europe"
+  },
+  {
+    "id": "70",
+    "cityName": "斯德哥尔摩",
+    "cityEn": "Stockholm",
+    "timezoneId": "Europe/Stockholm",
+    "country": "SE",
+    "continent": "europe"
+  },
+  {
+    "id": "71",
+    "cityName": "哥本哈根",
+    "cityEn": "Copenhagen",
+    "timezoneId": "Europe/Copenhagen",
+    "country": "DK",
+    "continent": "europe"
+  },
+  {
+    "id": "72",
+    "cityName": "奥斯陆",
+    "cityEn": "Oslo",
+    "timezoneId": "Europe/Oslo",
+    "country": "NO",
+    "continent": "europe"
+  },
+  {
+    "id": "73",
+    "cityName": "赫尔辛基",
+    "cityEn": "Helsinki",
+    "timezoneId": "Europe/Helsinki",
+    "country": "FI",
+    "continent": "europe"
+  },
+  {
+    "id": "74",
+    "cityName": "布鲁塞尔",
+    "cityEn": "Brussels",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "75",
+    "cityName": "里斯本",
+    "cityEn": "Lisbon",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "76",
+    "cityName": "雅典",
+    "cityEn": "Athens",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "77",
+    "cityName": "日内瓦",
+    "cityEn": "Geneva",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "78",
+    "cityName": "苏黎世",
+    "cityEn": "Zurich",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "79",
+    "cityName": "爱丁堡",
+    "cityEn": "Edinburgh",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "80",
+    "cityName": "都柏林",
+    "cityEn": "Dublin",
+    "timezoneId": "Europe/Dublin",
+    "country": "IE",
+    "continent": "europe"
+  },
+  {
+    "id": "81",
+    "cityName": "索菲亚",
+    "cityEn": "Sofia",
+    "timezoneId": "Europe/Sofia",
+    "country": "BG",
+    "continent": "europe"
+  },
+  {
+    "id": "82",
+    "cityName": "布加勒斯特",
+    "cityEn": "Bucharest",
+    "timezoneId": "Europe/Bucharest",
+    "country": "RO",
+    "continent": "europe"
+  },
+  {
+    "id": "83",
+    "cityName": "贝尔格莱德",
+    "cityEn": "Belgrade",
+    "timezoneId": "Europe/Belgrade",
+    "country": "RS",
+    "continent": "europe"
+  },
+  {
+    "id": "84",
+    "cityName": "卢森堡",
+    "cityEn": "Luxembourg",
+    "timezoneId": "Europe/Luxembourg",
+    "country": "LU",
+    "continent": "europe"
+  },
+  {
+    "id": "85",
+    "cityName": "慕尼黑",
+    "cityEn": "Munich",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "86",
+    "cityName": "法兰克福",
+    "cityEn": "Frankfurt",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "87",
+    "cityName": "汉堡",
+    "cityEn": "Hamburg",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "88",
+    "cityName": "米兰",
+    "cityEn": "Milan",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "89",
+    "cityName": "巴塞罗那",
+    "cityEn": "Barcelona",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "90",
+    "cityName": "伊斯坦布尔",
+    "cityEn": "Istanbul",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "europe"
+  },
+  {
+    "id": "91",
+    "cityName": "基辅",
+    "cityEn": "Kyiv",
+    "timezoneId": "Europe/Kyiv",
+    "country": "UA",
+    "continent": "europe"
+  },
+  {
+    "id": "92",
+    "cityName": "明斯克",
+    "cityEn": "Minsk",
+    "timezoneId": "Europe/Minsk",
+    "country": "BY",
+    "continent": "europe"
+  },
+  {
+    "id": "93",
+    "cityName": "圣彼得堡",
+    "cityEn": "Saint Petersburg",
+    "timezoneId": "Europe/Moscow",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "94",
+    "cityName": "雷克雅未克",
+    "cityEn": "Reykjavik",
+    "timezoneId": "Atlantic/Reykjavik",
+    "country": "IS",
+    "continent": "europe"
+  },
+  {
+    "id": "95",
+    "cityName": "瓦莱塔",
+    "cityEn": "Valletta",
+    "timezoneId": "Europe/Malta",
+    "country": "MT",
+    "continent": "europe"
+  },
+  {
+    "id": "96",
+    "cityName": "尼科西亚",
+    "cityEn": "Nicosia",
+    "timezoneId": "Asia/Nicosia",
+    "country": "CY",
+    "continent": "europe"
+  },
+  {
+    "id": "97",
+    "cityName": "芝加哥",
+    "cityEn": "Chicago",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "98",
+    "cityName": "多伦多",
+    "cityEn": "Toronto",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "99",
+    "cityName": "温哥华",
+    "cityEn": "Vancouver",
+    "timezoneId": "America/Vancouver",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "100",
+    "cityName": "卡尔加里",
+    "cityEn": "Calgary",
+    "timezoneId": "America/Edmonton",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "101",
+    "cityName": "圣保罗",
+    "cityEn": "Sao Paulo",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "102",
+    "cityName": "墨西哥城",
+    "cityEn": "Mexico City",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "103",
+    "cityName": "布宜诺斯艾利斯",
+    "cityEn": "Buenos Aires",
+    "timezoneId": "America/Argentina/Buenos_Aires",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "104",
+    "cityName": "里约热内卢",
+    "cityEn": "Rio de Janeiro",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "105",
+    "cityName": "利马",
+    "cityEn": "Lima",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "106",
+    "cityName": "波哥大",
+    "cityEn": "Bogota",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "107",
+    "cityName": "圣地亚哥",
+    "cityEn": "Santiago",
+    "timezoneId": "America/Santiago",
+    "country": "CL",
+    "continent": "america"
+  },
+  {
+    "id": "108",
+    "cityName": "哈瓦那",
+    "cityEn": "Havana",
+    "timezoneId": "America/Havana",
+    "country": "CU",
+    "continent": "america"
+  },
+  {
+    "id": "109",
+    "cityName": "圣何塞",
+    "cityEn": "San Jose",
+    "timezoneId": "America/Costa_Rica",
+    "country": "CR",
+    "continent": "america"
+  },
+  {
+    "id": "110",
+    "cityName": "巴拿马城",
+    "cityEn": "Panama City",
+    "timezoneId": "America/Panama",
+    "country": "PA",
+    "continent": "america"
+  },
+  {
+    "id": "111",
+    "cityName": "蒙特雷",
+    "cityEn": "Monterrey",
+    "timezoneId": "America/Monterrey",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "112",
+    "cityName": "瓜达拉哈拉",
+    "cityEn": "Guadalajara",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "113",
+    "cityName": "迈阿密",
+    "cityEn": "Miami",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "114",
+    "cityName": "旧金山",
+    "cityEn": "San Francisco",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "115",
+    "cityName": "西雅图",
+    "cityEn": "Seattle",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "116",
+    "cityName": "丹佛",
+    "cityEn": "Denver",
+    "timezoneId": "America/Denver",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "117",
+    "cityName": "休斯顿",
+    "cityEn": "Houston",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "118",
+    "cityName": "亚特兰大",
+    "cityEn": "Atlanta",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "119",
+    "cityName": "波士顿",
+    "cityEn": "Boston",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "120",
+    "cityName": "华盛顿",
+    "cityEn": "Washington D.C.",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "121",
+    "cityName": "达拉斯",
+    "cityEn": "Dallas",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "122",
+    "cityName": "凤凰城",
+    "cityEn": "Phoenix",
+    "timezoneId": "America/Phoenix",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "123",
+    "cityName": "檀香山",
+    "cityEn": "Honolulu",
+    "timezoneId": "Pacific/Honolulu",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "124",
+    "cityName": "安克雷奇",
+    "cityEn": "Anchorage",
+    "timezoneId": "America/Anchorage",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "125",
+    "cityName": "蒙特利尔",
+    "cityEn": "Montreal",
+    "timezoneId": "America/Montreal",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "126",
+    "cityName": "渥太华",
+    "cityEn": "Ottawa",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "127",
+    "cityName": "基多",
+    "cityEn": "Quito",
+    "timezoneId": "America/Guayaquil",
+    "country": "EC",
+    "continent": "america"
+  },
+  {
+    "id": "128",
+    "cityName": "加拉加斯",
+    "cityEn": "Caracas",
+    "timezoneId": "America/Caracas",
+    "country": "VE",
+    "continent": "america"
+  },
+  {
+    "id": "129",
+    "cityName": "拉巴斯",
+    "cityEn": "La Paz",
+    "timezoneId": "America/La_Paz",
+    "country": "BO",
+    "continent": "america"
+  },
+  {
+    "id": "130",
+    "cityName": "蒙得维的亚",
+    "cityEn": "Montevideo",
+    "timezoneId": "America/Montevideo",
+    "country": "UY",
+    "continent": "america"
+  },
+  {
+    "id": "131",
+    "cityName": "奥克兰",
+    "cityEn": "Auckland",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "132",
+    "cityName": "墨尔本",
+    "cityEn": "Melbourne",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "133",
+    "cityName": "布里斯班",
+    "cityEn": "Brisbane",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "134",
+    "cityName": "珀斯",
+    "cityEn": "Perth",
+    "timezoneId": "Australia/Perth",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "135",
+    "cityName": "阿德莱德",
+    "cityEn": "Adelaide",
+    "timezoneId": "Australia/Adelaide",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "136",
+    "cityName": "惠灵顿",
+    "cityEn": "Wellington",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "137",
+    "cityName": "斐济",
+    "cityEn": "Fiji",
+    "timezoneId": "Pacific/Fiji",
+    "country": "FJ",
+    "continent": "oceania"
+  },
+  {
+    "id": "138",
+    "cityName": "霍巴特",
+    "cityEn": "Hobart",
+    "timezoneId": "Australia/Hobart",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "139",
+    "cityName": "达尔文",
+    "cityEn": "Darwin",
+    "timezoneId": "Australia/Darwin",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "140",
+    "cityName": "堪培拉",
+    "cityEn": "Canberra",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "141",
+    "cityName": "关岛",
+    "cityEn": "Guam",
+    "timezoneId": "Pacific/Guam",
+    "country": "GU",
+    "continent": "oceania"
+  },
+  {
+    "id": "142",
+    "cityName": "帕皮提",
+    "cityEn": "Papeete",
+    "timezoneId": "Pacific/Tahiti",
+    "country": "PF",
+    "continent": "oceania"
+  },
+  {
+    "id": "143",
+    "cityName": "开罗",
+    "cityEn": "Cairo",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "144",
+    "cityName": "约翰内斯堡",
+    "cityEn": "Johannesburg",
+    "timezoneId": "Africa/Johannesburg",
+    "country": "ZA",
+    "continent": "africa"
+  },
+  {
+    "id": "145",
+    "cityName": "内罗毕",
+    "cityEn": "Nairobi",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "146",
+    "cityName": "拉各斯",
+    "cityEn": "Lagos",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "147",
+    "cityName": "卡萨布兰卡",
+    "cityEn": "Casablanca",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "148",
+    "cityName": "亚的斯亚贝巴",
+    "cityEn": "Addis Ababa",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "149",
+    "cityName": "达累斯萨拉姆",
+    "cityEn": "Dar es Salaam",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "150",
+    "cityName": "阿克拉",
+    "cityEn": "Accra",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "151",
+    "cityName": "阿尔及尔",
+    "cityEn": "Algiers",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "152",
+    "cityName": "突尼斯",
+    "cityEn": "Tunis",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "153",
+    "cityName": "哈拉雷",
+    "cityEn": "Harare",
+    "timezoneId": "Africa/Harare",
+    "country": "ZW",
+    "continent": "africa"
+  },
+  {
+    "id": "154",
+    "cityName": "坎帕拉",
+    "cityEn": "Kampala",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "155",
+    "cityName": "基加利",
+    "cityEn": "Kigali",
+    "timezoneId": "Africa/Kigali",
+    "country": "RW",
+    "continent": "africa"
+  },
+  {
+    "id": "156",
+    "cityName": "马普托",
+    "cityEn": "Maputo",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "157",
+    "cityName": "安卡拉",
+    "cityEn": "Ankara",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "asia"
+  },
+  {
+    "id": "158",
+    "cityName": "利沃夫",
+    "cityEn": "Lviv",
+    "timezoneId": "Europe/Kyiv",
+    "country": "UA",
+    "continent": "europe"
+  },
+  {
+    "id": "159",
+    "cityName": "第比利斯",
+    "cityEn": "Tbilisi",
+    "timezoneId": "Asia/Tbilisi",
+    "country": "GE",
+    "continent": "asia"
+  },
+  {
+    "id": "160",
+    "cityName": "埃里温",
+    "cityEn": "Yerevan",
+    "timezoneId": "Asia/Yerevan",
+    "country": "AM",
+    "continent": "asia"
+  },
+  {
+    "id": "161",
+    "cityName": "巴库",
+    "cityEn": "Baku",
+    "timezoneId": "Asia/Baku",
+    "country": "AZ",
+    "continent": "asia"
+  },
+  {
+    "id": "162",
+    "cityName": "科威特城",
+    "cityEn": "Kuwait City",
+    "timezoneId": "Asia/Kuwait",
+    "country": "KW",
+    "continent": "asia"
+  },
+  {
+    "id": "163",
+    "cityName": "麦纳麦",
+    "cityEn": "Manama",
+    "timezoneId": "Asia/Bahrain",
+    "country": "BH",
+    "continent": "asia"
+  },
+  {
+    "id": "164",
+    "cityName": "喀布尔",
+    "cityEn": "Kabul",
+    "timezoneId": "Asia/Kabul",
+    "country": "AF",
+    "continent": "asia"
+  },
+  {
+    "id": "167",
+    "cityName": "科泽科德",
+    "cityEn": "Kozhikode",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "168",
+    "cityName": "拉合尔",
+    "cityEn": "Lahore",
+    "timezoneId": "Asia/Karachi",
+    "country": "PK",
+    "continent": "asia"
+  },
+  {
+    "id": "169",
+    "cityName": "南京",
+    "cityEn": "Nanjing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "170",
+    "cityName": "武汉",
+    "cityEn": "Wuhan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "171",
+    "cityName": "西安",
+    "cityEn": "Xian",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "172",
+    "cityName": "重庆",
+    "cityEn": "Chongqing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "173",
+    "cityName": "天津",
+    "cityEn": "Tianjin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "174",
+    "cityName": "苏州",
+    "cityEn": "Suzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "175",
+    "cityName": "厦门",
+    "cityEn": "Xiamen",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "176",
+    "cityName": "青岛",
+    "cityEn": "Qingdao",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "177",
+    "cityName": "大连",
+    "cityEn": "Dalian",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "178",
+    "cityName": "长沙",
+    "cityEn": "Changsha",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "179",
+    "cityName": "昆明",
+    "cityEn": "Kunming",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "180",
+    "cityName": "哈尔滨",
+    "cityEn": "Harbin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "181",
+    "cityName": "沈阳",
+    "cityEn": "Shenyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "182",
+    "cityName": "济南",
+    "cityEn": "Jinan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "183",
+    "cityName": "郑州",
+    "cityEn": "Zhengzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "184",
+    "cityName": "福州",
+    "cityEn": "Fuzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "185",
+    "cityName": "合肥",
+    "cityEn": "Hefei",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "186",
+    "cityName": "南昌",
+    "cityEn": "Nanchang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "187",
+    "cityName": "石家庄",
+    "cityEn": "Shijiazhuang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "188",
+    "cityName": "长春",
+    "cityEn": "Changchun",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "189",
+    "cityName": "南宁",
+    "cityEn": "Nanning",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "190",
+    "cityName": "贵阳",
+    "cityEn": "Guiyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "191",
+    "cityName": "兰州",
+    "cityEn": "Lanzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "192",
+    "cityName": "太原",
+    "cityEn": "Taiyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "193",
+    "cityName": "乌鲁木齐",
+    "cityEn": "Urumqi",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "194",
+    "cityName": "拉萨",
+    "cityEn": "Lhasa",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "195",
+    "cityName": "呼和浩特",
+    "cityEn": "Hohhot",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "196",
+    "cityName": "海口",
+    "cityEn": "Haikou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "197",
+    "cityName": "银川",
+    "cityEn": "Yinchuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "198",
+    "cityName": "西宁",
+    "cityEn": "Xining",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "199",
+    "cityName": "无锡",
+    "cityEn": "Wuxi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "200",
+    "cityName": "宁波",
+    "cityEn": "Ningbo",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "201",
+    "cityName": "佛山",
+    "cityEn": "Foshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "202",
+    "cityName": "东莞",
+    "cityEn": "Dongguan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "203",
+    "cityName": "温州",
+    "cityEn": "Wenzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "204",
+    "cityName": "常州",
+    "cityEn": "Changzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "205",
+    "cityName": "泉州",
+    "cityEn": "Quanzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "206",
+    "cityName": "烟台",
+    "cityEn": "Yantai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "207",
+    "cityName": "惠州",
+    "cityEn": "Huizhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "208",
+    "cityName": "中山",
+    "cityEn": "Zhongshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "209",
+    "cityName": "保定",
+    "cityEn": "Baoding",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "210",
+    "cityName": "南通",
+    "cityEn": "Nantong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "211",
+    "cityName": "徐州",
+    "cityEn": "Xuzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "212",
+    "cityName": "扬州",
+    "cityEn": "Yangzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "213",
+    "cityName": "镇江",
+    "cityEn": "Zhenjiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "214",
+    "cityName": "泰州",
+    "cityEn": "Taizhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "215",
+    "cityName": "盐城",
+    "cityEn": "Yancheng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "216",
+    "cityName": "连云港",
+    "cityEn": "Lianyungang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "217",
+    "cityName": "淮安",
+    "cityEn": "Huaian",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "218",
+    "cityName": "嘉兴",
+    "cityEn": "Jiaxing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "219",
+    "cityName": "绍兴",
+    "cityEn": "Shaoxing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "220",
+    "cityName": "金华",
+    "cityEn": "Jinhua",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "221",
+    "cityName": "台州",
+    "cityEn": "Taizhou (Zhejiang)",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "222",
+    "cityName": "芜湖",
+    "cityEn": "Wuhu",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "223",
+    "cityName": "漳州",
+    "cityEn": "Zhangzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "224",
+    "cityName": "潍坊",
+    "cityEn": "Weifang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "225",
+    "cityName": "临沂",
+    "cityEn": "Linyi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "226",
+    "cityName": "宜昌",
+    "cityEn": "Yichang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "227",
+    "cityName": "襄阳",
+    "cityEn": "Xiangyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "228",
+    "cityName": "岳阳",
+    "cityEn": "Yueyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "229",
+    "cityName": "常德",
+    "cityEn": "Changde",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "230",
+    "cityName": "湛江",
+    "cityEn": "Zhanjiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "231",
+    "cityName": "江门",
+    "cityEn": "Jiangmen",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "232",
+    "cityName": "茂名",
+    "cityEn": "Maoming",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "233",
+    "cityName": "珠海",
+    "cityEn": "Zhuhai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "234",
+    "cityName": "汕头",
+    "cityEn": "Shantou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "235",
+    "cityName": "肇庆",
+    "cityEn": "Zhaoqing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "236",
+    "cityName": "柳州",
+    "cityEn": "Liuzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "237",
+    "cityName": "桂林",
+    "cityEn": "Guilin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "238",
+    "cityName": "三亚",
+    "cityEn": "Sanya",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "239",
+    "cityName": "大理",
+    "cityEn": "Dali",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "240",
+    "cityName": "丽江",
+    "cityEn": "Lijiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "241",
+    "cityName": "九江",
+    "cityEn": "Jiujiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "242",
+    "cityName": "赣州",
+    "cityEn": "Ganzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "243",
+    "cityName": "洛阳",
+    "cityEn": "Luoyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "244",
+    "cityName": "大同",
+    "cityEn": "Datong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "245",
+    "cityName": "咸阳",
+    "cityEn": "Xianyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "246",
+    "cityName": "绵阳",
+    "cityEn": "Mianyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "247",
+    "cityName": "遵义",
+    "cityEn": "Zunyi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "248",
+    "cityName": "曲靖",
+    "cityEn": "Qujing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "249",
+    "cityName": "齐齐哈尔",
+    "cityEn": "Qiqihar",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "250",
+    "cityName": "牡丹江",
+    "cityEn": "Mudanjiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "251",
+    "cityName": "喀什",
+    "cityEn": "Kashgar",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "253",
+    "cityName": "鹿特丹",
+    "cityEn": "Rotterdam",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "254",
+    "cityName": "海牙",
+    "cityEn": "The Hague",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "255",
+    "cityName": "马赛",
+    "cityEn": "Marseille",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "256",
+    "cityName": "里昂",
+    "cityEn": "Lyon",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "257",
+    "cityName": "图卢兹",
+    "cityEn": "Toulouse",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "258",
+    "cityName": "那不勒斯",
+    "cityEn": "Naples",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "259",
+    "cityName": "都灵",
+    "cityEn": "Turin",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "260",
+    "cityName": "瓦伦西亚",
+    "cityEn": "Valencia",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "261",
+    "cityName": "塞维利亚",
+    "cityEn": "Seville",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "262",
+    "cityName": "波尔图",
+    "cityEn": "Porto",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "263",
+    "cityName": "曼彻斯特",
+    "cityEn": "Manchester",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "264",
+    "cityName": "伯明翰",
+    "cityEn": "Birmingham",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "265",
+    "cityName": "格拉斯哥",
+    "cityEn": "Glasgow",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "266",
+    "cityName": "新北",
+    "cityEn": "New Taipei",
+    "timezoneId": "Asia/Taipei",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "267",
+    "cityName": "桃园",
+    "cityEn": "Taoyuan",
+    "timezoneId": "Asia/Taipei",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "268",
+    "cityName": "台中",
+    "cityEn": "Taichung",
+    "timezoneId": "Asia/Taipei",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "269",
+    "cityName": "台南",
+    "cityEn": "Tainan",
+    "timezoneId": "Asia/Taipei",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "270",
+    "cityName": "唐山",
+    "cityEn": "Tangshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "271",
+    "cityName": "秦皇岛",
+    "cityEn": "Qinhuangdao",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "272",
+    "cityName": "邯郸",
+    "cityEn": "Handan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "273",
+    "cityName": "邢台",
+    "cityEn": "Xingtai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "274",
+    "cityName": "张家口",
+    "cityEn": "Zhangjiakou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "275",
+    "cityName": "承德",
+    "cityEn": "Chengde",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "276",
+    "cityName": "沧州",
+    "cityEn": "Cangzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "277",
+    "cityName": "廊坊",
+    "cityEn": "Langfang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "278",
+    "cityName": "衡水",
+    "cityEn": "Hengshui",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "279",
+    "cityName": "阳泉",
+    "cityEn": "Yangquan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "280",
+    "cityName": "长治",
+    "cityEn": "Changzhi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "281",
+    "cityName": "晋城",
+    "cityEn": "Jincheng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "282",
+    "cityName": "朔州",
+    "cityEn": "Shuozhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "283",
+    "cityName": "晋中",
+    "cityEn": "Jinzhong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "284",
+    "cityName": "运城",
+    "cityEn": "Yuncheng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "285",
+    "cityName": "忻州",
+    "cityEn": "Xinzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "286",
+    "cityName": "临汾",
+    "cityEn": "Linfen",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "287",
+    "cityName": "吕梁",
+    "cityEn": "Lvliang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "288",
+    "cityName": "包头",
+    "cityEn": "Baotou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "289",
+    "cityName": "乌海",
+    "cityEn": "Wuhai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "290",
+    "cityName": "赤峰",
+    "cityEn": "Chifeng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "291",
+    "cityName": "通辽",
+    "cityEn": "Tongliao",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "292",
+    "cityName": "鄂尔多斯",
+    "cityEn": "Ordos",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "293",
+    "cityName": "呼伦贝尔",
+    "cityEn": "Hulunbuir",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "294",
+    "cityName": "巴彦淖尔",
+    "cityEn": "Bayannur",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "295",
+    "cityName": "乌兰察布",
+    "cityEn": "Ulanqab",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "296",
+    "cityName": "兴安盟",
+    "cityEn": "Hinggan League",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "297",
+    "cityName": "锡林郭勒盟",
+    "cityEn": "Xilingol League",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "298",
+    "cityName": "阿拉善盟",
+    "cityEn": "Alxa League",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "299",
+    "cityName": "鞍山",
+    "cityEn": "Anshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "300",
+    "cityName": "抚顺",
+    "cityEn": "Fushun",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "301",
+    "cityName": "本溪",
+    "cityEn": "Benxi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "302",
+    "cityName": "丹东",
+    "cityEn": "Dandong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "303",
+    "cityName": "锦州",
+    "cityEn": "Jinzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "304",
+    "cityName": "营口",
+    "cityEn": "Yingkou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "305",
+    "cityName": "阜新",
+    "cityEn": "Fuxin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "306",
+    "cityName": "辽阳",
+    "cityEn": "Liaoyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "307",
+    "cityName": "盘锦",
+    "cityEn": "Panjin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "308",
+    "cityName": "铁岭",
+    "cityEn": "Tieling",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "309",
+    "cityName": "朝阳",
+    "cityEn": "Chaoyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "310",
+    "cityName": "葫芦岛",
+    "cityEn": "Huludao",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "311",
+    "cityName": "吉林市",
+    "cityEn": "Jilin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "312",
+    "cityName": "四平",
+    "cityEn": "Siping",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "313",
+    "cityName": "辽源",
+    "cityEn": "Liaoyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "314",
+    "cityName": "通化",
+    "cityEn": "Tonghua",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "315",
+    "cityName": "白山",
+    "cityEn": "Baishan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "316",
+    "cityName": "松原",
+    "cityEn": "Songyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "317",
+    "cityName": "白城",
+    "cityEn": "Baicheng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "318",
+    "cityName": "延边朝鲜族自治州",
+    "cityEn": "Yanbian Korean Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "319",
+    "cityName": "鸡西",
+    "cityEn": "Jixi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "320",
+    "cityName": "鹤岗",
+    "cityEn": "Hegang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "321",
+    "cityName": "双鸭山",
+    "cityEn": "Shuangyashan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "322",
+    "cityName": "大庆",
+    "cityEn": "Daqing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "323",
+    "cityName": "伊春",
+    "cityEn": "Yichun",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "324",
+    "cityName": "佳木斯",
+    "cityEn": "Jiamusi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "325",
+    "cityName": "七台河",
+    "cityEn": "Qitaihe",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "326",
+    "cityName": "黑河",
+    "cityEn": "Heihe",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "327",
+    "cityName": "绥化",
+    "cityEn": "Suihua",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "328",
+    "cityName": "大兴安岭地区",
+    "cityEn": "Daxing'anling",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "329",
+    "cityName": "宿迁",
+    "cityEn": "Suqian",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "330",
+    "cityName": "湖州",
+    "cityEn": "Huzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "331",
+    "cityName": "衢州",
+    "cityEn": "Quzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "332",
+    "cityName": "舟山",
+    "cityEn": "Zhoushan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "333",
+    "cityName": "丽水",
+    "cityEn": "Lishui",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "334",
+    "cityName": "蚌埠",
+    "cityEn": "Bengbu",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "335",
+    "cityName": "淮南",
+    "cityEn": "Huainan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "336",
+    "cityName": "马鞍山",
+    "cityEn": "Ma'anshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "337",
+    "cityName": "淮北",
+    "cityEn": "Huaibei",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "338",
+    "cityName": "铜陵",
+    "cityEn": "Tongling",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "339",
+    "cityName": "安庆",
+    "cityEn": "Anqing",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "340",
+    "cityName": "黄山",
+    "cityEn": "Huangshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "341",
+    "cityName": "滁州",
+    "cityEn": "Chuzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "342",
+    "cityName": "阜阳",
+    "cityEn": "Fuyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "343",
+    "cityName": "宿州",
+    "cityEn": "Suzhou (Anhui)",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "344",
+    "cityName": "六安",
+    "cityEn": "Lu'an",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "345",
+    "cityName": "亳州",
+    "cityEn": "Bozhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "346",
+    "cityName": "池州",
+    "cityEn": "Chizhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "347",
+    "cityName": "宣城",
+    "cityEn": "Xuancheng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "348",
+    "cityName": "莆田",
+    "cityEn": "Putian",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "349",
+    "cityName": "三明",
+    "cityEn": "Sanming",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "350",
+    "cityName": "南平",
+    "cityEn": "Nanping",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "351",
+    "cityName": "龙岩",
+    "cityEn": "Longyan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "352",
+    "cityName": "宁德",
+    "cityEn": "Ningde",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "353",
+    "cityName": "景德镇",
+    "cityEn": "Jingdezhen",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "354",
+    "cityName": "萍乡",
+    "cityEn": "Pingxiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "355",
+    "cityName": "新余",
+    "cityEn": "Xinyu",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "356",
+    "cityName": "鹰潭",
+    "cityEn": "Yingtan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "357",
+    "cityName": "吉安",
+    "cityEn": "Ji'an",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "358",
+    "cityName": "宜春",
+    "cityEn": "Yichun (Jiangxi)",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "359",
+    "cityName": "抚州",
+    "cityEn": "Fuzhou (Jiangxi)",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "360",
+    "cityName": "上饶",
+    "cityEn": "Shangrao",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "361",
+    "cityName": "淄博",
+    "cityEn": "Zibo",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "362",
+    "cityName": "枣庄",
+    "cityEn": "Zaozhuang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "363",
+    "cityName": "东营",
+    "cityEn": "Dongying",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "364",
+    "cityName": "济宁",
+    "cityEn": "Jining",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "365",
+    "cityName": "泰安",
+    "cityEn": "Tai'an",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "366",
+    "cityName": "威海",
+    "cityEn": "Weihai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "367",
+    "cityName": "日照",
+    "cityEn": "Rizhao",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "368",
+    "cityName": "德州",
+    "cityEn": "Dezhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "369",
+    "cityName": "聊城",
+    "cityEn": "Liaocheng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "370",
+    "cityName": "滨州",
+    "cityEn": "Binzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "371",
+    "cityName": "菏泽",
+    "cityEn": "Heze",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "372",
+    "cityName": "开封",
+    "cityEn": "Kaifeng",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "373",
+    "cityName": "平顶山",
+    "cityEn": "Pingdingshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "374",
+    "cityName": "安阳",
+    "cityEn": "Anyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "375",
+    "cityName": "鹤壁",
+    "cityEn": "Hebi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "376",
+    "cityName": "新乡",
+    "cityEn": "Xinxiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "377",
+    "cityName": "焦作",
+    "cityEn": "Jiaozuo",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "378",
+    "cityName": "濮阳",
+    "cityEn": "Puyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "379",
+    "cityName": "许昌",
+    "cityEn": "Xuchang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "380",
+    "cityName": "漯河",
+    "cityEn": "Luohe",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "381",
+    "cityName": "三门峡",
+    "cityEn": "Sanmenxia",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "382",
+    "cityName": "南阳",
+    "cityEn": "Nanyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "383",
+    "cityName": "商丘",
+    "cityEn": "Shangqiu",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "384",
+    "cityName": "信阳",
+    "cityEn": "Xinyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "385",
+    "cityName": "周口",
+    "cityEn": "Zhoukou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "386",
+    "cityName": "驻马店",
+    "cityEn": "Zhumadian",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "387",
+    "cityName": "黄石",
+    "cityEn": "Huangshi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "388",
+    "cityName": "十堰",
+    "cityEn": "Shiyan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "389",
+    "cityName": "鄂州",
+    "cityEn": "Ezhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "390",
+    "cityName": "荆门",
+    "cityEn": "Jingmen",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "391",
+    "cityName": "孝感",
+    "cityEn": "Xiaogan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "392",
+    "cityName": "荆州",
+    "cityEn": "Jingzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "393",
+    "cityName": "黄冈",
+    "cityEn": "Huanggang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "394",
+    "cityName": "咸宁",
+    "cityEn": "Xianning",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "395",
+    "cityName": "随州",
+    "cityEn": "Suizhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "396",
+    "cityName": "恩施土家族苗族自治州",
+    "cityEn": "Enshi Tujia and Miao Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "397",
+    "cityName": "株洲",
+    "cityEn": "Zhuzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "398",
+    "cityName": "湘潭",
+    "cityEn": "Xiangtan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "399",
+    "cityName": "衡阳",
+    "cityEn": "Hengyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "400",
+    "cityName": "邵阳",
+    "cityEn": "Shaoyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "401",
+    "cityName": "张家界",
+    "cityEn": "Zhangjiajie",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "402",
+    "cityName": "益阳",
+    "cityEn": "Yiyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "403",
+    "cityName": "郴州",
+    "cityEn": "Chenzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "404",
+    "cityName": "永州",
+    "cityEn": "Yongzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "405",
+    "cityName": "怀化",
+    "cityEn": "Huaihua",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "406",
+    "cityName": "娄底",
+    "cityEn": "Loudi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "407",
+    "cityName": "湘西土家族苗族自治州",
+    "cityEn": "Xiangxi Tujia and Miao Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "408",
+    "cityName": "韶关",
+    "cityEn": "Shaoguan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "409",
+    "cityName": "梅州",
+    "cityEn": "Meizhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "410",
+    "cityName": "汕尾",
+    "cityEn": "Shanwei",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "411",
+    "cityName": "河源",
+    "cityEn": "Heyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "412",
+    "cityName": "阳江",
+    "cityEn": "Yangjiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "413",
+    "cityName": "清远",
+    "cityEn": "Qingyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "414",
+    "cityName": "潮州",
+    "cityEn": "Chaozhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "415",
+    "cityName": "揭阳",
+    "cityEn": "Jieyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "416",
+    "cityName": "云浮",
+    "cityEn": "Yunfu",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "417",
+    "cityName": "梧州",
+    "cityEn": "Wuzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "418",
+    "cityName": "北海",
+    "cityEn": "Beihai",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "419",
+    "cityName": "防城港",
+    "cityEn": "Fangchenggang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "420",
+    "cityName": "钦州",
+    "cityEn": "Qinzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "421",
+    "cityName": "贵港",
+    "cityEn": "Guigang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "422",
+    "cityName": "玉林",
+    "cityEn": "Yulin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "423",
+    "cityName": "百色",
+    "cityEn": "Baise",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "424",
+    "cityName": "贺州",
+    "cityEn": "Hezhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "425",
+    "cityName": "河池",
+    "cityEn": "Hechi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "426",
+    "cityName": "来宾",
+    "cityEn": "Laibin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "427",
+    "cityName": "崇左",
+    "cityEn": "Chongzuo",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "428",
+    "cityName": "三沙",
+    "cityEn": "Sansha",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "429",
+    "cityName": "儋州",
+    "cityEn": "Danzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "430",
+    "cityName": "自贡",
+    "cityEn": "Zigong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "431",
+    "cityName": "攀枝花",
+    "cityEn": "Panzhihua",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "432",
+    "cityName": "泸州",
+    "cityEn": "Luzhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "433",
+    "cityName": "德阳",
+    "cityEn": "Deyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "434",
+    "cityName": "广元",
+    "cityEn": "Guangyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "435",
+    "cityName": "遂宁",
+    "cityEn": "Suining",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "436",
+    "cityName": "内江",
+    "cityEn": "Neijiang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "437",
+    "cityName": "乐山",
+    "cityEn": "Leshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "438",
+    "cityName": "南充",
+    "cityEn": "Nanchong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "439",
+    "cityName": "眉山",
+    "cityEn": "Meishan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "440",
+    "cityName": "宜宾",
+    "cityEn": "Yibin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "441",
+    "cityName": "广安",
+    "cityEn": "Guang'an",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "442",
+    "cityName": "达州",
+    "cityEn": "Dazhou",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "443",
+    "cityName": "雅安",
+    "cityEn": "Ya'an",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "444",
+    "cityName": "巴中",
+    "cityEn": "Bazhong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "445",
+    "cityName": "资阳",
+    "cityEn": "Ziyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "446",
+    "cityName": "阿坝藏族羌族自治州",
+    "cityEn": "Aba Tibetan and Qiang Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "447",
+    "cityName": "甘孜藏族自治州",
+    "cityEn": "Ganzi Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "448",
+    "cityName": "凉山彝族自治州",
+    "cityEn": "Liangshan Yi Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "449",
+    "cityName": "六盘水",
+    "cityEn": "Liupanshui",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "450",
+    "cityName": "安顺",
+    "cityEn": "Anshun",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "451",
+    "cityName": "毕节",
+    "cityEn": "Bijie",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "452",
+    "cityName": "铜仁",
+    "cityEn": "Tongren",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "453",
+    "cityName": "黔西南布依族苗族自治州",
+    "cityEn": "Qianxinan Buyi and Miao Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "454",
+    "cityName": "黔东南苗族侗族自治州",
+    "cityEn": "Qiandongnan Miao and Dong Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "455",
+    "cityName": "黔南布依族苗族自治州",
+    "cityEn": "Qiannan Buyi and Miao Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "456",
+    "cityName": "玉溪",
+    "cityEn": "Yuxi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "457",
+    "cityName": "保山",
+    "cityEn": "Baoshan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "458",
+    "cityName": "昭通",
+    "cityEn": "Zhaotong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "459",
+    "cityName": "普洱",
+    "cityEn": "Pu'er",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "460",
+    "cityName": "临沧",
+    "cityEn": "Lincang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "461",
+    "cityName": "楚雄彝族自治州",
+    "cityEn": "Chuxiong Yi Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "462",
+    "cityName": "红河哈尼族彝族自治州",
+    "cityEn": "Honghe Hani and Yi Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "463",
+    "cityName": "文山壮族苗族自治州",
+    "cityEn": "Wenshan Zhuang and Miao Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "464",
+    "cityName": "西双版纳傣族自治州",
+    "cityEn": "Xishuangbanna Dai Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "466",
+    "cityName": "德宏傣族景颇族自治州",
+    "cityEn": "Dehong Dai and Jingpo Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "467",
+    "cityName": "怒江傈僳族自治州",
+    "cityEn": "Nujiang Lisu Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "468",
+    "cityName": "迪庆藏族自治州",
+    "cityEn": "Diqing Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "469",
+    "cityName": "日喀则",
+    "cityEn": "Shigatse",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "470",
+    "cityName": "昌都",
+    "cityEn": "Chamdo",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "471",
+    "cityName": "林芝",
+    "cityEn": "Nyingchi",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "472",
+    "cityName": "山南",
+    "cityEn": "Shannan",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "473",
+    "cityName": "那曲",
+    "cityEn": "Nagqu",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "474",
+    "cityName": "阿里地区",
+    "cityEn": "Ngari",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "475",
+    "cityName": "铜川",
+    "cityEn": "Tongchuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "476",
+    "cityName": "宝鸡",
+    "cityEn": "Baoji",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "477",
+    "cityName": "渭南",
+    "cityEn": "Weinan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "478",
+    "cityName": "延安",
+    "cityEn": "Yan'an",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "479",
+    "cityName": "汉中",
+    "cityEn": "Hanzhong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "480",
+    "cityName": "榆林",
+    "cityEn": "Yulin (Shaanxi)",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "481",
+    "cityName": "安康",
+    "cityEn": "Ankang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "482",
+    "cityName": "商洛",
+    "cityEn": "Shangluo",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "483",
+    "cityName": "嘉峪关",
+    "cityEn": "Jiayuguan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "484",
+    "cityName": "金昌",
+    "cityEn": "Jinchang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "485",
+    "cityName": "白银",
+    "cityEn": "Baiyin",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "486",
+    "cityName": "天水",
+    "cityEn": "Tianshui",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "487",
+    "cityName": "武威",
+    "cityEn": "Wuwei",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "488",
+    "cityName": "张掖",
+    "cityEn": "Zhangye",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "489",
+    "cityName": "平凉",
+    "cityEn": "Pingliang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "490",
+    "cityName": "酒泉",
+    "cityEn": "Jiuquan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "491",
+    "cityName": "庆阳",
+    "cityEn": "Qingyang",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "492",
+    "cityName": "定西",
+    "cityEn": "Dingxi",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "493",
+    "cityName": "陇南",
+    "cityEn": "Longnan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "494",
+    "cityName": "临夏回族自治州",
+    "cityEn": "Linxia Hui Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "495",
+    "cityName": "甘南藏族自治州",
+    "cityEn": "Gannan Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "496",
+    "cityName": "海东",
+    "cityEn": "Haidong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "497",
+    "cityName": "海北藏族自治州",
+    "cityEn": "Haibei Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "498",
+    "cityName": "黄南藏族自治州",
+    "cityEn": "Huangnan Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "499",
+    "cityName": "海南藏族自治州",
+    "cityEn": "Hainan Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "500",
+    "cityName": "果洛藏族自治州",
+    "cityEn": "Golog Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "501",
+    "cityName": "玉树藏族自治州",
+    "cityEn": "Yushu Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "502",
+    "cityName": "海西蒙古族藏族自治州",
+    "cityEn": "Haixi Mongolian and Tibetan Autonomous Prefecture",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "503",
+    "cityName": "石嘴山",
+    "cityEn": "Shizuishan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "504",
+    "cityName": "吴忠",
+    "cityEn": "Wuzhong",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "505",
+    "cityName": "固原",
+    "cityEn": "Guyuan",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "506",
+    "cityName": "中卫",
+    "cityEn": "Zhongwei",
+    "timezoneId": "Asia/Shanghai",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "507",
+    "cityName": "克拉玛依",
+    "cityEn": "Karamay",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "508",
+    "cityName": "吐鲁番",
+    "cityEn": "Turpan",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "509",
+    "cityName": "哈密",
+    "cityEn": "Hami",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "510",
+    "cityName": "昌吉回族自治州",
+    "cityEn": "Changji Hui Autonomous Prefecture",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "511",
+    "cityName": "博尔塔拉蒙古自治州",
+    "cityEn": "Bortala Mongolian Autonomous Prefecture",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "512",
+    "cityName": "巴音郭楞蒙古自治州",
+    "cityEn": "Bayingolin Mongolian Autonomous Prefecture",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "513",
+    "cityName": "阿克苏地区",
+    "cityEn": "Aksu",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "514",
+    "cityName": "克孜勒苏柯尔克孜自治州",
+    "cityEn": "Kizilsu Kirgiz Autonomous Prefecture",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "516",
+    "cityName": "和田地区",
+    "cityEn": "Hotan",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "517",
+    "cityName": "伊犁哈萨克自治州",
+    "cityEn": "Ili Kazakh Autonomous Prefecture",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "518",
+    "cityName": "塔城地区",
+    "cityEn": "Tacheng",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "519",
+    "cityName": "阿勒泰地区",
+    "cityEn": "Altay",
+    "timezoneId": "Asia/Urumqi",
+    "country": "CN",
+    "continent": "asia"
+  },
+  {
+    "id": "520",
+    "cityName": "京都",
+    "cityEn": "Kyoto",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "521",
+    "cityName": "福冈",
+    "cityEn": "Fukuoka",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "522",
+    "cityName": "神户",
+    "cityEn": "Kobe",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "523",
+    "cityName": "那霸",
+    "cityEn": "Naha",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "524",
+    "cityName": "济州",
+    "cityEn": "Jeju",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "525",
+    "cityName": "阿格拉",
+    "cityEn": "Agra",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "526",
+    "cityName": "斋浦尔",
+    "cityEn": "Jaipur",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "527",
+    "cityName": "浦那",
+    "cityEn": "Pune",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "528",
+    "cityName": "普吉岛",
+    "cityEn": "Phuket",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "529",
+    "cityName": "清迈",
+    "cityEn": "Chiang Mai",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "530",
+    "cityName": "芭堤雅",
+    "cityEn": "Pattaya",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "531",
+    "cityName": "巴厘岛",
+    "cityEn": "Bali",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "532",
+    "cityName": "泗水",
+    "cityEn": "Surabaya",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "533",
+    "cityName": "槟城",
+    "cityEn": "Penang",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "534",
+    "cityName": "亚庇",
+    "cityEn": "Kota Kinabalu",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "535",
+    "cityName": "岘港",
+    "cityEn": "Da Nang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "536",
+    "cityName": "芽庄",
+    "cityEn": "Nha Trang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "537",
+    "cityName": "宿务",
+    "cityEn": "Cebu",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "538",
+    "cityName": "暹粒",
+    "cityEn": "Siem Reap",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "539",
+    "cityName": "马累",
+    "cityEn": "Male",
+    "timezoneId": "Indian/Maldives",
+    "country": "MV",
+    "continent": "asia"
+  },
+  {
+    "id": "540",
+    "cityName": "吉达",
+    "cityEn": "Jeddah",
+    "timezoneId": "Asia/Riyadh",
+    "country": "SA",
+    "continent": "asia"
+  },
+  {
+    "id": "541",
+    "cityName": "特拉维夫",
+    "cityEn": "Tel Aviv",
+    "timezoneId": "Asia/Jerusalem",
+    "country": "IL",
+    "continent": "asia"
+  },
+  {
+    "id": "542",
+    "cityName": "海参崴",
+    "cityEn": "Vladivostok",
+    "timezoneId": "Asia/Vladivostok",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "543",
+    "cityName": "利物浦",
+    "cityEn": "Liverpool",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "544",
+    "cityName": "加的夫",
+    "cityEn": "Cardiff",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "545",
+    "cityName": "贝尔法斯特",
+    "cityEn": "Belfast",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "546",
+    "cityName": "尼斯",
+    "cityEn": "Nice",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "547",
+    "cityName": "波尔多",
+    "cityEn": "Bordeaux",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "548",
+    "cityName": "科隆",
+    "cityEn": "Cologne",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "549",
+    "cityName": "杜塞尔多夫",
+    "cityEn": "Dusseldorf",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "550",
+    "cityName": "斯图加特",
+    "cityEn": "Stuttgart",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "551",
+    "cityName": "威尼斯",
+    "cityEn": "Venice",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "552",
+    "cityName": "佛罗伦萨",
+    "cityEn": "Florence",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "553",
+    "cityName": "博洛尼亚",
+    "cityEn": "Bologna",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "554",
+    "cityName": "马拉加",
+    "cityEn": "Malaga",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "555",
+    "cityName": "格拉纳达",
+    "cityEn": "Granada",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "556",
+    "cityName": "埃因霍温",
+    "cityEn": "Eindhoven",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "557",
+    "cityName": "安特卫普",
+    "cityEn": "Antwerp",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "558",
+    "cityName": "哥德堡",
+    "cityEn": "Gothenburg",
+    "timezoneId": "Europe/Stockholm",
+    "country": "SE",
+    "continent": "europe"
+  },
+  {
+    "id": "559",
+    "cityName": "卑尔根",
+    "cityEn": "Bergen",
+    "timezoneId": "Europe/Oslo",
+    "country": "NO",
+    "continent": "europe"
+  },
+  {
+    "id": "560",
+    "cityName": "克拉科夫",
+    "cityEn": "Krakow",
+    "timezoneId": "Europe/Warsaw",
+    "country": "PL",
+    "continent": "europe"
+  },
+  {
+    "id": "561",
+    "cityName": "圣托里尼",
+    "cityEn": "Santorini",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "562",
+    "cityName": "杜布罗夫尼克",
+    "cityEn": "Dubrovnik",
+    "timezoneId": "Europe/Zagreb",
+    "country": "HR",
+    "continent": "europe"
+  },
+  {
+    "id": "563",
+    "cityName": "伊兹密尔",
+    "cityEn": "Izmir",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "europe"
+  },
+  {
+    "id": "564",
+    "cityName": "维尔纽斯",
+    "cityEn": "Vilnius",
+    "timezoneId": "Europe/Vilnius",
+    "country": "LT",
+    "continent": "europe"
+  },
+  {
+    "id": "565",
+    "cityName": "里加",
+    "cityEn": "Riga",
+    "timezoneId": "Europe/Riga",
+    "country": "LV",
+    "continent": "europe"
+  },
+  {
+    "id": "566",
+    "cityName": "塔林",
+    "cityEn": "Tallinn",
+    "timezoneId": "Europe/Tallinn",
+    "country": "EE",
+    "continent": "europe"
+  },
+  {
+    "id": "567",
+    "cityName": "摩纳哥",
+    "cityEn": "Monaco",
+    "timezoneId": "Europe/Monaco",
+    "country": "MC",
+    "continent": "europe"
+  },
+  {
+    "id": "568",
+    "cityName": "拉斯维加斯",
+    "cityEn": "Las Vegas",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "569",
+    "cityName": "奥兰多",
+    "cityEn": "Orlando",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "570",
+    "cityName": "费城",
+    "cityEn": "Philadelphia",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "571",
+    "cityName": "底特律",
+    "cityEn": "Detroit",
+    "timezoneId": "America/Detroit",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "572",
+    "cityName": "新奥尔良",
+    "cityEn": "New Orleans",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "573",
+    "cityName": "波特兰",
+    "cityEn": "Portland",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "574",
+    "cityName": "明尼阿波利斯",
+    "cityEn": "Minneapolis",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "575",
+    "cityName": "魁北克城",
+    "cityEn": "Quebec City",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "576",
+    "cityName": "埃德蒙顿",
+    "cityEn": "Edmonton",
+    "timezoneId": "America/Edmonton",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "577",
+    "cityName": "温尼伯",
+    "cityEn": "Winnipeg",
+    "timezoneId": "America/Winnipeg",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "578",
+    "cityName": "坎昆",
+    "cityEn": "Cancun",
+    "timezoneId": "America/Cancun",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "579",
+    "cityName": "蒂华纳",
+    "cityEn": "Tijuana",
+    "timezoneId": "America/Tijuana",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "580",
+    "cityName": "巴西利亚",
+    "cityEn": "Brasilia",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "581",
+    "cityName": "萨尔瓦多",
+    "cityEn": "Salvador",
+    "timezoneId": "America/Bahia",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "582",
+    "cityName": "累西腓",
+    "cityEn": "Recife",
+    "timezoneId": "America/Recife",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "583",
+    "cityName": "麦德林",
+    "cityEn": "Medellin",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "584",
+    "cityName": "卡塔赫纳",
+    "cityEn": "Cartagena",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "585",
+    "cityName": "亚松森",
+    "cityEn": "Asuncion",
+    "timezoneId": "America/Asuncion",
+    "country": "PY",
+    "continent": "america"
+  },
+  {
+    "id": "586",
+    "cityName": "圣多明各",
+    "cityEn": "Santo Domingo",
+    "timezoneId": "America/Santo_Domingo",
+    "country": "DO",
+    "continent": "america"
+  },
+  {
+    "id": "587",
+    "cityName": "金斯敦",
+    "cityEn": "Kingston",
+    "timezoneId": "America/Jamaica",
+    "country": "JM",
+    "continent": "america"
+  },
+  {
+    "id": "588",
+    "cityName": "拿骚",
+    "cityEn": "Nassau",
+    "timezoneId": "America/Nassau",
+    "country": "BS",
+    "continent": "america"
+  },
+  {
+    "id": "589",
+    "cityName": "黄金海岸",
+    "cityEn": "Gold Coast",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "590",
+    "cityName": "凯恩斯",
+    "cityEn": "Cairns",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "591",
+    "cityName": "基督城",
+    "cityEn": "Christchurch",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "592",
+    "cityName": "皇后镇",
+    "cityEn": "Queenstown",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "593",
+    "cityName": "亚历山大",
+    "cityEn": "Alexandria",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "594",
+    "cityName": "开普敦",
+    "cityEn": "Cape Town",
+    "timezoneId": "Africa/Johannesburg",
+    "country": "ZA",
+    "continent": "africa"
+  },
+  {
+    "id": "595",
+    "cityName": "德班",
+    "cityEn": "Durban",
+    "timezoneId": "Africa/Johannesburg",
+    "country": "ZA",
+    "continent": "africa"
+  },
+  {
+    "id": "596",
+    "cityName": "阿布贾",
+    "cityEn": "Abuja",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "597",
+    "cityName": "马拉喀什",
+    "cityEn": "Marrakesh",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "598",
+    "cityName": "拉巴特",
+    "cityEn": "Rabat",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "599",
+    "cityName": "桑给巴尔",
+    "cityEn": "Zanzibar",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "600",
+    "cityName": "阿鲁沙",
+    "cityEn": "Arusha",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "601",
+    "cityName": "达喀尔",
+    "cityEn": "Dakar",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "602",
+    "cityName": "阿比让",
+    "cityEn": "Abidjan",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "603",
+    "cityName": "路易港",
+    "cityEn": "Port Louis",
+    "timezoneId": "Indian/Mauritius",
+    "country": "MU",
+    "continent": "africa"
+  },
+  {
+    "id": "604",
+    "cityName": "维多利亚",
+    "cityEn": "Victoria",
+    "timezoneId": "Indian/Mahe",
+    "country": "SC",
+    "continent": "africa"
+  },
+  {
+    "id": "605",
+    "cityName": "圣迭戈",
+    "cityEn": "San Diego",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "606",
+    "cityName": "比勒陀利亚",
+    "cityEn": "Pretoria",
+    "timezoneId": "Africa/Johannesburg",
+    "country": "ZA",
+    "continent": "africa"
+  },
+  {
+    "id": "607",
+    "cityName": "卢克索",
+    "cityEn": "Luxor",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "608",
+    "cityName": "赫尔格达",
+    "cityEn": "Hurghada",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "609",
+    "cityName": "阿斯旺",
+    "cityEn": "Aswan",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "610",
+    "cityName": "菲斯",
+    "cityEn": "Fes",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "611",
+    "cityName": "阿加迪尔",
+    "cityEn": "Agadir",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "612",
+    "cityName": "丹吉尔",
+    "cityEn": "Tangier",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "613",
+    "cityName": "蒙巴萨",
+    "cityEn": "Mombasa",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "614",
+    "cityName": "奥兰",
+    "cityEn": "Oran",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "615",
+    "cityName": "苏塞",
+    "cityEn": "Sousse",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "616",
+    "cityName": "罗安达",
+    "cityEn": "Luanda",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "617",
+    "cityName": "金沙萨",
+    "cityEn": "Kinshasa",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "618",
+    "cityName": "卢萨卡",
+    "cityEn": "Lusaka",
+    "timezoneId": "Africa/Lusaka",
+    "country": "ZM",
+    "continent": "africa"
+  },
+  {
+    "id": "619",
+    "cityName": "温得和克",
+    "cityEn": "Windhoek",
+    "timezoneId": "Africa/Windhoek",
+    "country": "NA",
+    "continent": "africa"
+  },
+  {
+    "id": "620",
+    "cityName": "塔那那利佛",
+    "cityEn": "Antananarivo",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "621",
+    "cityName": "哈博罗内",
+    "cityEn": "Gaborone",
+    "timezoneId": "Africa/Gaborone",
+    "country": "BW",
+    "continent": "africa"
+  },
+  {
+    "id": "622",
+    "cityName": "喀土穆",
+    "cityEn": "Khartoum",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "623",
+    "cityName": "库里蒂巴",
+    "cityEn": "Curitiba",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "624",
+    "cityName": "贝洛奥里藏特",
+    "cityEn": "Belo Horizonte",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "625",
+    "cityName": "福塔莱萨",
+    "cityEn": "Fortaleza",
+    "timezoneId": "America/Fortaleza",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "626",
+    "cityName": "玛瑙斯",
+    "cityEn": "Manaus",
+    "timezoneId": "America/Manaus",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "627",
+    "cityName": "阿雷格里港",
+    "cityEn": "Porto Alegre",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "628",
+    "cityName": "科尔多瓦",
+    "cityEn": "Cordoba",
+    "timezoneId": "America/Argentina/Cordoba",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "629",
+    "cityName": "门多萨",
+    "cityEn": "Mendoza",
+    "timezoneId": "America/Argentina/Mendoza",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "630",
+    "cityName": "瓦尔帕莱索",
+    "cityEn": "Valparaiso",
+    "timezoneId": "America/Santiago",
+    "country": "CL",
+    "continent": "america"
+  },
+  {
+    "id": "631",
+    "cityName": "库斯科",
+    "cityEn": "Cusco",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "632",
+    "cityName": "卡利",
+    "cityEn": "Cali",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "633",
+    "cityName": "瓜亚基尔",
+    "cityEn": "Guayaquil",
+    "timezoneId": "America/Guayaquil",
+    "country": "EC",
+    "continent": "america"
+  },
+  {
+    "id": "634",
+    "cityName": "圣克鲁斯",
+    "cityEn": "Santa Cruz",
+    "timezoneId": "America/La_Paz",
+    "country": "BO",
+    "continent": "america"
+  },
+  {
+    "id": "635",
+    "cityName": "乔治敦",
+    "cityEn": "Georgetown",
+    "timezoneId": "America/Guyana",
+    "country": "GY",
+    "continent": "america"
+  },
+  {
+    "id": "636",
+    "cityName": "帕拉马里博",
+    "cityEn": "Paramaribo",
+    "timezoneId": "America/Paramaribo",
+    "country": "SR",
+    "continent": "america"
+  },
+  {
+    "id": "637",
+    "cityName": "清莱",
+    "cityEn": "Chiang Rai",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "638",
+    "cityName": "甲米",
+    "cityEn": "Krabi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "639",
+    "cityName": "苏梅岛",
+    "cityEn": "Koh Samui",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "640",
+    "cityName": "顺化",
+    "cityEn": "Hue",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "641",
+    "cityName": "会安",
+    "cityEn": "Hoi An",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "642",
+    "cityName": "海防",
+    "cityEn": "Haiphong",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "643",
+    "cityName": "新山",
+    "cityEn": "Johor Bahru",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "644",
+    "cityName": "马六甲",
+    "cityEn": "Malacca",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "645",
+    "cityName": "兰卡威",
+    "cityEn": "Langkawi",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "646",
+    "cityName": "古晋",
+    "cityEn": "Kuching",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "647",
+    "cityName": "万隆",
+    "cityEn": "Bandung",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "648",
+    "cityName": "日惹",
+    "cityEn": "Yogyakarta",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "649",
+    "cityName": "棉兰",
+    "cityEn": "Medan",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "650",
+    "cityName": "巴淡",
+    "cityEn": "Batam",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "651",
+    "cityName": "望加锡",
+    "cityEn": "Makassar",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "652",
+    "cityName": "达沃",
+    "cityEn": "Davao",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "653",
+    "cityName": "长滩岛",
+    "cityEn": "Boracay",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "654",
+    "cityName": "西哈努克",
+    "cityEn": "Sihanoukville",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "655",
+    "cityName": "琅勃拉邦",
+    "cityEn": "Luang Prabang",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "656",
+    "cityName": "曼德勒",
+    "cityEn": "Mandalay",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "657",
+    "cityName": "蒲甘",
+    "cityEn": "Bagan",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "658",
+    "cityName": "斯里巴加湾市",
+    "cityEn": "Bandar Seri Begawan",
+    "timezoneId": "Asia/Brunei",
+    "country": "BN",
+    "continent": "asia"
+  },
+  {
+    "id": "659",
+    "cityName": "帝力",
+    "cityEn": "Dili",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "660",
+    "cityName": "广岛",
+    "cityEn": "Hiroshima",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "661",
+    "cityName": "熊本",
+    "cityEn": "Kumamoto",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "662",
+    "cityName": "仁川",
+    "cityEn": "Incheon",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "663",
+    "cityName": "艾哈迈达巴德",
+    "cityEn": "Ahmedabad",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "664",
+    "cityName": "吉大港",
+    "cityEn": "Chittagong",
+    "timezoneId": "Asia/Dhaka",
+    "country": "BD",
+    "continent": "asia"
+  },
+  {
+    "id": "665",
+    "cityName": "博卡拉",
+    "cityEn": "Pokhara",
+    "timezoneId": "Asia/Kathmandu",
+    "country": "NP",
+    "continent": "asia"
+  },
+  {
+    "id": "666",
+    "cityName": "廷布",
+    "cityEn": "Thimphu",
+    "timezoneId": "Asia/Thimphu",
+    "country": "BT",
+    "continent": "asia"
+  },
+  {
+    "id": "667",
+    "cityName": "撒马尔罕",
+    "cityEn": "Samarkand",
+    "timezoneId": "Asia/Samarkand",
+    "country": "UZ",
+    "continent": "asia"
+  },
+  {
+    "id": "668",
+    "cityName": "沙迦",
+    "cityEn": "Sharjah",
+    "timezoneId": "Asia/Dubai",
+    "country": "AE",
+    "continent": "asia"
+  },
+  {
+    "id": "669",
+    "cityName": "麦加",
+    "cityEn": "Mecca",
+    "timezoneId": "Asia/Riyadh",
+    "country": "SA",
+    "continent": "asia"
+  },
+  {
+    "id": "670",
+    "cityName": "麦地那",
+    "cityEn": "Medina",
+    "timezoneId": "Asia/Riyadh",
+    "country": "SA",
+    "continent": "asia"
+  },
+  {
+    "id": "671",
+    "cityName": "达曼",
+    "cityEn": "Dammam",
+    "timezoneId": "Asia/Riyadh",
+    "country": "SA",
+    "continent": "asia"
+  },
+  {
+    "id": "672",
+    "cityName": "海法",
+    "cityEn": "Haifa",
+    "timezoneId": "Asia/Jerusalem",
+    "country": "IL",
+    "continent": "asia"
+  },
+  {
+    "id": "673",
+    "cityName": "巴士拉",
+    "cityEn": "Basra",
+    "timezoneId": "Asia/Baghdad",
+    "country": "IQ",
+    "continent": "asia"
+  },
+  {
+    "id": "674",
+    "cityName": "埃尔比勒",
+    "cityEn": "Erbil",
+    "timezoneId": "Asia/Baghdad",
+    "country": "IQ",
+    "continent": "asia"
+  },
+  {
+    "id": "675",
+    "cityName": "设拉子",
+    "cityEn": "Shiraz",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "676",
+    "cityName": "伊斯法罕",
+    "cityEn": "Isfahan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "677",
+    "cityName": "马什哈德",
+    "cityEn": "Mashhad",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "678",
+    "cityName": "阿勒颇",
+    "cityEn": "Aleppo",
+    "timezoneId": "Asia/Damascus",
+    "country": "SY",
+    "continent": "asia"
+  },
+  {
+    "id": "679",
+    "cityName": "安塔利亚",
+    "cityEn": "Antalya",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "asia"
+  },
+  {
+    "id": "680",
+    "cityName": "布尔萨",
+    "cityEn": "Bursa",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "asia"
+  },
+  {
+    "id": "681",
+    "cityName": "萨那",
+    "cityEn": "Sana'a",
+    "timezoneId": "Asia/Aden",
+    "country": "YE",
+    "continent": "asia"
+  },
+  {
+    "id": "682",
+    "cityName": "拉姆安拉",
+    "cityEn": "Ramallah",
+    "timezoneId": "Asia/Hebron",
+    "country": "PS",
+    "continent": "asia"
+  },
+  {
+    "id": "683",
+    "cityName": "塞拉莱",
+    "cityEn": "Salalah",
+    "timezoneId": "Asia/Muscat",
+    "country": "OM",
+    "continent": "asia"
+  },
+  {
+    "id": "684",
+    "cityName": "巴统",
+    "cityEn": "Batumi",
+    "timezoneId": "Asia/Tbilisi",
+    "country": "GE",
+    "continent": "asia"
+  },
+  {
+    "id": "685",
+    "cityName": "奇姆肯特",
+    "cityEn": "Shymkent",
+    "timezoneId": "Asia/Almaty",
+    "country": "KZ",
+    "continent": "asia"
+  },
+  {
+    "id": "686",
+    "cityName": "布哈拉",
+    "cityEn": "Bukhara",
+    "timezoneId": "Asia/Samarkand",
+    "country": "UZ",
+    "continent": "asia"
+  },
+  {
+    "id": "687",
+    "cityName": "奥什",
+    "cityEn": "Osh",
+    "timezoneId": "Asia/Bishkek",
+    "country": "KG",
+    "continent": "asia"
+  },
+  {
+    "id": "688",
+    "cityName": "苦盏",
+    "cityEn": "Khujand",
+    "timezoneId": "Asia/Dushanbe",
+    "country": "TJ",
+    "continent": "asia"
+  },
+  {
+    "id": "689",
+    "cityName": "阿什哈巴德",
+    "cityEn": "Ashgabat",
+    "timezoneId": "Asia/Ashgabat",
+    "country": "TM",
+    "continent": "asia"
+  },
+  {
+    "id": "690",
+    "cityName": "平壤",
+    "cityEn": "Pyongyang",
+    "timezoneId": "Asia/Pyongyang",
+    "country": "KP",
+    "continent": "asia"
+  },
+  {
+    "id": "691",
+    "cityName": "卢布尔雅那",
+    "cityEn": "Ljubljana",
+    "timezoneId": "Europe/Ljubljana",
+    "country": "SI",
+    "continent": "europe"
+  },
+  {
+    "id": "692",
+    "cityName": "布拉迪斯拉发",
+    "cityEn": "Bratislava",
+    "timezoneId": "Europe/Bratislava",
+    "country": "SK",
+    "continent": "europe"
+  },
+  {
+    "id": "693",
+    "cityName": "莱比锡",
+    "cityEn": "Leipzig",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "694",
+    "cityName": "斯特拉斯堡",
+    "cityEn": "Strasbourg",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "695",
+    "cityName": "里尔",
+    "cityEn": "Lille",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "696",
+    "cityName": "毕尔巴鄂",
+    "cityEn": "Bilbao",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "697",
+    "cityName": "热那亚",
+    "cityEn": "Genoa",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "698",
+    "cityName": "布里斯托尔",
+    "cityEn": "Bristol",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "699",
+    "cityName": "剑桥",
+    "cityEn": "Cambridge",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "700",
+    "cityName": "格但斯克",
+    "cityEn": "Gdansk",
+    "timezoneId": "Europe/Warsaw",
+    "country": "PL",
+    "continent": "europe"
+  },
+  {
+    "id": "701",
+    "cityName": "巴塞尔",
+    "cityEn": "Basel",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "702",
+    "cityName": "洛桑",
+    "cityEn": "Lausanne",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "703",
+    "cityName": "法鲁",
+    "cityEn": "Faro",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "704",
+    "cityName": "塞萨洛尼基",
+    "cityEn": "Thessaloniki",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "705",
+    "cityName": "萨尔茨堡",
+    "cityEn": "Salzburg",
+    "timezoneId": "Europe/Vienna",
+    "country": "AT",
+    "continent": "europe"
+  },
+  {
+    "id": "706",
+    "cityName": "喀山",
+    "cityEn": "Kazan",
+    "timezoneId": "Europe/Moscow",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "707",
+    "cityName": "叶卡捷琳堡",
+    "cityEn": "Yekaterinburg",
+    "timezoneId": "Asia/Yekaterinburg",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "708",
+    "cityName": "新西伯利亚",
+    "cityEn": "Novosibirsk",
+    "timezoneId": "Asia/Novosibirsk",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "709",
+    "cityName": "伊尔库茨克",
+    "cityEn": "Irkutsk",
+    "timezoneId": "Asia/Irkutsk",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "710",
+    "cityName": "敖德萨",
+    "cityEn": "Odesa",
+    "timezoneId": "Europe/Kyiv",
+    "country": "UA",
+    "continent": "europe"
+  },
+  {
+    "id": "711",
+    "cityName": "危地马拉城",
+    "cityEn": "Guatemala City",
+    "timezoneId": "America/Guatemala",
+    "country": "GT",
+    "continent": "america"
+  },
+  {
+    "id": "712",
+    "cityName": "特古西加尔巴",
+    "cityEn": "Tegucigalpa",
+    "timezoneId": "America/Tegucigalpa",
+    "country": "HN",
+    "continent": "america"
+  },
+  {
+    "id": "713",
+    "cityName": "圣萨尔瓦多",
+    "cityEn": "San Salvador",
+    "timezoneId": "America/El_Salvador",
+    "country": "SV",
+    "continent": "america"
+  },
+  {
+    "id": "714",
+    "cityName": "马那瓜",
+    "cityEn": "Managua",
+    "timezoneId": "America/Managua",
+    "country": "NI",
+    "continent": "america"
+  },
+  {
+    "id": "715",
+    "cityName": "太子港",
+    "cityEn": "Port-au-Prince",
+    "timezoneId": "America/Port-au-Prince",
+    "country": "HT",
+    "continent": "america"
+  },
+  {
+    "id": "716",
+    "cityName": "西班牙港",
+    "cityEn": "Port of Spain",
+    "timezoneId": "America/Port_of_Spain",
+    "country": "TT",
+    "continent": "america"
+  },
+  {
+    "id": "717",
+    "cityName": "圣胡安",
+    "cityEn": "San Juan",
+    "timezoneId": "America/Puerto_Rico",
+    "country": "PR",
+    "continent": "america"
+  },
+  {
+    "id": "718",
+    "cityName": "梅里达",
+    "cityEn": "Merida",
+    "timezoneId": "America/Merida",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "719",
+    "cityName": "乌斯怀亚",
+    "cityEn": "Ushuaia",
+    "timezoneId": "America/Argentina/Ushuaia",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "720",
+    "cityName": "阿雷基帕",
+    "cityEn": "Arequipa",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "721",
+    "cityName": "埃斯特角城",
+    "cityEn": "Punta del Este",
+    "timezoneId": "America/Montevideo",
+    "country": "UY",
+    "continent": "america"
+  },
+  {
+    "id": "722",
+    "cityName": "莫尔兹比港",
+    "cityEn": "Port Moresby",
+    "timezoneId": "Pacific/Port_Moresby",
+    "country": "PG",
+    "continent": "oceania"
+  },
+  {
+    "id": "723",
+    "cityName": "维拉港",
+    "cityEn": "Port Vila",
+    "timezoneId": "Pacific/Efate",
+    "country": "VU",
+    "continent": "oceania"
+  },
+  {
+    "id": "724",
+    "cityName": "霍尼亚拉",
+    "cityEn": "Honiara",
+    "timezoneId": "Pacific/Guadalcanal",
+    "country": "SB",
+    "continent": "oceania"
+  },
+  {
+    "id": "725",
+    "cityName": "苏瓦",
+    "cityEn": "Suva",
+    "timezoneId": "Pacific/Fiji",
+    "country": "FJ",
+    "continent": "oceania"
+  },
+  {
+    "id": "726",
+    "cityName": "阿皮亚",
+    "cityEn": "Apia",
+    "timezoneId": "Pacific/Apia",
+    "country": "WS",
+    "continent": "oceania"
+  },
+  {
+    "id": "727",
+    "cityName": "努库阿洛法",
+    "cityEn": "Nuku'alofa",
+    "timezoneId": "Pacific/Tongatapu",
+    "country": "TO",
+    "continent": "oceania"
+  },
+  {
+    "id": "728",
+    "cityName": "塔拉瓦",
+    "cityEn": "Tarawa",
+    "timezoneId": "Pacific/Tarawa",
+    "country": "KI",
+    "continent": "oceania"
+  },
+  {
+    "id": "729",
+    "cityName": "马朱罗",
+    "cityEn": "Majuro",
+    "timezoneId": "Pacific/Majuro",
+    "country": "MH",
+    "continent": "oceania"
+  },
+  {
+    "id": "730",
+    "cityName": "帕利基尔",
+    "cityEn": "Palikir",
+    "timezoneId": "Pacific/Pohnpei",
+    "country": "FM",
+    "continent": "oceania"
+  },
+  {
+    "id": "731",
+    "cityName": "科罗尔",
+    "cityEn": "Koror",
+    "timezoneId": "Pacific/Palau",
+    "country": "PW",
+    "continent": "oceania"
+  },
+  {
+    "id": "732",
+    "cityName": "努美阿",
+    "cityEn": "Noumea",
+    "timezoneId": "Pacific/Noumea",
+    "country": "NC",
+    "continent": "oceania"
+  },
+  {
+    "id": "733",
+    "cityName": "雅温得",
+    "cityEn": "Yaounde",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "734",
+    "cityName": "杜阿拉",
+    "cityEn": "Douala",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "735",
+    "cityName": "巴马科",
+    "cityEn": "Bamako",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "736",
+    "cityName": "瓦加杜古",
+    "cityEn": "Ouagadougou",
+    "timezoneId": "Africa/Ouagadougou",
+    "country": "BF",
+    "continent": "africa"
+  },
+  {
+    "id": "737",
+    "cityName": "尼亚美",
+    "cityEn": "Niamey",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "738",
+    "cityName": "恩贾梅纳",
+    "cityEn": "N'Djamena",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "739",
+    "cityName": "的黎波里",
+    "cityEn": "Tripoli",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "740",
+    "cityName": "摩加迪沙",
+    "cityEn": "Mogadishu",
+    "timezoneId": "Africa/Mogadishu",
+    "country": "SO",
+    "continent": "africa"
+  },
+  {
+    "id": "741",
+    "cityName": "努瓦克肖特",
+    "cityEn": "Nouakchott",
+    "timezoneId": "Africa/Nouakchott",
+    "country": "MR",
+    "continent": "africa"
+  },
+  {
+    "id": "742",
+    "cityName": "科纳克里",
+    "cityEn": "Conakry",
+    "timezoneId": "Africa/Conakry",
+    "country": "GN",
+    "continent": "africa"
+  },
+  {
+    "id": "743",
+    "cityName": "弗里敦",
+    "cityEn": "Freetown",
+    "timezoneId": "Africa/Freetown",
+    "country": "SL",
+    "continent": "africa"
+  },
+  {
+    "id": "744",
+    "cityName": "科托努",
+    "cityEn": "Cotonou",
+    "timezoneId": "Africa/Porto-Novo",
+    "country": "BJ",
+    "continent": "africa"
+  },
+  {
+    "id": "745",
+    "cityName": "利隆圭",
+    "cityEn": "Lilongwe",
+    "timezoneId": "Africa/Blantyre",
+    "country": "MW",
+    "continent": "africa"
+  },
+  {
+    "id": "746",
+    "cityName": "阿斯马拉",
+    "cityEn": "Asmara",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "747",
+    "cityName": "吉布提",
+    "cityEn": "Djibouti",
+    "timezoneId": "Africa/Djibouti",
+    "country": "DJ",
+    "continent": "africa"
+  },
+  {
+    "id": "748",
+    "cityName": "地拉那",
+    "cityEn": "Tirana",
+    "timezoneId": "Europe/Tirane",
+    "country": "AL",
+    "continent": "europe"
+  },
+  {
+    "id": "749",
+    "cityName": "斯科普里",
+    "cityEn": "Skopje",
+    "timezoneId": "Europe/Skopje",
+    "country": "MK",
+    "continent": "europe"
+  },
+  {
+    "id": "750",
+    "cityName": "萨拉热窝",
+    "cityEn": "Sarajevo",
+    "timezoneId": "Europe/Sarajevo",
+    "country": "BA",
+    "continent": "europe"
+  },
+  {
+    "id": "751",
+    "cityName": "波德戈里察",
+    "cityEn": "Podgorica",
+    "timezoneId": "Europe/Podgorica",
+    "country": "ME",
+    "continent": "europe"
+  },
+  {
+    "id": "752",
+    "cityName": "基希讷乌",
+    "cityEn": "Chisinau",
+    "timezoneId": "Europe/Chisinau",
+    "country": "MD",
+    "continent": "europe"
+  },
+  {
+    "id": "753",
+    "cityName": "布里奇敦",
+    "cityEn": "Bridgetown",
+    "timezoneId": "America/Barbados",
+    "country": "BB",
+    "continent": "america"
+  },
+  {
+    "id": "754",
+    "cityName": "圣约翰",
+    "cityEn": "St. John's",
+    "timezoneId": "America/Antigua",
+    "country": "AG",
+    "continent": "america"
+  },
+  {
+    "id": "755",
+    "cityName": "卡斯特里",
+    "cityEn": "Castries",
+    "timezoneId": "America/St_Lucia",
+    "country": "LC",
+    "continent": "america"
+  },
+  {
+    "id": "756",
+    "cityName": "奥拉涅斯塔德",
+    "cityEn": "Oranjestad",
+    "timezoneId": "America/Aruba",
+    "country": "AW",
+    "continent": "america"
+  },
+  {
+    "id": "757",
+    "cityName": "哈密尔顿",
+    "cityEn": "Hamilton",
+    "timezoneId": "Atlantic/Bermuda",
+    "country": "BM",
+    "continent": "america"
+  },
+  {
+    "id": "758",
+    "cityName": "罗索",
+    "cityEn": "Roseau",
+    "timezoneId": "America/Dominica",
+    "country": "DM",
+    "continent": "america"
+  },
+  {
+    "id": "759",
+    "cityName": "瓦拉纳西",
+    "cityEn": "Varanasi",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "760",
+    "cityName": "果阿",
+    "cityEn": "Goa",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "761",
+    "cityName": "安道尔城",
+    "cityEn": "Andorra la Vella",
+    "timezoneId": "Europe/Andorra",
+    "country": "AD",
+    "continent": "europe"
+  },
+  {
+    "id": "762",
+    "cityName": "圣马力诺",
+    "cityEn": "San Marino",
+    "timezoneId": "Europe/San_Marino",
+    "country": "SM",
+    "continent": "europe"
+  },
+  {
+    "id": "763",
+    "cityName": "瓦杜兹",
+    "cityEn": "Vaduz",
+    "timezoneId": "Europe/Vaduz",
+    "country": "LI",
+    "continent": "europe"
+  },
+  {
+    "id": "764",
+    "cityName": "梵蒂冈",
+    "cityEn": "Vatican City",
+    "timezoneId": "Europe/Vatican",
+    "country": "VA",
+    "continent": "europe"
+  },
+  {
+    "id": "765",
+    "cityName": "托尔斯港",
+    "cityEn": "Torshavn",
+    "timezoneId": "Atlantic/Faroe",
+    "country": "FO",
+    "continent": "europe"
+  },
+  {
+    "id": "766",
+    "cityName": "直布罗陀",
+    "cityEn": "Gibraltar",
+    "timezoneId": "Europe/Gibraltar",
+    "country": "GI",
+    "continent": "europe"
+  },
+  {
+    "id": "767",
+    "cityName": "道格拉斯",
+    "cityEn": "Douglas",
+    "timezoneId": "Europe/Isle_of_Man",
+    "country": "IM",
+    "continent": "europe"
+  },
+  {
+    "id": "768",
+    "cityName": "圣赫利尔",
+    "cityEn": "St. Helier",
+    "timezoneId": "Europe/Jersey",
+    "country": "JE",
+    "continent": "europe"
+  },
+  {
+    "id": "769",
+    "cityName": "圣彼得港",
+    "cityEn": "St. Peter Port",
+    "timezoneId": "Europe/Guernsey",
+    "country": "GG",
+    "continent": "europe"
+  },
+  {
+    "id": "770",
+    "cityName": "乔治城",
+    "cityEn": "George Town",
+    "timezoneId": "America/Cayman",
+    "country": "KY",
+    "continent": "america"
+  },
+  {
+    "id": "771",
+    "cityName": "科伯恩城",
+    "cityEn": "Cockburn Town",
+    "timezoneId": "America/Grand_Turk",
+    "country": "TC",
+    "continent": "america"
+  },
+  {
+    "id": "772",
+    "cityName": "罗德城",
+    "cityEn": "Road Town",
+    "timezoneId": "America/Tortola",
+    "country": "VG",
+    "continent": "america"
+  },
+  {
+    "id": "773",
+    "cityName": "夏洛特阿马利亚",
+    "cityEn": "Charlotte Amalie",
+    "timezoneId": "America/St_Thomas",
+    "country": "VI",
+    "continent": "america"
+  },
+  {
+    "id": "774",
+    "cityName": "巴斯特尔",
+    "cityEn": "Basseterre",
+    "timezoneId": "America/St_Kitts",
+    "country": "KN",
+    "continent": "america"
+  },
+  {
+    "id": "775",
+    "cityName": "国王镇",
+    "cityEn": "Kingstown",
+    "timezoneId": "America/St_Vincent",
+    "country": "VC",
+    "continent": "america"
+  },
+  {
+    "id": "776",
+    "cityName": "圣乔治",
+    "cityEn": "St. George's",
+    "timezoneId": "America/Grenada",
+    "country": "GD",
+    "continent": "america"
+  },
+  {
+    "id": "777",
+    "cityName": "法兰西堡",
+    "cityEn": "Fort-de-France",
+    "timezoneId": "America/Martinique",
+    "country": "MQ",
+    "continent": "america"
+  },
+  {
+    "id": "778",
+    "cityName": "皮特尔角城",
+    "cityEn": "Pointe-a-Pitre",
+    "timezoneId": "America/Guadeloupe",
+    "country": "GP",
+    "continent": "america"
+  },
+  {
+    "id": "779",
+    "cityName": "威廉斯塔德",
+    "cityEn": "Willemstad",
+    "timezoneId": "America/Curacao",
+    "country": "CW",
+    "continent": "america"
+  },
+  {
+    "id": "780",
+    "cityName": "菲利普斯堡",
+    "cityEn": "Philipsburg",
+    "timezoneId": "America/Lower_Princes",
+    "country": "SX",
+    "continent": "america"
+  },
+  {
+    "id": "781",
+    "cityName": "姆巴巴内",
+    "cityEn": "Mbabane",
+    "timezoneId": "Africa/Mbabane",
+    "country": "SZ",
+    "continent": "africa"
+  },
+  {
+    "id": "782",
+    "cityName": "马塞卢",
+    "cityEn": "Maseru",
+    "timezoneId": "Africa/Maseru",
+    "country": "LS",
+    "continent": "africa"
+  },
+  {
+    "id": "783",
+    "cityName": "布琼布拉",
+    "cityEn": "Bujumbura",
+    "timezoneId": "Africa/Bujumbura",
+    "country": "BI",
+    "continent": "africa"
+  },
+  {
+    "id": "784",
+    "cityName": "朱巴",
+    "cityEn": "Juba",
+    "timezoneId": "Africa/Juba",
+    "country": "SS",
+    "continent": "africa"
+  },
+  {
+    "id": "785",
+    "cityName": "洛美",
+    "cityEn": "Lome",
+    "timezoneId": "Africa/Lome",
+    "country": "TG",
+    "continent": "africa"
+  },
+  {
+    "id": "786",
+    "cityName": "蒙罗维亚",
+    "cityEn": "Monrovia",
+    "timezoneId": "Africa/Monrovia",
+    "country": "LR",
+    "continent": "africa"
+  },
+  {
+    "id": "787",
+    "cityName": "班珠尔",
+    "cityEn": "Banjul",
+    "timezoneId": "Africa/Banjul",
+    "country": "GM",
+    "continent": "africa"
+  },
+  {
+    "id": "788",
+    "cityName": "比绍",
+    "cityEn": "Bissau",
+    "timezoneId": "Africa/Bissau",
+    "country": "GW",
+    "continent": "africa"
+  },
+  {
+    "id": "789",
+    "cityName": "普拉亚",
+    "cityEn": "Praia",
+    "timezoneId": "Atlantic/Cape_Verde",
+    "country": "CV",
+    "continent": "africa"
+  },
+  {
+    "id": "790",
+    "cityName": "圣多美",
+    "cityEn": "Sao Tome",
+    "timezoneId": "Africa/Sao_Tome",
+    "country": "ST",
+    "continent": "africa"
+  },
+  {
+    "id": "791",
+    "cityName": "利伯维尔",
+    "cityEn": "Libreville",
+    "timezoneId": "Africa/Libreville",
+    "country": "GA",
+    "continent": "africa"
+  },
+  {
+    "id": "792",
+    "cityName": "马拉博",
+    "cityEn": "Malabo",
+    "timezoneId": "Africa/Malabo",
+    "country": "GQ",
+    "continent": "africa"
+  },
+  {
+    "id": "793",
+    "cityName": "班吉",
+    "cityEn": "Bangui",
+    "timezoneId": "Africa/Bangui",
+    "country": "CF",
+    "continent": "africa"
+  },
+  {
+    "id": "794",
+    "cityName": "布拉柴维尔",
+    "cityEn": "Brazzaville",
+    "timezoneId": "Africa/Brazzaville",
+    "country": "CG",
+    "continent": "africa"
+  },
+  {
+    "id": "795",
+    "cityName": "圣但尼",
+    "cityEn": "Saint-Denis",
+    "timezoneId": "Indian/Reunion",
+    "country": "RE",
+    "continent": "africa"
+  },
+  {
+    "id": "796",
+    "cityName": "莫罗尼",
+    "cityEn": "Moroni",
+    "timezoneId": "Indian/Comoro",
+    "country": "KM",
+    "continent": "africa"
+  },
+  {
+    "id": "797",
+    "cityName": "亚伦",
+    "cityEn": "Yaren",
+    "timezoneId": "Pacific/Nauru",
+    "country": "NR",
+    "continent": "oceania"
+  },
+  {
+    "id": "798",
+    "cityName": "富纳富提",
+    "cityEn": "Funafuti",
+    "timezoneId": "Pacific/Funafuti",
+    "country": "TV",
+    "continent": "oceania"
+  },
+  {
+    "id": "799",
+    "cityName": "塞班",
+    "cityEn": "Saipan",
+    "timezoneId": "Pacific/Saipan",
+    "country": "MP",
+    "continent": "oceania"
+  },
+  {
+    "id": "800",
+    "cityName": "帕果帕果",
+    "cityEn": "Pago Pago",
+    "timezoneId": "Pacific/Pago_Pago",
+    "country": "AS",
+    "continent": "oceania"
+  },
+  {
+    "id": "801",
+    "cityName": "阿瓦鲁阿",
+    "cityEn": "Avarua",
+    "timezoneId": "Pacific/Rarotonga",
+    "country": "CK",
+    "continent": "oceania"
+  },
+  {
+    "id": "802",
+    "cityName": "马塔乌图",
+    "cityEn": "Mata-Utu",
+    "timezoneId": "Pacific/Wallis",
+    "country": "WF",
+    "continent": "oceania"
+  },
+  {
+    "id": "803",
+    "cityName": "贝尔莫潘",
+    "cityEn": "Belmopan",
+    "timezoneId": "America/Belize",
+    "country": "BZ",
+    "continent": "america"
+  },
+  {
+    "id": "804",
+    "cityName": "努克",
+    "cityEn": "Nuuk",
+    "timezoneId": "America/Nuuk",
+    "country": "GL",
+    "continent": "arctic"
+  },
+  {
+    "id": "805",
+    "cityName": "马里戈特",
+    "cityEn": "Marigot",
+    "timezoneId": "America/Marigot",
+    "country": "MF",
+    "continent": "america"
+  },
+  {
+    "id": "806",
+    "cityName": "居斯塔维亚",
+    "cityEn": "Gustavia",
+    "timezoneId": "America/St_Barthelemy",
+    "country": "BL",
+    "continent": "america"
+  },
+  {
+    "id": "807",
+    "cityName": "普利茅斯",
+    "cityEn": "Plymouth",
+    "timezoneId": "America/Montserrat",
+    "country": "MS",
+    "continent": "america"
+  },
+  {
+    "id": "808",
+    "cityName": "瓦利",
+    "cityEn": "The Valley",
+    "timezoneId": "America/Anguilla",
+    "country": "AI",
+    "continent": "america"
+  },
+  {
+    "id": "809",
+    "cityName": "圣皮埃尔",
+    "cityEn": "Saint-Pierre",
+    "timezoneId": "America/Miquelon",
+    "country": "PM",
+    "continent": "america"
+  },
+  {
+    "id": "810",
+    "cityName": "斯坦利",
+    "cityEn": "Stanley",
+    "timezoneId": "Atlantic/Stanley",
+    "country": "FK",
+    "continent": "america"
+  },
+  {
+    "id": "811",
+    "cityName": "飞鱼湾",
+    "cityEn": "Flying Fish Cove",
+    "timezoneId": "Indian/Christmas",
+    "country": "CX",
+    "continent": "oceania"
+  },
+  {
+    "id": "812",
+    "cityName": "西岛",
+    "cityEn": "West Island",
+    "timezoneId": "Indian/Cocos",
+    "country": "CC",
+    "continent": "oceania"
+  },
+  {
+    "id": "813",
+    "cityName": "金士顿",
+    "cityEn": "Kingston",
+    "timezoneId": "Pacific/Norfolk",
+    "country": "NF",
+    "continent": "oceania"
+  },
+  {
+    "id": "814",
+    "cityName": "阿洛菲",
+    "cityEn": "Alofi",
+    "timezoneId": "Pacific/Niue",
+    "country": "NU",
+    "continent": "oceania"
+  },
+  {
+    "id": "815",
+    "cityName": "法考福",
+    "cityEn": "Fakaofo",
+    "timezoneId": "Pacific/Fakaofo",
+    "country": "TK",
+    "continent": "oceania"
+  },
+  {
+    "id": "816",
+    "cityName": "亚当斯敦",
+    "cityEn": "Adamstown",
+    "timezoneId": "Pacific/Pitcairn",
+    "country": "PN",
+    "continent": "oceania"
+  },
+  {
+    "id": "817",
+    "cityName": "阿尤恩",
+    "cityEn": "Laayoune",
+    "timezoneId": "Africa/El_Aaiun",
+    "country": "EH",
+    "continent": "africa"
+  },
+  {
+    "id": "818",
+    "cityName": "朗伊尔城",
+    "cityEn": "Longyearbyen",
+    "timezoneId": "Arctic/Longyearbyen",
+    "country": "SJ",
+    "continent": "arctic"
+  },
+  {
+    "id": "819",
+    "cityName": "詹姆斯敦",
+    "cityEn": "Jamestown",
+    "timezoneId": "Atlantic/St_Helena",
+    "country": "SH",
+    "continent": "africa"
+  },
+  {
+    "id": "820",
+    "cityName": "迪戈加西亚",
+    "cityEn": "Diego Garcia",
+    "timezoneId": "Indian/Chagos",
+    "country": "IO",
+    "continent": "africa"
+  },
+  {
+    "id": "821",
+    "cityName": "奥斯汀",
+    "cityEn": "Austin",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "822",
+    "cityName": "夏洛特",
+    "cityEn": "Charlotte",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "823",
+    "cityName": "纳什维尔",
+    "cityEn": "Nashville",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "824",
+    "cityName": "圣安东尼奥",
+    "cityEn": "San Antonio",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "825",
+    "cityName": "匹兹堡",
+    "cityEn": "Pittsburgh",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "826",
+    "cityName": "巴尔的摩",
+    "cityEn": "Baltimore",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "827",
+    "cityName": "圣路易斯",
+    "cityEn": "St. Louis",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "828",
+    "cityName": "堪萨斯城",
+    "cityEn": "Kansas City",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "829",
+    "cityName": "哥伦布",
+    "cityEn": "Columbus",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "830",
+    "cityName": "印第安纳波利斯",
+    "cityEn": "Indianapolis",
+    "timezoneId": "America/Indiana/Indianapolis",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "831",
+    "cityName": "盐湖城",
+    "cityEn": "Salt Lake City",
+    "timezoneId": "America/Denver",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "832",
+    "cityName": "坦帕",
+    "cityEn": "Tampa",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "833",
+    "cityName": "萨克拉门托",
+    "cityEn": "Sacramento",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "834",
+    "cityName": "圣荷西",
+    "cityEn": "San Jose",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "835",
+    "cityName": "孟菲斯",
+    "cityEn": "Memphis",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "836",
+    "cityName": "俄克拉何马城",
+    "cityEn": "Oklahoma City",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "837",
+    "cityName": "路易斯维尔",
+    "cityEn": "Louisville",
+    "timezoneId": "America/Kentucky/Louisville",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "838",
+    "cityName": "杰克逊维尔",
+    "cityEn": "Jacksonville",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "839",
+    "cityName": "罗利",
+    "cityEn": "Raleigh",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "840",
+    "cityName": "水牛城",
+    "cityEn": "Buffalo",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "841",
+    "cityName": "密尔沃基",
+    "cityEn": "Milwaukee",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "842",
+    "cityName": "辛辛那提",
+    "cityEn": "Cincinnati",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "843",
+    "cityName": "克利夫兰",
+    "cityEn": "Cleveland",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "844",
+    "cityName": "利兹",
+    "cityEn": "Leeds",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "845",
+    "cityName": "纽卡斯尔",
+    "cityEn": "Newcastle",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "846",
+    "cityName": "诺丁汉",
+    "cityEn": "Nottingham",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "847",
+    "cityName": "谢菲尔德",
+    "cityEn": "Sheffield",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "848",
+    "cityName": "南安普顿",
+    "cityEn": "Southampton",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "849",
+    "cityName": "哈利法克斯",
+    "cityEn": "Halifax",
+    "timezoneId": "America/Halifax",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "850",
+    "cityName": "里贾纳",
+    "cityEn": "Regina",
+    "timezoneId": "America/Regina",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "851",
+    "cityName": "萨斯卡通",
+    "cityEn": "Saskatoon",
+    "timezoneId": "America/Regina",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "852",
+    "cityName": "温莎",
+    "cityEn": "Windsor",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "853",
+    "cityName": "汉密尔顿",
+    "cityEn": "Hamilton",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "854",
+    "cityName": "纽伦堡",
+    "cityEn": "Nuremberg",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "855",
+    "cityName": "德累斯顿",
+    "cityEn": "Dresden",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "856",
+    "cityName": "不来梅",
+    "cityEn": "Bremen",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "857",
+    "cityName": "汉诺威",
+    "cityEn": "Hanover",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "858",
+    "cityName": "南特",
+    "cityEn": "Nantes",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "859",
+    "cityName": "蒙彼利埃",
+    "cityEn": "Montpellier",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "860",
+    "cityName": "维罗纳",
+    "cityEn": "Verona",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "861",
+    "cityName": "巴勒莫",
+    "cityEn": "Palermo",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "862",
+    "cityName": "帕尔马",
+    "cityEn": "Palma",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "863",
+    "cityName": "阿利坎特",
+    "cityEn": "Alicante",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "864",
+    "cityName": "拉斯帕尔马斯",
+    "cityEn": "Las Palmas",
+    "timezoneId": "Atlantic/Canary",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "865",
+    "cityName": "乌得勒支",
+    "cityEn": "Utrecht",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "866",
+    "cityName": "伯尔尼",
+    "cityEn": "Bern",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "867",
+    "cityName": "卢塞恩",
+    "cityEn": "Lucerne",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "868",
+    "cityName": "因斯布鲁克",
+    "cityEn": "Innsbruck",
+    "timezoneId": "Europe/Vienna",
+    "country": "AT",
+    "continent": "europe"
+  },
+  {
+    "id": "869",
+    "cityName": "长崎",
+    "cityEn": "Nagasaki",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "870",
+    "cityName": "金泽",
+    "cityEn": "Kanazawa",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "871",
+    "cityName": "大邱",
+    "cityEn": "Daegu",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "872",
+    "cityName": "蔚山",
+    "cityEn": "Ulsan",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "873",
+    "cityName": "卢克瑙",
+    "cityEn": "Lucknow",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "874",
+    "cityName": "苏拉特",
+    "cityEn": "Surat",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "875",
+    "cityName": "阿姆利则",
+    "cityEn": "Amritsar",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "876",
+    "cityName": "科钦",
+    "cityEn": "Kochi",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "877",
+    "cityName": "三宝垄",
+    "cityEn": "Semarang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "878",
+    "cityName": "戛纳",
+    "cityEn": "Cannes",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "879",
+    "cityName": "米科诺斯",
+    "cityEn": "Mykonos",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "880",
+    "cityName": "伊拉克利翁",
+    "cityEn": "Heraklion",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "881",
+    "cityName": "斯普利特",
+    "cityEn": "Split",
+    "timezoneId": "Europe/Zagreb",
+    "country": "HR",
+    "continent": "europe"
+  },
+  {
+    "id": "882",
+    "cityName": "海德堡",
+    "cityEn": "Heidelberg",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "883",
+    "cityName": "布鲁日",
+    "cityEn": "Bruges",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "884",
+    "cityName": "圣塞瓦斯蒂安",
+    "cityEn": "San Sebastian",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "885",
+    "cityName": "丰沙尔",
+    "cityEn": "Funchal",
+    "timezoneId": "Atlantic/Madeira",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "886",
+    "cityName": "班夫",
+    "cityEn": "Banff",
+    "timezoneId": "America/Edmonton",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "887",
+    "cityName": "弗拉格斯塔夫",
+    "cityEn": "Flagstaff",
+    "timezoneId": "America/Phoenix",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "888",
+    "cityName": "福斯杜伊瓜苏",
+    "cityEn": "Foz do Iguacu",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "889",
+    "cityName": "巴里洛切",
+    "cityEn": "Bariloche",
+    "timezoneId": "America/Argentina/Salta",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "890",
+    "cityName": "安加罗阿",
+    "cityEn": "Hanga Roa",
+    "timezoneId": "Pacific/Easter",
+    "country": "CL",
+    "continent": "america"
+  },
+  {
+    "id": "891",
+    "cityName": "加拉帕戈斯",
+    "cityEn": "Galapagos",
+    "timezoneId": "Pacific/Galapagos",
+    "country": "EC",
+    "continent": "america"
+  },
+  {
+    "id": "892",
+    "cityName": "蓬塔卡纳",
+    "cityEn": "Punta Cana",
+    "timezoneId": "America/Santo_Domingo",
+    "country": "DO",
+    "continent": "america"
+  },
+  {
+    "id": "893",
+    "cityName": "奈良",
+    "cityEn": "Nara",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "894",
+    "cityName": "下龙",
+    "cityEn": "Ha Long",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "895",
+    "cityName": "龙目岛",
+    "cityEn": "Lombok",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "896",
+    "cityName": "沙姆沙伊赫",
+    "cityEn": "Sharm el-Sheikh",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "897",
+    "cityName": "舍夫沙万",
+    "cityEn": "Chefchaouen",
+    "timezoneId": "Africa/Casablanca",
+    "country": "MA",
+    "continent": "africa"
+  },
+  {
+    "id": "898",
+    "cityName": "罗托鲁瓦",
+    "cityEn": "Rotorua",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "899",
+    "cityName": "陶朗加",
+    "cityEn": "Tauranga",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "900",
+    "cityName": "内皮尔",
+    "cityEn": "Napier",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "901",
+    "cityName": "但尼丁",
+    "cityEn": "Dunedin",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "902",
+    "cityName": "纳尔逊",
+    "cityEn": "Nelson",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "903",
+    "cityName": "瓦纳卡",
+    "cityEn": "Wanaka",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "904",
+    "cityName": "特卡波",
+    "cityEn": "Lake Tekapo",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "905",
+    "cityName": "凯库拉",
+    "cityEn": "Kaikoura",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "906",
+    "cityName": "玛塔玛塔",
+    "cityEn": "Matamata",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "907",
+    "cityName": "阳光海岸",
+    "cityEn": "Sunshine Coast",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "908",
+    "cityName": "汤斯维尔",
+    "cityEn": "Townsville",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "909",
+    "cityName": "卧龙岗",
+    "cityEn": "Wollongong",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "910",
+    "cityName": "吉朗",
+    "cityEn": "Geelong",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "911",
+    "cityName": "朗塞斯顿",
+    "cityEn": "Launceston",
+    "timezoneId": "Australia/Hobart",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "912",
+    "cityName": "爱丽丝泉",
+    "cityEn": "Alice Springs",
+    "timezoneId": "Australia/Darwin",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "913",
+    "cityName": "乌鲁鲁",
+    "cityEn": "Uluru",
+    "timezoneId": "Australia/Darwin",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "914",
+    "cityName": "布鲁姆",
+    "cityEn": "Broome",
+    "timezoneId": "Australia/Perth",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "915",
+    "cityName": "横滨",
+    "cityEn": "Yokohama",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "916",
+    "cityName": "仙台",
+    "cityEn": "Sendai",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "917",
+    "cityName": "函馆",
+    "cityEn": "Hakodate",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "918",
+    "cityName": "小樽",
+    "cityEn": "Otaru",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "919",
+    "cityName": "日光",
+    "cityEn": "Nikko",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "920",
+    "cityName": "箱根",
+    "cityEn": "Hakone",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "921",
+    "cityName": "石垣岛",
+    "cityEn": "Ishigaki",
+    "timezoneId": "Asia/Tokyo",
+    "country": "JP",
+    "continent": "asia"
+  },
+  {
+    "id": "922",
+    "cityName": "牛津",
+    "cityEn": "Oxford",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "923",
+    "cityName": "约克",
+    "cityEn": "York",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "924",
+    "cityName": "巴斯",
+    "cityEn": "Bath",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "925",
+    "cityName": "布莱顿",
+    "cityEn": "Brighton",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "926",
+    "cityName": "阿伯丁",
+    "cityEn": "Aberdeen",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "927",
+    "cityName": "因弗内斯",
+    "cityEn": "Inverness",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "928",
+    "cityName": "科克",
+    "cityEn": "Cork",
+    "timezoneId": "Europe/Dublin",
+    "country": "IE",
+    "continent": "europe"
+  },
+  {
+    "id": "929",
+    "cityName": "高威",
+    "cityEn": "Galway",
+    "timezoneId": "Europe/Dublin",
+    "country": "IE",
+    "continent": "europe"
+  },
+  {
+    "id": "930",
+    "cityName": "采尔马特",
+    "cityEn": "Zermatt",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "931",
+    "cityName": "因特拉肯",
+    "cityEn": "Interlaken",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "932",
+    "cityName": "阿维尼翁",
+    "cityEn": "Avignon",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "933",
+    "cityName": "卡塔尼亚",
+    "cityEn": "Catania",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "934",
+    "cityName": "伊维萨",
+    "cityEn": "Ibiza",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "935",
+    "cityName": "辛特拉",
+    "cityEn": "Sintra",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "936",
+    "cityName": "罗德",
+    "cityEn": "Rhodes",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "937",
+    "cityName": "科孚岛",
+    "cityEn": "Corfu",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "938",
+    "cityName": "费特希耶",
+    "cityEn": "Fethiye",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "europe"
+  },
+  {
+    "id": "939",
+    "cityName": "华欣",
+    "cityEn": "Hua Hin",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "940",
+    "cityName": "拉布安巴焦",
+    "cityEn": "Labuan Bajo",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "941",
+    "cityName": "公主港",
+    "cityEn": "Puerto Princesa",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "942",
+    "cityName": "富国岛",
+    "cityEn": "Phu Quoc",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "943",
+    "cityName": "仙本那",
+    "cityEn": "Semporna",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "944",
+    "cityName": "加勒",
+    "cityEn": "Galle",
+    "timezoneId": "Asia/Colombo",
+    "country": "LK",
+    "continent": "asia"
+  },
+  {
+    "id": "945",
+    "cityName": "康提",
+    "cityEn": "Kandy",
+    "timezoneId": "Asia/Colombo",
+    "country": "LK",
+    "continent": "asia"
+  },
+  {
+    "id": "946",
+    "cityName": "乌代布尔",
+    "cityEn": "Udaipur",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "947",
+    "cityName": "尼亚加拉瀑布城",
+    "cityEn": "Niagara Falls",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "948",
+    "cityName": "图卢姆",
+    "cityEn": "Tulum",
+    "timezoneId": "America/Cancun",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "949",
+    "cityName": "光州",
+    "cityEn": "Gwangju",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "950",
+    "cityName": "全州",
+    "cityEn": "Jeonju",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "951",
+    "cityName": "庆州",
+    "cityEn": "Gyeongju",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "952",
+    "cityName": "江陵",
+    "cityEn": "Gangneung",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "953",
+    "cityName": "束草",
+    "cityEn": "Sokcho",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "954",
+    "cityName": "水原",
+    "cityEn": "Suwon",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "955",
+    "cityName": "大田",
+    "cityEn": "Daejeon",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "956",
+    "cityName": "春川",
+    "cityEn": "Chuncheon",
+    "timezoneId": "Asia/Seoul",
+    "country": "KR",
+    "continent": "asia"
+  },
+  {
+    "id": "957",
+    "cityName": "万鸦老",
+    "cityEn": "Manado",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "958",
+    "cityName": "大吉岭",
+    "cityEn": "Darjeeling",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "959",
+    "cityName": "希瓦",
+    "cityEn": "Khiva",
+    "timezoneId": "Asia/Samarkand",
+    "country": "UZ",
+    "continent": "asia"
+  },
+  {
+    "id": "960",
+    "cityName": "拉斯佩齐亚",
+    "cityEn": "La Spezia",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "961",
+    "cityName": "托莱多",
+    "cityEn": "Toledo",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "962",
+    "cityName": "科尔马",
+    "cityEn": "Colmar",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "963",
+    "cityName": "弗莱堡",
+    "cityEn": "Freiburg",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "964",
+    "cityName": "菲森",
+    "cityEn": "Fussen",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "965",
+    "cityName": "哈尔施塔特",
+    "cityEn": "Hallstatt",
+    "timezoneId": "Europe/Vienna",
+    "country": "AT",
+    "continent": "europe"
+  },
+  {
+    "id": "966",
+    "cityName": "根特",
+    "cityEn": "Ghent",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "967",
+    "cityName": "马尔默",
+    "cityEn": "Malmo",
+    "timezoneId": "Europe/Stockholm",
+    "country": "SE",
+    "continent": "europe"
+  },
+  {
+    "id": "968",
+    "cityName": "特罗姆瑟",
+    "cityEn": "Tromso",
+    "timezoneId": "Europe/Oslo",
+    "country": "NO",
+    "continent": "europe"
+  },
+  {
+    "id": "969",
+    "cityName": "罗瓦涅米",
+    "cityEn": "Rovaniemi",
+    "timezoneId": "Europe/Helsinki",
+    "country": "FI",
+    "continent": "europe"
+  },
+  {
+    "id": "970",
+    "cityName": "弗罗茨瓦夫",
+    "cityEn": "Wroclaw",
+    "timezoneId": "Europe/Warsaw",
+    "country": "PL",
+    "continent": "europe"
+  },
+  {
+    "id": "971",
+    "cityName": "克鲁姆洛夫",
+    "cityEn": "Cesky Krumlov",
+    "timezoneId": "Europe/Prague",
+    "country": "CZ",
+    "continent": "europe"
+  },
+  {
+    "id": "972",
+    "cityName": "布拉索夫",
+    "cityEn": "Brasov",
+    "timezoneId": "Europe/Bucharest",
+    "country": "RO",
+    "continent": "europe"
+  },
+  {
+    "id": "973",
+    "cityName": "查尔斯顿",
+    "cityEn": "Charleston",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "974",
+    "cityName": "萨凡纳",
+    "cityEn": "Savannah",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "975",
+    "cityName": "基韦斯特",
+    "cityEn": "Key West",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "976",
+    "cityName": "惠斯勒",
+    "cityEn": "Whistler",
+    "timezoneId": "America/Vancouver",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "977",
+    "cityName": "瓜纳华托",
+    "cityEn": "Guanajuato",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "978",
+    "cityName": "瓦哈卡",
+    "cityEn": "Oaxaca",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "979",
+    "cityName": "拉利贝拉",
+    "cityEn": "Lalibela",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "980",
+    "cityName": "楠迪",
+    "cityEn": "Nadi",
+    "timezoneId": "Pacific/Fiji",
+    "country": "FJ",
+    "continent": "oceania"
+  },
+  {
+    "id": "981",
+    "cityName": "麦克默多站",
+    "cityEn": "McMurdo Station",
+    "timezoneId": "Antarctica/McMurdo",
+    "country": "US",
+    "continent": "antarctica"
+  },
+  {
+    "id": "982",
+    "cityName": "阿蒙森-斯科特站",
+    "cityEn": "Amundsen-Scott South Pole Station",
+    "timezoneId": "Antarctica/McMurdo",
+    "country": "US",
+    "continent": "antarctica"
+  },
+  {
+    "id": "983",
+    "cityName": "帕尔默站",
+    "cityEn": "Palmer Station",
+    "timezoneId": "Antarctica/Palmer",
+    "country": "US",
+    "continent": "antarctica"
+  },
+  {
+    "id": "984",
+    "cityName": "罗瑟拉站",
+    "cityEn": "Rothera Research Station",
+    "timezoneId": "Antarctica/Rothera",
+    "country": "GB",
+    "continent": "antarctica"
+  },
+  {
+    "id": "985",
+    "cityName": "莫森站",
+    "cityEn": "Mawson Station",
+    "timezoneId": "Antarctica/Mawson",
+    "country": "AU",
+    "continent": "antarctica"
+  },
+  {
+    "id": "986",
+    "cityName": "戴维斯站",
+    "cityEn": "Davis Station",
+    "timezoneId": "Antarctica/Davis",
+    "country": "AU",
+    "continent": "antarctica"
+  },
+  {
+    "id": "987",
+    "cityName": "凯西站",
+    "cityEn": "Casey Station",
+    "timezoneId": "Antarctica/Casey",
+    "country": "AU",
+    "continent": "antarctica"
+  },
+  {
+    "id": "988",
+    "cityName": "迪蒙迪维尔站",
+    "cityEn": "Dumont d'Urville Station",
+    "timezoneId": "Antarctica/DumontDUrville",
+    "country": "FR",
+    "continent": "antarctica"
+  },
+  {
+    "id": "989",
+    "cityName": "昭和站",
+    "cityEn": "Syowa Station",
+    "timezoneId": "Antarctica/Syowa",
+    "country": "JP",
+    "continent": "antarctica"
+  },
+  {
+    "id": "990",
+    "cityName": "特罗尔站",
+    "cityEn": "Troll Station",
+    "timezoneId": "Antarctica/Troll",
+    "country": "NO",
+    "continent": "antarctica"
+  },
+  {
+    "id": "991",
+    "cityName": "沃斯托克站",
+    "cityEn": "Vostok Station",
+    "timezoneId": "Antarctica/Vostok",
+    "country": "RU",
+    "continent": "antarctica"
+  },
+  {
+    "id": "992",
+    "cityName": "长城站",
+    "cityEn": "Great Wall Station",
+    "timezoneId": "Antarctica/Palmer",
+    "country": "CN",
+    "continent": "antarctica"
+  },
+  {
+    "id": "993",
+    "cityName": "中山站",
+    "cityEn": "Zhongshan Station",
+    "timezoneId": "Antarctica/Davis",
+    "country": "CN",
+    "continent": "antarctica"
+  },
+  {
+    "id": "994",
+    "cityName": "乌特恰维克",
+    "cityEn": "Utqiagvik",
+    "timezoneId": "America/Anchorage",
+    "country": "US",
+    "continent": "arctic"
+  },
+  {
+    "id": "995",
+    "cityName": "阿勒特",
+    "cityEn": "Alert",
+    "timezoneId": "America/Iqaluit",
+    "country": "CA",
+    "continent": "arctic"
+  },
+  {
+    "id": "996",
+    "cityName": "白马市",
+    "cityEn": "Whitehorse",
+    "timezoneId": "America/Whitehorse",
+    "country": "CA",
+    "continent": "arctic"
+  },
+  {
+    "id": "997",
+    "cityName": "耶洛奈夫",
+    "cityEn": "Yellowknife",
+    "timezoneId": "America/Yellowknife",
+    "country": "CA",
+    "continent": "arctic"
+  },
+  {
+    "id": "998",
+    "cityName": "费尔班克斯",
+    "cityEn": "Fairbanks",
+    "timezoneId": "America/Anchorage",
+    "country": "US",
+    "continent": "arctic"
+  },
+  {
+    "id": "999",
+    "cityName": "摩尔曼斯克",
+    "cityEn": "Murmansk",
+    "timezoneId": "Europe/Moscow",
+    "country": "RU",
+    "continent": "arctic"
+  },
+  {
+    "id": "1000",
+    "cityName": "纳尔维克",
+    "cityEn": "Narvik",
+    "timezoneId": "Europe/Oslo",
+    "country": "NO",
+    "continent": "arctic"
+  },
+  {
+    "id": "1001",
+    "cityName": "伊卢利萨特",
+    "cityEn": "Ilulissat",
+    "timezoneId": "America/Nuuk",
+    "country": "GL",
+    "continent": "arctic"
+  }
 ]

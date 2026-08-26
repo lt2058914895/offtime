@@ -292,6 +292,7 @@ final class TravelViewModel: ObservableObject {
             cityName: String(localized: "travel.city.new_york"),
             cityEn: "New York",
             timezoneId: "America/New_York",
+            country: "US",
             continent: "america"
         )
     }
@@ -302,6 +303,7 @@ final class TravelViewModel: ObservableObject {
             cityName: String(localized: "travel.city.shanghai"),
             cityEn: "Shanghai",
             timezoneId: "Asia/Shanghai",
+            country: "CN",
             continent: "asia"
         )
         let destination = CitySuggestion(
@@ -309,6 +311,7 @@ final class TravelViewModel: ObservableObject {
             cityName: String(localized: "travel.city.los_angeles"),
             cityEn: "Los Angeles",
             timezoneId: "America/Los_Angeles",
+            country: "US",
             continent: "america"
         )
         return TravelLeg(

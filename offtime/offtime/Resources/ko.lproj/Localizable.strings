@@ -10,6 +10,7 @@
 "common.loading" = "로딩 중...";
 "common.cancel" = "취소";
 "common.done" = "완료";
+"common.clear" = "지우기";
 "common.delete" = "삭제";
 "common.retry" = "다시 시도";
 "common.success" = "성공";
@@ -76,7 +77,10 @@
 // MARK: - City Picker
 "city.picker.title" = "도시 추가";
 "city.selector.title" = "도시 선택";
-"city.search.placeholder" = "도시 검색";
+"city.search.placeholder" = "도시 또는 국가 검색";
+"city.search.country" = "국가";
+"city.search.index" = "국가 색인";
+"city.search.count" = "도시 %d개를 찾았습니다";
 "city.no.results" = "도시를 찾을 수 없습니다";
 "city.hint.add" = "이 도시 추가";
 "city.hint.select" = "이 도시 선택";
@@ -91,6 +95,8 @@
 "continent.america" = "아메리카";
 "continent.oceania" = "오세아니아";
 "continent.africa" = "아프리카";
+"continent.antarctica" = "남극 기지";
+"continent.arctic" = "북극 마을";
 
 // MARK: - Meeting
 "meeting.participants.title" = "참가자";

@@ -24,12 +24,13 @@ final class TravelPlannerServiceTests: XCTestCase {
         )))
     }
 
-    private func city(id: String, name: String, timezoneId: String, continent: String) -> CitySuggestion {
+    private func city(id: String, name: String, timezoneId: String, continent: String, country: String = "US") -> CitySuggestion {
         CitySuggestion(
             id: id,
             cityName: name,
             cityEn: name,
             timezoneId: timezoneId,
+            country: country,
             continent: continent
         )
     }

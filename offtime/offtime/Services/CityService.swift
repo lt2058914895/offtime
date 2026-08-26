@@ -21,14 +21,9 @@ final class CityService {
     
     func addCity(cityName: String, cityEn: String, timezoneId: String, context: ModelContext? = nil) throws {
         let ctx = context ?? mainContext
-        
-        // 判重：(cityName, timezoneId) 联合唯一
-        var fetch = FetchDescriptor<CityModel>(
-            predicate: #Predicate { $0.cityName == cityName && $0.timezoneId == timezoneId }
-        )
-        fetch.fetchLimit = 1
-        let existing = try ctx.fetch(fetch)
-        if !existing.isEmpty {
+
+        // 判重：规范化英文名 + 时区 联合唯一（中文名不参与，避免同名不同城误判）
+        if try findExisting(cityEn: cityEn, timezoneId: timezoneId, context: ctx) != nil {
             throw CityError.alreadyExists
         }
         
@@ -41,6 +36,18 @@ final class CityService {
         )
         ctx.insert(city)
         try ctx.save()
+    }
+
+    /// 按身份键查找已添加城市：先按 IANA 时区过滤，再在内存中比对规范化英文名。
+    private func findExisting(cityEn: String, timezoneId: String, context: ModelContext) throws -> CityModel? {
+        let key = CityIdentity.key(cityEn: cityEn, timezoneId: timezoneId)
+        var fetch = FetchDescriptor<CityModel>(
+            predicate: #Predicate { $0.timezoneId == timezoneId }
+        )
+        let candidates = try context.fetch(fetch)
+        return candidates.first {
+            CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId) == key
+        }
     }
     
     func deleteCity(id: UUID, context: ModelContext? = nil) throws {
@@ -109,13 +116,9 @@ final class CityService {
         try ctx.save()
     }
     
-    func hasCity(cityName: String, timezoneId: String, context: ModelContext? = nil) throws -> Bool {
+    func hasCity(cityEn: String, timezoneId: String, context: ModelContext? = nil) throws -> Bool {
         let ctx = context ?? mainContext
-        var fetch = FetchDescriptor<CityModel>(
-            predicate: #Predicate { $0.cityName == cityName && $0.timezoneId == timezoneId }
-        )
-        fetch.fetchLimit = 1
-        return !(try ctx.fetch(fetch)).isEmpty
+        return try findExisting(cityEn: cityEn, timezoneId: timezoneId, context: ctx) != nil
     }
     
     // MARK: - Import / Export

@@ -190,12 +190,16 @@ struct CitySuggestion: Equatable, Identifiable, Codable {
     let cityName: String
     let cityEn: String
     let timezoneId: String
+    let country: String
     let continent: String
 }
 
-struct ContinentGroup: Equatable {
+struct CountryGroup: Equatable, Identifiable {
+    let code: String
     let name: String
+    let indexLetter: String
     let cities: [CitySuggestion]
+    var id: String { code }
 }
 
 enum ImportStrategy {

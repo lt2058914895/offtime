@@ -10,6 +10,7 @@
 "common.loading" = "加载中...";
 "common.cancel" = "取消";
 "common.done" = "完成";
+"common.clear" = "清除";
 "common.delete" = "删除";
 "common.retry" = "重试";
 "common.success" = "成功";
@@ -76,7 +77,10 @@
 // MARK: - City Picker
 "city.picker.title" = "添加城市";
 "city.selector.title" = "选择城市";
-"city.search.placeholder" = "搜索城市";
+"city.search.placeholder" = "搜索城市或国家";
+"city.search.country" = "国家";
+"city.search.index" = "国家索引";
+"city.search.count" = "找到 %d 个城市";
 "city.no.results" = "未找到城市";
 "city.hint.add" = "添加此城市";
 "city.hint.select" = "选择此城市";
@@ -91,6 +95,8 @@
 "continent.america" = "美洲";
 "continent.oceania" = "大洋洲";
 "continent.africa" = "非洲";
+"continent.antarctica" = "南极洲科考站";
+"continent.arctic" = "北极区域城镇";
 
 // MARK: - Meeting
 "meeting.participants.title" = "参与者";

@@ -6,7 +6,7 @@ final class TripStatusTests: XCTestCase {
         year: Int,
         month: Int,
         day: Int,
-        hour: Int,
+        hour: Int = 9,
         minute: Int = 0,
         timezoneId: String = "Asia/Shanghai"
     ) throws -> Date {
@@ -22,12 +22,13 @@ final class TripStatusTests: XCTestCase {
         )))
     }
 
-    private func city(id: String, name: String, timezoneId: String) -> CitySuggestion {
+    private func city(id: String, name: String, timezoneId: String, country: String = "CN") -> CitySuggestion {
         CitySuggestion(
             id: id,
             cityName: name,
             cityEn: name,
             timezoneId: timezoneId,
+            country: country,
             continent: "asia"
         )
     }
@@ -48,7 +49,7 @@ final class TripStatusTests: XCTestCase {
         let departure = try date(year: 2026, month: 8, day: 25, hour: 9)
         let now = try date(year: 2026, month: 8, day: 25, hour: 8)
         XCTAssertEqual(
-            TripStatus.status(
+            TripModel.status(
                 at: now,
                 firstDeparture: departure,
                 tripEndDate: try date(year: 2026, month: 8, day: 28),
@@ -62,7 +63,7 @@ final class TripStatusTests: XCTestCase {
         let departure = try date(year: 2026, month: 8, day: 25, hour: 9)
         let now = try date(year: 2026, month: 8, day: 26, hour: 10)
         XCTAssertEqual(
-            TripStatus.status(
+            TripModel.status(
                 at: now,
                 firstDeparture: departure,
                 tripEndDate: try date(year: 2026, month: 8, day: 28),
@@ -76,7 +77,7 @@ final class TripStatusTests: XCTestCase {
         let departure = try date(year: 2026, month: 8, day: 25, hour: 9)
         let now = try date(year: 2026, month: 8, day: 28, hour: 23, minute: 59)
         XCTAssertEqual(
-            TripStatus.status(
+            TripModel.status(
                 at: now,
                 firstDeparture: departure,
                 tripEndDate: try date(year: 2026, month: 8, day: 28),
@@ -90,7 +91,7 @@ final class TripStatusTests: XCTestCase {
         let departure = try date(year: 2026, month: 8, day: 25, hour: 9)
         let now = try date(year: 2026, month: 8, day: 29, hour: 0, minute: 1)
         XCTAssertEqual(
-            TripStatus.status(
+            TripModel.status(
                 at: now,
                 firstDeparture: departure,
                 tripEndDate: try date(year: 2026, month: 8, day: 28),
@@ -102,7 +103,7 @@ final class TripStatusTests: XCTestCase {
 
     func testMissingDepartureIsUpcoming() throws {
         XCTAssertEqual(
-            TripStatus.status(
+            TripModel.status(
                 at: Date(),
                 firstDeparture: nil,
                 tripEndDate: Date(),
