@@ -101,7 +101,7 @@ struct CityDetailView: View {
                     icon: "clock",
                     title: "detail.rules.title",
                     subtitle: "detail.rules.hint",
-                    tint: .accentColor
+                    tint: .blue
                 )
 
                 cityWorkHoursSection(
@@ -188,7 +188,7 @@ struct CityDetailView: View {
                         .fontWeight(.semibold)
                         .monospacedDigit()
                     Text(String(localized: "detail.current.time"))
-                        .font(.caption2)
+                        .font(.caption2.weight(.medium))
                         .foregroundColor(.secondary)
                 }
             }
@@ -210,7 +210,7 @@ struct CityDetailView: View {
                     icon: viewModel.overlap.isCurrentlyOverlapping ? "phone.fill" : "phone",
                     title: "detail.contactable.period",
                     subtitle: "detail.rules.2",
-                    tint: .accentColor
+                    tint: .green
                 ) {
                     if viewModel.overlap.isCurrentlyOverlapping {
                         Text(String(localized: "detail.contactable.now"))
@@ -248,7 +248,7 @@ struct CityDetailView: View {
                     icon: "bell.badge",
                     title: "city.reminder.title",
                     subtitle: "city.reminder.hint",
-                    tint: .accentColor
+                    tint: .orange
                 )
 
                 let contactableHours = viewModel.contactableTargetHours
@@ -331,8 +331,8 @@ struct CityDetailView: View {
 
     // MARK: - Components
 
-    /// 卡片头部：图标 + 标题 + 一行说明，统一各卡片的说明信息层级。
-    /// 说明用 caption 次级色轻量呈现，突出标题与重点内容，不抢视觉重心。
+    /// 卡片头部：图标（带主题色背景）+ 标题 + 一行说明，统一各卡片的说明信息层级。
+    /// 图标用圆角方形背景提升辨识度，副标题用 subheadline 保证可读性但不抢视觉重心。
     private func cardHeader(
         icon: String,
         title: LocalizedStringKey,
@@ -340,20 +340,20 @@ struct CityDetailView: View {
         tint: Color = .accentColor,
         @ViewBuilder accessory: () -> some View = { EmptyView() }
     ) -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            HStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.body)
-                    .foregroundColor(tint)
-                Text(title)
-                    .font(.headline)
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(tint)
+                    Text(subtitle)
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 Spacer()
                 accessory()
             }
-            Text(subtitle)
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -402,7 +402,7 @@ struct CityDetailView: View {
     private func dstBadge(_ status: String?) -> some View {
         if let status {
             Text(status)
-                .font(.caption2)
+                .font(.caption2.weight(.medium))
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1)
                 .background(status == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
@@ -443,6 +443,7 @@ struct CityDetailView: View {
             .padding(16)
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
+            .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 2)
     }
 }
 
