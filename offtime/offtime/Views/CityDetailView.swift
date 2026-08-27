@@ -56,11 +56,9 @@ struct CityDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                localWorkHoursCard
-                targetWorkHoursCard
+                workHoursCard
                 overlapCard
                 reminderCard
-                rulesCard
             }
             .padding()
         }
@@ -94,33 +92,51 @@ struct CityDetailView: View {
         }
     }
 
-    // MARK: - Local Work Hours
+    // MARK: - Work Hours（本地 + 目标城市合并卡片）
 
-    private var localWorkHoursCard: some View {
+    private var workHoursCard: some View {
         detailCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(systemName: "house")
-                        .foregroundColor(.accentColor)
-                    Text(String(localized: "detail.local.work.hours"))
-                        .font(.headline)
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 0) {
-                        Text(viewModel.localTime)
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .monospacedDigit()
-                        Text(String(localized: "detail.current.time"))
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                TimelineBar(
+            VStack(alignment: .leading, spacing: 16) {
+                cardHeader(
+                    icon: "clock",
+                    title: "detail.rules.title",
+                    subtitle: "detail.rules.hint",
+                    tint: .accentColor
+                )
+
+                cityWorkHoursSection(
+                    cityName: viewModel.localCityName,
+                    cityEn: viewModel.localCityEn,
+                    dstStatus: viewModel.localDSTStatus,
+                    countryCode: viewModel.localCountryCode,
+                    timezoneId: viewModel.localTimezoneId,
+                    timeDifference: "0h",
+                    timeDifferenceColor: .secondary,
+                    timeText: viewModel.localTime,
                     hourlyHighlight: viewModel.localHourlyWorking,
                     highlightColor: .accentColor,
-                    nowHour: viewModel.localNowHour
+                    nowHour: viewModel.localNowHour,
+                    workStart: $viewModel.localWorkStart,
+                    workEnd: $viewModel.localWorkEnd
                 )
-                workHoursSteppers(start: $viewModel.localWorkStart, end: $viewModel.localWorkEnd)
+
+                Divider()
+
+                cityWorkHoursSection(
+                    cityName: viewModel.city.cityName,
+                    cityEn: viewModel.city.cityEn,
+                    dstStatus: viewModel.targetDSTStatus,
+                    countryCode: viewModel.targetCountryCode,
+                    timezoneId: viewModel.city.timezoneId,
+                    timeDifference: viewModel.timeDifference,
+                    timeDifferenceColor: timeDifferenceColor,
+                    timeText: viewModel.cityTime,
+                    hourlyHighlight: viewModel.targetHourlyWorking,
+                    highlightColor: .blue,
+                    nowHour: viewModel.targetNowHour,
+                    workStart: $viewModel.targetWorkStart,
+                    workEnd: $viewModel.targetWorkEnd
+                )
             }
         }
     }
@@ -131,50 +147,57 @@ struct CityDetailView: View {
         return offset.hasPrefix("+") ? .green : .red
     }
 
-    // MARK: - Target Work Hours
-
-    private var targetWorkHoursCard: some View {
-        detailCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
-                    Image(systemName: "building.2")
-                        .font(.title2)
-                        .foregroundColor(.blue)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(viewModel.city.cityName)
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        Text(viewModel.city.cityEn)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text(viewModel.cityTime)
-                            .font(.title2)
+    private func cityWorkHoursSection(
+        cityName: String,
+        cityEn: String,
+        dstStatus: String?,
+        countryCode: String,
+        timezoneId: String,
+        timeDifference: String,
+        timeDifferenceColor: Color,
+        timeText: String,
+        hourlyHighlight: [Bool],
+        highlightColor: Color,
+        nowHour: Double?,
+        workStart: Binding<Int>,
+        workEnd: Binding<Int>
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 4) {
+                        Text(cityName)
+                            .font(.body)
                             .fontWeight(.semibold)
-                            .monospacedDigit()
-                        Text(String(localized: "detail.current.time"))
-                            .font(.caption2)
+                        Text(cityEn)
+                            .font(.caption)
                             .foregroundColor(.secondary)
-                        HStack(spacing: 4) {
-                            Text(String(localized: "detail.time.diff"))
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                            Text(viewModel.timeDifference)
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundColor(timeDifferenceColor)
-                        }
+                        dstBadge(dstStatus)
                     }
+                    cityMetaRow(
+                        countryCode: countryCode,
+                        timezoneId: timezoneId,
+                        timeDifference: timeDifference,
+                        timeDifferenceColor: timeDifferenceColor
+                    )
                 }
-                TimelineBar(
-                    hourlyHighlight: viewModel.targetHourlyWorking,
-                    highlightColor: .blue,
-                    nowHour: viewModel.targetNowHour
-                )
-                workHoursSteppers(start: $viewModel.targetWorkStart, end: $viewModel.targetWorkEnd)
+                Spacer()
+                VStack(alignment: .trailing, spacing: 0) {
+                    Text(timeText)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .monospacedDigit()
+                    Text(String(localized: "detail.current.time"))
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
             }
+            TimelineBar(
+                hourlyHighlight: hourlyHighlight,
+                highlightColor: highlightColor,
+                nowHour: nowHour
+            )
+            workHoursSteppers(start: workStart, end: workEnd)
         }
     }
 
@@ -182,13 +205,13 @@ struct CityDetailView: View {
 
     private var overlapCard: some View {
         detailCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(systemName: viewModel.overlap.isCurrentlyOverlapping ? "phone.fill" : "phone")
-                        .foregroundColor(viewModel.overlap.isCurrentlyOverlapping ? .green : .secondary)
-                    Text(String(localized: "detail.contactable.period"))
-                        .font(.headline)
-                    Spacer()
+            VStack(alignment: .leading, spacing: 16) {
+                cardHeader(
+                    icon: viewModel.overlap.isCurrentlyOverlapping ? "phone.fill" : "phone",
+                    title: "detail.contactable.period",
+                    subtitle: "detail.rules.2",
+                    tint: .accentColor
+                ) {
                     if viewModel.overlap.isCurrentlyOverlapping {
                         Text(String(localized: "detail.contactable.now"))
                             .font(.caption)
@@ -221,55 +244,80 @@ struct CityDetailView: View {
     private var reminderCard: some View {
         detailCard {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
-                    Image(systemName: "bell.badge")
-                        .font(.title2)
-                        .foregroundColor(.accentColor)
-                    Text(String(localized: "city.reminder.title"))
-                        .font(.headline)
-                    Spacer()
-                }
+                cardHeader(
+                    icon: "bell.badge",
+                    title: "city.reminder.title",
+                    subtitle: "city.reminder.hint",
+                    tint: .accentColor
+                )
 
-                DatePicker(
-                    String(localized: "city.reminder.time"),
-                    selection: $viewModel.reminderTime,
-                    displayedComponents: .hourAndMinute
-                )
-                .environment(
-                    \.timeZone,
-                    TimeZone(identifier: viewModel.city.timezoneId) ?? .current
-                )
+                let contactableHours = viewModel.contactableTargetHours
+                if !contactableHours.isEmpty {
+                    ForEach(contactableHours, id: \.self) { targetHour in
+                        let localHour = viewModel.localHour(forTargetHour: targetHour)
+                        HStack {
+                            HStack(spacing: 5) {
+                                Text(contactTimeText(localHour))
+                                    .font(.title3.weight(.semibold))
+                                    .monospacedDigit()
+                                HStack(spacing: 3) {
+                                    Text("(")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(viewModel.city.cityName)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(contactTimeText(targetHour))
+                                        .font(.caption.weight(.medium))
+                                        .foregroundColor(.secondary)
+                                        .monospacedDigit()
+                                    Text(")")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            Spacer()
+                            if let existing = viewModel.reminder(atHour: localHour, minute: 0) {
+                                Button {
+                                    Task {
+                                        await viewModel.removeReminder(existing)
+                                    }
+                                } label: {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.title3)
+                                        .foregroundColor(.green)
+                                }
+                                .buttonStyle(.borderless)
+                                .disabled(viewModel.isAddingReminder)
+                                .accessibilityLabel(String(localized: "city.reminder.remove"))
+                            } else {
+                                Button {
+                                    Task {
+                                        await viewModel.addContactableReminder(
+                                            localHour: localHour,
+                                            targetHour: targetHour
+                                        )
+                                    }
+                                } label: {
+                                    Image(systemName: "bell")
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                }
+                                .buttonStyle(.borderless)
+                                .disabled(viewModel.isAddingReminder)
+                                .accessibilityLabel(String(localized: "city.reminder.contactable.add"))
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+
+                    Divider()
+                }
 
                 Toggle(
                     String(localized: "city.reminder.weekdays.only"),
                     isOn: $viewModel.reminderWeekdaysOnly
                 )
-
-                Text(String(localized: "city.reminder.multiple.description"))
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-
-                Button {
-                    Task {
-                        await viewModel.addReminder()
-                    }
-                } label: {
-                    Label(
-                        String(localized: "city.reminder.add"),
-                        systemImage: "plus.circle.fill"
-                    )
-                    .font(.subheadline.weight(.semibold))
-                    .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(viewModel.isAddingReminder || viewModel.isDuplicateReminderSelected)
-
-                if viewModel.isDuplicateReminderSelected {
-                    Text(String(localized: "city.reminder.duplicate"))
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
 
                 if let status = viewModel.reminderStatus {
                     Text(status)
@@ -277,77 +325,89 @@ struct CityDetailView: View {
                         .foregroundColor(viewModel.reminderStatusIsError ? .red : .secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-
-                if !viewModel.reminders.isEmpty {
-                    Divider()
-
-                    ForEach(viewModel.reminders) { reminder in
-                        reminderRow(reminder)
-                    }
-                }
             }
         }
-    }
-
-    private func reminderRow(_ reminder: CityReminderGroup) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(String(format: "%02d:%02d", reminder.hour, reminder.minute))
-                    .font(.subheadline.weight(.semibold))
-                    .monospacedDigit()
-                Text(
-                    reminder.weekdaysOnly
-                        ? String(localized: "city.reminder.weekdays.only")
-                        : String(localized: "city.reminder.everyday")
-                )
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-            Button {
-                Task {
-                    await viewModel.removeReminder(reminder)
-                }
-            } label: {
-                Image(systemName: "trash")
-                    .font(.subheadline)
-                    .foregroundColor(.red)
-            }
-            .buttonStyle(.borderless)
-            .accessibilityLabel(String(localized: "common.delete"))
-        }
-        .padding(.vertical, 2)
-    }
-
-    // MARK: - Rules
-
-    private var rulesCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(String(localized: "detail.rules.title"))
-                .font(.headline)
-                .foregroundColor(.secondary)
-            VStack(alignment: .leading, spacing: 6) {
-                bulletText("detail.rules.1")
-                bulletText("detail.rules.2")
-                bulletText("detail.rules.3")
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
     }
 
     // MARK: - Components
 
-    private func bulletText(_ key: LocalizedStringKey) -> some View {
-        HStack(alignment: .top, spacing: 6) {
-            Circle()
-                .fill(Color.secondary)
-                .frame(width: 4, height: 4)
-                .padding(.top, 6)
-            Text(key)
+    /// 卡片头部：图标 + 标题 + 一行说明，统一各卡片的说明信息层级。
+    /// 说明用 caption 次级色轻量呈现，突出标题与重点内容，不抢视觉重心。
+    private func cardHeader(
+        icon: String,
+        title: LocalizedStringKey,
+        subtitle: LocalizedStringKey,
+        tint: Color = .accentColor,
+        @ViewBuilder accessory: () -> some View = { EmptyView() }
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.body)
+                    .foregroundColor(tint)
+                Text(title)
+                    .font(.headline)
+                Spacer()
+                accessory()
+            }
+            Text(subtitle)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    /// 可联系时段钟点文案（24 小时制，与重叠摘要一致）
+    private func contactTimeText(_ hour: Int) -> String {
+        String(format: "%02d:00", hour)
+    }
+
+    /// 城市元信息行：国旗 国家名 · UTC · 时差（与时钟列表卡片一致）
+    private func cityMetaRow(
+        countryCode: String,
+        timezoneId: String,
+        timeDifference: String,
+        timeDifferenceColor: Color
+    ) -> some View {
+        HStack(spacing: 6) {
+            if !countryCode.isEmpty {
+                Text(flagEmoji(for: countryCode))
+                    .font(.system(size: 13))
+                Text(appCountryName(for: countryCode))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Text("·")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(utcText(for: timezoneId))
+                .font(.caption2.weight(.medium))
+                .foregroundColor(.secondary)
+                .monospacedDigit()
+            Text("·")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(String(localized: "clock.time.difference"))
+                .font(.caption2.weight(.medium))
+                .foregroundColor(.secondary)
+            Text(timeDifference)
+                .font(.caption2.weight(.medium))
+                .foregroundColor(timeDifferenceColor)
+                .monospacedDigit()
+        }
+    }
+
+    /// 夏令时/冬令时胶囊标签（样式与时钟列表卡片一致）
+    @ViewBuilder
+    private func dstBadge(_ status: String?) -> some View {
+        if let status {
+            Text(status)
+                .font(.caption2)
+                .padding(.horizontal, 3)
+                .padding(.vertical, 1)
+                .background(status == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
+                .foregroundColor(status == String(localized: "clock.dst.summer") ? .orange : .blue)
+                .cornerRadius(3)
         }
     }
 
@@ -384,4 +444,46 @@ struct CityDetailView: View {
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
     }
+}
+
+// MARK: - 城市元信息辅助
+
+/// 国家码 → 国旗 Emoji；非法/空返回 🌐 占位
+private func flagEmoji(for countryCode: String) -> String {
+    let upper = countryCode.uppercased()
+    guard upper.count == 2, upper.allSatisfy({ $0.isASCII && $0.isLetter }) else {
+        return "🌐"
+    }
+    let base: UInt32 = 127397
+    return upper.unicodeScalars
+        .compactMap { UnicodeScalar(base + $0.value) }
+        .reduce(into: "") { result, scalar in
+            result.unicodeScalars.append(scalar)
+        }
+}
+
+/// 当前 App 语言下的国家名
+private func appCountryName(for countryCode: String) -> String {
+    guard countryCode.count == 2 else { return "" }
+    let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+    let locale: Locale
+    switch language {
+    case "en": locale = Locale(identifier: "en_US")
+    case "ja": locale = Locale(identifier: "ja_JP")
+    case "ko": locale = Locale(identifier: "ko_KR")
+    default: locale = Locale(identifier: "zh_CN")
+    }
+    return locale.localizedString(forRegionCode: countryCode) ?? ""
+}
+
+/// 时区 ID → UTC 偏移文案，如 UTC+8
+private func utcText(for timezoneId: String) -> String {
+    guard let timeZone = TimeZone(identifier: timezoneId) else { return "" }
+    let seconds = timeZone.secondsFromGMT()
+    let hours = seconds / 3600
+    let minutes = abs(seconds % 3600) / 60
+    if minutes == 0 {
+        return String(format: "UTC%+d", hours)
+    }
+    return String(format: "UTC%+d:%02d", hours, minutes)
 }

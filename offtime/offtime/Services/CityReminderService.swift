@@ -19,10 +19,15 @@ struct CityReminderGroup: Identifiable, Equatable {
     let id: String
     let cityID: UUID
     let cityName: String
+    /// 触发时区（当前城市）
     let timezoneId: String
     let hour: Int
     let minute: Int
     let weekdaysOnly: Bool
+    /// 目标城市时区与对应时刻（用于展示与通知正文）
+    let targetTimezoneId: String
+    let targetHour: Int
+    let targetMinute: Int
 }
 
 enum CityReminderScheduler {
@@ -97,7 +102,10 @@ final class CityReminderService {
         timezoneId: String,
         hour: Int,
         minute: Int,
-        weekdaysOnly: Bool
+        weekdaysOnly: Bool,
+        targetTimezoneId: String,
+        targetHour: Int,
+        targetMinute: Int
     ) async throws -> CityReminderGroup {
         guard let triggerComponents = CityReminderScheduler.triggerComponents(
                   hour: hour,
@@ -116,10 +124,9 @@ final class CityReminderService {
         let content = UNMutableNotificationContent()
         content.title = cityName
         content.body = notificationBody(
-            timezoneId: timezoneId,
-            hour: hour,
-            minute: minute,
-            weekdaysOnly: weekdaysOnly
+            targetTimezoneId: targetTimezoneId,
+            targetHour: targetHour,
+            targetMinute: targetMinute
         )
         content.sound = .default
         content.userInfo = [
@@ -129,7 +136,10 @@ final class CityReminderService {
             "timezoneId": timezoneId,
             "hour": hour,
             "minute": minute,
-            "weekdaysOnly": weekdaysOnly
+            "weekdaysOnly": weekdaysOnly,
+            "targetTimezoneId": targetTimezoneId,
+            "targetHour": targetHour,
+            "targetMinute": targetMinute
         ]
 
         let weekdays = weekdaysOnly ? [2, 3, 4, 5, 6] : [nil]
@@ -157,7 +167,10 @@ final class CityReminderService {
             timezoneId: timezoneId,
             hour: hour,
             minute: minute,
-            weekdaysOnly: weekdaysOnly
+            weekdaysOnly: weekdaysOnly,
+            targetTimezoneId: targetTimezoneId,
+            targetHour: targetHour,
+            targetMinute: targetMinute
         )
     }
 
@@ -172,7 +185,10 @@ final class CityReminderService {
                   let timezoneId = userInfo["timezoneId"] as? String,
                   let hour = userInfo["hour"] as? Int,
                   let minute = userInfo["minute"] as? Int,
-                  let weekdaysOnly = userInfo["weekdaysOnly"] as? Bool else {
+                  let weekdaysOnly = userInfo["weekdaysOnly"] as? Bool,
+                  let targetTimezoneId = userInfo["targetTimezoneId"] as? String,
+                  let targetHour = userInfo["targetHour"] as? Int,
+                  let targetMinute = userInfo["targetMinute"] as? Int else {
                 return nil
             }
 
@@ -183,7 +199,10 @@ final class CityReminderService {
                 timezoneId: timezoneId,
                 hour: hour,
                 minute: minute,
-                weekdaysOnly: weekdaysOnly
+                weekdaysOnly: weekdaysOnly,
+                targetTimezoneId: targetTimezoneId,
+                targetHour: targetHour,
+                targetMinute: targetMinute
             )
         }
 
@@ -214,30 +233,28 @@ final class CityReminderService {
     }
 
     private func notificationBody(
-        timezoneId: String,
-        hour: Int,
-        minute: Int,
-        weekdaysOnly: Bool
+        targetTimezoneId: String,
+        targetHour: Int,
+        targetMinute: Int
     ) -> String {
-        guard let nextDate = CityReminderScheduler.nextOccurrence(
-            after: Date(),
-            timezoneId: timezoneId,
-            hour: hour,
-            minute: minute,
-            weekdaysOnly: weekdaysOnly
-        ),
-        let timezone = TimeZone(identifier: timezoneId) else {
-            return String(format: "%02d:%02d", hour, minute)
+        let timezone = TimeZone(identifier: targetTimezoneId) ?? .current
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+        var components = calendar.dateComponents([.year, .month, .day], from: Date())
+        components.hour = targetHour
+        components.minute = targetMinute
+        guard let date = calendar.date(from: components) else {
+            return String(format: "%02d:%02d", targetHour, targetMinute)
         }
 
         let formatter = DateFormatter()
         formatter.locale = Locale.current
-        formatter.dateFormat = "yyyy-MM-dd EEEE HH:mm"
+        formatter.dateFormat = "HH:mm"
         formatter.timeZone = timezone
 
         return String(
-            format: String(localized: "city.reminder.notification.body.format"),
-            formatter.string(from: nextDate)
+            format: String(localized: "city.reminder.contactable.body"),
+            formatter.string(from: date)
         )
     }
 }

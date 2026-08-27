@@ -51,25 +51,23 @@
 "clock.working.next" = "%@ に連絡可能";
 
 // MARK: - City Detail
-"detail.local.work.hours" = "現地の勤務時間";
 "detail.contactable.period" = "連絡可能時間帯";
 "detail.contactable.now" = "現在連絡可能";
 "detail.contactable.none" = "今日の連絡可能時間帯はありません";
 "detail.current.time" = "現在時刻";
-"detail.time.diff" = "時差";
 "detail.work.start" = "開始";
 "detail.work.end" = "終了";
-"detail.rules.title" = "連絡可能時間帯ルール";
-"detail.rules.1" = "既定では現地と対象都市の勤務時間（9:00–18:00）を連絡可能時間帯とします。";
+"detail.rules.title" = "勤務時間";
+"detail.rules.hint" = "既定は勤務時間（9:00–18:00）です。開始・終了時間を調整してカスタマイズできます。";
 "detail.rules.2" = "連絡可能時間帯は双方の勤務時間の重複部分です。";
-"detail.rules.3" = "下の勤務時間を調整して連絡可能時間帯をカスタマイズできます。";
 "detail.hours" = "時間";
-"city.reminder.title" = "都市時間リマインダー";
-"city.reminder.time" = "対象都市の時間";
+"city.reminder.title" = "リマインダーを追加";
+"city.reminder.hint" = "右側のベルをタップするとリマインダーを追加でき、もう一度タップすると解除できます。";
+"city.reminder.contactable.add" = "この時間帯の開始時にリマインダー";
+"city.reminder.remove" = "リマインダーを削除";
+"city.reminder.contactable.body" = "対象都市は現在 %@ です。連絡できます";
 "city.reminder.weekdays.only" = "平日のみ";
 "city.reminder.everyday" = "毎日";
-"city.reminder.add" = "リマインダーを追加";
-"city.reminder.multiple.description" = "同じ都市に複数の異なる時刻を設定できます。時刻を変えればさらに追加できます。";
 "city.reminder.duplicate" = "この時刻のリマインダーはすでに存在します";
 "city.reminder.error.authorization" = "通知が許可されていません。設定で有効にしてください。";
 "city.reminder.error.timezone" = "選択した都市のタイムゾーンを利用できません。";

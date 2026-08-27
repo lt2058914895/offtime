@@ -51,25 +51,23 @@
 "clock.working.next" = "%@ 연락 가능";
 
 // MARK: - City Detail
-"detail.local.work.hours" = "현지 근무 시간";
 "detail.contactable.period" = "연락 가능 시간대";
 "detail.contactable.now" = "현재 연락 가능";
 "detail.contactable.none" = "오늘 연락 가능 시간대 없음";
 "detail.current.time" = "현재 시간";
-"detail.time.diff" = "시차";
 "detail.work.start" = "시작";
 "detail.work.end" = "종료";
-"detail.rules.title" = "연락 가능 시간대 규칙";
-"detail.rules.1" = "기본값으로 현지 및 대상 도시의 근무 시간(9:00–18:00)을 연락 가능 시간대로 사용합니다.";
+"detail.rules.title" = "근무 시간";
+"detail.rules.hint" = "기본값은 근무 시간(9:00–18:00)이며, 시작·종료 시간을 조정해 사용자 정의할 수 있습니다.";
 "detail.rules.2" = "연락 가능 시간대는 양쪽 근무 시간의 겹치는 구간입니다.";
-"detail.rules.3" = "아래 근무 시간을 조정해 연락 가능 시간대를 사용자 정의할 수 있습니다.";
 "detail.hours" = "시간";
-"city.reminder.title" = "도시 시간 알림";
-"city.reminder.time" = "대상 도시 시간";
+"city.reminder.title" = "알림 추가";
+"city.reminder.hint" = "오른쪽 종을 탭하면 알림을 추가하고, 다시 탭하면 취소할 수 있습니다.";
+"city.reminder.contactable.add" = "이 시간대 시작 시 알림";
+"city.reminder.remove" = "알림 삭제";
+"city.reminder.contactable.body" = "대상 도시는 지금 %@입니다. 연락 가능합니다";
 "city.reminder.weekdays.only" = "평일만";
 "city.reminder.everyday" = "매일";
-"city.reminder.add" = "알림 추가";
-"city.reminder.multiple.description" = "같은 도시에 여러 시간을 추가할 수 있습니다. 시간을 변경하면 계속 추가할 수 있습니다.";
 "city.reminder.duplicate" = "이 시간의 알림이 이미 있습니다";
 "city.reminder.error.authorization" = "알림 권한이 꺼져 있습니다. 설정에서 허용해 주세요.";
 "city.reminder.error.timezone" = "선택한 도시의 시간대를 사용할 수 없습니다.";

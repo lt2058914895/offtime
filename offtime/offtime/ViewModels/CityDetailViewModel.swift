@@ -13,7 +13,6 @@ final class CityDetailViewModel: ObservableObject {
     @Published var targetWorkEnd: Int
     @Published var use24Hour: Bool = true
     @Published var localTimezoneId: String = TimeZone.current.identifier
-    @Published var reminderTime: Date
     @Published var reminderWeekdaysOnly = true
     @Published var isAddingReminder = false
     @Published var reminders: [CityReminderGroup] = []
@@ -34,13 +33,6 @@ final class CityDetailViewModel: ObservableObject {
         self.targetWorkEnd = city.workEndHour
         self.localWorkStart = city.localWorkStart
         self.localWorkEnd = city.localWorkEnd
-
-        var targetCalendar = Calendar(identifier: .gregorian)
-        targetCalendar.timeZone = TimeZone(identifier: city.timezoneId) ?? .current
-        var reminderComponents = targetCalendar.dateComponents([.year, .month, .day], from: Date())
-        reminderComponents.hour = 9
-        reminderComponents.minute = 0
-        self.reminderTime = targetCalendar.date(from: reminderComponents) ?? Date()
     }
 
     // MARK: - Time Display
@@ -134,6 +126,48 @@ final class CityDetailViewModel: ObservableObject {
         return parts.joined(separator: " ") + "（\(total)\(String(localized: "detail.hours"))）"
     }
 
+    /// 可联系时间段（按目标城市时区 24 小时轴），提醒据此一键添加
+    var contactableTargetRanges: [(startHour: Int, endHour: Int)] {
+        guard let targetTZ = TimeZone(identifier: city.timezoneId),
+              let localTZ = TimeZone(identifier: localTimezoneId) else {
+            return []
+        }
+
+        var targetCal = Calendar(identifier: .gregorian)
+        targetCal.timeZone = targetTZ
+        var localCal = Calendar(identifier: .gregorian)
+        localCal.timeZone = localTZ
+        let dayStart = targetCal.startOfDay(for: currentDate)
+
+        var hourly: [Bool] = []
+        for hour in 0..<24 {
+            let date = targetCal.date(byAdding: .hour, value: hour, to: dayStart) ?? dayStart
+            let localHour = localCal.component(.hour, from: date)
+            hourly.append(
+                hour >= targetWorkStart && hour < targetWorkEnd
+                    && localHour >= localWorkStart && localHour < localWorkEnd
+            )
+        }
+
+        var ranges: [(Int, Int)] = []
+        var rangeStart: Int?
+        for hour in 0..<24 {
+            if hourly[hour] {
+                if rangeStart == nil { rangeStart = hour }
+            } else if let start = rangeStart {
+                ranges.append((start, hour))
+                rangeStart = nil
+            }
+        }
+        if let start = rangeStart { ranges.append((start, 24)) }
+        return ranges
+    }
+
+    /// 可联系时段（以目标城市时区为准，按 1 小时为单位展开的逐小时列表）
+    var contactableTargetHours: [Int] {
+        contactableTargetRanges.flatMap { ($0.startHour..<$0.endHour).map { $0 } }
+    }
+
     func saveWorkHours() {
         city.workStartHour = targetWorkStart
         city.workEndHour = targetWorkEnd
@@ -144,28 +178,17 @@ final class CityDetailViewModel: ObservableObject {
 
     // MARK: - City Reminder
 
-    var formattedReminderTime: String {
-        String(format: "%02d:%02d", reminderHour, reminderMinute)
-    }
-
-    var isDuplicateReminderSelected: Bool {
-        reminders.contains {
-            $0.hour == reminderHour
-                && $0.minute == reminderMinute
-                && $0.weekdaysOnly == reminderWeekdaysOnly
-        }
-    }
-
     func loadReminders() async {
         reminders = await reminderService.reminders(for: city.id)
     }
 
-    func addReminder() async {
+    /// 为可联系时段添加提醒：按当前城市时间触发，通知中告知目标城市对应时刻
+    func addContactableReminder(localHour: Int, targetHour: Int) async {
         isAddingReminder = true
         reminderStatus = nil
         defer { isAddingReminder = false }
 
-        guard !isDuplicateReminderSelected else {
+        guard !hasReminder(atHour: localHour, minute: 0) else {
             reminderStatus = String(localized: "city.reminder.duplicate")
             reminderStatusIsError = true
             return
@@ -175,10 +198,13 @@ final class CityDetailViewModel: ObservableObject {
             try await reminderService.addReminder(
                 cityID: city.id,
                 cityName: city.cityName,
-                timezoneId: city.timezoneId,
-                hour: reminderHour,
-                minute: reminderMinute,
-                weekdaysOnly: reminderWeekdaysOnly
+                timezoneId: localTimezoneId,
+                hour: localHour,
+                minute: 0,
+                weekdaysOnly: reminderWeekdaysOnly,
+                targetTimezoneId: city.timezoneId,
+                targetHour: targetHour,
+                targetMinute: 0
             )
             await loadReminders()
             reminderStatus = nil
@@ -189,6 +215,78 @@ final class CityDetailViewModel: ObservableObject {
         }
     }
 
+    /// 指定时刻（当前城市时区）是否已有提醒
+    func hasReminder(atHour hour: Int, minute: Int) -> Bool {
+        reminder(atHour: hour, minute: minute) != nil
+    }
+
+    /// 指定时刻（当前城市时区）已有的提醒
+    func reminder(atHour hour: Int, minute: Int) -> CityReminderGroup? {
+        reminders.first {
+            $0.hour == hour && $0.minute == minute && $0.weekdaysOnly == reminderWeekdaysOnly
+        }
+    }
+
+    /// 当前城市名（触发提醒的城市）
+    var localCityName: String {
+        CityService.matchCity(for: localTimezoneId).name
+    }
+
+    /// 当前城市英文名
+    var localCityEn: String {
+        CityService.matchCity(for: localTimezoneId).en
+    }
+
+    /// 内置城市目录缓存：英文名+时区 → 国家码，用于补全旧数据缺失的 country 字段
+    private static let countryCatalog: [String: String] = {
+        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
+            return [:]
+        }
+        var catalog: [String: String] = [:]
+        for city in cities {
+            catalog["\(city.cityEn)|\(city.timezoneId)"] = city.country
+        }
+        return catalog
+    }()
+
+    /// 当前城市国家码
+    var localCountryCode: String {
+        Self.countryCatalog["\(localCityEn)|\(localTimezoneId)"] ?? ""
+    }
+
+    /// 目标城市国家码：优先取模型字段，旧数据为空时从内置城市目录按 英文名+时区 补全
+    var targetCountryCode: String {
+        if !city.country.isEmpty { return city.country }
+        return Self.countryCatalog["\(city.cityEn)|\(city.timezoneId)"] ?? ""
+    }
+
+    /// 当前城市夏令时/冬令时状态
+    var localDSTStatus: String? {
+        timezoneService.getDSTStatus(timezoneId: localTimezoneId, date: currentDate)
+    }
+
+    /// 目标城市夏令时/冬令时状态
+    var targetDSTStatus: String? {
+        timezoneService.getDSTStatus(timezoneId: city.timezoneId, date: currentDate)
+    }
+
+    /// 目标城市某钟点对应的当前城市钟点（用于展示触发时间）
+    func localHour(forTargetHour targetHour: Int) -> Int {
+        guard let targetTZ = TimeZone(identifier: city.timezoneId),
+              let localTZ = TimeZone(identifier: localTimezoneId) else {
+            return targetHour
+        }
+        var targetCal = Calendar(identifier: .gregorian)
+        targetCal.timeZone = targetTZ
+        var localCal = Calendar(identifier: .gregorian)
+        localCal.timeZone = localTZ
+        let dayStart = targetCal.startOfDay(for: currentDate)
+        let date = targetCal.date(byAdding: .hour, value: targetHour, to: dayStart) ?? dayStart
+        return localCal.component(.hour, from: date)
+    }
+
     func removeReminder(_ reminder: CityReminderGroup) async {
         await reminderService.removeReminder(id: reminder.id)
         await loadReminders()
@@ -196,15 +294,4 @@ final class CityDetailViewModel: ObservableObject {
         reminderStatusIsError = false
     }
 
-    private var reminderHour: Int {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: city.timezoneId) ?? .current
-        return calendar.component(.hour, from: reminderTime)
-    }
-
-    private var reminderMinute: Int {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: city.timezoneId) ?? .current
-        return calendar.component(.minute, from: reminderTime)
-    }
 }

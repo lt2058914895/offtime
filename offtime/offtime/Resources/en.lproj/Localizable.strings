@@ -51,25 +51,23 @@
 "clock.working.next" = "Reachable at %@";
 
 // MARK: - City Detail
-"detail.local.work.hours" = "Local Work Hours";
 "detail.contactable.period" = "Contactable Period";
 "detail.contactable.now" = "Contactable now";
 "detail.contactable.none" = "No contactable hours today";
 "detail.current.time" = "Current Time";
-"detail.time.diff" = "Diff";
 "detail.work.start" = "Start";
 "detail.work.end" = "End";
-"detail.rules.title" = "Contactable Period Rules";
-"detail.rules.1" = "Defaults to local and target city work hours (9:00–18:00) as the contactable period.";
+"detail.rules.title" = "Work Hours";
+"detail.rules.hint" = "Defaults to 9:00–18:00; adjust start and end times to customize.";
 "detail.rules.2" = "The contactable period is the overlap of both work hours.";
-"detail.rules.3" = "Adjust the work hours below to customize the contactable period.";
 "detail.hours" = "h";
-"city.reminder.title" = "City Time Reminder";
-"city.reminder.time" = "Target city time";
+"city.reminder.title" = "Add Reminder";
+"city.reminder.hint" = "Tap the bell to add a reminder; tap again to remove it.";
+"city.reminder.contactable.add" = "Add reminder at start";
+"city.reminder.remove" = "Remove reminder";
+"city.reminder.contactable.body" = "It's %@ in the target city — time to connect";
 "city.reminder.weekdays.only" = "Weekdays only";
 "city.reminder.everyday" = "Every day";
-"city.reminder.add" = "Add Reminder";
-"city.reminder.multiple.description" = "You can add multiple different times for one city. Change the time to add another.";
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
 "city.reminder.error.timezone" = "The selected city time zone is unavailable.";

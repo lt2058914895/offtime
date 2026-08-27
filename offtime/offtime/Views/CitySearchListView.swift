@@ -198,8 +198,12 @@ struct CitySearchListView: View {
                     .frame(width: 36)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(city.cityName)
-                        .font(.body.weight(.medium))
+                    HStack(spacing: 4) {
+                        Text(city.cityName)
+                            .font(.body.weight(.medium))
+                            .fixedSize(horizontal: false, vertical: true)
+                        dstBadge(dstStatus(for: city.timezoneId))
+                    }
                     Text(subtitle(for: city, countryName: countryName))
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -306,6 +310,26 @@ struct CitySearchListView: View {
             return String(format: "UTC%+d", hours)
         }
         return String(format: "UTC%+d:%02d", hours, minutes)
+    }
+
+    // MARK: - 夏令时/冬令时标签
+
+    private func dstStatus(for timezoneId: String) -> String? {
+        TimezoneService.shared.getDSTStatus(timezoneId: timezoneId)
+    }
+
+    /// 夏令时/冬令时胶囊标签（样式与时钟列表卡片一致）
+    @ViewBuilder
+    private func dstBadge(_ status: String?) -> some View {
+        if let status {
+            Text(status)
+                .font(.caption2)
+                .padding(.horizontal, 3)
+                .padding(.vertical, 1)
+                .background(status == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
+                .foregroundColor(status == String(localized: "clock.dst.summer") ? .orange : .blue)
+                .cornerRadius(3)
+        }
     }
 
     // MARK: - 国旗 Emoji

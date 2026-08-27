@@ -51,25 +51,23 @@
 "clock.working.next" = "%@ 可联系";
 
 // MARK: - City Detail
-"detail.local.work.hours" = "本地工作时间";
 "detail.contactable.period" = "可联系时段";
 "detail.contactable.now" = "当前可联系";
 "detail.contactable.none" = "今日无可联系时段";
 "detail.current.time" = "当前时间";
-"detail.time.diff" = "时差";
 "detail.work.start" = "开始";
 "detail.work.end" = "结束";
-"detail.rules.title" = "可联系时间段规则";
-"detail.rules.1" = "默认使用本地与目标城市的工作时段（9:00–18:00）作为可联系时段。";
+"detail.rules.title" = "工作时段";
+"detail.rules.hint" = "默认工作时段（9:00–18:00），调整开始、结束时间可自定义。";
 "detail.rules.2" = "可联系时段为双方工作时段的交集。";
-"detail.rules.3" = "调整下方工作时间可自定义可联系时段。";
 "detail.hours" = "小时";
-"city.reminder.title" = "城市时间提醒";
-"city.reminder.time" = "目标城市时间";
+"city.reminder.title" = "添加提醒";
+"city.reminder.hint" = "点击右侧铃铛添加提醒，再次点击取消提醒。";
+"city.reminder.contactable.add" = "为此时段起点添加提醒";
+"city.reminder.remove" = "移除提醒";
+"city.reminder.contactable.body" = "现在是目标城市 %@，双方可联系了";
 "city.reminder.weekdays.only" = "仅工作日";
 "city.reminder.everyday" = "每天";
-"city.reminder.add" = "添加提醒";
-"city.reminder.multiple.description" = "可为同一城市添加多个不同时刻；修改时间可继续添加。";
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";
