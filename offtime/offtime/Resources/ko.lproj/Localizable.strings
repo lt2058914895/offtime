@@ -264,7 +264,7 @@
 "trip.delete" = "삭제";
 "trip.delete.confirm.title" = "일정을 삭제할까요?";
 "settings.tools" = "도구";
-"settings.trips.meetings" = "회의 및 일정";
+"settings.meetings" = "회의 기록";
 "settings.data.management" = "데이터 관리";
 "settings.export.cities" = "도시 목록 내보내기";
 "settings.import.cities" = "도시 목록 가져오기";

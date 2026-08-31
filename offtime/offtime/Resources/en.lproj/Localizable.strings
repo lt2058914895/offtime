@@ -264,7 +264,7 @@
 "trip.delete" = "Delete";
 "trip.delete.confirm.title" = "Delete Trip?";
 "settings.tools" = "Tools";
-"settings.trips.meetings" = "Meetings & Trips";
+"settings.meetings" = "Meeting Records";
 "settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";

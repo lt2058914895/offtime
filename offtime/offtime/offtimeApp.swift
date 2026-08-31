@@ -61,13 +61,6 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.meeting)
 
-            TravelView()
-                .tabItem {
-                    Image(systemName: "airplane")
-                    Text(String(localized: "tab.travel"))
-                }
-                .tag(AppTab.travel)
-
             SettingsView()
                 .tabItem {
                     Image(systemName: "gear")

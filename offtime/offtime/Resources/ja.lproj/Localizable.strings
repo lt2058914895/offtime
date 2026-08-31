@@ -264,7 +264,7 @@
 "trip.delete" = "削除";
 "trip.delete.confirm.title" = "旅程を削除しますか？";
 "settings.tools" = "ツール";
-"settings.trips.meetings" = "会議と旅程";
+"settings.meetings" = "会議履歴";
 "settings.data.management" = "データ管理";
 "settings.export.cities" = "都市リストをエクスポート";
 "settings.import.cities" = "都市リストをインポート";

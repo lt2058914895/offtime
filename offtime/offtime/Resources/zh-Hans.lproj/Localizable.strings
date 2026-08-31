@@ -264,7 +264,7 @@
 "trip.delete" = "删除";
 "trip.delete.confirm.title" = "删除行程？";
 "settings.tools" = "工具";
-"settings.trips.meetings" = "会议与行程";
+"settings.meetings" = "会议记录";
 "settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";

@@ -175,7 +175,6 @@ enum AppTab: Hashable {
     case clock
     case converter
     case meeting
-    case travel
     case settings
 }
 
