@@ -69,13 +69,12 @@
 "city.reminder.cancel" = "リマインダーを解除";
 "city.reminder.contactable.add" = "この時間帯の開始時にリマインダー";
 "city.reminder.remove" = "リマインダーを削除";
-"city.reminder.contactable.body" = "対象都市は現在 %@ です。連絡できます";
+"city.reminder.contactable.body" = "現在時刻 %@、連絡可能です";
 "city.reminder.weekdays.only" = "平日のみ";
 "city.reminder.everyday" = "毎日";
 "city.reminder.duplicate" = "この時刻のリマインダーはすでに存在します";
 "city.reminder.error.authorization" = "通知が許可されていません。設定で有効にしてください。";
 "city.reminder.error.timezone" = "選択した都市のタイムゾーンを利用できません。";
-"city.reminder.notification.body.format" = "現在の時間 %@";
 
 // MARK: - City Picker
 "city.picker.title" = "都市を追加";

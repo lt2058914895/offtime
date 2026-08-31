@@ -69,13 +69,12 @@
 "city.reminder.cancel" = "取消提醒";
 "city.reminder.contactable.add" = "为此时段起点添加提醒";
 "city.reminder.remove" = "移除提醒";
-"city.reminder.contactable.body" = "现在是目标城市 %@，双方可联系了";
+"city.reminder.contactable.body" = "当前时间 %@，可联系了";
 "city.reminder.weekdays.only" = "仅工作日";
 "city.reminder.everyday" = "每天";
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";
-"city.reminder.notification.body.format" = "当前时间 %@";
 
 // MARK: - City Picker
 "city.picker.title" = "添加城市";

@@ -69,13 +69,12 @@
 "city.reminder.cancel" = "알림 취소";
 "city.reminder.contactable.add" = "이 시간대 시작 시 알림";
 "city.reminder.remove" = "알림 삭제";
-"city.reminder.contactable.body" = "대상 도시는 지금 %@입니다. 연락 가능합니다";
+"city.reminder.contactable.body" = "현재 시간 %@, 연락 가능합니다";
 "city.reminder.weekdays.only" = "평일만";
 "city.reminder.everyday" = "매일";
 "city.reminder.duplicate" = "이 시간의 알림이 이미 있습니다";
 "city.reminder.error.authorization" = "알림 권한이 꺼져 있습니다. 설정에서 허용해 주세요.";
 "city.reminder.error.timezone" = "선택한 도시의 시간대를 사용할 수 없습니다.";
-"city.reminder.notification.body.format" = "현재 시간 %@";
 
 // MARK: - City Picker
 "city.picker.title" = "도시 추가";

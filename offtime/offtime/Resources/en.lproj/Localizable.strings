@@ -69,13 +69,12 @@
 "city.reminder.cancel" = "Cancel Reminder";
 "city.reminder.contactable.add" = "Add reminder at start";
 "city.reminder.remove" = "Remove reminder";
-"city.reminder.contactable.body" = "It's %@ in the target city — time to connect";
+"city.reminder.contactable.body" = "Current time %@, contactable now";
 "city.reminder.weekdays.only" = "Weekdays only";
 "city.reminder.everyday" = "Every day";
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
 "city.reminder.error.timezone" = "The selected city time zone is unavailable.";
-"city.reminder.notification.body.format" = "Current time %@";
 
 // MARK: - City Picker
 "city.picker.title" = "Add City";

@@ -249,7 +249,7 @@ final class CityReminderService {
 
         let formatter = DateFormatter()
         formatter.locale = Locale.current
-        formatter.dateFormat = "HH:mm"
+        formatter.dateFormat = "yyyy-M-d EEE HH:mm"
         formatter.timeZone = timezone
 
         return String(
