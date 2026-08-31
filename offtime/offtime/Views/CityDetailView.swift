@@ -98,11 +98,10 @@ struct CityDetailView: View {
         detailCard {
             VStack(alignment: .leading, spacing: 16) {
                 cardHeader(
-                    icon: "clock",
                     title: "detail.rules.title",
-                    subtitle: "detail.rules.hint",
-                    tint: .blue
+                    subtitle: "detail.rules.hint"
                 )
+                dashedDivider()
 
                 cityWorkHoursSection(
                     cityName: viewModel.localCityName,
@@ -115,12 +114,11 @@ struct CityDetailView: View {
                     timeText: viewModel.localTime,
                     hourlyHighlight: viewModel.localHourlyWorking,
                     highlightColor: .accentColor,
+                    cityIcon: "location.fill",
                     nowHour: viewModel.localNowHour,
                     workStart: $viewModel.localWorkStart,
                     workEnd: $viewModel.localWorkEnd
                 )
-
-                Divider()
 
                 cityWorkHoursSection(
                     cityName: viewModel.city.cityName,
@@ -133,10 +131,12 @@ struct CityDetailView: View {
                     timeText: viewModel.cityTime,
                     hourlyHighlight: viewModel.targetHourlyWorking,
                     highlightColor: .blue,
+                    cityIcon: "building.2",
                     nowHour: viewModel.targetNowHour,
                     workStart: $viewModel.targetWorkStart,
                     workEnd: $viewModel.targetWorkEnd
                 )
+                .padding(.top, 16)
             }
         }
     }
@@ -158,6 +158,7 @@ struct CityDetailView: View {
         timeText: String,
         hourlyHighlight: [Bool],
         highlightColor: Color,
+        cityIcon: String,
         nowHour: Double?,
         workStart: Binding<Int>,
         workEnd: Binding<Int>
@@ -166,6 +167,7 @@ struct CityDetailView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 4) {
+                        moduleIcon(cityIcon, size: 22)
                         Text(cityName)
                             .font(.body)
                             .fontWeight(.semibold)
@@ -207,10 +209,8 @@ struct CityDetailView: View {
         detailCard {
             VStack(alignment: .leading, spacing: 16) {
                 cardHeader(
-                    icon: viewModel.overlap.isCurrentlyOverlapping ? "phone.fill" : "phone",
                     title: "detail.contactable.period",
-                    subtitle: "detail.rules.2",
-                    tint: .green
+                    subtitle: "detail.rules.2"
                 ) {
                     if viewModel.overlap.isCurrentlyOverlapping {
                         Text(String(localized: "detail.contactable.now"))
@@ -219,6 +219,7 @@ struct CityDetailView: View {
                             .foregroundColor(.green)
                     }
                 }
+                dashedDivider()
                 TimelineBar(
                     hourlyHighlight: viewModel.overlap.hourlyOverlap,
                     highlightColor: .green,
@@ -245,11 +246,10 @@ struct CityDetailView: View {
         detailCard {
             VStack(alignment: .leading, spacing: 12) {
                 cardHeader(
-                    icon: "bell.badge",
                     title: "city.reminder.title",
-                    subtitle: "city.reminder.hint",
-                    tint: .orange
+                    subtitle: "city.reminder.hint"
                 )
+                dashedDivider()
 
                 let contactableHours = viewModel.contactableTargetHours
                 if !contactableHours.isEmpty {
@@ -311,7 +311,6 @@ struct CityDetailView: View {
                         .padding(.vertical, 2)
                     }
 
-                    Divider()
                 }
 
                 Toggle(
@@ -331,13 +330,9 @@ struct CityDetailView: View {
 
     // MARK: - Components
 
-    /// 卡片头部：图标（带主题色背景）+ 标题 + 一行说明，统一各卡片的说明信息层级。
-    /// 图标用圆角方形背景提升辨识度，副标题用 subheadline 保证可读性但不抢视觉重心。
     private func cardHeader(
-        icon: String,
         title: LocalizedStringKey,
         subtitle: LocalizedStringKey,
-        tint: Color = .accentColor,
         @ViewBuilder accessory: () -> some View = { EmptyView() }
     ) -> some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -345,9 +340,9 @@ struct CityDetailView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.headline)
-                        .foregroundColor(tint)
+                        .foregroundColor(.primary)
                     Text(subtitle)
-                        .font(.caption2.weight(.medium))
+                        .font(.caption)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -355,6 +350,29 @@ struct CityDetailView: View {
                 accessory()
             }
         }
+    }
+
+    private func moduleIcon(_ name: String, size: CGFloat) -> some View {
+        Image(systemName: name)
+            .font(.system(size: size * 0.48, weight: .semibold))
+            .foregroundColor(.secondary)
+            .frame(width: size, height: size)
+            .background(Color(.tertiarySystemFill))
+            .clipShape(RoundedRectangle(cornerRadius: size * 0.28))
+    }
+
+    private func dashedDivider() -> some View {
+        GeometryReader { proxy in
+            Path { path in
+                path.move(to: CGPoint(x: 0, y: proxy.size.height / 2))
+                path.addLine(to: CGPoint(x: proxy.size.width, y: proxy.size.height / 2))
+            }
+            .stroke(
+                Color(.separator).opacity(0.55),
+                style: StrokeStyle(lineWidth: 1, dash: [4, 3])
+            )
+        }
+        .frame(height: 1)
     }
 
     /// 可联系时段钟点文案（24 小时制，与重叠摘要一致）

@@ -59,11 +59,11 @@
 "detail.work.start" = "Start";
 "detail.work.end" = "End";
 "detail.rules.title" = "Work Hours";
-"detail.rules.hint" = "Defaults to 9:00–18:00; adjust start and end times to customize.";
+"detail.rules.hint" = "Defaults to 9:00–18:00 and can be adjusted per city.";
 "detail.rules.2" = "The contactable period is the overlap of both work hours.";
 "detail.hours" = "h";
-"city.reminder.title" = "Add Reminder";
-"city.reminder.hint" = "Tap the bell to add a reminder; tap again to remove it.";
+"city.reminder.title" = "Reminder Settings";
+"city.reminder.hint" = "Tap a bell to add or remove that reminder.";
 "city.reminder.contactable.add" = "Add reminder at start";
 "city.reminder.remove" = "Remove reminder";
 "city.reminder.contactable.body" = "It's %@ in the target city — time to connect";

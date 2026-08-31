@@ -59,11 +59,11 @@
 "detail.work.start" = "開始";
 "detail.work.end" = "終了";
 "detail.rules.title" = "勤務時間";
-"detail.rules.hint" = "既定は勤務時間（9:00–18:00）です。開始・終了時間を調整してカスタマイズできます。";
+"detail.rules.hint" = "既定は 9:00–18:00 です。都市ごとに調整できます。";
 "detail.rules.2" = "連絡可能時間帯は双方の勤務時間の重複部分です。";
 "detail.hours" = "時間";
-"city.reminder.title" = "リマインダーを追加";
-"city.reminder.hint" = "右側のベルをタップするとリマインダーを追加でき、もう一度タップすると解除できます。";
+"city.reminder.title" = "リマインダー設定";
+"city.reminder.hint" = "ベルをタップしてリマインダーを追加・解除できます。";
 "city.reminder.contactable.add" = "この時間帯の開始時にリマインダー";
 "city.reminder.remove" = "リマインダーを削除";
 "city.reminder.contactable.body" = "対象都市は現在 %@ です。連絡できます";
