@@ -170,9 +170,56 @@ final class CityDetailViewModel: ObservableObject {
         return ranges
     }
 
-    /// 可联系时段（以目标城市时区为准，按 1 小时为单位展开的逐小时列表）
+    /// 可联系时段（按本地触发时间升序排列的逐小时列表）
     var contactableTargetHours: [Int] {
-        contactableTargetRanges.flatMap { ($0.startHour..<$0.endHour).map { $0 } }
+        contactableTargetRanges
+            .flatMap { ($0.startHour..<$0.endHour).map { $0 } }
+            .sorted { localHour(forTargetHour: $0) < localHour(forTargetHour: $1) }
+    }
+
+    /// 目标城市时刻与同一绝对时刻在本地时区所属日期的跨天关系；同一天不标记
+    func targetDayLabel(forTargetHour targetHour: Int) -> String? {
+        guard let targetTZ = TimeZone(identifier: city.timezoneId),
+              let localTZ = TimeZone(identifier: localTimezoneId) else {
+            return nil
+        }
+
+        var targetCal = Calendar(identifier: .gregorian)
+        targetCal.timeZone = targetTZ
+        var localCal = Calendar(identifier: .gregorian)
+        localCal.timeZone = localTZ
+
+        let targetDayStart = targetCal.startOfDay(for: currentDate)
+        guard let targetDate = targetCal.date(byAdding: .hour, value: targetHour, to: targetDayStart) else {
+            return nil
+        }
+
+        let dateComponents: Set<Calendar.Component> = [.year, .month, .day]
+        let targetComponents = targetCal.dateComponents(dateComponents, from: targetDate)
+        let localComponents = localCal.dateComponents(dateComponents, from: targetDate)
+
+        guard let targetYear = targetComponents.year,
+              let targetMonth = targetComponents.month,
+              let targetDay = targetComponents.day,
+              let localYear = localComponents.year,
+              let localMonth = localComponents.month,
+              let localDay = localComponents.day else {
+            return nil
+        }
+
+        if targetYear < localYear
+            || (targetYear == localYear && targetMonth < localMonth)
+            || (targetYear == localYear && targetMonth == localMonth && targetDay < localDay) {
+            return String(localized: "clock.yesterday")
+        }
+
+        if targetYear > localYear
+            || (targetYear == localYear && targetMonth > localMonth)
+            || (targetYear == localYear && targetMonth == localMonth && targetDay > localDay) {
+            return String(localized: "clock.tomorrow")
+        }
+
+        return nil
     }
 
     func saveWorkHours() {

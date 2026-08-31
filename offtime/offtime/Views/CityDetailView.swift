@@ -260,6 +260,7 @@ struct CityDetailView: View {
                             targetHour: targetHour,
                             localHour: localHour,
                             cityName: viewModel.city.cityName,
+                            dayLabel: viewModel.targetDayLabel(forTargetHour: targetHour),
                             existing: viewModel.reminder(atHour: localHour, minute: 0),
                             isProcessing: processingReminderTargetHours.contains(targetHour),
                             onToggle: { existing in
@@ -457,6 +458,7 @@ private struct ReminderRow: View, Equatable {
     let targetHour: Int
     let localHour: Int
     let cityName: String
+    let dayLabel: String?
     let existing: CityReminderGroup?
     let isProcessing: Bool
     let onToggle: (CityReminderGroup?) -> Void
@@ -465,6 +467,7 @@ private struct ReminderRow: View, Equatable {
         lhs.targetHour == rhs.targetHour
             && lhs.localHour == rhs.localHour
             && lhs.cityName == rhs.cityName
+            && lhs.dayLabel == rhs.dayLabel
             && lhs.existing == rhs.existing
             && lhs.isProcessing == rhs.isProcessing
     }
@@ -485,6 +488,11 @@ private struct ReminderRow: View, Equatable {
                         Text(cityName)
                             .font(.caption)
                             .foregroundColor(.secondary)
+                        if let dayLabel {
+                            Text(dayLabel)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                         Text(String(format: "%02d:00", targetHour))
                             .font(.caption.weight(.medium))
                             .foregroundColor(.secondary)
