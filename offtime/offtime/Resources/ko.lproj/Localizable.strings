@@ -63,8 +63,10 @@
 "detail.rules.2" = "연락 가능 시간대는 양쪽 근무 시간의 겹치는 구간입니다.";
 "detail.hours" = "시간";
 "city.reminder.title" = "알림 설정";
-"city.reminder.hint" = "종을 탭해 알림을 추가하거나 취소할 수 있습니다.";
+"city.reminder.hint" = "시간대를 탭해 알림을 추가하거나 취소할 수 있습니다.";
 "city.reminder.empty" = "알림을 설정할 수 있는 시간대가 없습니다";
+"city.reminder.add" = "알림 추가";
+"city.reminder.cancel" = "알림 취소";
 "city.reminder.contactable.add" = "이 시간대 시작 시 알림";
 "city.reminder.remove" = "알림 삭제";
 "city.reminder.contactable.body" = "대상 도시는 지금 %@입니다. 연락 가능합니다";

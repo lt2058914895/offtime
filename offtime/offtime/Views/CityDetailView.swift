@@ -48,6 +48,7 @@ struct CityDetailView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: CityDetailViewModel
+    @State private var processingReminderTargetHours: Set<Int> = []
 
     init(city: CityModel) {
         _viewModel = StateObject(wrappedValue: CityDetailViewModel(city: city))
@@ -255,60 +256,23 @@ struct CityDetailView: View {
                 if !contactableHours.isEmpty {
                     ForEach(contactableHours, id: \.self) { targetHour in
                         let localHour = viewModel.localHour(forTargetHour: targetHour)
-                        HStack {
-                            HStack(spacing: 5) {
-                                Text(contactTimeText(localHour))
-                                    .font(.title3.weight(.semibold))
-                                    .monospacedDigit()
-                                HStack(spacing: 3) {
-                                    Text("(")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    Text(viewModel.city.cityName)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    Text(contactTimeText(targetHour))
-                                        .font(.caption.weight(.medium))
-                                        .foregroundColor(.secondary)
-                                        .monospacedDigit()
-                                    Text(")")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
+                        ReminderRow(
+                            targetHour: targetHour,
+                            localHour: localHour,
+                            cityName: viewModel.city.cityName,
+                            existing: viewModel.reminder(atHour: localHour, minute: 0),
+                            isProcessing: processingReminderTargetHours.contains(targetHour),
+                            onToggle: { existing in
+                                Task {
+                                    await toggleReminder(
+                                        existing,
+                                        localHour: localHour,
+                                        targetHour: targetHour
+                                    )
                                 }
                             }
-                            Spacer()
-                            if let existing = viewModel.reminder(atHour: localHour, minute: 0) {
-                                Button {
-                                    Task {
-                                        await viewModel.removeReminder(existing)
-                                    }
-                                } label: {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.title3)
-                                        .foregroundColor(.green)
-                                }
-                                .buttonStyle(.borderless)
-                                .disabled(viewModel.isAddingReminder)
-                                .accessibilityLabel(String(localized: "city.reminder.remove"))
-                            } else {
-                                Button {
-                                    Task {
-                                        await viewModel.addContactableReminder(
-                                            localHour: localHour,
-                                            targetHour: targetHour
-                                        )
-                                    }
-                                } label: {
-                                    Image(systemName: "bell")
-                                        .font(.title3)
-                                        .foregroundColor(.accentColor)
-                                }
-                                .buttonStyle(.borderless)
-                                .disabled(viewModel.isAddingReminder)
-                                .accessibilityLabel(String(localized: "city.reminder.contactable.add"))
-                            }
-                        }
-                        .padding(.vertical, 2)
+                        )
+                        .equatable()
                     }
 
                 } else {
@@ -331,6 +295,24 @@ struct CityDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
+        }
+    }
+
+    private func toggleReminder(
+        _ existing: CityReminderGroup?,
+        localHour: Int,
+        targetHour: Int
+    ) async {
+        processingReminderTargetHours.insert(targetHour)
+        defer { processingReminderTargetHours.remove(targetHour) }
+
+        if let existing {
+            await viewModel.removeReminder(existing)
+        } else {
+            await viewModel.addContactableReminder(
+                localHour: localHour,
+                targetHour: targetHour
+            )
         }
     }
 
@@ -468,6 +450,78 @@ struct CityDetailView: View {
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
             .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 2)
+    }
+}
+
+private struct ReminderRow: View, Equatable {
+    let targetHour: Int
+    let localHour: Int
+    let cityName: String
+    let existing: CityReminderGroup?
+    let isProcessing: Bool
+    let onToggle: (CityReminderGroup?) -> Void
+
+    static func == (lhs: ReminderRow, rhs: ReminderRow) -> Bool {
+        lhs.targetHour == rhs.targetHour
+            && lhs.localHour == rhs.localHour
+            && lhs.cityName == rhs.cityName
+            && lhs.existing == rhs.existing
+            && lhs.isProcessing == rhs.isProcessing
+    }
+
+    var body: some View {
+        Button {
+            onToggle(existing)
+        } label: {
+            HStack(spacing: 12) {
+                HStack(spacing: 5) {
+                    Text(String(format: "%02d:00", localHour))
+                        .font(.title3.weight(.semibold))
+                        .monospacedDigit()
+                    HStack(spacing: 3) {
+                        Text("(")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(cityName)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(String(format: "%02d:00", targetHour))
+                            .font(.caption.weight(.medium))
+                            .foregroundColor(.secondary)
+                            .monospacedDigit()
+                        Text(")")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                if existing == nil {
+                    Text(String(localized: "city.reminder.add"))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Color.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Color.accentColor)
+                        .clipShape(Capsule())
+                } else {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title3)
+                        .foregroundColor(.green)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color(.tertiarySystemFill))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(.plain)
+        .disabled(isProcessing)
+        .accessibilityLabel(existing == nil
+            ? String(localized: "city.reminder.add")
+            : String(localized: "city.reminder.cancel")
+        )
     }
 }
 

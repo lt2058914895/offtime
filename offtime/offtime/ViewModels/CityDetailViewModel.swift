@@ -14,7 +14,6 @@ final class CityDetailViewModel: ObservableObject {
     @Published var use24Hour: Bool = true
     @Published var localTimezoneId: String = TimeZone.current.identifier
     @Published var reminderWeekdaysOnly = true
-    @Published var isAddingReminder = false
     @Published var reminders: [CityReminderGroup] = []
     @Published var reminderStatus: String?
     @Published private(set) var reminderStatusIsError = false
@@ -184,10 +183,7 @@ final class CityDetailViewModel: ObservableObject {
 
     /// 为可联系时段添加提醒：按当前城市时间触发，通知中告知目标城市对应时刻
     func addContactableReminder(localHour: Int, targetHour: Int) async {
-        isAddingReminder = true
         reminderStatus = nil
-        defer { isAddingReminder = false }
-
         guard !hasReminder(atHour: localHour, minute: 0) else {
             reminderStatus = String(localized: "city.reminder.duplicate")
             reminderStatusIsError = true

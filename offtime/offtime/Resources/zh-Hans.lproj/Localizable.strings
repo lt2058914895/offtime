@@ -63,8 +63,10 @@
 "detail.rules.2" = "可联系时段为双方工作时段的交集。";
 "detail.hours" = "小时";
 "city.reminder.title" = "提醒设置";
-"city.reminder.hint" = "点按时段右侧铃铛，添加或取消提醒。";
+"city.reminder.hint" = "点按对应时段，添加或取消提醒。";
 "city.reminder.empty" = "暂无可提醒时段";
+"city.reminder.add" = "添加提醒";
+"city.reminder.cancel" = "取消提醒";
 "city.reminder.contactable.add" = "为此时段起点添加提醒";
 "city.reminder.remove" = "移除提醒";
 "city.reminder.contactable.body" = "现在是目标城市 %@，双方可联系了";
