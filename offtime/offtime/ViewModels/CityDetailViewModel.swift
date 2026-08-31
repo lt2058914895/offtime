@@ -120,9 +120,17 @@ final class CityDetailViewModel: ObservableObject {
         }
         if let start = rangeStart { ranges.append((start, 24)) }
         guard !ranges.isEmpty else { return String(localized: "detail.contactable.none") }
-        let parts = ranges.map { String(format: "%02d:00–%02d:00", $0.0, $0.1) }
-        let total = ranges.reduce(0) { $0 + ($1.1 - $1.0) }
-        return parts.joined(separator: " ") + "（\(total)\(String(localized: "detail.hours"))）"
+        return ranges.map { range in
+            let hours = range.1 - range.0
+            return String(
+                format: "%02d:00–%02d:00（%d%@）",
+                range.0,
+                range.1,
+                hours,
+                String(localized: "detail.hours")
+            )
+        }
+        .joined(separator: "\n")
     }
 
     /// 可联系时间段（按目标城市时区 24 小时轴），提醒据此一键添加
