@@ -113,6 +113,7 @@ struct CityDetailView: View {
                     timeDifference: "0h",
                     timeDifferenceColor: .secondary,
                     timeText: viewModel.localTime,
+                    crossDay: nil,
                     hourlyHighlight: viewModel.localHourlyWorking,
                     highlightColor: .accentColor,
                     cityIcon: "location.fill",
@@ -130,6 +131,7 @@ struct CityDetailView: View {
                     timeDifference: viewModel.timeDifference,
                     timeDifferenceColor: timeDifferenceColor,
                     timeText: viewModel.cityTime,
+                    crossDay: viewModel.targetCrossDay,
                     hourlyHighlight: viewModel.targetHourlyWorking,
                     highlightColor: .blue,
                     cityIcon: "building.2",
@@ -157,6 +159,7 @@ struct CityDetailView: View {
         timeDifference: String,
         timeDifferenceColor: Color,
         timeText: String,
+        crossDay: String?,
         hourlyHighlight: [Bool],
         highlightColor: Color,
         cityIcon: String,
@@ -186,10 +189,15 @@ struct CityDetailView: View {
                 }
                 Spacer()
                 VStack(alignment: .trailing, spacing: 0) {
-                    Text(timeText)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .monospacedDigit()
+                    HStack(alignment: .center, spacing: 4) {
+                        if let crossDay {
+                            CrossDayBadge(label: crossDay)
+                        }
+                        Text(timeText)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .monospacedDigit()
+                    }
                     Text(String(localized: "detail.current.time"))
                         .font(.caption2.weight(.medium))
                         .foregroundColor(.secondary)

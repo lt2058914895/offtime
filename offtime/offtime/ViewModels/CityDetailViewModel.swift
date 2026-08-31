@@ -54,6 +54,11 @@ final class CityDetailViewModel: ObservableObject {
         timezoneService.getTimeDifferenceBetween(sourceTimezoneId: localTimezoneId, targetTimezoneId: city.timezoneId, date: currentDate).offset
     }
 
+    /// 目标城市当前时间相对本地的跨天标签（昨日/明日）
+    var targetCrossDay: String? {
+        timezoneService.getTimeDifferenceBetween(sourceTimezoneId: localTimezoneId, targetTimezoneId: city.timezoneId, date: currentDate).crossDay
+    }
+
     var isLocalCityDaytime: Bool {
         timezoneService.isDaytime(timezoneId: localTimezoneId, date: currentDate)
     }

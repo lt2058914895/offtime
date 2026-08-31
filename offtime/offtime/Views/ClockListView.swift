@@ -394,9 +394,6 @@ struct ClockListCell: View {
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
-                        if let crossDay = timeDifference.crossDay {
-                            CrossDayBadge(label: crossDay)
-                        }
                         if !weekday.isEmpty {
                             Text(weekday)
                                 .font(.subheadline)
@@ -405,6 +402,9 @@ struct ClockListCell: View {
                     }
                     Spacer()
                     HStack(alignment: .center, spacing: 5) {
+                        if let crossDay = timeDifference.crossDay {
+                            CrossDayBadge(label: crossDay)
+                        }
                         Text(time)
                             .font(.title3)
                             .fontWeight(.semibold)
@@ -520,8 +520,11 @@ struct ClockGridCell: View {
             
             Divider()
             
-            // 中部：时间 + 昼夜图标
+            // 中部：昨日/明日 + 时间 + 昼夜图标
             HStack(alignment: .center, spacing: 8) {
+                if let crossDay = timeDifference.crossDay {
+                    CrossDayBadge(label: crossDay)
+                }
                 Text(time)
                     .font(.title2)
                     .fontWeight(.bold)
@@ -533,7 +536,7 @@ struct ClockGridCell: View {
                     .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
             }
             
-            // 底部：日期 + 星期 + 时差
+            // 底部：日期 + 星期
             HStack(alignment: .top, spacing: 8) {
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 4) {
@@ -545,9 +548,6 @@ struct ClockGridCell: View {
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
-                    }
-                    if let crossDay = timeDifference.crossDay {
-                        CrossDayBadge(label: crossDay)
                     }
                 }
                 Spacer()
