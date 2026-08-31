@@ -311,6 +311,12 @@ struct CityDetailView: View {
                         .padding(.vertical, 2)
                     }
 
+                } else {
+                    Text(String(localized: "city.reminder.empty"))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 8)
                 }
 
                 Toggle(

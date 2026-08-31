@@ -64,6 +64,7 @@
 "detail.hours" = "h";
 "city.reminder.title" = "Reminder Settings";
 "city.reminder.hint" = "Tap a bell to add or remove that reminder.";
+"city.reminder.empty" = "No reminder periods available";
 "city.reminder.contactable.add" = "Add reminder at start";
 "city.reminder.remove" = "Remove reminder";
 "city.reminder.contactable.body" = "It's %@ in the target city — time to connect";

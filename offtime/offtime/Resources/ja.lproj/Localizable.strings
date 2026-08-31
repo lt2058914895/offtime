@@ -64,6 +64,7 @@
 "detail.hours" = "時間";
 "city.reminder.title" = "リマインダー設定";
 "city.reminder.hint" = "ベルをタップしてリマインダーを追加・解除できます。";
+"city.reminder.empty" = "リマインダーを設定できる時間帯はありません";
 "city.reminder.contactable.add" = "この時間帯の開始時にリマインダー";
 "city.reminder.remove" = "リマインダーを削除";
 "city.reminder.contactable.body" = "対象都市は現在 %@ です。連絡できます";
