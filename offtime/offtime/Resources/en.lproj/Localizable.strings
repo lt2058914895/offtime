@@ -2,6 +2,7 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "Clock";
+"tab.converter" = "Time Converter";
 "tab.meeting" = "Meetings";
 "tab.travel" = "Trips";
 "tab.settings" = "Settings";
@@ -222,7 +223,6 @@
 "travel.city.new_york" = "New York";
 
 // MARK: - Converter
-"converter.title" = "Time Converter";
 "converter.source.city" = "Source City";
 "converter.target.city" = "Target City";
 "converter.select.city" = "Select City";

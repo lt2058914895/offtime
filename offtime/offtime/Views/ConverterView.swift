@@ -63,7 +63,7 @@ struct ConverterView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle(String(localized: "converter.title"))
+            .navigationTitle(String(localized: "tab.converter"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

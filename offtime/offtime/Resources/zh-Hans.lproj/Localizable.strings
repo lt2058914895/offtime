@@ -2,6 +2,7 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "时钟";
+"tab.converter" = "时区转换";
 "tab.meeting" = "会议";
 "tab.travel" = "行程";
 "tab.settings" = "设置";
@@ -222,7 +223,6 @@
 "travel.city.new_york" = "纽约";
 
 // MARK: - Converter
-"converter.title" = "时区转换";
 "converter.source.city" = "起点城市";
 "converter.target.city" = "目标城市";
 "converter.select.city" = "选择城市";

@@ -50,7 +50,7 @@ struct MainTabView: View {
             ConverterView()
                 .tabItem {
                     Image(systemName: "repeat")
-                    Text(String(localized: "converter.title"))
+                    Text(String(localized: "tab.converter"))
                 }
                 .tag(AppTab.converter)
 

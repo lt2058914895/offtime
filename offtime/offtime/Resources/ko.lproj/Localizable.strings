@@ -2,6 +2,7 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "시계";
+"tab.converter" = "시간 변환기";
 "tab.meeting" = "회의";
 "tab.travel" = "일정";
 "tab.settings" = "설정";
@@ -222,7 +223,6 @@
 "travel.city.new_york" = "뉴욕";
 
 // MARK: - Converter
-"converter.title" = "시간 변환기";
 "converter.source.city" = "출발 도시";
 "converter.target.city" = "도착 도시";
 "converter.select.city" = "도시 선택";
