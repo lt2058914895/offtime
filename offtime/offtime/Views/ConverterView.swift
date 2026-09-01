@@ -223,7 +223,7 @@ struct ConverterView: View {
             
             // 大字 Dynamic Type 下 HStack 放不下时自动回退 VStack，避免溢出
             ViewThatFits(in: .horizontal) {
-                HStack {
+                HStack(alignment: .center) {
                     HStack(spacing: 6) {
                         Image(systemName: "calendar")
                             .font(.callout)
@@ -305,20 +305,20 @@ struct ConverterView: View {
                 .foregroundColor(Color(.systemGray2))
             
             Button(action: action) {
-                HStack {
+                HStack(alignment: .center) {
                     if let city {
                         if city.cityName != city.cityEn {
                             Text("\(city.cityName) (\(city.cityEn))")
                                 .font(.headline)
                                 .foregroundColor(Color(.label))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
+                                .lineLimit(2)
+                                .fixedSize(horizontal: false, vertical: true)
                         } else {
                             Text(city.cityName)
                                 .font(.headline)
                                 .foregroundColor(Color(.label))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
+                                .lineLimit(2)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     } else {
                         Text(String(localized: "converter.select.city"))
@@ -376,7 +376,7 @@ struct ConverterView: View {
         VStack(alignment: .leading, spacing: 8) {
             // 表头：窄横屏 / 大字下标签与「当前时间」按钮放不下时自动回退纵向
             ViewThatFits(in: .horizontal) {
-                HStack {
+                HStack(alignment: .center) {
                     datePickerLabel
                     Spacer()
                     currentTimeButton
