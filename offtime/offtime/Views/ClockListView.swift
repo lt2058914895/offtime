@@ -349,6 +349,14 @@ struct ClockListCell: View {
                     Text(city.cityName)
                         .font(.body)
                         .fontWeight(.semibold)
+                    if city.timezoneId == localTimezoneId {
+                        Text(String(localized: "meeting.local.badge"))
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 1)
+                            .background(Color.accentColor.opacity(0.15))
+                            .cornerRadius(4)
+                    }
                     if city.cityName != city.cityEn {
                         Text(city.cityEn)
                             .font(.caption)

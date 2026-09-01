@@ -294,6 +294,35 @@ struct CityDetailView: View {
                         .padding(.vertical, 8)
                 }
 
+                let orphaned = viewModel.orphanedReminders
+                if !orphaned.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.caption2)
+                                .foregroundColor(.orange)
+                            Text(String(localized: "city.reminder.outdated"))
+                                .font(.caption2)
+                                .foregroundColor(.orange)
+                        }
+                        ForEach(orphaned) { reminder in
+                            OrphanedReminderRow(
+                                reminder: reminder,
+                                cityName: viewModel.city.cityName,
+                                isProcessing: processingReminderTargetHours.contains(reminder.targetHour),
+                                onRemove: {
+                                    Task {
+                                        processingReminderTargetHours.insert(reminder.targetHour)
+                                        defer { processingReminderTargetHours.remove(reminder.targetHour) }
+                                        await viewModel.removeReminder(reminder)
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    .padding(.top, 4)
+                }
+
                 Toggle(
                     String(localized: "city.reminder.weekdays.only"),
                     isOn: $viewModel.reminderWeekdaysOnly
@@ -483,39 +512,39 @@ private struct ReminderRow: View, Equatable {
     }
 
     var body: some View {
-        Button {
-            onToggle(existing)
-        } label: {
-            HStack(spacing: 12) {
-                HStack(spacing: 5) {
-                    Text(String(format: "%02d:00", localHour))
-                        .font(.title3.weight(.semibold))
-                        .monospacedDigit()
-                    HStack(spacing: 3) {
-                        Text("(")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text(cityName)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        if let dayLabel {
-                            Text(dayLabel)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        Text(String(format: "%02d:00", targetHour))
-                            .font(.caption.weight(.medium))
-                            .foregroundColor(.secondary)
-                            .monospacedDigit()
-                        Text(")")
+        HStack(spacing: 12) {
+            HStack(spacing: 5) {
+                Text(String(format: "%02d:00", localHour))
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                HStack(spacing: 3) {
+                    Text("(")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(cityName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    if let dayLabel {
+                        Text(dayLabel)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    Text(String(format: "%02d:00", targetHour))
+                        .font(.caption.weight(.medium))
+                        .foregroundColor(.secondary)
+                        .monospacedDigit()
+                    Text(")")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
+            }
 
-                Spacer()
+            Spacer()
 
-                if existing == nil {
+            if existing == nil {
+                Button {
+                    onToggle(existing)
+                } label: {
                     Text(String(localized: "city.reminder.add"))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(Color.white)
@@ -523,23 +552,81 @@ private struct ReminderRow: View, Equatable {
                         .padding(.vertical, 6)
                         .background(Color.accentColor)
                         .clipShape(Capsule())
-                } else {
+                }
+                .buttonStyle(.plain)
+                .disabled(isProcessing)
+            } else {
+                Button {
+                    onToggle(existing)
+                } label: {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.title3)
                         .foregroundColor(.green)
                 }
+                .buttonStyle(.plain)
+                .disabled(isProcessing)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(Color(.tertiarySystemFill))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
-        .buttonStyle(.plain)
-        .disabled(isProcessing)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Color(.tertiarySystemFill))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .accessibilityLabel(existing == nil
             ? String(localized: "city.reminder.add")
             : String(localized: "city.reminder.cancel")
         )
+    }
+}
+
+// MARK: - Orphaned Reminder Row
+
+private struct OrphanedReminderRow: View {
+    let reminder: CityReminderGroup
+    let cityName: String
+    let isProcessing: Bool
+    let onRemove: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            HStack(spacing: 5) {
+                Text(String(format: "%02d:00", reminder.hour))
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                    .foregroundColor(.secondary)
+                HStack(spacing: 3) {
+                    Text("(")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(cityName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(String(format: "%02d:00", reminder.targetHour))
+                        .font(.caption.weight(.medium))
+                        .foregroundColor(.secondary)
+                        .monospacedDigit()
+                    Text(")")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            Spacer()
+
+            Button {
+                onRemove()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title3)
+                    .foregroundColor(.orange)
+            }
+            .buttonStyle(.plain)
+            .disabled(isProcessing)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Color.orange.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .accessibilityLabel(String(localized: "city.reminder.remove.outdated"))
     }
 }
 

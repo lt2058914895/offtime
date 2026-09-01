@@ -74,6 +74,8 @@
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";
+"city.reminder.outdated" = "以下提醒已超出工作时段";
+"city.reminder.remove.outdated" = "移除过期提醒";
 
 // MARK: - City Picker
 "city.picker.title" = "添加城市";

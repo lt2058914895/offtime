@@ -74,6 +74,8 @@
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
 "city.reminder.error.timezone" = "The selected city time zone is unavailable.";
+"city.reminder.outdated" = "Reminders outside work hours";
+"city.reminder.remove.outdated" = "Remove outdated reminder";
 
 // MARK: - City Picker
 "city.picker.title" = "Add City";

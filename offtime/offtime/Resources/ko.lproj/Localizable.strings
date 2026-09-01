@@ -74,6 +74,8 @@
 "city.reminder.duplicate" = "이 시간의 알림이 이미 있습니다";
 "city.reminder.error.authorization" = "알림 권한이 꺼져 있습니다. 설정에서 허용해 주세요.";
 "city.reminder.error.timezone" = "선택한 도시의 시간대를 사용할 수 없습니다.";
+"city.reminder.outdated" = "근무 시간 외 알림";
+"city.reminder.remove.outdated" = "만료된 알림 제거";
 
 // MARK: - City Picker
 "city.picker.title" = "도시 추가";

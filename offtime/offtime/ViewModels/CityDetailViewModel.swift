@@ -237,6 +237,12 @@ final class CityDetailViewModel: ObservableObject {
 
     // MARK: - City Reminder
 
+    /// 已超出当前工作时段的提醒（targetHour 不在 contactableTargetHours 中）
+    var orphanedReminders: [CityReminderGroup] {
+        let contactableSet = Set(contactableTargetHours)
+        return reminders.filter { !contactableSet.contains($0.targetHour) }
+    }
+
     func loadReminders() async {
         reminders = await reminderService.reminders(for: city.id)
     }

@@ -74,6 +74,8 @@
 "city.reminder.duplicate" = "この時刻のリマインダーはすでに存在します";
 "city.reminder.error.authorization" = "通知が許可されていません。設定で有効にしてください。";
 "city.reminder.error.timezone" = "選択した都市のタイムゾーンを利用できません。";
+"city.reminder.outdated" = "勤務時間外のリマインダー";
+"city.reminder.remove.outdated" = "期限切れリマインダーを削除";
 
 // MARK: - City Picker
 "city.picker.title" = "都市を追加";
