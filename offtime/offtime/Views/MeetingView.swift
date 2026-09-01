@@ -679,13 +679,14 @@ private struct SlotDetailSheet: View {
                             HStack(spacing: 6) {
                                 Text(startTimeText(selectedStartDate))
                                     .font(.body.weight(.semibold))
+                                    .foregroundColor(.accentColor)
                                 Image(systemName: "chevron.down")
                                     .font(.caption.weight(.semibold))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.accentColor)
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
-                            .background(Color(.systemGray6))
+                            .background(Color.accentColor.opacity(0.1))
                             .cornerRadius(10)
                         }
                     }
