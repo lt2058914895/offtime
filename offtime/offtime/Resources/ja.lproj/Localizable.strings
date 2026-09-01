@@ -155,8 +155,6 @@
 "meeting.list.filter.empty" = "この分類には会議がありません";
 "meeting.list.ongoing" = "進行中";
 "meeting.list.swipe.hint" = "左にスワイプで会議を削除できます";
-"meeting.day.before" = "昨日";
-"meeting.day.after" = "翌日";
 
 // MARK: - Travel
 "travel.title" = "旅程と時差ボケ対策";

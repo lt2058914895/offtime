@@ -342,7 +342,7 @@ struct ConverterView: View {
     
     private static let sourceDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.dateFormat = "yyyy/MM/dd"
         return formatter
     }()
     

@@ -262,14 +262,21 @@ final class MeetingViewModel: ObservableObject {
         var participantCalendar = Calendar(identifier: .gregorian)
         participantCalendar.timeZone = participantTimezone
 
-        let localDay = dayOrder(localCalendar.dateComponents([.year, .month, .day], from: date))
+        // 本地时区无需日期前缀：会议日期已在标题显示，时间范围自然连续
+        if participant.isLocal {
+            return time
+        }
+
+        // 参考日为会议日期（本地时区），而非边界时刻的本地日
+        let referenceDay = dayOrder(localCalendar.dateComponents([.year, .month, .day], from: meetingDate))
         let participantDay = dayOrder(participantCalendar.dateComponents([.year, .month, .day], from: date))
 
-        if participantDay < localDay {
-            return "\(String(localized: "meeting.day.before")) \(time)"
-        }
-        if participantDay > localDay {
-            return "\(String(localized: "meeting.day.after")) \(time)"
+        if participantDay != referenceDay {
+            // 跨天时显示参与者时区下的具体日期，避免相对标签的歧义
+            var style = Date.FormatStyle.dateTime.month(.defaultDigits).day()
+            style.timeZone = participantTimezone
+            let dateStr = date.formatted(style)
+            return "\(dateStr) \(time)"
         }
         return time
     }

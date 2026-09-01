@@ -155,8 +155,6 @@
 "meeting.list.filter.empty" = "该分类暂无会议";
 "meeting.list.ongoing" = "进行中";
 "meeting.list.swipe.hint" = "往左滑动会议可删除";
-"meeting.day.before" = "昨日";
-"meeting.day.after" = "次日";
 
 // MARK: - Travel
 "travel.title" = "行程与倒时差计划";

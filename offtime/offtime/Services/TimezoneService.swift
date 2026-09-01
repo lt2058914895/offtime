@@ -58,12 +58,12 @@ final class TimezoneService {
     
     func getLocalDate(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd").string(from: date)
+        return makeFormatter(timezone: timezone, dateFormat: "yyyy/MM/dd").string(from: date)
     }
     
     func getLocalWeekday(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "EEEE").string(from: date)
+        return makeFormatter(timezone: timezone, dateFormat: "EEE").string(from: date)
     }
     
     func getLocalDateTime(timezoneId: String, date: Date = Date()) -> String? {

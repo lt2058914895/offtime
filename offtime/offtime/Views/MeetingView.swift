@@ -89,6 +89,7 @@ struct MeetingView: View {
             SlotDetailSheet(
                 rangeText: groupRangeText(group),
                 group: group,
+                meetingDate: viewModel.meetingDate,
                 use24Hour: use24Hour,
                 localTimezoneId: viewModel.localTimezoneId,
                 makeDetail: { startDate in
@@ -613,6 +614,7 @@ private struct HoursBar: View {
 private struct SlotDetailSheet: View {
     let rangeText: String
     let group: MeetingSlotGroup
+    let meetingDate: Date
     let use24Hour: Bool
     let localTimezoneId: String
     let makeDetail: (Date) -> MeetingSlotDetail
@@ -623,6 +625,7 @@ private struct SlotDetailSheet: View {
     init(
         rangeText: String,
         group: MeetingSlotGroup,
+        meetingDate: Date,
         use24Hour: Bool,
         localTimezoneId: String,
         makeDetail: @escaping (Date) -> MeetingSlotDetail,
@@ -630,6 +633,7 @@ private struct SlotDetailSheet: View {
     ) {
         self.rangeText = rangeText
         self.group = group
+        self.meetingDate = meetingDate
         self.use24Hour = use24Hour
         self.localTimezoneId = localTimezoneId
         self.makeDetail = makeDetail
@@ -689,10 +693,14 @@ private struct SlotDetailSheet: View {
                 }
 
                 VStack(spacing: 4) {
-                    Text(meetingTimeText(selectedStartDate))
-                        .font(.title2.weight(.bold))
+                    HStack(alignment: .center, spacing: 8) {
+                        Text(meetingDateString)
+                            .font(.subheadline.weight(.bold))
+                        Text(meetingTimeText(selectedStartDate))
+                            .font(.title2.weight(.bold))
+                    }
                     Text(String(localized: "meeting.detail.subtitle"))
-                        .font(.subheadline)
+                        .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 .padding(.top, 8)
@@ -785,6 +793,15 @@ private struct SlotDetailSheet: View {
     private func meetingTimeText(_ date: Date) -> String {
         let end = date.addingTimeInterval(Double(group.durationMinutes) * 60)
         return "\(startTimeText(date))–\(startTimeText(end))"
+    }
+
+    /// 会议日期格式化：2026-9-1 周二（按本地时区）
+    private var meetingDateString: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(identifier: localTimezoneId) ?? .current
+        formatter.dateFormat = "yyyy/MM/dd EEE"
+        return formatter.string(from: meetingDate)
     }
 
     private func stateColor(_ state: MeetingParticipantState) -> Color {

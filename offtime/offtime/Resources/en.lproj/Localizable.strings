@@ -155,8 +155,6 @@
 "meeting.list.filter.empty" = "No meetings in this category";
 "meeting.list.ongoing" = "Ongoing";
 "meeting.list.swipe.hint" = "Swipe left to delete a meeting";
-"meeting.day.before" = "Yesterday";
-"meeting.day.after" = "Next day";
 
 // MARK: - Travel
 "travel.title" = "Trips & Jet-Lag Plan";
