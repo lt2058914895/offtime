@@ -34,7 +34,6 @@
 "clock.confirm.delete.selected.message" = "선택한 도시를 삭제하시겠습니까?";
 "clock.dst.summer" = "서머타임";
 "clock.time.difference" = "시차:";
-"clock.dst.winter" = "윈터타임";
 "clock.tomorrow" = "내일";
 "clock.yesterday" = "어제";
 "clock.today" = "오늘";

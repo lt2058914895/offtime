@@ -412,7 +412,7 @@ struct CityDetailView: View {
         }
     }
 
-    /// 夏令时/冬令时胶囊标签（样式与时钟列表卡片一致）
+    /// 夏令时胶囊标签
     @ViewBuilder
     private func dstBadge(_ status: String?) -> some View {
         if let status {
@@ -420,8 +420,8 @@ struct CityDetailView: View {
                 .font(.caption2.weight(.medium))
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1)
-                .background(status == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
-                .foregroundColor(status == String(localized: "clock.dst.summer") ? .orange : .blue)
+                .background(Color.blue.opacity(0.15))
+                .foregroundColor(.blue)
                 .cornerRadius(3)
         }
     }

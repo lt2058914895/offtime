@@ -312,13 +312,13 @@ struct CitySearchListView: View {
         return String(format: "UTC%+d:%02d", hours, minutes)
     }
 
-    // MARK: - 夏令时/冬令时标签
+    // MARK: - 夏令时标签
 
     private func dstStatus(for timezoneId: String) -> String? {
         TimezoneService.shared.getDSTStatus(timezoneId: timezoneId)
     }
 
-    /// 夏令时/冬令时胶囊标签（样式与时钟列表卡片一致）
+    /// 夏令时胶囊标签
     @ViewBuilder
     private func dstBadge(_ status: String?) -> some View {
         if let status {
@@ -326,8 +326,8 @@ struct CitySearchListView: View {
                 .font(.caption2)
                 .padding(.horizontal, 3)
                 .padding(.vertical, 1)
-                .background(status == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
-                .foregroundColor(status == String(localized: "clock.dst.summer") ? .orange : .blue)
+                .background(Color.blue.opacity(0.15))
+                .foregroundColor(.blue)
                 .cornerRadius(3)
         }
     }

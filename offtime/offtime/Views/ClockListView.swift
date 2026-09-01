@@ -357,9 +357,9 @@ struct ClockListCell: View {
                             .font(.caption2)
                             .padding(.horizontal, 3)
                             .padding(.vertical, 1)
-                            .background(dstStatus == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
-                            .foregroundColor(dstStatus == String(localized: "clock.dst.summer") ? .orange : .blue)
-                        .cornerRadius(3)
+                            .background(Color.blue.opacity(0.15))
+                            .foregroundColor(.blue)
+                            .cornerRadius(3)
                     }
                 }
 
@@ -486,8 +486,8 @@ struct ClockGridCell: View {
                             .font(.caption2)
                             .padding(.horizontal, 3)
                             .padding(.vertical, 1)
-                            .background(dstStatus == String(localized: "clock.dst.summer") ? Color.orange.opacity(0.15) : Color.blue.opacity(0.15))
-                            .foregroundColor(dstStatus == String(localized: "clock.dst.summer") ? .orange : .blue)
+                            .background(Color.blue.opacity(0.15))
+                            .foregroundColor(.blue)
                             .cornerRadius(3)
                     }
                     if !countryCode.isEmpty {
