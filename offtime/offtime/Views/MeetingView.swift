@@ -207,9 +207,15 @@ struct MeetingView: View {
                                 .cornerRadius(4)
                         }
                     }
-                    Text("\(participant.cityEn) · \(currentTimeText(for: participant))")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if participant.cityName != participant.cityEn {
+                        Text("\(participant.cityEn) · \(currentTimeText(for: participant))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text(currentTimeText(for: participant))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 Spacer()
             }
@@ -708,9 +714,11 @@ private struct SlotDetailSheet: View {
                                             .cornerRadius(4)
                                     }
                                 }
-                                Text(row.cityEn)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                if row.cityName != row.cityEn {
+                                    Text(row.cityEn)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
                             }
                             Spacer()
                             VStack(alignment: .trailing, spacing: 3) {

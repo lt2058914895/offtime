@@ -175,9 +175,11 @@ struct CityDetailView: View {
                         Text(cityName)
                             .font(.body)
                             .fontWeight(.semibold)
-                        Text(cityEn)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        if cityName != cityEn {
+                            Text(cityEn)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                         dstBadge(dstStatus)
                     }
                     cityMetaRow(

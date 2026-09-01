@@ -71,7 +71,8 @@ struct SettingsView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(appEnvironment.settings.currentCityName ?? String(localized: "settings.current.city.none"))
                                     .foregroundColor(appEnvironment.settings.currentCityName == nil ? .secondary : .primary)
-                                if let en = appEnvironment.settings.currentCityEn {
+                                if let en = appEnvironment.settings.currentCityEn,
+                                   en != appEnvironment.settings.currentCityName {
                                     Text(en)
                                         .font(.caption)
                                         .foregroundColor(.secondary)

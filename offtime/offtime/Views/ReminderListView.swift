@@ -52,9 +52,7 @@ struct ReminderListView: View {
                                     }
                             }
                         } header: {
-                            Text(group.cityName)
-                                .font(.headline.weight(.semibold))
-                                .foregroundColor(.primary)
+                            sectionHeader(for: group)
                         }
                     }
                 }
@@ -177,4 +175,99 @@ struct ReminderListView: View {
         let date = Calendar.current.date(from: components) ?? Date()
         return formatter.string(from: date)
     }
+
+    // MARK: - Section Header
+
+    private func sectionHeader(for group: (cityName: String, reminders: [CityReminderGroup])) -> some View {
+        guard let firstReminder = group.reminders.first,
+              let city = viewModel.city(for: firstReminder.cityID) else {
+            return AnyView(
+                Text(group.cityName)
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(.primary)
+            )
+        }
+
+        let localTzId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
+        let timeDiff = viewModel.timeDifference(for: city.timezoneId, localTimezoneId: localTzId)
+        let dst = viewModel.dstStatus(for: city.timezoneId)
+
+        return AnyView(
+            HStack(spacing: 4) {
+                Text(city.cityName)
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(.primary)
+                if city.cityName != city.cityEn {
+                    Text(city.cityEn)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                if let dst {
+                    Text(dst)
+                        .font(.caption2.weight(.medium))
+                        .padding(.horizontal, 3)
+                        .padding(.vertical, 1)
+                        .background(Color.blue.opacity(0.15))
+                        .foregroundColor(.blue)
+                        .cornerRadius(3)
+                }
+                Spacer()
+                Text(String(localized: "clock.time.difference"))
+                    .font(.caption2.weight(.medium))
+                    .foregroundColor(.secondary)
+                Text(timeDiff)
+                    .font(.caption2.weight(.medium))
+                    .foregroundColor(timeDiffColor(timeDiff))
+                    .monospacedDigit()
+            }
+            .textCase(nil)
+        )
+    }
+
+    private func timeDiffColor(_ offset: String) -> Color {
+        if offset == "0h" { return .secondary }
+        return offset.hasPrefix("+") ? .green : .red
+    }
+}
+
+// MARK: - 城市元信息辅助
+
+/// 国家码 → 国旗 Emoji；非法/空返回 🌐 占位
+private func flagEmoji(for countryCode: String) -> String {
+    let upper = countryCode.uppercased()
+    guard upper.count == 2, upper.allSatisfy({ $0.isASCII && $0.isLetter }) else {
+        return "🌐"
+    }
+    let base: UInt32 = 127397
+    return upper.unicodeScalars
+        .compactMap { UnicodeScalar(base + $0.value) }
+        .reduce(into: "") { result, scalar in
+            result.unicodeScalars.append(scalar)
+        }
+}
+
+/// 当前 App 语言下的国家名
+private func appCountryName(for countryCode: String) -> String {
+    guard countryCode.count == 2 else { return "" }
+    let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+    let locale: Locale
+    switch language {
+    case "en": locale = Locale(identifier: "en_US")
+    case "ja": locale = Locale(identifier: "ja_JP")
+    case "ko": locale = Locale(identifier: "ko_KR")
+    default: locale = Locale(identifier: "zh_CN")
+    }
+    return locale.localizedString(forRegionCode: countryCode) ?? ""
+}
+
+/// 时区 ID → UTC 偏移文案，如 UTC+8
+private func utcText(for timezoneId: String) -> String {
+    guard let timeZone = TimeZone(identifier: timezoneId) else { return "" }
+    let seconds = timeZone.secondsFromGMT()
+    let hours = seconds / 3600
+    let minutes = abs(seconds % 3600) / 60
+    if minutes == 0 {
+        return String(format: "UTC%+d", hours)
+    }
+    return String(format: "UTC%+d:%02d", hours, minutes)
 }

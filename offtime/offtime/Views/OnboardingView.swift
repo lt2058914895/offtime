@@ -71,7 +71,9 @@ struct OnboardingView: View {
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(city.cityName).font(.body).fontWeight(.medium)
-                                Text(city.cityEn).font(.caption).foregroundColor(.secondary)
+                                if city.cityName != city.cityEn {
+                                    Text(city.cityEn).font(.caption).foregroundColor(.secondary)
+                                }
                             }
                             Spacer()
                             Image(systemName: viewModel.isAdded(city) ? "checkmark.circle.fill" : "plus.circle")

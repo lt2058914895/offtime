@@ -176,10 +176,12 @@ struct TravelInputSection: View {
                     .font(.body.weight(.semibold))
                     .foregroundColor(.primary)
                     .lineLimit(1)
-                Text(city.cityEn)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .lineLimit(1)
+                if city.cityName != city.cityEn {
+                    Text(city.cityEn)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(10)

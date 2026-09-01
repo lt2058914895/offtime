@@ -204,9 +204,11 @@ struct CitySearchListView: View {
                             .fixedSize(horizontal: false, vertical: true)
                         dstBadge(dstStatus(for: city.timezoneId))
                     }
-                    Text(subtitle(for: city, countryName: countryName))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if let sub = subtitle(for: city, countryName: countryName), !sub.isEmpty {
+                        Text(sub)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
 
                 Spacer()
@@ -239,12 +241,13 @@ struct CitySearchListView: View {
         .accessibilityHint(showAddButton ? String(localized: "city.hint.add") : String(localized: "city.hint.select"))
     }
 
-    /// 副标题：搜索时附加国家名，避免同名城市混淆
-    private func subtitle(for city: CitySuggestion, countryName: String?) -> String {
-        guard let countryName, !countryName.isEmpty else {
-            return city.cityEn
+    /// 副标题：搜索时附加国家名，避免同名城市混淆；城市名与英文名相同时不重复显示
+    private func subtitle(for city: CitySuggestion, countryName: String?) -> String? {
+        let nameSame = city.cityName == city.cityEn
+        if let countryName, !countryName.isEmpty {
+            return nameSame ? countryName : "\(city.cityEn) · \(countryName)"
         }
-        return "\(city.cityEn) · \(countryName)"
+        return nameSame ? nil : city.cityEn
     }
 
     // MARK: - 搜索栏

@@ -307,11 +307,19 @@ struct ConverterView: View {
             Button(action: action) {
                 HStack {
                     if let city {
-                        Text("\(city.cityName) (\(city.cityEn))")
-                            .font(.headline)
-                            .foregroundColor(Color(.label))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+                        if city.cityName != city.cityEn {
+                            Text("\(city.cityName) (\(city.cityEn))")
+                                .font(.headline)
+                                .foregroundColor(Color(.label))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        } else {
+                            Text(city.cityName)
+                                .font(.headline)
+                                .foregroundColor(Color(.label))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        }
                     } else {
                         Text(String(localized: "converter.select.city"))
                             .font(.headline)

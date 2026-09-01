@@ -349,9 +349,11 @@ struct ClockListCell: View {
                     Text(city.cityName)
                         .font(.body)
                         .fontWeight(.semibold)
-                    Text(city.cityEn)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if city.cityName != city.cityEn {
+                        Text(city.cityEn)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                     if let dstStatus = dstStatus {
                         Text(dstStatus)
                             .font(.caption2)
@@ -477,9 +479,11 @@ struct ClockGridCell: View {
                         Text(city.cityName)
                             .font(.body)
                             .fontWeight(.semibold)
-                        Text(city.cityEn)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        if city.cityName != city.cityEn {
+                            Text(city.cityEn)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                     }
                     if let dstStatus = dstStatus {
                         Text(dstStatus)
