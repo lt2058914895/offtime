@@ -63,6 +63,15 @@ final class CityService {
         }
         ctx.delete(city)
         try ctx.save()
+
+        // 清理该城市关联的通知提醒
+        Task {
+            let reminderService = CityReminderService()
+            let reminders = await reminderService.reminders(for: id)
+            for reminder in reminders {
+                await reminderService.removeReminder(id: reminder.id)
+            }
+        }
     }
     
     func deleteCities(ids: [UUID], context: ModelContext? = nil) throws {
@@ -79,6 +88,17 @@ final class CityService {
             }
         }
         try ctx.save()
+
+        // 清理关联的通知提醒
+        Task {
+            let reminderService = CityReminderService()
+            for id in ids {
+                let reminders = await reminderService.reminders(for: id)
+                for reminder in reminders {
+                    await reminderService.removeReminder(id: reminder.id)
+                }
+            }
+        }
     }
     
     func getAllCities(context: ModelContext? = nil) throws -> [CityModel] {

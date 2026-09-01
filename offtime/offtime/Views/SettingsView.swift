@@ -87,6 +87,11 @@ struct SettingsView: View {
                     } label: {
                         Label(String(localized: "tab.meeting"), systemImage: "calendar.badge.clock")
                     }
+                    NavigationLink {
+                        ReminderListView()
+                    } label: {
+                        Label(String(localized: "reminder.list.title"), systemImage: "bell.fill")
+                    }
                 }
 
                 Section(String(localized: "settings.display")) {

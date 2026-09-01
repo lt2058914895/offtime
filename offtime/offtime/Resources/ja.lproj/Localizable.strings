@@ -266,7 +266,12 @@
 "trip.delete" = "削除";
 "trip.delete.confirm.title" = "旅程を削除しますか？";
 "settings.tools" = "ツール";
-"settings.meetings" = "会議履歴";
+"settings.meetings" = "会議とリマインダー";
+"reminder.list.title" = "リマインダー";
+"reminder.list.empty.title" = "リマインダーなし";
+"reminder.list.empty" = "都市詳細ページで追加したリマインダーがここに表示されます";
+"reminder.list.target.time %@" = "対象都市 %@";
+"reminder.list.swipe.hint" = "左にスワイプでリマインダーを削除できます";
 "settings.data.management" = "データ管理";
 "settings.export.cities" = "都市リストをエクスポート";
 "settings.import.cities" = "都市リストをインポート";

@@ -183,6 +183,7 @@ enum AppRoute: Hashable {
     case citySelector
     case supportPage
     case cityDetail(UUID)
+    case reminderList
 }
 
 struct TimezoneInfo: Equatable {

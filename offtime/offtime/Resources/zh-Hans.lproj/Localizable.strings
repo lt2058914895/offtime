@@ -266,7 +266,12 @@
 "trip.delete" = "删除";
 "trip.delete.confirm.title" = "删除行程？";
 "settings.tools" = "工具";
-"settings.meetings" = "会议记录";
+"settings.meetings" = "会议与提醒";
+"reminder.list.title" = "提醒";
+"reminder.list.empty.title" = "暂无提醒";
+"reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
+"reminder.list.target.time %@" = "目标城市 %@";
+"reminder.list.swipe.hint" = "往左滑动提醒可删除";
 "settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";

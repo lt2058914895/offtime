@@ -97,6 +97,8 @@ struct ClockListView: View {
                     } else {
                         EmptyView()
                     }
+                case .reminderList:
+                    EmptyView()
                 }
             }
             .toast(message: $viewModel.errorMessage)

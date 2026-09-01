@@ -219,6 +219,55 @@ final class CityReminderService {
             }
     }
 
+    /// 获取所有城市的提醒列表
+    func allReminders() async -> [CityReminderGroup] {
+        let requests = await notificationCenter.pendingNotificationRequests()
+        let groups = requests.compactMap { request -> CityReminderGroup? in
+            let userInfo = request.content.userInfo
+            guard let reminderID = userInfo["reminderID"] as? String,
+                  let storedCityID = userInfo["cityID"] as? String,
+                  let cityID = UUID(uuidString: storedCityID),
+                  let cityName = userInfo["cityName"] as? String,
+                  let timezoneId = userInfo["timezoneId"] as? String,
+                  let hour = userInfo["hour"] as? Int,
+                  let minute = userInfo["minute"] as? Int,
+                  let weekdaysOnly = userInfo["weekdaysOnly"] as? Bool,
+                  let targetTimezoneId = userInfo["targetTimezoneId"] as? String,
+                  let targetHour = userInfo["targetHour"] as? Int,
+                  let targetMinute = userInfo["targetMinute"] as? Int else {
+                return nil
+            }
+
+            return CityReminderGroup(
+                id: reminderID,
+                cityID: cityID,
+                cityName: cityName,
+                timezoneId: timezoneId,
+                hour: hour,
+                minute: minute,
+                weekdaysOnly: weekdaysOnly,
+                targetTimezoneId: targetTimezoneId,
+                targetHour: targetHour,
+                targetMinute: targetMinute
+            )
+        }
+
+        return Array(Dictionary(groups.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            .values)
+            .sorted {
+                if $0.cityName != $1.cityName {
+                    return $0.cityName < $1.cityName
+                }
+                if $0.hour != $1.hour {
+                    return $0.hour < $1.hour
+                }
+                if $0.minute != $1.minute {
+                    return $0.minute < $1.minute
+                }
+                return $0.id < $1.id
+            }
+    }
+
     func removeReminder(id: String) async {
         let requests = await notificationCenter.pendingNotificationRequests()
         let identifiers = requests

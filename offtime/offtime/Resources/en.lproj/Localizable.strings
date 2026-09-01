@@ -266,7 +266,12 @@
 "trip.delete" = "Delete";
 "trip.delete.confirm.title" = "Delete Trip?";
 "settings.tools" = "Tools";
-"settings.meetings" = "Meeting Records";
+"settings.meetings" = "Meetings & Reminders";
+"reminder.list.title" = "Reminders";
+"reminder.list.empty.title" = "No Reminders";
+"reminder.list.empty" = "Reminders added in city details will appear here";
+"reminder.list.target.time %@" = "Target city %@";
+"reminder.list.swipe.hint" = "Swipe left to delete a reminder";
 "settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";

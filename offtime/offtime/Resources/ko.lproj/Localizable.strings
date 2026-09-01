@@ -266,7 +266,12 @@
 "trip.delete" = "삭제";
 "trip.delete.confirm.title" = "일정을 삭제할까요?";
 "settings.tools" = "도구";
-"settings.meetings" = "회의 기록";
+"settings.meetings" = "회의 및 알림";
+"reminder.list.title" = "알림";
+"reminder.list.empty.title" = "알림 없음";
+"reminder.list.empty" = "도시 상세 페이지에서 추가한 알림이 여기에 표시됩니다";
+"reminder.list.target.time %@" = "대상 도시 %@";
+"reminder.list.swipe.hint" = "왼쪽으로 스와이프하여 알림을 삭제할 수 있습니다";
 "settings.data.management" = "데이터 관리";
 "settings.export.cities" = "도시 목록 내보내기";
 "settings.import.cities" = "도시 목록 가져오기";

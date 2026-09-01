@@ -42,6 +42,8 @@ final class AppEnvironment: ObservableObject {
         seedDefaultCityIfFirstLaunch()
         loadOnboardingState()
         loadSettings()
+        // 清理孤立通知提醒（城市已删除但通知仍残留）
+        cleanupOrphanedReminders()
         // 旧版 UserDefaults 单草稿 → SwiftData 行程（一次性迁移）
         TripStore.shared.migrateLegacyDraftIfNeeded(context: modelContainer.mainContext)
     }
@@ -100,6 +102,25 @@ final class AppEnvironment: ObservableObject {
     }
 
     // MARK: - 引导状态
+
+    /// 清理孤立通知提醒：城市已从列表删除但通知仍残留的情况（如卸载重装后 iOS 恢复旧通知）
+    private func cleanupOrphanedReminders() {
+        Task {
+            let context = modelContainer.mainContext
+            var fetch = FetchDescriptor<CityModel>()
+            let cities = (try? context.fetch(fetch)) ?? []
+            let validCityIDs = Set(cities.map { $0.id.uuidString })
+
+            let reminderService = CityReminderService()
+            let allReminders = await reminderService.allReminders()
+
+            for reminder in allReminders {
+                if !validCityIDs.contains(reminder.cityID.uuidString) {
+                    await reminderService.removeReminder(id: reminder.id)
+                }
+            }
+        }
+    }
 
     private func loadOnboardingState() {
         onboardingCompleted = UserDefaults.standard.bool(forKey: "onboarding_completed")
