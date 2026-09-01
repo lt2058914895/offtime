@@ -153,10 +153,12 @@ final class MeetingViewModel: ObservableObject {
             )
         ]
 
-        var seenTimezones: Set<String> = [localTimezoneId]
+        let localKey = CityIdentity.key(cityEn: localEn, timezoneId: localTimezoneId)
+
         if let cities = try? cityService.getAllCities() {
-            for city in cities where !seenTimezones.contains(city.timezoneId) {
-                seenTimezones.insert(city.timezoneId)
+            for city in cities {
+                let cityKey = CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
+                if cityKey == localKey { continue }
                 loaded.append(
                     MeetingParticipant(
                         id: city.id.uuidString,
