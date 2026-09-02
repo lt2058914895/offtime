@@ -220,8 +220,8 @@ struct CitySuggestion: Equatable, Identifiable, Codable {
         case id, cityName, cityEn, timezoneId, country, continent
     }
 
-    /// 兼容旧数据：country 是后新增字段，旧行程 legsData 中缺失时回退为空字符串，
-    /// 避免整体解码失败导致行程卡片空白。
+    /// 兼容旧数据：country 是后新增字段，旧数据中缺失时回退为空字符串，
+    /// 避免整体解码失败导致卡片空白。
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)

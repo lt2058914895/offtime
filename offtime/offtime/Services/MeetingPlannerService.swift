@@ -223,7 +223,7 @@ struct MeetingConstraint: Identifiable, Hashable {
 }
 
 extension MeetingPlannerService {
-    /// 默认睡眠窗口（与行程作息一致）：22:00 入睡、07:00 起床
+    /// 默认睡眠窗口（与日常作息一致）：22:00 入睡、07:00 起床
     static let sleepStartHour = 22
     static let sleepEndHour = 7
 
