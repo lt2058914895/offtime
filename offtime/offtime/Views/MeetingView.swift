@@ -255,7 +255,7 @@ struct MeetingView: View {
                 HStack(spacing: 12) {
                     Text(String(localized: "meeting.settings.range"))
                         .font(.headline)
-                    Spacer(minLength: 8)
+                    Spacer(minLength: 0)
                     Menu {
                         ForEach(viewModel.dateOptions, id: \.self) { option in
                             Button(dateLabel(option)) {
@@ -268,11 +268,12 @@ struct MeetingView: View {
                                 .foregroundColor(.secondary)
                             Text(dateLabel(viewModel.meetingDate))
                                 .font(.body.weight(.semibold))
-                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
                             Image(systemName: "chevron.down")
                                 .font(.caption.weight(.semibold))
                                 .foregroundColor(.secondary)
                         }
+                        .fixedSize()
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                         .background(Color(.systemGray6))
