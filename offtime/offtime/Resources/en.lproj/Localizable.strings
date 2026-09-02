@@ -301,6 +301,10 @@
 "onboarding.cities.title" = "Add cities you track";
 "onboarding.cities.subtitle" = "Your local city is already added. Add a few more you check often.";
 "onboarding.features.title" = "More features";
+"onboarding.features.manage" = "Manage Clocks";
+"onboarding.features.manage.desc" = "Tap Manage to select, delete, or drag to reorder";
+"onboarding.features.meeting" = "Cross-Timezone Meetings";
+"onboarding.features.meeting.desc" = "Auto-suggest the best meeting slots for everyone";
 "onboarding.features.converter" = "Time Converter";
 "onboarding.features.converter.desc" = "Quickly convert time between any cities";
 "onboarding.features.format" = "12/24-Hour Toggle";

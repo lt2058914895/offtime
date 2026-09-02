@@ -301,6 +301,10 @@
 "onboarding.cities.title" = "자주 확인하는 도시를 추가하세요";
 "onboarding.cities.subtitle" = "현지 도시가 이미 추가되었습니다. 자주 확인하는 도시를 몇 개 더 추가해 보세요.";
 "onboarding.features.title" = "더 많은 기능";
+"onboarding.features.manage" = "시계 관리";
+"onboarding.features.manage.desc" = "'관리'를 눌러 선택 삭제 및 드래그로 순서 변경";
+"onboarding.features.meeting" = "시차 회의";
+"onboarding.features.meeting.desc" = "모두가 참여하기 좋은 시간대를 자동으로 추천";
 "onboarding.features.converter" = "시간 변환기";
 "onboarding.features.converter.desc" = "어떤 도시 간에도 시간을 빠르게 환산";
 "onboarding.features.format" = "12/24시간 전환";

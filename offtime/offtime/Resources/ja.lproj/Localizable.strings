@@ -301,6 +301,10 @@
 "onboarding.cities.title" = "よく見る都市を追加";
 "onboarding.cities.subtitle" = "お住まいの地域の都市は登録済みです。よく確認する都市を追加してください。";
 "onboarding.features.title" = "その他の機能";
+"onboarding.features.manage" = "時計の管理";
+"onboarding.features.manage.desc" = "「管理」から選択削除やドラッグで並べ替え";
+"onboarding.features.meeting" = "時差をまたぐ会議";
+"onboarding.features.meeting.desc" = "全員が参加しやすい時間帯を自動で提案";
 "onboarding.features.converter" = "時刻コンバーター";
 "onboarding.features.converter.desc" = "どの都市間でもすばやく時刻を換算";
 "onboarding.features.format" = "12/24時間切り替え";

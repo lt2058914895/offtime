@@ -301,6 +301,10 @@
 "onboarding.cities.title" = "添加你关心的城市";
 "onboarding.cities.subtitle" = "已为你加入本地城市，再添加几个常关注的城市吧";
 "onboarding.features.title" = "更多功能";
+"onboarding.features.manage" = "时钟管理";
+"onboarding.features.manage.desc" = "点击「管理」可多选删除、拖动排序";
+"onboarding.features.meeting" = "跨时区会议";
+"onboarding.features.meeting.desc" = "自动推荐全员都合适的最优开会时段";
 "onboarding.features.converter" = "时区转换";
 "onboarding.features.converter.desc" = "任意城市间快速换算时间";
 "onboarding.features.format" = "12/24 小时切换";

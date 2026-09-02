@@ -107,6 +107,12 @@ struct OnboardingView: View {
                 .fontWeight(.bold)
 
             VStack(alignment: .leading, spacing: 18) {
+                featureRow(icon: "arrow.up.arrow.down",
+                           title: "onboarding.features.manage",
+                           desc: "onboarding.features.manage.desc")
+                featureRow(icon: "person.2",
+                           title: "onboarding.features.meeting",
+                           desc: "onboarding.features.meeting.desc")
                 featureRow(icon: "repeat",
                            title: "onboarding.features.converter",
                            desc: "onboarding.features.converter.desc")
