@@ -314,14 +314,14 @@ struct ConverterView: View {
             Button(action: action) {
                 HStack(alignment: .center) {
                     if let city {
-                        if city.cityName != city.cityEn {
-                            Text("\(city.cityName) (\(city.cityEn))")
+                        if let secondary = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn) {
+                            Text("\(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn)) (\(secondary))")
                                 .font(.headline)
                                 .foregroundColor(Color(.label))
                                 .lineLimit(2)
                                 .fixedSize(horizontal: false, vertical: true)
                         } else {
-                            Text(city.cityName)
+                            Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
                                 .font(.headline)
                                 .foregroundColor(Color(.label))
                                 .lineLimit(2)
@@ -372,10 +372,10 @@ struct ConverterView: View {
     
     /// 分享文案：「源城市 源日期 源时间 = 目标城市 目标日期 目标时间」
     private var conversionShareText: String {
-        let srcName = viewModel.sourceCity?.cityName ?? ""
+        let srcName = viewModel.sourceCity.map { CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn) } ?? ""
         let srcDate = Self.sourceDateFormatter.string(from: viewModel.sourceDate)
         let srcTime = sourceTimeFormatter.string(from: viewModel.sourceDate)
-        let tgtName = viewModel.targetCity?.cityName ?? ""
+        let tgtName = viewModel.targetCity.map { CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn) } ?? ""
         return "\(srcName) \(srcDate) \(srcTime) = \(tgtName) \(viewModel.resultDate) \(viewModel.resultTime)"
     }
     

@@ -69,12 +69,16 @@ struct SettingsView: View {
                                 .foregroundColor(.blue)
                                 .font(.title3)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(appEnvironment.settings.currentCityName ?? String(localized: "settings.current.city.none"))
-                                    .foregroundColor(appEnvironment.settings.currentCityName == nil ? .secondary : .primary)
-                                if let en = appEnvironment.settings.currentCityEn,
-                                   en != appEnvironment.settings.currentCityName {
-                                    Text(en)
-                                        .font(.caption)
+                                if let name = appEnvironment.settings.currentCityName {
+                                    Text(CityDisplay.primaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name))
+                                        .foregroundColor(.primary)
+                                    if let secondary = CityDisplay.secondaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name) {
+                                        Text(secondary)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                } else {
+                                    Text(String(localized: "settings.current.city.none"))
                                         .foregroundColor(.secondary)
                                 }
                             }

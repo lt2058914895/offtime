@@ -213,7 +213,9 @@ struct MeetingListView: View {
 
     private func subtitle(for meeting: MeetingModel) -> String {
         let duration = String(format: String(localized: "meeting.settings.duration.format"), meeting.durationMinutes)
-        let cities = meeting.participantNames.joined(separator: String(localized: "meeting.slots.constraints.join"))
+        let cities = zip(meeting.participantNames, meeting.participantEnNames).map { name, en in
+            CityDisplay.primaryName(cityName: name, cityEn: en)
+        }.joined(separator: String(localized: "meeting.slots.constraints.join"))
         return "\(duration) · \(cities)"
     }
 

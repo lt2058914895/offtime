@@ -96,8 +96,6 @@ final class CityPickerViewModel: ObservableObject {
         let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
         switch language {
         case "en": return Locale(identifier: "en_US")
-        case "ja": return Locale(identifier: "ja_JP")
-        case "ko": return Locale(identifier: "ko_KR")
         default: return Locale(identifier: "zh_CN")
         }
     }

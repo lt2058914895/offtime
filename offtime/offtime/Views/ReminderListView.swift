@@ -78,7 +78,9 @@ struct ReminderListView: View {
     }
 
     private func reminderRow(_ reminder: CityReminderGroup) -> some View {
-        HStack(spacing: 12) {
+        let city = viewModel.city(for: reminder.cityID)
+        let displayName = city.map { CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn) } ?? reminder.cityName
+        return HStack(spacing: 12) {
             Image(systemName: "bell.fill")
                 .font(.title3)
                 .foregroundColor(.green)
@@ -102,7 +104,7 @@ struct ReminderListView: View {
                     Text("(")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(reminder.cityName)
+                    Text(displayName)
                         .font(.caption)
                         .foregroundColor(.secondary)
                     if let crossDay = crossDayLabel(for: reminder) {
@@ -194,11 +196,11 @@ struct ReminderListView: View {
 
         return AnyView(
             HStack(spacing: 4) {
-                Text(city.cityName)
+                Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
                     .font(.body.weight(.semibold))
                     .foregroundColor(.primary)
-                if city.cityName != city.cityEn {
-                    Text(city.cityEn)
+                if let secondary = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn) {
+                    Text(secondary)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -253,8 +255,6 @@ private func appCountryName(for countryCode: String) -> String {
     let locale: Locale
     switch language {
     case "en": locale = Locale(identifier: "en_US")
-    case "ja": locale = Locale(identifier: "ja_JP")
-    case "ko": locale = Locale(identifier: "ko_KR")
     default: locale = Locale(identifier: "zh_CN")
     }
     return locale.localizedString(forRegionCode: countryCode) ?? ""

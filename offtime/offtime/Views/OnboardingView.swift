@@ -70,9 +70,9 @@ struct OnboardingView: View {
                     Button { viewModel.toggle(city) } label: {
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(city.cityName).font(.body).fontWeight(.medium)
-                                if city.cityName != city.cityEn {
-                                    Text(city.cityEn).font(.caption).foregroundColor(.secondary)
+                                Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn)).font(.body).fontWeight(.medium)
+                                if let secondary = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn) {
+                                    Text(secondary).font(.caption).foregroundColor(.secondary)
                                 }
                             }
                             Spacer()

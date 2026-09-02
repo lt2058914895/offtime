@@ -199,7 +199,7 @@ struct CitySearchListView: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
-                        Text(city.cityName)
+                        Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
                             .font(.body.weight(.medium))
                             .fixedSize(horizontal: false, vertical: true)
                         dstBadge(dstStatus(for: city.timezoneId))
@@ -243,11 +243,11 @@ struct CitySearchListView: View {
 
     /// 副标题：搜索时附加国家名，避免同名城市混淆；城市名与英文名相同时不重复显示
     private func subtitle(for city: CitySuggestion, countryName: String?) -> String? {
-        let nameSame = city.cityName == city.cityEn
+        let secondary = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn)
         if let countryName, !countryName.isEmpty {
-            return nameSame ? countryName : "\(city.cityEn) · \(countryName)"
+            return secondary.map { "\($0) · \(countryName)" } ?? countryName
         }
-        return nameSame ? nil : city.cityEn
+        return secondary
     }
 
     // MARK: - 搜索栏

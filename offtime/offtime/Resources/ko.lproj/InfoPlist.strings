@@ -1,4 +1,0 @@
-/* OffTime - 한국어 Info.plist 로컬라이제이션 */
-
-"CFBundleDisplayName" = "OffTime";
-"NSDocumentPickerUsageDescription" = "도시 목록 파일 가져오기/내보내기에 사용됩니다";

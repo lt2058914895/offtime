@@ -105,6 +105,11 @@ final class MeetingViewModel: ObservableObject {
         selectedParticipants.map(\.cityName)
     }
 
+    /// 选中城市的英文名称（用于保存会议记录）
+    var participantEnNames: [String] {
+        selectedParticipants.map(\.cityEn)
+    }
+
     func workingHours(for participant: MeetingParticipant) -> [Bool] {
         MeetingPlannerService.workingHours(
             participant: participant,

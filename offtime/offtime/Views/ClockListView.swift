@@ -376,11 +376,11 @@ struct ClockListCell: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
-                    Text(city.cityName)
+                    Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
                         .font(.body)
                         .fontWeight(.semibold)
-                    if city.cityName != city.cityEn {
-                        Text(city.cityEn)
+                    if let secondary = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn) {
+                        Text(secondary)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -521,11 +521,11 @@ struct ClockGridCell: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
-                        Text(city.cityName)
+                        Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
                             .font(.body)
                             .fontWeight(.semibold)
-                        if city.cityName != city.cityEn {
-                            Text(city.cityEn)
+                        if let secondary = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn) {
+                            Text(secondary)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -704,8 +704,6 @@ private func appCountryName(for countryCode: String) -> String {
     let locale: Locale
     switch language {
     case "en": locale = Locale(identifier: "en_US")
-    case "ja": locale = Locale(identifier: "ja_JP")
-    case "ko": locale = Locale(identifier: "ko_KR")
     default: locale = Locale(identifier: "zh_CN")
     }
     return locale.localizedString(forRegionCode: countryCode) ?? ""

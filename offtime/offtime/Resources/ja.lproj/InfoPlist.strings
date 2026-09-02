@@ -1,4 +1,0 @@
-/* OffTime - 日本語 Info.plist ローカライズ */
-
-"CFBundleDisplayName" = "OffTime";
-"NSDocumentPickerUsageDescription" = "都市リストファイルのインポート/エクスポートに使用します";

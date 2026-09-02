@@ -144,7 +144,8 @@ struct MeetingView: View {
             startDate: startDate,
             durationMinutes: durationMinutes,
             localTimezoneId: viewModel.localTimezoneId,
-            participantNames: viewModel.participantNames
+            participantNames: viewModel.participantNames,
+            participantEnNames: viewModel.participantEnNames
         )
         modelContext.insert(meeting)
         try? modelContext.save()
@@ -197,7 +198,7 @@ struct MeetingView: View {
                     .foregroundStyle(isSelected ? Color.accentColor : Color(.systemGray3))
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
-                        Text(participant.cityName)
+                        Text(CityDisplay.primaryName(cityName: participant.cityName, cityEn: participant.cityEn))
                             .font(.body.weight(.medium))
                         if participant.isLocal {
                             Text(String(localized: "meeting.local.badge"))
@@ -208,8 +209,8 @@ struct MeetingView: View {
                                 .cornerRadius(4)
                         }
                     }
-                    if participant.cityName != participant.cityEn {
-                        Text("\(participant.cityEn) · \(currentTimeText(for: participant))")
+                    if let secondary = CityDisplay.secondaryName(cityName: participant.cityName, cityEn: participant.cityEn) {
+                        Text("\(secondary) · \(currentTimeText(for: participant))")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
@@ -367,10 +368,11 @@ struct MeetingView: View {
                 ? constraint.participant.workStartHour
                 : constraint.participant.workEndHour
             let time = String(format: "%02d:00", hour)
+            let name = CityDisplay.primaryName(cityName: constraint.participant.cityName, cityEn: constraint.participant.cityEn)
             if constraint.kind == .start {
-                return String(format: String(localized: "meeting.slots.constraint.start"), constraint.participant.cityName, time)
+                return String(format: String(localized: "meeting.slots.constraint.start"), name, time)
             }
-            return String(format: String(localized: "meeting.slots.constraint.end"), constraint.participant.cityName, time)
+            return String(format: String(localized: "meeting.slots.constraint.end"), name, time)
         }
         return parts.joined(separator: String(localized: "meeting.slots.constraints.join"))
     }
@@ -459,7 +461,7 @@ struct MeetingView: View {
                     VStack(spacing: 8) {
                         ForEach(viewModel.selectedParticipants) { participant in
                             HStack(spacing: 10) {
-                                Text(participant.cityName)
+                                Text(CityDisplay.primaryName(cityName: participant.cityName, cityEn: participant.cityEn))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                     .frame(width: 76, alignment: .leading)
@@ -712,7 +714,7 @@ private struct SlotDetailSheet: View {
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack(spacing: 6) {
-                                    Text(row.cityName)
+                                    Text(CityDisplay.primaryName(cityName: row.cityName, cityEn: row.cityEn))
                                         .font(.body.weight(.medium))
                                     if row.isLocal {
                                         Text(String(localized: "meeting.local.badge"))
@@ -723,8 +725,8 @@ private struct SlotDetailSheet: View {
                                             .cornerRadius(4)
                                     }
                                 }
-                                if row.cityName != row.cityEn {
-                                    Text(row.cityEn)
+                                if let secondary = CityDisplay.secondaryName(cityName: row.cityName, cityEn: row.cityEn) {
+                                    Text(secondary)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }

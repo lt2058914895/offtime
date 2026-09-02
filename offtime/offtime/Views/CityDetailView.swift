@@ -64,7 +64,7 @@ struct CityDetailView: View {
             .padding()
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(viewModel.city.cityName)
+        .navigationTitle(CityDisplay.primaryName(cityName: viewModel.city.cityName, cityEn: viewModel.city.cityEn))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -179,11 +179,11 @@ struct CityDetailView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 4) {
                         moduleIcon(cityIcon, size: 22)
-                        Text(cityName)
+                        Text(CityDisplay.primaryName(cityName: cityName, cityEn: cityEn))
                             .font(.body)
                             .fontWeight(.semibold)
-                        if cityName != cityEn {
-                            Text(cityEn)
+                        if let secondary = CityDisplay.secondaryName(cityName: cityName, cityEn: cityEn) {
+                            Text(secondary)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -276,7 +276,7 @@ struct CityDetailView: View {
                         ReminderRow(
                             targetHour: targetHour,
                             localHour: localHour,
-                            cityName: viewModel.city.cityName,
+                            cityName: CityDisplay.primaryName(cityName: viewModel.city.cityName, cityEn: viewModel.city.cityEn),
                             dayLabel: viewModel.targetDayLabel(forTargetHour: targetHour),
                             existing: viewModel.reminder(atHour: localHour, minute: 0),
                             isProcessing: processingReminderTargetHours.contains(targetHour),
@@ -315,7 +315,7 @@ struct CityDetailView: View {
                         ForEach(orphaned) { reminder in
                             OrphanedReminderRow(
                                 reminder: reminder,
-                                cityName: viewModel.city.cityName,
+                                cityName: CityDisplay.primaryName(cityName: viewModel.city.cityName, cityEn: viewModel.city.cityEn),
                                 isProcessing: processingReminderTargetHours.contains(reminder.targetHour),
                                 onRemove: {
                                     Task {
@@ -660,8 +660,6 @@ private func appCountryName(for countryCode: String) -> String {
     let locale: Locale
     switch language {
     case "en": locale = Locale(identifier: "en_US")
-    case "ja": locale = Locale(identifier: "ja_JP")
-    case "ko": locale = Locale(identifier: "ko_KR")
     default: locale = Locale(identifier: "zh_CN")
     }
     return locale.localizedString(forRegionCode: countryCode) ?? ""
