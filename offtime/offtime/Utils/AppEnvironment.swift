@@ -21,15 +21,27 @@ final class AppEnvironment: ObservableObject {
     private var minuteTimer: Timer?
 
     init() {
+        let schema = Schema([CityModel.self, MeetingModel.self])
         do {
-            let schema = Schema([CityModel.self, MeetingModel.self])
             let config = ModelConfiguration(isStoredInMemoryOnly: false)
             modelContainer = try ModelContainer(for: schema, configurations: [config])
         } catch {
-            // SwiftData 初始化失败时用空容器兜底，避免 App 崩溃；
-            // 实际场景极少发生（iOS 17+ 系统框架保障）
-            logger.error("SwiftData ModelContainer 创建失败: \(error.localizedDescription)")
-            modelContainer = try! ModelContainer(for: Schema([CityModel.self, MeetingModel.self]), configurations: [ModelConfiguration(isStoredInMemoryOnly: true)])
+            // Schema 变更导致旧存储不兼容，删除旧存储文件后重建（一次性数据丢失）
+            logger.error("SwiftData ModelContainer 创建失败，尝试删除旧存储: \(error.localizedDescription)")
+            if let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+                let storeURL = appSupport.appendingPathComponent("default.store")
+                try? FileManager.default.removeItem(at: storeURL)
+                try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("-wal"))
+                try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("-shm"))
+            }
+            do {
+                let config = ModelConfiguration(isStoredInMemoryOnly: false)
+                modelContainer = try ModelContainer(for: schema, configurations: [config])
+            } catch {
+                // 重建仍失败，用内存容器兜底避免崩溃
+                logger.error("SwiftData 重建仍失败，回退内存模式: \(error.localizedDescription)")
+                modelContainer = try! ModelContainer(for: schema, configurations: [ModelConfiguration(isStoredInMemoryOnly: true)])
+            }
         }
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
         CityService.shared.modelContainer = modelContainer
