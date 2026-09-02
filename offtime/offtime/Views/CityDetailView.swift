@@ -546,7 +546,7 @@ private struct ReminderRow: View, Equatable {
                 }
             }
 
-            Spacer()
+            Spacer(minLength: 0)
 
             if existing == nil {
                 Button {
