@@ -197,9 +197,14 @@ struct MeetingView: View {
                     .font(.title3)
                     .foregroundStyle(isSelected ? Color.accentColor : Color(.systemGray3))
                 VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 4) {
                         Text(CityDisplay.primaryName(cityName: participant.cityName, cityEn: participant.cityEn))
                             .font(.body.weight(.medium))
+                        if let secondary = CityDisplay.secondaryName(cityName: participant.cityName, cityEn: participant.cityEn) {
+                            Text(secondary)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                         if participant.isLocal {
                             Text(String(localized: "meeting.local.badge"))
                                 .font(.caption2.weight(.semibold))
@@ -209,15 +214,9 @@ struct MeetingView: View {
                                 .cornerRadius(4)
                         }
                     }
-                    if let secondary = CityDisplay.secondaryName(cityName: participant.cityName, cityEn: participant.cityEn) {
-                        Text("\(secondary) · \(currentTimeText(for: participant))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text(currentTimeText(for: participant))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+                    Text(currentTimeText(for: participant))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
                 Spacer()
             }
