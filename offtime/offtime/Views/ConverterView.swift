@@ -214,6 +214,13 @@ struct ConverterView: View {
         }
     }
     
+    /// 时差颜色：与时钟列表一致（0h 灰、+ 绿、- 红）
+    private var timeDifferenceColor: Color {
+        let offset = viewModel.timeDifference
+        if offset == "0h" { return .secondary }
+        return offset.hasPrefix("+") ? .green : .red
+    }
+
     private var resultDateTimeRow: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(String(localized: "converter.datetime"))
@@ -256,7 +263,7 @@ struct ConverterView: View {
                         if !viewModel.timeDifference.isEmpty {
                             Text(viewModel.timeDifference)
                                 .font(.body.weight(.semibold))
-                                .foregroundColor(Color(.label))
+                                .foregroundColor(timeDifferenceColor)
                         }
                     }
                 }
@@ -288,7 +295,7 @@ struct ConverterView: View {
                         if !viewModel.timeDifference.isEmpty {
                             Text(viewModel.timeDifference)
                                 .font(.body.weight(.semibold))
-                                .foregroundColor(Color(.label))
+                                .foregroundColor(timeDifferenceColor)
                         }
                     }
                 }
