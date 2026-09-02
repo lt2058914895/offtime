@@ -13,6 +13,10 @@ final class CityDetailViewModel: ObservableObject {
     @Published var targetWorkEnd: Int
     @Published var use24Hour: Bool = true
     @Published var localTimezoneId: String = TimeZone.current.identifier
+    /// 设置页当前城市名覆盖（优先于时区反推）
+    @Published var localCityNameOverride: String?
+    /// 设置页当前城市英文名覆盖（优先于时区反推）
+    @Published var localCityEnOverride: String?
     @Published var reminderWeekdaysOnly = true
     @Published var reminders: [CityReminderGroup] = []
     @Published var reminderStatus: String?
@@ -289,14 +293,14 @@ final class CityDetailViewModel: ObservableObject {
         }
     }
 
-    /// 当前城市名（触发提醒的城市）
+    /// 当前城市名（触发提醒的城市）——优先使用设置页选择的城市名
     var localCityName: String {
-        CityService.matchCity(for: localTimezoneId).name
+        localCityNameOverride ?? CityService.matchCity(for: localTimezoneId).name
     }
 
-    /// 当前城市英文名
+    /// 当前城市英文名——优先使用设置页选择的城市英文名
     var localCityEn: String {
-        CityService.matchCity(for: localTimezoneId).en
+        localCityEnOverride ?? CityService.matchCity(for: localTimezoneId).en
     }
 
     /// 内置城市目录缓存：英文名+时区 → 国家码，用于补全旧数据缺失的 country 字段

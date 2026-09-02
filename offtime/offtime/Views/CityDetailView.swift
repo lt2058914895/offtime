@@ -80,9 +80,16 @@ struct CityDetailView: View {
         .onAppear {
             viewModel.use24Hour = appEnvironment.settings.use24Hour
             viewModel.localTimezoneId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
+            viewModel.localCityNameOverride = appEnvironment.settings.currentCityName
+            viewModel.localCityEnOverride = appEnvironment.settings.currentCityEn
             Task {
                 await viewModel.loadReminders()
             }
+        }
+        .onChange(of: appEnvironment.settings.currentCityTimezoneId) { _, _ in
+            viewModel.localTimezoneId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
+            viewModel.localCityNameOverride = appEnvironment.settings.currentCityName
+            viewModel.localCityEnOverride = appEnvironment.settings.currentCityEn
         }
         .onReceive(appEnvironment.$currentDate) { newValue in
             viewModel.currentDate = newValue
