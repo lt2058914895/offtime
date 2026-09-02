@@ -27,6 +27,10 @@ struct ClockListView: View {
         appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
     }
 
+    private var localCityName: String? {
+        appEnvironment.settings.currentCityName
+    }
+
     /// Timer 只在「App 在前台」且「当前是时钟/会议 Tab」时运行：
     /// 切到行程/设置 Tab 或进后台时暂停，省掉每秒无用的时区重算，防发热省电。
     /// 会议页与时钟页共享同一套「分钟级刷新」，两页各自在 onAppear/onChange 中校正，
@@ -212,8 +216,10 @@ struct ClockListView: View {
                        dstStatus: viewModel.getDSTStatus(city: city),
                         countryCode: viewModel.countryCode(for: city),
                         workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
-                       localTimezoneId: localTimezoneId,
-                       isEditMode: isEditing,
+                        localTimezoneId: localTimezoneId,
+                        localCityName: localCityName,
+                        localCityEn: appEnvironment.settings.currentCityEn,
+                        isEditMode: isEditing,
                         isSelected: viewModel.selectedCityIds.contains(city.id),
                         onToggleSelection: {
                             viewModel.toggleSelection(id: city.id)
@@ -266,9 +272,11 @@ struct ClockListView: View {
                            isDaytime: viewModel.isDaytime(city: city),
                            dstStatus: viewModel.getDSTStatus(city: city),
                             countryCode: viewModel.countryCode(for: city),
-                            workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
-                       localTimezoneId: localTimezoneId,
-                           isEditMode: isEditing,
+                        workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
+                        localTimezoneId: localTimezoneId,
+                        localCityName: localCityName,
+                        localCityEn: appEnvironment.settings.currentCityEn,
+                        isEditMode: isEditing,
                             isSelected: viewModel.selectedCityIds.contains(city.id),
                             onToggleSelection: {
                                 viewModel.toggleSelection(id: city.id)
@@ -325,6 +333,8 @@ struct ClockListCell: View {
     let countryCode: String
     let workingHoursOverlap: WorkingHoursOverlap
     let localTimezoneId: String
+    let localCityName: String?
+    let localCityEn: String?
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
@@ -332,6 +342,12 @@ struct ClockListCell: View {
     let onShare: () -> Void
     let onDelete: () -> Void
     var onTap: () -> Void = {}
+
+    /// 是否为设置页当前城市（城市名+时区均匹配才标记"本地"）
+    private var isLocal: Bool {
+        guard let localCityName else { return false }
+        return city.timezoneId == localTimezoneId && city.cityName == localCityName
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: isEditMode ? 12 : 16) {
@@ -349,18 +365,18 @@ struct ClockListCell: View {
                     Text(city.cityName)
                         .font(.body)
                         .fontWeight(.semibold)
-                    if city.timezoneId == localTimezoneId {
+                    if city.cityName != city.cityEn {
+                        Text(city.cityEn)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    if isLocal {
                         Text(String(localized: "meeting.local.badge"))
                             .font(.caption2.weight(.semibold))
                             .padding(.horizontal, 6)
                             .padding(.vertical, 1)
                             .background(Color.accentColor.opacity(0.15))
                             .cornerRadius(4)
-                    }
-                    if city.cityName != city.cityEn {
-                        Text(city.cityEn)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
                     if let dstStatus = dstStatus {
                         Text(dstStatus)
@@ -470,6 +486,8 @@ struct ClockGridCell: View {
     let countryCode: String
     let workingHoursOverlap: WorkingHoursOverlap
     let localTimezoneId: String
+    let localCityName: String?
+    let localCityEn: String?
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
@@ -477,6 +495,12 @@ struct ClockGridCell: View {
     let onShare: () -> Void
     let onDelete: () -> Void
     var onTap: () -> Void = {}
+
+    /// 是否为设置页当前城市（城市名+时区均匹配才标记"本地"）
+    private var isLocal: Bool {
+        guard let localCityName else { return false }
+        return city.timezoneId == localTimezoneId && city.cityName == localCityName
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -491,6 +515,14 @@ struct ClockGridCell: View {
                             Text(city.cityEn)
                                 .font(.caption)
                                 .foregroundColor(.secondary)
+                        }
+                        if isLocal {
+                            Text(String(localized: "meeting.local.badge"))
+                                .font(.caption2.weight(.semibold))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 1)
+                                .background(Color.accentColor.opacity(0.15))
+                                .cornerRadius(4)
                         }
                     }
                     if let dstStatus = dstStatus {
