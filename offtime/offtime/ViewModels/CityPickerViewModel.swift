@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+@MainActor
 final class CityPickerViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var cityGroups: [CountryGroup] = []
@@ -325,7 +326,7 @@ final class CityPickerViewModel: ObservableObject {
     /// 简化异步检查：直接在 Task 中调用同步方法
     func checkCityExists(cityEn: String, timezoneId: String) async -> Bool {
         do {
-            return try await cityService.hasCity(cityEn: cityEn, timezoneId: timezoneId)
+            return try cityService.hasCity(cityEn: cityEn, timezoneId: timezoneId)
         } catch {
             return false
         }

@@ -107,7 +107,7 @@ final class AppEnvironment: ObservableObject {
     private func cleanupOrphanedReminders() {
         Task {
             let context = modelContainer.mainContext
-            var fetch = FetchDescriptor<CityModel>()
+            let fetch = FetchDescriptor<CityModel>()
             let cities = (try? context.fetch(fetch)) ?? []
             let validCityIDs = Set(cities.map { $0.id.uuidString })
 

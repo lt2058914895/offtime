@@ -39,6 +39,8 @@
 "clock.today" = "Today";
 "clock.time.parse.failed" = "Time parse failed";
 "clock.date.parse.failed" = "Date parse failed";
+"clock.reorder.hint.prefix" = "Touch and hold the handle";
+"clock.reorder.hint.suffix" = "on the right to drag and reorder";
 "clock.reorder.failed" = "Reorder failed";
 "clock.city.exists" = "City already exists";
 "clock.add.failed" = "Failed to add city";

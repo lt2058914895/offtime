@@ -39,6 +39,8 @@
 "clock.today" = "今日";
 "clock.time.parse.failed" = "時刻の解析に失敗しました";
 "clock.date.parse.failed" = "日付の解析に失敗しました";
+"clock.reorder.hint.prefix" = "右側のハンドル";
+"clock.reorder.hint.suffix" = "を長押ししてドラッグすると並べ替えられます";
 "clock.reorder.failed" = "並べ替えに失敗しました";
 "clock.city.exists" = "この都市はすでに存在します";
 "clock.add.failed" = "都市の追加に失敗しました";

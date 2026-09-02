@@ -197,12 +197,29 @@ struct ClockListView: View {
         .background(Color(.systemBackground))
     }
     
+    // MARK: - 管理模式拖动排序提示（仅 iPhone 列表支持拖动排序，iPad 网格无此能力）
+    private var reorderHintBar: some View {
+        HStack(spacing: 2) {
+            Text(String(localized: "clock.reorder.hint.prefix"))
+                .font(.caption2)
+            Image(systemName: "line.3.horizontal")
+                .font(.caption2.weight(.medium))
+            Text(String(localized: "clock.reorder.hint.suffix"))
+                .font(.caption2)
+        }
+        .foregroundColor(.secondary)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(Color(.systemGroupedBackground))
+    }
+    
     // MARK: - iPhone 布局（单列列表）
     private var iphoneLayout: some View {
         VStack(spacing: 0) {
             if isEditing {
                 editActionBar
                 Divider()
+                reorderHintBar
             }
             List {
                 ForEach($viewModel.cities) { $city in
@@ -218,7 +235,6 @@ struct ClockListView: View {
                         workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
                         localTimezoneId: localTimezoneId,
                         localCityName: localCityName,
-                        localCityEn: appEnvironment.settings.currentCityEn,
                         isEditMode: isEditing,
                         isSelected: viewModel.selectedCityIds.contains(city.id),
                         onToggleSelection: {
@@ -275,7 +291,6 @@ struct ClockListView: View {
                         workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
                         localTimezoneId: localTimezoneId,
                         localCityName: localCityName,
-                        localCityEn: appEnvironment.settings.currentCityEn,
                         isEditMode: isEditing,
                             isSelected: viewModel.selectedCityIds.contains(city.id),
                             onToggleSelection: {
@@ -334,7 +349,6 @@ struct ClockListCell: View {
     let workingHoursOverlap: WorkingHoursOverlap
     let localTimezoneId: String
     let localCityName: String?
-    let localCityEn: String?
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}
@@ -487,7 +501,6 @@ struct ClockGridCell: View {
     let workingHoursOverlap: WorkingHoursOverlap
     let localTimezoneId: String
     let localCityName: String?
-    let localCityEn: String?
     var isEditMode: Bool = false
     var isSelected: Bool = false
     var onToggleSelection: () -> Void = {}

@@ -42,7 +42,7 @@ final class CityService {
     /// 按身份键查找已添加城市：先按 IANA 时区过滤，再在内存中比对规范化英文名。
     private func findExisting(cityEn: String, timezoneId: String, context: ModelContext) throws -> CityModel? {
         let key = CityIdentity.key(cityEn: cityEn, timezoneId: timezoneId)
-        var fetch = FetchDescriptor<CityModel>(
+        let fetch = FetchDescriptor<CityModel>(
             predicate: #Predicate { $0.timezoneId == timezoneId }
         )
         let candidates = try context.fetch(fetch)

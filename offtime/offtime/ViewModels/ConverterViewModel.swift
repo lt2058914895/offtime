@@ -99,7 +99,7 @@ final class ConverterViewModel: ObservableObject {
         }
         
         guard let sourceTimezone = TimeZone(identifier: source.timezoneId),
-              let targetTimezone = TimeZone(identifier: target.timezoneId) else {
+              TimeZone(identifier: target.timezoneId) != nil else {
             resultTime = String(localized: "converter.timezone.parse.failed")
             resultDate = ""
             timeDifference = ""

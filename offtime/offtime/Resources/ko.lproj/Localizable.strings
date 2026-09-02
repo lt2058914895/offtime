@@ -39,6 +39,8 @@
 "clock.today" = "오늘";
 "clock.time.parse.failed" = "시간 파싱에 실패했습니다";
 "clock.date.parse.failed" = "날짜 파싱에 실패했습니다";
+"clock.reorder.hint.prefix" = "오른쪽 핸들";
+"clock.reorder.hint.suffix" = "을 길게 눌러 드래그하면 순서를 변경할 수 있어요";
 "clock.reorder.failed" = "순서 변경에 실패했습니다";
 "clock.city.exists" = "이미 존재하는 도시입니다";
 "clock.add.failed" = "도시 추가에 실패했습니다";

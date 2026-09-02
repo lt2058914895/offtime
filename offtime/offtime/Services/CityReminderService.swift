@@ -96,6 +96,7 @@ final class CityReminderService {
         self.notificationCenter = notificationCenter
     }
 
+    @discardableResult
     func addReminder(
         cityID: UUID,
         cityName: String,

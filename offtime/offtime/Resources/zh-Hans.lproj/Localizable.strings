@@ -39,6 +39,8 @@
 "clock.today" = "今天";
 "clock.time.parse.failed" = "时间解析失败";
 "clock.date.parse.failed" = "日期解析失败";
+"clock.reorder.hint.prefix" = "按住右侧图标";
+"clock.reorder.hint.suffix" = "拖动，可调整城市顺序";
 "clock.reorder.failed" = "排序失败";
 "clock.city.exists" = "该城市已存在";
 "clock.add.failed" = "添加城市失败";
