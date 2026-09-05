@@ -143,6 +143,45 @@ final class CityDetailViewModel: ObservableObject {
         .joined(separator: "\n")
     }
 
+    /// 与时钟列表一致的可联系状态提示
+    var overlapStatusText: String {
+        let overlap = overlap
+        if overlap.isCurrentlyOverlapping {
+            return String(localized: "clock.working.now")
+        }
+        if let nextOverlapDate = overlap.nextOverlapDate {
+            return nextOverlapText(nextOverlapDate)
+        }
+        return String(localized: "clock.working.none")
+    }
+
+    private func nextOverlapText(_ date: Date) -> String {
+        guard let localTimezone = TimeZone(identifier: localTimezoneId) else {
+            return ""
+        }
+
+        var localCalendar = Calendar(identifier: .gregorian)
+        localCalendar.timeZone = localTimezone
+
+        let formatter = DateFormatter()
+        formatter.timeZone = localTimezone
+        formatter.locale = Locale.current
+        formatter.dateFormat = "HH:mm"
+
+        let todayStart = localCalendar.dateInterval(of: .day, for: currentDate)?.start ?? currentDate
+        let targetStart = localCalendar.dateInterval(of: .day, for: date)?.start ?? date
+        let dayDifference = localCalendar.dateComponents([.day], from: todayStart, to: targetStart).day ?? 0
+        let timeText = formatter.string(from: date)
+
+        if dayDifference > 0 {
+            return "\(String(localized: "clock.tomorrow")) \(timeText)"
+        }
+        if dayDifference < 0 {
+            return "\(String(localized: "clock.yesterday")) \(timeText)"
+        }
+        return timeText
+    }
+
     /// 可联系时间段（按目标城市时区 24 小时轴），提醒据此一键添加
     var contactableTargetRanges: [(startHour: Int, endHour: Int)] {
         guard let targetTZ = TimeZone(identifier: city.timezoneId),

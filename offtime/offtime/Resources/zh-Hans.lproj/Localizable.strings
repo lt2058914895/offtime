@@ -48,13 +48,12 @@
 // MARK: - Working Hours
 "clock.working.now" = "可联系";
 "clock.working.none" = "无重叠";
-"clock.working.ended" = "已结束";
 "clock.working.next" = "%@ 可联系";
 
 // MARK: - City Detail
 "detail.contactable.period" = "可联系时段";
 "detail.contactable.now" = "当前可联系";
-"detail.contactable.none" = "今日无可联系时段";
+"detail.contactable.none" = "无可联系时段，调整工作时段试试";
 "detail.current.time" = "当前时间";
 "detail.work.start" = "开始";
 "detail.work.end" = "结束";

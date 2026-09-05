@@ -46,9 +46,6 @@ struct WorkingHoursBar: View {
         if let next = overlap.nextOverlapDate {
             return nextOverlapText(next)
         }
-        if overlap.hourlyOverlap.contains(true) {
-            return String(localized: "clock.working.ended")
-        }
         return String(localized: "clock.working.none")
     }
 
@@ -88,9 +85,6 @@ struct WorkingHoursBar: View {
         }
         if let next = overlap.nextOverlapDate {
             return String(format: String(localized: "clock.working.next"), nextOverlapText(next))
-        }
-        if overlap.hourlyOverlap.contains(true) {
-            return String(localized: "clock.working.ended")
         }
         return String(localized: "clock.working.none")
     }

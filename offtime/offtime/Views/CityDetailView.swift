@@ -150,7 +150,8 @@ struct CityDetailView: View {
                     cityIcon: "location.fill",
                     nowHour: viewModel.localNowHour,
                     workStart: $viewModel.localWorkStart,
-                    workEnd: $viewModel.localWorkEnd
+                    workEnd: $viewModel.localWorkEnd,
+                    showLocalBadge: true
                 )
 
                 cityWorkHoursSection(
@@ -196,7 +197,8 @@ struct CityDetailView: View {
         cityIcon: String,
         nowHour: Double?,
         workStart: Binding<Int>,
-        workEnd: Binding<Int>
+        workEnd: Binding<Int>,
+        showLocalBadge: Bool = false
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -207,9 +209,17 @@ struct CityDetailView: View {
                             .font(.body)
                             .fontWeight(.semibold)
                         if let secondary = CityDisplay.secondaryName(cityName: cityName, cityEn: cityEn) {
-                            Text(secondary)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                        Text(secondary)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        }
+                        if showLocalBadge {
+                            Text(String(localized: "meeting.local.badge"))
+                                .font(.caption2.weight(.semibold))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 1)
+                                .background(Color.accentColor.opacity(0.15))
+                                .cornerRadius(4)
                         }
                         dstBadge(dstStatus)
                     }
@@ -227,7 +237,7 @@ struct CityDetailView: View {
                             CrossDayBadge(label: crossDay)
                         }
                         Text(timeText)
-                            .font(.title3)
+                            .font(.body)
                             .fontWeight(.semibold)
                             .monospacedDigit()
                     }
@@ -254,12 +264,13 @@ struct CityDetailView: View {
                     title: "detail.contactable.period",
                     subtitle: "detail.rules.2"
                 ) {
-                    if viewModel.overlap.isCurrentlyOverlapping {
-                        Text(String(localized: "detail.contactable.now"))
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.green)
+                    HStack(spacing: 2) {
+                        Image(systemName: viewModel.overlap.isCurrentlyOverlapping ? "phone.fill" : "phone")
+                        Text(viewModel.overlapStatusText)
                     }
+                    .font(.caption2)
+                    .foregroundColor(viewModel.overlap.isCurrentlyOverlapping ? .green : .secondary)
+                    .lineLimit(1)
                 }
                 dashedDivider()
                 TimelineBar(
@@ -276,7 +287,7 @@ struct CityDetailView: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 12)
-                    .background(viewModel.overlap.isCurrentlyOverlapping ? Color.green.opacity(0.12) : Color(.tertiarySystemFill))
+                    .background(viewModel.overlap.isCurrentlyOverlapping ? Color.green.opacity(0.2) : Color.indigo.opacity(0.2))
                     .cornerRadius(10)
             }
         }
@@ -473,7 +484,7 @@ struct CityDetailView: View {
                 .font(.caption2.weight(.medium))
                 .foregroundColor(.secondary)
             Text(timeDifference)
-                .font(.caption2.weight(.medium))
+                .font(.footnote.weight(.bold))
                 .foregroundColor(timeDifferenceColor)
                 .monospacedDigit()
         }
@@ -501,6 +512,8 @@ struct CityDetailView: View {
                     .foregroundColor(.secondary)
                 Stepper(value: start, in: 0...23) {
                     Text(String(format: "%02d:00", start.wrappedValue))
+                        .font(.title3)
+                        .fontWeight(.semibold)
                         .monospacedDigit()
                 }
                 .fixedSize(horizontal: true, vertical: false)
@@ -512,6 +525,8 @@ struct CityDetailView: View {
                     .foregroundColor(.secondary)
                 Stepper(value: end, in: 1...24) {
                     Text(String(format: "%02d:00", end.wrappedValue))
+                        .font(.title3)
+                        .fontWeight(.semibold)
                         .monospacedDigit()
                 }
                 .fixedSize(horizontal: true, vertical: false)
