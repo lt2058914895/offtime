@@ -17,7 +17,6 @@ final class CityDetailViewModel: ObservableObject {
     @Published var localCityNameOverride: String?
     /// 设置页当前城市英文名覆盖（优先于时区反推）
     @Published var localCityEnOverride: String?
-    @Published var reminderWeekdaysOnly = true
     @Published var reminders: [CityReminderGroup] = []
     @Published var reminderStatus: String?
     @Published private(set) var reminderStatusIsError = false
@@ -254,7 +253,11 @@ final class CityDetailViewModel: ObservableObject {
     }
 
     /// 为可联系时段添加提醒：按当前城市时间触发，通知中告知目标城市对应时刻
-    func addContactableReminder(localHour: Int, targetHour: Int) async {
+    func addContactableReminder(
+        localHour: Int,
+        targetHour: Int,
+        weekdaysOnly: Bool
+    ) async {
         reminderStatus = nil
         guard !hasReminder(atHour: localHour, minute: 0) else {
             reminderStatus = String(localized: "city.reminder.duplicate")
@@ -269,7 +272,7 @@ final class CityDetailViewModel: ObservableObject {
                 timezoneId: localTimezoneId,
                 hour: localHour,
                 minute: 0,
-                weekdaysOnly: reminderWeekdaysOnly,
+                weekdaysOnly: weekdaysOnly,
                 targetTimezoneId: city.timezoneId,
                 targetHour: targetHour,
                 targetMinute: 0
@@ -291,7 +294,7 @@ final class CityDetailViewModel: ObservableObject {
     /// 指定时刻（当前城市时区）已有的提醒
     func reminder(atHour hour: Int, minute: Int) -> CityReminderGroup? {
         reminders.first {
-            $0.hour == hour && $0.minute == minute && $0.weekdaysOnly == reminderWeekdaysOnly
+            $0.hour == hour && $0.minute == minute
         }
     }
 

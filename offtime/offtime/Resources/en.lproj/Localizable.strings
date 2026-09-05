@@ -72,6 +72,7 @@
 "city.reminder.contactable.body" = "Current time %@, contactable now";
 "city.reminder.weekdays.only" = "Weekdays only";
 "city.reminder.everyday" = "Every day";
+"city.reminder.weekdays.prompt" = "Should this reminder repeat only on weekdays?";
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
 "city.reminder.error.timezone" = "The selected city time zone is unavailable.";

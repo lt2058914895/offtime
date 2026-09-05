@@ -72,6 +72,7 @@
 "city.reminder.contactable.body" = "当前时间 %@，可联系了";
 "city.reminder.weekdays.only" = "仅工作日";
 "city.reminder.everyday" = "每天";
+"city.reminder.weekdays.prompt" = "是否仅在工作日重复提醒？";
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";

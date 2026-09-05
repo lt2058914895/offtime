@@ -44,11 +44,17 @@ struct TimelineBar: View {
 
 // MARK: - CityDetailView
 
+private struct PendingReminder {
+    let localHour: Int
+    let targetHour: Int
+}
+
 struct CityDetailView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: CityDetailViewModel
     @State private var processingReminderTargetHours: Set<Int> = []
+    @State private var pendingReminder: PendingReminder?
 
     init(city: CityModel) {
         _viewModel = StateObject(wrappedValue: CityDetailViewModel(city: city))
@@ -97,6 +103,24 @@ struct CityDetailView: View {
         .onDisappear {
             viewModel.saveWorkHours()
             appEnvironment.citiesRevision += 1
+        }
+        .confirmationDialog(
+            String(localized: "city.reminder.weekdays.prompt"),
+            isPresented: Binding(
+                get: { pendingReminder != nil },
+                set: { if !$0 { pendingReminder = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button(String(localized: "city.reminder.weekdays.only")) {
+                addPendingReminder(weekdaysOnly: true)
+            }
+            Button(String(localized: "city.reminder.everyday")) {
+                addPendingReminder(weekdaysOnly: false)
+            }
+            Button(String(localized: "common.cancel"), role: .cancel) {
+                pendingReminder = nil
+            }
         }
     }
 
@@ -330,11 +354,6 @@ struct CityDetailView: View {
                     .padding(.top, 4)
                 }
 
-                Toggle(
-                    String(localized: "city.reminder.weekdays.only"),
-                    isOn: $viewModel.reminderWeekdaysOnly
-                )
-
                 if let status = viewModel.reminderStatus {
                     Text(status)
                         .font(.caption)
@@ -350,15 +369,25 @@ struct CityDetailView: View {
         localHour: Int,
         targetHour: Int
     ) async {
-        processingReminderTargetHours.insert(targetHour)
-        defer { processingReminderTargetHours.remove(targetHour) }
-
         if let existing {
+            processingReminderTargetHours.insert(targetHour)
+            defer { processingReminderTargetHours.remove(targetHour) }
             await viewModel.removeReminder(existing)
         } else {
+            pendingReminder = PendingReminder(localHour: localHour, targetHour: targetHour)
+        }
+    }
+
+    private func addPendingReminder(weekdaysOnly: Bool) {
+        guard let pendingReminder else { return }
+        self.pendingReminder = nil
+        Task {
+            processingReminderTargetHours.insert(pendingReminder.targetHour)
+            defer { processingReminderTargetHours.remove(pendingReminder.targetHour) }
             await viewModel.addContactableReminder(
-                localHour: localHour,
-                targetHour: targetHour
+                localHour: pendingReminder.localHour,
+                targetHour: pendingReminder.targetHour,
+                weekdaysOnly: weekdaysOnly
             )
         }
     }
