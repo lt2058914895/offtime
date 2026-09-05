@@ -222,42 +222,16 @@ struct ClockListView: View {
                 reorderHintBar
             }
             List {
-                ForEach($viewModel.cities) { $city in
-                   ClockListCell(
-                       city: city,
-                       time: viewModel.getLocalTime(city: city),
-                       date: viewModel.getLocalDate(city: city),
-                       weekday: viewModel.getLocalWeekday(city: city),
-                       timeDifference: viewModel.getTimeDifference(city: city, localTimezoneId: localTimezoneId),
-                       isDaytime: viewModel.isDaytime(city: city),
-                       dstStatus: viewModel.getDSTStatus(city: city),
-                        countryCode: viewModel.countryCode(for: city),
-                        workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
-                        localTimezoneId: localTimezoneId,
-                        localCityName: localCityName,
-                        isEditMode: isEditing,
-                        isSelected: viewModel.selectedCityIds.contains(city.id),
-                        onToggleSelection: {
-                            viewModel.toggleSelection(id: city.id)
-                        },
-                        onCopy: {
-                            let text = viewModel.copyTimeText(city: city)
-                            UIPasteboard.general.string = text
-                        },
-                        onShare: {
-                            shareItem = ShareTextItem(text: viewModel.copyTimeText(city: city))
-                        },
-                        onDelete: {
-                            cityToDelete = city
-                            isShowingDeleteConfirm = true
-                        },
-                        onTap: {
-                            path.append(AppRoute.cityDetail(city.id))
-                        }
-                    )
-                    .listRowBackground(Color(.secondarySystemGroupedBackground))
+                if isEditing {
+                    ForEach(viewModel.cities) { city in
+                        clockListCell(city)
+                    }
+                    .onMove(perform: move)
+                } else {
+                    ForEach(viewModel.cities) { city in
+                        clockListCell(city)
+                    }
                 }
-                .onMove(perform: move)
             }
             .listStyle(.insetGrouped)
             // 只读 .constant：让 List 的 .onMove 手柄照常显示，但禁止 SwiftUI 回写 editMode，
@@ -265,7 +239,43 @@ struct ClockListView: View {
             .environment(\.editMode, .constant(isEditing ? .active : .inactive))
         }
     }
-    
+
+    private func clockListCell(_ city: CityModel) -> some View {
+        ClockListCell(
+            city: city,
+            time: viewModel.getLocalTime(city: city),
+            date: viewModel.getLocalDate(city: city),
+            weekday: viewModel.getLocalWeekday(city: city),
+            timeDifference: viewModel.getTimeDifference(city: city, localTimezoneId: localTimezoneId),
+            isDaytime: viewModel.isDaytime(city: city),
+            dstStatus: viewModel.getDSTStatus(city: city),
+            countryCode: viewModel.countryCode(for: city),
+            workingHoursOverlap: viewModel.getWorkingHoursOverlap(city: city, localTimezoneId: localTimezoneId),
+            localTimezoneId: localTimezoneId,
+            localCityName: localCityName,
+            isEditMode: isEditing,
+            isSelected: viewModel.selectedCityIds.contains(city.id),
+            onToggleSelection: {
+                viewModel.toggleSelection(id: city.id)
+            },
+            onCopy: {
+                let text = viewModel.copyTimeText(city: city)
+                UIPasteboard.general.string = text
+            },
+            onShare: {
+                shareItem = ShareTextItem(text: viewModel.copyTimeText(city: city))
+            },
+            onDelete: {
+                cityToDelete = city
+                isShowingDeleteConfirm = true
+            },
+            onTap: {
+                path.append(AppRoute.cityDetail(city.id))
+            }
+        )
+        .listRowBackground(Color(.secondarySystemGroupedBackground))
+    }
+
     // MARK: - iPad 布局（多列网格）
     private var ipadLayout: some View {
         VStack(spacing: 0) {
@@ -471,8 +481,10 @@ struct ClockListCell: View {
             Button(String(localized: "clock.share.time")) {
                 onShare()
             }
-            Button(String(localized: "clock.delete.city"), role: .destructive) {
-                onDelete()
+            if isEditMode {
+                Button(String(localized: "clock.delete.city"), role: .destructive) {
+                    onDelete()
+                }
             }
         }
     }
@@ -621,7 +633,9 @@ struct ClockGridCell: View {
         .contextMenu {
             Button(String(localized: "clock.copy.time")) { onCopy() }
             Button(String(localized: "clock.share.time")) { onShare() }
-            Button(String(localized: "clock.delete.city"), role: .destructive) { onDelete() }
+            if isEditMode {
+                Button(String(localized: "clock.delete.city"), role: .destructive) { onDelete() }
+            }
         }
     }
 
