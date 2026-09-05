@@ -168,6 +168,8 @@
 "converter.current.time" = "Current Time";
 "converter.select.date" = "Select Date";
 "converter.select.time" = "Select Time";
+"converter.hour" = "Hour";
+"converter.minute" = "Minute";
 "converter.select.city.hint" = "Please select a city";
 "converter.timezone.parse.failed" = "Timezone parse failed";
 "converter.convert.failed" = "Time conversion failed";

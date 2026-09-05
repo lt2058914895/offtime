@@ -121,25 +121,15 @@ struct ConverterView: View {
         }
         .sheet(isPresented: $showTimePicker) {
             NavigationStack {
-                VStack(spacing: 20) {
-                    DatePicker(
-                        "",
-                        selection: $viewModel.sourceDate,
-                        displayedComponents: .hourAndMinute
-                    )
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-
-                    Spacer()
-                }
-                .padding()
-                .navigationTitle(String(localized: "converter.select.time"))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(String(localized: "common.done")) { showTimePicker = false }
+                ConverterTimePickerSheet(
+                    sourceDate: $viewModel.sourceDate,
+                    onSetCurrentTime: {
+                        viewModel.sourceDate = viewModel.currentSourceCityDate()
+                    },
+                    onDone: {
+                        showTimePicker = false
                     }
-                }
+                )
             }
             .presentationDetents([.medium, .large])
         }
@@ -539,6 +529,139 @@ private struct CardView<Content: View>: View {
     }
 }
 
-#Preview {
-    ConverterView()
+private struct ConverterTimePickerSheet: View {
+    @Binding var sourceDate: Date
+    let onSetCurrentTime: () -> Void
+    let onDone: () -> Void
+
+    private var selectedHour: Int {
+        Calendar.current.component(.hour, from: sourceDate)
+    }
+
+    private var selectedMinute: Int {
+        Calendar.current.component(.minute, from: sourceDate)
+    }
+
+    private var hourOptions: [Int] {
+        Array(0...23)
+    }
+
+    private var minuteOptions: [Int] {
+        var options = stride(from: 0, through: 55, by: 5).map { $0 }
+        if !options.contains(selectedMinute) {
+            options.append(selectedMinute)
+            options.sort()
+        }
+        return options
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                ConverterTimePickerSection(title: String(localized: "converter.hour")) {
+                    ConverterTimeGrid(options: hourOptions) { hour in
+                        updateTime(hour: hour, minute: selectedMinute)
+                    } isSelected: { option in
+                        option == selectedHour
+                    }
+                }
+
+                ConverterTimePickerSection(title: String(localized: "converter.minute")) {
+                    ConverterTimeGrid(options: minuteOptions) { minute in
+                        updateTime(hour: selectedHour, minute: minute)
+                    } isSelected: { option in
+                        option == selectedMinute
+                    }
+                }
+            }
+            .padding()
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(String(localized: "converter.select.time"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(String(localized: "converter.current.time")) {
+                    onSetCurrentTime()
+                }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button(String(localized: "common.done")) {
+                    onDone()
+                }
+            }
+        }
+    }
+
+    private func updateTime(hour: Int, minute: Int) {
+        var components = Calendar.current.dateComponents(
+            [.year, .month, .day],
+            from: sourceDate
+        )
+        components.hour = hour
+        components.minute = minute
+        sourceDate = Calendar.current.date(from: components) ?? sourceDate
+    }
+}
+
+private struct ConverterTimePickerSection<Content: View>: View {
+    let title: String
+    let content: Content
+
+    init(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.title = title
+        self.content = content()
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.subheadline.weight(.medium))
+                .foregroundColor(.secondary)
+
+            content
+        }
+    }
+}
+
+private struct ConverterTimeGrid: View {
+    let options: [Int]
+    let onSelect: (Int) -> Void
+    let isSelected: (Int) -> Bool
+
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: 52), spacing: 8)]
+    }
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 8) {
+            ForEach(options, id: \.self) { option in
+                Button {
+                    onSelect(option)
+                } label: {
+                    Text(String(format: "%02d", option))
+                        .font(.subheadline.weight(isSelected(option) ? .bold : .medium))
+                        .monospacedDigit()
+                        .foregroundColor(isSelected(option) ? .accentColor : .primary)
+                        .frame(maxWidth: .infinity, minHeight: 36)
+                        .background(
+                            isSelected(option)
+                            ? Color.accentColor.opacity(0.15)
+                            : Color(.systemGray5)
+                        )
+                        .cornerRadius(8)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+struct ConverterView_Previews: PreviewProvider {
+    static var previews: some View {
+        ConverterView()
+    }
 }

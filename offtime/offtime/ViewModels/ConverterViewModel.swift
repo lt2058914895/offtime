@@ -210,6 +210,16 @@ final class ConverterViewModel: ObservableObject {
         return Calendar.current.date(from: components) ?? Date()
     }
 
+    func setSourceTime(hour: Int, minute: Int) {
+        var components = Calendar.current.dateComponents(
+            [.year, .month, .day],
+            from: sourceDate
+        )
+        components.hour = hour
+        components.minute = minute
+        sourceDate = Calendar.current.date(from: components) ?? sourceDate
+    }
+
     func addTarget(_ city: CityModel) {
         let cityKey = CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
         let sourceKey = sourceCity.map {

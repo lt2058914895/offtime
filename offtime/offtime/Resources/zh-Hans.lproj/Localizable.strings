@@ -168,6 +168,8 @@
 "converter.current.time" = "当前时间";
 "converter.select.date" = "选择日期";
 "converter.select.time" = "选择时间";
+"converter.hour" = "小时";
+"converter.minute" = "分钟";
 "converter.select.city.hint" = "请选择城市";
 "converter.timezone.parse.failed" = "时区解析失败";
 "converter.convert.failed" = "时间转换失败";
