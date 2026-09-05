@@ -26,11 +26,12 @@ struct ConvertedTimeResult: Identifiable, Equatable {
     let id: UUID
     let cityName: String
     let cityEn: String
+    let countryFlag: String
+    let countryName: String
+    let dstText: String?
     let dateText: String
+    let weekdayText: String
     let timeText: String
-    let endTimeText: String?
-    let endDateText: String?
-    let durationText: String?
     let differenceText: String
     let crossDayText: String?
 }
@@ -42,12 +43,10 @@ final class ConverterViewModel: ObservableObject {
     @Published var sourceDate: Date = Date()
 
     @Published var results: [ConvertedTimeResult] = []
-    @Published var durationMinutes: Int = 60
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     @Published var availableCities: [CityModel] = []
-    @Published var isSwapping: Bool = false
 
     private let timezoneService = TimezoneService.shared
     private let cityService: CityService
@@ -58,15 +57,14 @@ final class ConverterViewModel: ObservableObject {
         loadCities()
 
         $sourceCity
-            .combineLatest($targetCities, $sourceDate, $durationMinutes)
+            .combineLatest($targetCities, $sourceDate)
             .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
             .sink { [weak self] inputs in
-                let (source, targets, date, duration) = inputs
+                let (source, targets, date) = inputs
                 self?.convert(
                     source: source,
                     targets: targets,
-                    date: date,
-                    durationMinutes: duration
+                    date: date
                 )
             }
             .store(in: &cancellables)
@@ -99,8 +97,7 @@ final class ConverterViewModel: ObservableObject {
         convert(
             source: sourceCity,
             targets: targetCities,
-            date: sourceDate,
-            durationMinutes: durationMinutes
+            date: sourceDate
         )
     }
 
@@ -112,8 +109,7 @@ final class ConverterViewModel: ObservableObject {
     private func convert(
         source: CityModel?,
         targets: [CityModel],
-        date: Date,
-        durationMinutes: Int
+        date: Date
     ) {
         guard let source, !targets.isEmpty else {
             results = []
@@ -139,12 +135,6 @@ final class ConverterViewModel: ObservableObject {
             return
         }
 
-        let endDate = sourceCalendar.date(
-            byAdding: .minute,
-            value: max(0, durationMinutes),
-            to: absoluteDate
-        ) ?? absoluteDate
-
         results = targets.compactMap { target in
             let difference = timezoneService.getTimeDifferenceBetween(
                 sourceTimezoneId: source.timezoneId,
@@ -154,30 +144,17 @@ final class ConverterViewModel: ObservableObject {
             let timeText = use24Hour
                 ? timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate)
                 : timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate)
-            let endTimeText = use24Hour
-                ? timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: endDate)
-                : timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: endDate)
-            var targetCalendar = Calendar.current
-            targetCalendar.timeZone = TimeZone(identifier: target.timezoneId) ?? .current
-            let startDateComponents = targetCalendar.dateComponents([.year, .month, .day], from: absoluteDate)
-            let endDateComponents = targetCalendar.dateComponents([.year, .month, .day], from: endDate)
-            let crossesMidnight = startDateComponents != endDateComponents
-            let endDateText = durationMinutes > 0 && crossesMidnight
-                ? timezoneService.getLocalDate(timezoneId: target.timezoneId, date: endDate)
-                : nil
-
             guard let timeText else { return nil }
             return ConvertedTimeResult(
                 id: target.id,
                 cityName: target.cityName,
                 cityEn: target.cityEn,
+                countryFlag: CountryDisplay.flagEmoji(for: target.country),
+                countryName: CountryDisplay.name(for: target.country),
+                dstText: timezoneService.getDSTStatus(timezoneId: target.timezoneId, date: absoluteDate),
                 dateText: timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "",
+                weekdayText: timezoneService.getLocalWeekday(timezoneId: target.timezoneId, date: absoluteDate) ?? "",
                 timeText: timeText,
-                endTimeText: durationMinutes > 0 ? endTimeText : nil,
-                endDateText: endDateText,
-                durationText: durationMinutes > 0
-                    ? String(format: String(localized: "meeting.settings.duration.format"), durationMinutes)
-                    : nil,
                 differenceText: difference.offset,
                 crossDayText: difference.crossDay
             )
@@ -209,26 +186,6 @@ final class ConverterViewModel: ObservableObject {
         }
         let (name, en) = CityService.matchCity(for: timezoneId)
         return CityModel(cityName: name, cityEn: en, timezoneId: timezoneId)
-    }
-
-    func swapCities() {
-        isSwapping = true
-        guard let firstTarget = targetCities.first else {
-            isSwapping = false
-            return
-        }
-
-        let oldSource = sourceCity
-        sourceCity = firstTarget
-        targetCities = [oldSource].compactMap { $0 } + Array(targetCities.dropFirst())
-        Haptics.medium()
-        Task {
-            try? await Task.sleep(nanoseconds: 300_000_000)
-            guard !Task.isCancelled else { return }
-            await MainActor.run {
-                self.isSwapping = false
-            }
-        }
     }
 
     func dismissError() {

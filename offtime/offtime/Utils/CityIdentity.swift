@@ -52,3 +52,29 @@ enum CityDisplay {
         return cityEn
     }
 }
+
+enum CountryDisplay {
+    static func flagEmoji(for countryCode: String) -> String {
+        let upper = countryCode.uppercased()
+        guard upper.count == 2, upper.allSatisfy({ $0.isASCII && $0.isLetter }) else {
+            return "🌐"
+        }
+        let base: UInt32 = 127397
+        return upper.unicodeScalars
+            .compactMap { UnicodeScalar(base + $0.value) }
+            .reduce(into: "") { result, scalar in
+                result.unicodeScalars.append(scalar)
+            }
+    }
+
+    static func name(for countryCode: String) -> String {
+        guard countryCode.count == 2 else { return "" }
+        let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
+        let locale: Locale
+        switch language {
+        case "en": locale = Locale(identifier: "en_US")
+        default: locale = Locale(identifier: "zh_CN")
+        }
+        return locale.localizedString(forRegionCode: countryCode) ?? ""
+    }
+}

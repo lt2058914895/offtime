@@ -424,7 +424,7 @@ struct ClockListCell: View {
                             .font(.caption2.weight(.medium))
                             .foregroundColor(.secondary)
                         Text(timeDifference.offset)
-                            .font(.caption2.weight(.medium))
+                            .font(.footnote.weight(.bold))
                             .foregroundColor(timeDifferenceColor)
                             .monospacedDigit()
                     }
@@ -447,15 +447,11 @@ struct ClockListCell: View {
                         if let crossDay = timeDifference.crossDay {
                             CrossDayBadge(label: crossDay)
                         }
-                        Text(time)
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .monospacedDigit()
-                        Image(isDaytime ? "day" : "night")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 18, height: 18)
-                            .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
+                        DayNightTimeBadge(
+                            time: time,
+                            isDaytime: isDaytime,
+                            font: .title3.weight(.semibold)
+                        )
                     }
                 }
                 if !isEditMode {
@@ -561,10 +557,10 @@ struct ClockGridCell: View {
                             Text(String(localized: "clock.time.difference"))
                                 .font(.caption2.weight(.medium))
                                 .foregroundColor(.secondary)
-                            Text(timeDifference.offset)
-                                .font(.caption2.weight(.medium))
-                                .foregroundColor(timeDifferenceColor)
-                                .monospacedDigit()
+                        Text(timeDifference.offset)
+                            .font(.footnote.weight(.bold))
+                            .foregroundColor(timeDifferenceColor)
+                            .monospacedDigit()
                         }
                     }
                 }
@@ -584,15 +580,11 @@ struct ClockGridCell: View {
                 if let crossDay = timeDifference.crossDay {
                     CrossDayBadge(label: crossDay)
                 }
-                Text(time)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .monospacedDigit()
-                Image(isDaytime ? "day" : "night")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 22, height: 22)
-                    .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
+                DayNightTimeBadge(
+                    time: time,
+                    isDaytime: isDaytime,
+                    font: .title2.weight(.bold)
+                )
             }
             
             // 底部：日期 + 星期
@@ -707,6 +699,28 @@ private func appCountryName(for countryCode: String) -> String {
     default: locale = Locale(identifier: "zh_CN")
     }
     return locale.localizedString(forRegionCode: countryCode) ?? ""
+}
+
+private struct DayNightTimeBadge: View {
+    let time: String
+    let isDaytime: Bool
+    let font: Font
+
+    var body: some View {
+        Text(time)
+            .font(font)
+            .monospacedDigit()
+            .foregroundColor(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(
+                isDaytime
+                ? Color(red: 110 / 255.0, green: 168 / 255.0, blue: 220 / 255.0)
+                : Color(red: 23 / 255.0, green: 55 / 255.0, blue: 94 / 255.0)
+            )
+            .clipShape(Capsule())
+            .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
+    }
 }
 
 /// 时区 ID → UTC 偏移文案，如 UTC+8

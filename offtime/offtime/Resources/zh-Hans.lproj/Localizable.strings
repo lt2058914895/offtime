@@ -162,6 +162,7 @@
 // MARK: - Converter
 "converter.source.city" = "起点城市";
 "converter.target.city" = "目标城市";
+"converter.target.hint" = "可添加多个城市";
 "converter.select.city" = "选择城市";
 "converter.datetime" = "日期时间";
 "converter.current.time" = "当前时间";
@@ -172,7 +173,6 @@
 "converter.convert.failed" = "时间转换失败";
 "converter.load.cities.failed" = "加载城市失败";
 "converter.add.city.failed" = "添加城市失败";
-"converter.duration" = "时长";
 "converter.add.target" = "添加";
 "converter.remove.target" = "移除目标城市";
 "converter.share.title" = "会议时间";
@@ -245,7 +245,6 @@
 "accessibility.nighttime" = "夜晚";
 "accessibility.selected" = "已选中";
 "accessibility.unselected" = "未选中";
-"accessibility.swap.cities" = "交换起终点城市";
 "clock.share.time" = "分享时间";
 "converter.share.result" = "分享转换结果";
 "settings.share.app" = "分享 App";

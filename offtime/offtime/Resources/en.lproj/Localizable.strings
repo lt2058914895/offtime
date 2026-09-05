@@ -162,6 +162,7 @@
 // MARK: - Converter
 "converter.source.city" = "Source City";
 "converter.target.city" = "Target City";
+"converter.target.hint" = "Add multiple cities";
 "converter.select.city" = "Select City";
 "converter.datetime" = "Date & Time";
 "converter.current.time" = "Current Time";
@@ -172,7 +173,6 @@
 "converter.convert.failed" = "Time conversion failed";
 "converter.load.cities.failed" = "Failed to load cities";
 "converter.add.city.failed" = "Failed to add city";
-"converter.duration" = "Duration";
 "converter.add.target" = "Add";
 "converter.remove.target" = "Remove target city";
 "converter.share.title" = "Meeting time";
@@ -245,7 +245,6 @@
 "accessibility.nighttime" = "Nighttime";
 "accessibility.selected" = "Selected";
 "accessibility.unselected" = "Not selected";
-"accessibility.swap.cities" = "Swap source and target cities";
 "clock.share.time" = "Share Time";
 "converter.share.result" = "Share conversion result";
 "settings.share.app" = "Share App";

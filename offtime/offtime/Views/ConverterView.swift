@@ -12,12 +12,10 @@ struct ConverterView: View {
     @State private var showCitySelector = false
     @State private var isSelectingSource = true
     @State private var lastSeenCitiesRevision: Int = 0
-    @ScaledMetric(relativeTo: .body) private var swapButtonSize: CGFloat = 44
+    @ScaledMetric(relativeTo: .body) private var flowIndicatorSize: CGFloat = 44
     private let embedsNavigationStack: Bool
     private let prefill: ConverterPrefill?
     @State private var appliedPrefillID: UUID?
-
-    private let durationOptions = [0, 15, 30, 45, 60, 90, 120]
 
     init(embedsNavigationStack: Bool = true, prefill: ConverterPrefill? = nil) {
         self.embedsNavigationStack = embedsNavigationStack
@@ -42,7 +40,7 @@ struct ConverterView: View {
         ScrollView {
             VStack(spacing: 16) {
                 sourceCard
-                swapButton
+                flowIndicator
                 targetCard
             }
             .padding(.horizontal, usesHorizontalLayout && isIPad ? 24 : 16)
@@ -94,15 +92,7 @@ struct ConverterView: View {
                     }
                 )
 
-                Divider()
-
-                Divider()
-
                 datePickerRow
-
-                Divider()
-
-                durationRow
             }
         }
         .sheet(isPresented: $showDatePicker) {
@@ -173,56 +163,28 @@ struct ConverterView: View {
         }
     }
 
-    private var durationRow: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "hourglass")
-                .font(.callout)
-                .foregroundColor(.secondary)
-            Text(String(localized: "converter.duration"))
-                .font(.subheadline.weight(.medium))
-            Spacer()
-            Picker(
-                String(localized: "converter.duration"),
-                selection: $viewModel.durationMinutes
-            ) {
-                ForEach(durationOptions, id: \.self) { minutes in
-                    Text(String(format: String(localized: "meeting.settings.duration.format"), minutes))
-                        .tag(minutes)
-                }
-            }
-            .pickerStyle(.menu)
-        }
-    }
-
-    private var swapButton: some View {
-        Button(action: {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
-                viewModel.swapCities()
-            }
-        }) {
-            Image(systemName: usesHorizontalLayout ? "arrow.left.arrow.right" : "arrow.up.arrow.down")
-                .font(.body.weight(.semibold))
-                .foregroundColor(Color(.systemGray2))
-                .frame(width: swapButtonSize, height: swapButtonSize)
-                .background(Color(.secondarySystemGroupedBackground))
-                .clipShape(Circle())
-                .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
-                .contentShape(Circle())
-        }
-        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
-        .scaleEffect(viewModel.isSwapping ? 0.9 : 1.0)
-        .accessibilityLabel(String(localized: "accessibility.swap.cities"))
-        .disabled(viewModel.targetCities.isEmpty)
-        .opacity(viewModel.targetCities.isEmpty ? 0.5 : 1)
+    private var flowIndicator: some View {
+        Image(systemName: "arrow.down")
+            .font(.body.weight(.semibold))
+            .foregroundColor(Color(.systemGray2))
+            .frame(width: flowIndicatorSize, height: flowIndicatorSize)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(Circle())
+            .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+            .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+            .accessibilityHidden(true)
     }
 
     private var targetCard: some View {
         CardView {
             VStack(spacing: 12) {
-                HStack {
+                HStack(alignment: .center, spacing: 4) {
                     Text(String(localized: "converter.target.city"))
                         .font(.body.weight(.semibold))
                         .foregroundColor(Color(.systemGray2))
+                    Text("(\(String(localized: "converter.target.hint")))")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Button {
                         isSelectingSource = false
@@ -240,10 +202,12 @@ struct ConverterView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.vertical, 12)
                 } else {
-                    ForEach(viewModel.results) { result in
-                        targetResultRow(result)
-                        if result.id != viewModel.results.last?.id {
-                            Divider()
+                    VStack(spacing: 8) {
+                        ForEach(viewModel.results) { result in
+                            targetResultRow(result)
+                            if result.id != viewModel.results.last?.id {
+                                Divider()
+                            }
                         }
                     }
                 }
@@ -252,74 +216,90 @@ struct ConverterView: View {
     }
 
     private func targetResultRow(_ result: ConvertedTimeResult) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn))
-                    .font(.headline)
-                    .lineLimit(2)
-                Spacer()
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 4) {
-                    Image(systemName: "globe")
+                    Text(CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn))
+                        .font(.headline)
+                        .lineLimit(2)
+                    if let secondary = CityDisplay.secondaryName(cityName: result.cityName, cityEn: result.cityEn) {
+                        Text(secondary)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    if let dstText = result.dstText {
+                        Text(dstText)
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(Color.blue.opacity(0.15))
+                            .foregroundColor(.blue)
+                            .clipShape(Capsule())
+                    }
+                }
+
+                HStack(spacing: 4) {
+                    Text(result.countryFlag)
+                        .font(.system(size: 13))
+                    if !result.countryName.isEmpty {
+                        Text(result.countryName)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    Text("·")
                         .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text(String(localized: "clock.time.difference"))
+                        .font(.caption2.weight(.medium))
+                        .foregroundColor(.secondary)
                     Text(result.differenceText)
-                        .font(.caption.weight(.semibold))
+                        .font(.caption2.weight(.medium))
                         .monospacedDigit()
                         .foregroundColor(timeDifferenceColor(result.differenceText))
                 }
-                Button {
-                    viewModel.removeTarget(id: result.id)
-                } label: {
-                    Image(systemName: "minus.circle")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                }
-                .accessibilityLabel(String(localized: "converter.remove.target"))
-            }
 
-            HStack(spacing: 6) {
-                Image(systemName: "calendar")
-                    .font(.callout)
-                    .foregroundColor(Color(.secondaryLabel))
-                Text(result.dateText)
-                    .font(.subheadline.weight(.semibold))
-                    .monospacedDigit()
-                if let endDateText = result.endDateText {
-                    Image(systemName: "arrow.right")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                    Text(endDateText)
-                        .font(.subheadline.weight(.semibold))
-                        .monospacedDigit()
-                }
-                if let crossDay = result.crossDayText {
-                    CrossDayBadge(label: crossDay)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 6) {
+                        targetMetadata(result)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        targetMetadata(result)
+                    }
                 }
             }
 
-            HStack(spacing: 6) {
-                Image(systemName: "clock")
-                    .font(.callout)
-                    .foregroundColor(Color(.secondaryLabel))
-                Text(result.timeText)
-                    .font(.title3.weight(.semibold))
-                    .monospacedDigit()
-                if let endTime = result.endTimeText {
-                    Text("– \(endTime)")
-                        .font(.title3.weight(.semibold))
-                        .monospacedDigit()
-                }
-                Spacer()
-                if let duration = result.durationText {
-                    Text(duration)
-                        .font(.caption.weight(.medium))
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 3)
-                        .background(Color.accentColor.opacity(0.12))
-                        .clipShape(Capsule())
-                }
+            Spacer(minLength: 4)
+
+            Button {
+                viewModel.removeTarget(id: result.id)
+            } label: {
+                Image(systemName: "minus.circle")
+                    .font(.title3)
+                    .foregroundColor(.secondary)
+                    .frame(minWidth: 32, minHeight: 32)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(String(localized: "converter.remove.target"))
         }
-        .accessibilityElement(children: .combine)
+        .padding(10)
+    }
+
+    @ViewBuilder
+    private func targetMetadata(_ result: ConvertedTimeResult) -> some View {
+        Text(result.dateText)
+            .font(.subheadline.weight(.semibold))
+            .monospacedDigit()
+        Text(result.weekdayText)
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+        Text(result.timeText)
+            .font(.headline.weight(.semibold))
+            .monospacedDigit()
     }
 
     private func timeDifferenceColor(_ offset: String) -> Color {
@@ -375,6 +355,12 @@ struct ConverterView: View {
         return formatter
     }()
 
+    private static let sourceWeekdayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter
+    }()
+
     private static let sourceTimeFormatter24: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
@@ -402,17 +388,11 @@ struct ConverterView: View {
 
         for result in viewModel.results {
             let name = CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn)
-            var line = "• \(name) \(result.dateText) \(result.timeText)"
-            if let endTime = result.endTimeText {
-                if let endDateText = result.endDateText {
-                    line += "–\(endDateText) \(endTime)"
-                } else {
-                    line += "–\(endTime)"
-                }
-            }
+            var line = "• \(name) \(result.dateText)"
             if let crossDay = result.crossDayText {
                 line += " (\(crossDay))"
             }
+            line += " \(result.timeText)"
             lines.append(line)
         }
         return lines.joined(separator: "\n")
@@ -480,16 +460,24 @@ struct ConverterView: View {
                     .font(.body.weight(.semibold))
                     .foregroundColor(Color(.label))
                     .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                Text(Self.sourceWeekdayFormatter.string(from: viewModel.sourceDate))
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
-            .background(Color(.systemGray5))
-            .cornerRadius(8)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: true, vertical: false)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(Color(.systemGray5))
+        .cornerRadius(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(String(localized: "converter.select.date") + ": " + Self.sourceDateFormatter.string(from: viewModel.sourceDate))
+        .accessibilityLabel(
+            String(localized: "converter.select.date") + ": "
+            + Self.sourceDateFormatter.string(from: viewModel.sourceDate) + " "
+            + Self.sourceWeekdayFormatter.string(from: viewModel.sourceDate)
+        )
     }
 
     private var timeButton: some View {
