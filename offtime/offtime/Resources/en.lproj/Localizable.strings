@@ -3,7 +3,7 @@
 // MARK: - Tab Bar
 "tab.clock" = "Clock";
 "tab.converter" = "Time Converter";
-"tab.meeting" = "Meetings";
+"tab.meeting" = "Meeting Slots";
 "tab.settings" = "Settings";
 
 // MARK: - Common
@@ -141,24 +141,24 @@
 "meeting.overlap.none" = "No overlap today";
 "meeting.detail.title" = "Slot Details";
 "meeting.detail.subtitle" = "Corresponding times in each city";
-"meeting.detail.range.hint" = "You can add a meeting at any point within this time range. You can manually choose the meeting start time below.";
+"meeting.detail.range.hint" = "You can add a meeting slot anywhere in this time range and choose a start time below.";
 "meeting.detail.select.start" = "Select meeting start time";
-"meeting.detail.add" = "Add to Meeting List";
-"meeting.add.success" = "Meeting added. See it in Settings > Meetings.";
-"meeting.add.conflict" = "This time conflicts with an existing meeting";
-"meeting.add.conflict.title" = "Cannot Add Meeting";
+"meeting.detail.add" = "Add to Meeting Slots";
+"meeting.add.success" = "Meeting slot added. See it in Settings > Meeting Slots.";
+"meeting.add.conflict" = "This time conflicts with an existing meeting slot";
+"meeting.add.conflict.title" = "Cannot Add Meeting Slot";
 "meeting.add.conflict.view" = "View";
-"meeting.list.title" = "Meeting History";
-"meeting.list.empty.title" = "No Meetings";
-"meeting.list.empty" = "Meetings you add from recommended slots will appear here.";
-"meeting.list.delete.confirm.title" = "Delete Meeting?";
+"meeting.list.title" = "Meeting Slot History";
+"meeting.list.empty.title" = "No Meeting Slots";
+"meeting.list.empty" = "Meeting slots added from recommended slots will appear here.";
+"meeting.list.delete.confirm.title" = "Delete Meeting Slot?";
 "meeting.list.delete" = "Delete";
-"meeting.list.filter.title" = "Meeting Status";
+"meeting.list.filter.title" = "Slot Status";
 "meeting.list.filter.upcoming" = "Upcoming";
 "meeting.list.filter.finished" = "Finished";
-"meeting.list.filter.empty" = "No meetings in this category";
+"meeting.list.filter.empty" = "No meeting slots in this category";
 "meeting.list.ongoing" = "Ongoing";
-"meeting.list.swipe.hint" = "Swipe left to delete a meeting";
+"meeting.list.swipe.hint" = "Swipe left to delete a meeting slot";
 
 // MARK: - Converter
 "converter.source.city" = "Source City";
@@ -189,7 +189,7 @@
 "settings.theme" = "Appearance";
 "settings.version" = "Version";
 "settings.tools" = "Tools";
-"settings.meetings" = "Meetings & Reminders";
+"settings.meetings" = "Meeting Slots & Reminders";
 "reminder.list.title" = "Reminders";
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
@@ -225,7 +225,7 @@
 "onboarding.features.title" = "More features";
 "onboarding.features.manage" = "Manage Clocks";
 "onboarding.features.manage.desc" = "Tap Manage to select, delete, or drag to reorder";
-"onboarding.features.meeting" = "Cross-Timezone Meetings";
+"onboarding.features.meeting" = "Cross-Timezone Meeting Slots";
 "onboarding.features.meeting.desc" = "Auto-suggest the best meeting slots for everyone";
 "onboarding.features.converter" = "Time Converter";
 "onboarding.features.converter.desc" = "Quickly convert time between any cities";

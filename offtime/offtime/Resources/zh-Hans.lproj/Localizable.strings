@@ -3,7 +3,7 @@
 // MARK: - Tab Bar
 "tab.clock" = "时钟";
 "tab.converter" = "时区转换";
-"tab.meeting" = "会议";
+"tab.meeting" = "会议档期";
 "tab.settings" = "设置";
 
 // MARK: - Common
@@ -141,24 +141,24 @@
 "meeting.overlap.none" = "今日无重叠";
 "meeting.detail.title" = "档期详情";
 "meeting.detail.subtitle" = "该时段在各城市的对应时间";
-"meeting.detail.range.hint" = "该时间范围内都可添加会议、可在下方手动选择会议开始时间";
+"meeting.detail.range.hint" = "该时间范围内都可添加会议档期、可在下方手动选择开始时间";
 "meeting.detail.select.start" = "选择会议开始时间";
-"meeting.detail.add" = "添加到会议列表";
-"meeting.add.success" = "会议添加成功，可在设置-会议页面查看";
-"meeting.add.conflict" = "该时间与已有会议冲突，请选择其他时间";
-"meeting.add.conflict.title" = "无法添加会议";
+"meeting.detail.add" = "添加到会议档期";
+"meeting.add.success" = "会议档期添加成功，可在设置-会议档期页面查看";
+"meeting.add.conflict" = "该时间与已有会议档期冲突，请选择其他时间";
+"meeting.add.conflict.title" = "无法添加会议档期";
 "meeting.add.conflict.view" = "去查看";
-"meeting.list.title" = "会议记录";
-"meeting.list.empty.title" = "暂无会议";
-"meeting.list.empty" = "从推荐档期添加到会议列表的会议将显示在这里。";
-"meeting.list.delete.confirm.title" = "删除会议？";
+"meeting.list.title" = "会议档期记录";
+"meeting.list.empty.title" = "暂无会议档期";
+"meeting.list.empty" = "从推荐档期添加的会议档期将显示在这里。";
+"meeting.list.delete.confirm.title" = "删除会议档期？";
 "meeting.list.delete" = "删除";
-"meeting.list.filter.title" = "会议状态";
+"meeting.list.filter.title" = "档期状态";
 "meeting.list.filter.upcoming" = "未开始";
 "meeting.list.filter.finished" = "已结束";
-"meeting.list.filter.empty" = "该分类暂无会议";
+"meeting.list.filter.empty" = "该分类暂无会议档期";
 "meeting.list.ongoing" = "进行中";
-"meeting.list.swipe.hint" = "往左滑动会议可删除";
+"meeting.list.swipe.hint" = "往左滑动会议档期可删除";
 
 // MARK: - Converter
 "converter.source.city" = "起点城市";
@@ -189,7 +189,7 @@
 "settings.theme" = "外观主题";
 "settings.version" = "版本号";
 "settings.tools" = "工具";
-"settings.meetings" = "会议与提醒";
+"settings.meetings" = "会议档期与提醒";
 "reminder.list.title" = "提醒";
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
@@ -225,7 +225,7 @@
 "onboarding.features.title" = "更多功能";
 "onboarding.features.manage" = "时钟管理";
 "onboarding.features.manage.desc" = "点击「管理」可多选删除、拖动排序";
-"onboarding.features.meeting" = "跨时区会议";
+"onboarding.features.meeting" = "跨时区会议档期";
 "onboarding.features.meeting.desc" = "自动推荐全员都合适的最优开会时段";
 "onboarding.features.converter" = "时区转换";
 "onboarding.features.converter.desc" = "任意城市间快速换算时间";
