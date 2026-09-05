@@ -444,11 +444,12 @@ struct ClockListCell: View {
                     HStack(spacing: 4) {
                         Text(date)
                             .font(.subheadline)
-                            .fontWeight(.medium)
+                            .fontWeight(.bold)
                             .foregroundColor(.secondary)
                         if !weekday.isEmpty {
                             Text(weekday)
                                 .font(.subheadline)
+                                .fontWeight(.bold)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -605,10 +606,12 @@ struct ClockGridCell: View {
                     HStack(spacing: 4) {
                         Text(date)
                             .font(.subheadline)
+                            .fontWeight(.bold)
                             .foregroundColor(.secondary)
                         if !weekday.isEmpty {
                             Text(weekday)
                                 .font(.subheadline)
+                                .fontWeight(.bold)
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -715,7 +718,7 @@ private func appCountryName(for countryCode: String) -> String {
     return locale.localizedString(forRegionCode: countryCode) ?? ""
 }
 
-private struct DayNightTimeBadge: View {
+struct DayNightTimeBadge: View {
     let time: String
     let isDaytime: Bool
     let font: Font
@@ -732,7 +735,7 @@ private struct DayNightTimeBadge: View {
                 ? Color(red: 110 / 255.0, green: 168 / 255.0, blue: 220 / 255.0)
                 : Color(red: 23 / 255.0, green: 55 / 255.0, blue: 94 / 255.0)
             )
-            .clipShape(Capsule())
+            .clipShape(RoundedRectangle(cornerRadius: 8))
             .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
     }
 }

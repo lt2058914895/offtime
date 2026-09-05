@@ -28,7 +28,9 @@ struct ConvertedTimeResult: Identifiable, Equatable {
     let cityEn: String
     let countryFlag: String
     let countryName: String
+    let utcText: String
     let dstText: String?
+    let isDaytime: Bool
     let dateText: String
     let weekdayText: String
     let timeText: String
@@ -151,7 +153,9 @@ final class ConverterViewModel: ObservableObject {
                 cityEn: target.cityEn,
                 countryFlag: CountryDisplay.flagEmoji(for: target.country),
                 countryName: CountryDisplay.name(for: target.country),
+                utcText: timezoneService.getUTCText(timezoneId: target.timezoneId) ?? "",
                 dstText: timezoneService.getDSTStatus(timezoneId: target.timezoneId, date: absoluteDate),
+                isDaytime: timezoneService.isDaytime(timezoneId: target.timezoneId, date: absoluteDate),
                 dateText: timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "",
                 weekdayText: timezoneService.getLocalWeekday(timezoneId: target.timezoneId, date: absoluteDate) ?? "",
                 timeText: timeText,

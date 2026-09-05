@@ -90,6 +90,17 @@ final class TimezoneService {
         ) ?? "MM/dd"
         return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
     }
+
+    func getUTCText(timezoneId: String) -> String? {
+        guard let timezone = timezone(for: timezoneId) else { return nil }
+        let seconds = timezone.secondsFromGMT()
+        let hours = seconds / 3600
+        let minutes = abs(seconds % 3600) / 60
+        if minutes == 0 {
+            return String(format: "UTC%+d", hours)
+        }
+        return String(format: "UTC%+d:%02d", hours, minutes)
+    }
     
     // MARK: - Daytime Detection
     

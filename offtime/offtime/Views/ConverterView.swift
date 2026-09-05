@@ -216,75 +216,87 @@ struct ConverterView: View {
     }
 
     private func targetResultRow(_ result: ConvertedTimeResult) -> some View {
-        HStack(alignment: .center, spacing: 8) {
-            VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .center, spacing: 8) {
                 HStack(spacing: 4) {
-                    Text(CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn))
-                        .font(.headline)
-                        .lineLimit(2)
-                    if let secondary = CityDisplay.secondaryName(cityName: result.cityName, cityEn: result.cityEn) {
-                        Text(secondary)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                    }
-                    if let dstText = result.dstText {
-                        Text(dstText)
-                            .font(.caption2.weight(.semibold))
-                            .padding(.horizontal, 5)
-                            .padding(.vertical, 2)
-                            .background(Color.blue.opacity(0.15))
-                            .foregroundColor(.blue)
-                            .clipShape(Capsule())
-                    }
-                }
-
-                HStack(spacing: 4) {
-                    Text(result.countryFlag)
-                        .font(.system(size: 13))
-                    if !result.countryName.isEmpty {
-                        Text(result.countryName)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.7)
-                    }
-                    Text("·")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(String(localized: "clock.time.difference"))
-                        .font(.caption2.weight(.medium))
-                        .foregroundColor(.secondary)
-                    Text(result.differenceText)
-                        .font(.caption2.weight(.medium))
-                        .monospacedDigit()
-                        .foregroundColor(timeDifferenceColor(result.differenceText))
-                }
-
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: 6) {
-                        targetMetadata(result)
-                    }
-
                     VStack(alignment: .leading, spacing: 4) {
-                        targetMetadata(result)
+                        HStack(spacing: 4) {
+                            Text(CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn))
+                                .font(.body.weight(.semibold))
+                            if let secondary = CityDisplay.secondaryName(cityName: result.cityName, cityEn: result.cityEn) {
+                                Text(secondary)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            if let dstText = result.dstText {
+                                Text(dstText)
+                                    .font(.caption2)
+                                    .padding(.horizontal, 3)
+                                    .padding(.vertical, 2)
+                                    .background(Color.blue.opacity(0.15))
+                                    .foregroundColor(.blue)
+                                    .cornerRadius(3)
+                            }
+                        }
+
+                        HStack(spacing: 6) {
+                            Text(result.countryFlag)
+                                .font(.system(size: 13))
+                            if !result.countryName.isEmpty {
+                                Text(result.countryName)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
+                            }
+                            Text("·")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(result.utcText)
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(.secondary)
+                                .monospacedDigit()
+                            Text("·")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(String(localized: "clock.time.difference"))
+                                .font(.caption2.weight(.medium))
+                                .foregroundColor(.secondary)
+                            Text(result.differenceText)
+                                .font(.footnote.weight(.bold))
+                                .monospacedDigit()
+                                .foregroundColor(timeDifferenceColor(result.differenceText))
+                        }
                     }
+
+                    Spacer(minLength: 8)
+
+                    Button {
+                        viewModel.removeTarget(id: result.id)
+                    } label: {
+                        Image(systemName: "minus.circle")
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                            .frame(minWidth: 32, minHeight: 32)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(String(localized: "converter.remove.target"))
                 }
             }
 
-            Spacer(minLength: 4)
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                targetMetadata(result)
 
-            Button {
-                viewModel.removeTarget(id: result.id)
-            } label: {
-                Image(systemName: "minus.circle")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                    .frame(minWidth: 32, minHeight: 32)
+                Spacer()
+
+                HStack(alignment: .center, spacing: 5) {
+                    DayNightTimeBadge(
+                        time: result.timeText,
+                        isDaytime: result.isDaytime,
+                        font: .title3.weight(.semibold)
+                    )
+                }
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(String(localized: "converter.remove.target"))
         }
         .padding(10)
     }
@@ -292,14 +304,12 @@ struct ConverterView: View {
     @ViewBuilder
     private func targetMetadata(_ result: ConvertedTimeResult) -> some View {
         Text(result.dateText)
-            .font(.subheadline.weight(.semibold))
+            .font(.subheadline.weight(.bold))
             .monospacedDigit()
-        Text(result.weekdayText)
-            .font(.subheadline)
             .foregroundColor(.secondary)
-        Text(result.timeText)
-            .font(.headline.weight(.semibold))
-            .monospacedDigit()
+        Text(result.weekdayText)
+            .font(.subheadline.weight(.bold))
+            .foregroundColor(.secondary)
     }
 
     private func timeDifferenceColor(_ offset: String) -> Color {
@@ -457,12 +467,12 @@ struct ConverterView: View {
                     .font(.callout)
                     .foregroundColor(Color(.secondaryLabel))
                 Text(Self.sourceDateFormatter.string(from: viewModel.sourceDate))
-                    .font(.body.weight(.semibold))
+                    .font(.body.weight(.bold))
                     .foregroundColor(Color(.label))
                     .lineLimit(1)
                 Text(Self.sourceWeekdayFormatter.string(from: viewModel.sourceDate))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundColor(Color(.label))
                     .lineLimit(1)
             }
             .fixedSize(horizontal: true, vertical: false)
