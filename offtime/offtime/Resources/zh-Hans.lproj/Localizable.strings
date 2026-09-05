@@ -72,6 +72,7 @@
 "city.reminder.weekdays.only" = "仅工作日";
 "city.reminder.everyday" = "每天";
 "city.reminder.weekdays.prompt" = "是否仅在工作日重复提醒？";
+"city.reminder.added.success" = "提醒添加成功，可在设置-提醒页面查看";
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";
@@ -143,7 +144,7 @@
 "meeting.detail.range.hint" = "该时间范围内都可添加会议、可在下方手动选择会议开始时间";
 "meeting.detail.select.start" = "选择会议开始时间";
 "meeting.detail.add" = "添加到会议列表";
-"meeting.add.success" = "已添加到会议列表";
+"meeting.add.success" = "会议添加成功，可在设置-会议页面查看";
 "meeting.add.conflict" = "该时间与已有会议冲突，请选择其他时间";
 "meeting.add.conflict.title" = "无法添加会议";
 "meeting.add.conflict.view" = "去查看";

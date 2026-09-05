@@ -55,6 +55,7 @@ struct CityDetailView: View {
     @StateObject private var viewModel: CityDetailViewModel
     @State private var processingReminderTargetHours: Set<Int> = []
     @State private var pendingReminder: PendingReminder?
+    @State private var reminderToastMessage: String?
 
     init(city: CityModel) {
         _viewModel = StateObject(wrappedValue: CityDetailViewModel(city: city))
@@ -122,6 +123,7 @@ struct CityDetailView: View {
                 pendingReminder = nil
             }
         }
+        .toast(message: $reminderToastMessage)
     }
 
     // MARK: - Work Hours（本地 + 目标城市合并卡片）
@@ -395,11 +397,14 @@ struct CityDetailView: View {
         Task {
             processingReminderTargetHours.insert(pendingReminder.targetHour)
             defer { processingReminderTargetHours.remove(pendingReminder.targetHour) }
-            await viewModel.addContactableReminder(
+            let isAdded = await viewModel.addContactableReminder(
                 localHour: pendingReminder.localHour,
                 targetHour: pendingReminder.targetHour,
                 weekdaysOnly: weekdaysOnly
             )
+            if isAdded {
+                reminderToastMessage = String(localized: "city.reminder.added.success")
+            }
         }
     }
 

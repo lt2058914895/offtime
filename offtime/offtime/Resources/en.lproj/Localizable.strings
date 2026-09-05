@@ -72,6 +72,7 @@
 "city.reminder.weekdays.only" = "Weekdays only";
 "city.reminder.everyday" = "Every day";
 "city.reminder.weekdays.prompt" = "Should this reminder repeat only on weekdays?";
+"city.reminder.added.success" = "Reminder added. See it in Settings > Reminders.";
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
 "city.reminder.error.timezone" = "The selected city time zone is unavailable.";
@@ -143,7 +144,7 @@
 "meeting.detail.range.hint" = "You can add a meeting at any point within this time range. You can manually choose the meeting start time below.";
 "meeting.detail.select.start" = "Select meeting start time";
 "meeting.detail.add" = "Add to Meeting List";
-"meeting.add.success" = "Added to meeting list";
+"meeting.add.success" = "Meeting added. See it in Settings > Meetings.";
 "meeting.add.conflict" = "This time conflicts with an existing meeting";
 "meeting.add.conflict.title" = "Cannot Add Meeting";
 "meeting.add.conflict.view" = "View";

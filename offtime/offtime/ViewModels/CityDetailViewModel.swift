@@ -292,16 +292,17 @@ final class CityDetailViewModel: ObservableObject {
     }
 
     /// 为可联系时段添加提醒：按当前城市时间触发，通知中告知目标城市对应时刻
+    @discardableResult
     func addContactableReminder(
         localHour: Int,
         targetHour: Int,
         weekdaysOnly: Bool
-    ) async {
+    ) async -> Bool {
         reminderStatus = nil
         guard !hasReminder(atHour: localHour, minute: 0) else {
             reminderStatus = String(localized: "city.reminder.duplicate")
             reminderStatusIsError = true
-            return
+            return false
         }
 
         do {
@@ -319,9 +320,11 @@ final class CityDetailViewModel: ObservableObject {
             await loadReminders()
             reminderStatus = nil
             reminderStatusIsError = false
+            return true
         } catch {
             reminderStatus = error.localizedDescription
             reminderStatusIsError = true
+            return false
         }
     }
 
