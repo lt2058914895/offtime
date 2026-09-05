@@ -28,10 +28,12 @@ final class CityDetailViewModel: ObservableObject {
 
     init(
         city: CityModel,
-        reminderService: CityReminderService = CityReminderService()
+        reminderService: CityReminderService? = nil
     ) {
         self.city = city
-        self.reminderService = reminderService
+        self.reminderService = reminderService ?? CityReminderService(
+            modelContainer: CityService.shared.modelContainer
+        )
         self.targetWorkStart = city.workStartHour
         self.targetWorkEnd = city.workEndHour
         self.localWorkStart = city.localWorkStart

@@ -21,7 +21,7 @@ final class AppEnvironment: ObservableObject {
     private var minuteTimer: Timer?
 
     init() {
-        let schema = Schema([CityModel.self, MeetingModel.self])
+        let schema = Schema([CityModel.self, MeetingModel.self, ReminderModel.self])
         do {
             let config = ModelConfiguration(isStoredInMemoryOnly: false)
             modelContainer = try ModelContainer(for: schema, configurations: [config])
@@ -54,8 +54,8 @@ final class AppEnvironment: ObservableObject {
         seedDefaultCityIfFirstLaunch()
         loadOnboardingState()
         loadSettings()
-        // 清理孤立通知提醒（城市已删除但通知仍残留）
-        cleanupOrphanedReminders()
+        // 导入旧版通知提醒、补齐被系统删除的通知，并清理孤立提醒
+        synchronizeReminders()
     }
 
     // MARK: - 分钟时钟
@@ -113,22 +113,10 @@ final class AppEnvironment: ObservableObject {
 
     // MARK: - 引导状态
 
-    /// 清理孤立通知提醒：城市已从列表删除但通知仍残留的情况（如卸载重装后 iOS 恢复旧通知）
-    private func cleanupOrphanedReminders() {
+    private func synchronizeReminders() {
         Task {
-            let context = modelContainer.mainContext
-            let fetch = FetchDescriptor<CityModel>()
-            let cities = (try? context.fetch(fetch)) ?? []
-            let validCityIDs = Set(cities.map { $0.id.uuidString })
-
-            let reminderService = CityReminderService()
-            let allReminders = await reminderService.allReminders()
-
-            for reminder in allReminders {
-                if !validCityIDs.contains(reminder.cityID.uuidString) {
-                    await reminderService.removeReminder(id: reminder.id)
-                }
-            }
+            let reminderService = CityReminderService(modelContainer: modelContainer)
+            await reminderService.synchronize()
         }
     }
 

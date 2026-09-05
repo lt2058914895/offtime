@@ -81,6 +81,68 @@ final class MeetingModel {
     }
 }
 
+// MARK: - 城市提醒
+
+/// SwiftData 持久化模型：城市可联系时段提醒。
+/// 通知中心是调度通道，这里才是提醒列表和启动补偿的事实来源。
+@Model
+final class ReminderModel {
+    var id: UUID
+    var cityID: UUID
+    var cityName: String
+    var timezoneId: String
+    var hour: Int
+    var minute: Int
+    var weekdaysOnly: Bool
+    var targetTimezoneId: String
+    var targetHour: Int
+    var targetMinute: Int
+    var createdAt: Date
+
+    init(
+        id: UUID = UUID(),
+        cityID: UUID,
+        cityName: String,
+        timezoneId: String,
+        hour: Int,
+        minute: Int,
+        weekdaysOnly: Bool,
+        targetTimezoneId: String,
+        targetHour: Int,
+        targetMinute: Int,
+        createdAt: Date = Date()
+    ) {
+        self.id = id
+        self.cityID = cityID
+        self.cityName = cityName
+        self.timezoneId = timezoneId
+        self.hour = hour
+        self.minute = minute
+        self.weekdaysOnly = weekdaysOnly
+        self.targetTimezoneId = targetTimezoneId
+        self.targetHour = targetHour
+        self.targetMinute = targetMinute
+        self.createdAt = createdAt
+    }
+}
+
+extension ReminderModel {
+    func toGroup() -> CityReminderGroup {
+        CityReminderGroup(
+            id: id.uuidString,
+            cityID: cityID,
+            cityName: cityName,
+            timezoneId: timezoneId,
+            hour: hour,
+            minute: minute,
+            weekdaysOnly: weekdaysOnly,
+            targetTimezoneId: targetTimezoneId,
+            targetHour: targetHour,
+            targetMinute: targetMinute
+        )
+    }
+}
+
 // MARK: - CityItem 保留为 Codable 值类型，仅用于导入/导出 JSON 兼容
 
 /// 城市值类型，用于 JSON 导入/导出。运行时数据操作请使用 CityModel。

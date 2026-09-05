@@ -64,13 +64,10 @@ final class CityService {
         ctx.delete(city)
         try ctx.save()
 
-        // 清理该城市关联的通知提醒
+        // 清理该城市关联的提醒持久化数据与通知
         Task {
-            let reminderService = CityReminderService()
-            let reminders = await reminderService.reminders(for: id)
-            for reminder in reminders {
-                await reminderService.removeReminder(id: reminder.id)
-            }
+            let reminderService = CityReminderService(modelContainer: modelContainer)
+            await reminderService.deleteReminders(cityID: id)
         }
     }
     
@@ -89,14 +86,11 @@ final class CityService {
         }
         try ctx.save()
 
-        // 清理关联的通知提醒
+        // 清理关联的提醒持久化数据与通知
         Task {
-            let reminderService = CityReminderService()
+            let reminderService = CityReminderService(modelContainer: modelContainer)
             for id in ids {
-                let reminders = await reminderService.reminders(for: id)
-                for reminder in reminders {
-                    await reminderService.removeReminder(id: reminder.id)
-                }
+                await reminderService.deleteReminders(cityID: id)
             }
         }
     }

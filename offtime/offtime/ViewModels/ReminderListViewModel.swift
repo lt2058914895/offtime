@@ -6,7 +6,7 @@ final class ReminderListViewModel: ObservableObject {
     @Published var reminders: [CityReminderGroup] = []
     @Published var isLoading = false
 
-    private let reminderService = CityReminderService()
+    private let reminderService: CityReminderService
     private let cityService = CityService.shared
     private let timezoneService = TimezoneService.shared
 
@@ -24,6 +24,12 @@ final class ReminderListViewModel: ObservableObject {
             ("\($0.cityEn)|\($0.timezoneId)", $0.country)
         })
     }()
+
+    init(reminderService: CityReminderService? = nil) {
+        self.reminderService = reminderService ?? CityReminderService(
+            modelContainer: CityService.shared.modelContainer
+        )
+    }
 
     func loadReminders() async {
         isLoading = true
