@@ -178,7 +178,6 @@
 "converter.add.city.failed" = "Failed to add city";
 "converter.add.target" = "Add";
 "converter.remove.target" = "Remove target city";
-"converter.share.title" = "Meeting time";
 
 // MARK: - Settings
 "settings.title" = "Settings";

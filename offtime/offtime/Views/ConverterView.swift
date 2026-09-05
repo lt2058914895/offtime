@@ -399,7 +399,7 @@ struct ConverterView: View {
         let sourceDate = Self.sourceDateFormatter.string(from: viewModel.sourceDate)
         let sourceTime = sourceTimeFormatter.string(from: viewModel.sourceDate)
 
-        var lines = [String(localized: "converter.share.title")]
+        var lines: [String] = []
         lines.append("\(sourceName) \(sourceDate) \(sourceTime)")
 
         for result in viewModel.results {
