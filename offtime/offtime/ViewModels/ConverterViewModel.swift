@@ -2,6 +2,20 @@ import Foundation
 import Combine
 import SwiftData
 
+struct ConverterCitySnapshot: Codable, Equatable {
+    let cityName: String
+    let cityEn: String
+    let timezoneId: String
+    let country: String
+
+    init(city: CityModel) {
+        cityName = city.cityName
+        cityEn = city.cityEn
+        timezoneId = city.timezoneId
+        country = city.country
+    }
+}
+
 /// 从会议页跳转转换器时的预填请求：指定源/目标时区与目标时刻（绝对时间）。
 struct ConverterPrefill: Equatable, Hashable {
     let id: UUID
@@ -53,6 +67,8 @@ final class ConverterViewModel: ObservableObject {
     private let timezoneService = TimezoneService.shared
     private let cityService: CityService
     private var cancellables = Set<AnyCancellable>()
+    private static let sourceSnapshotKey = "converter_source_city_snapshot"
+    private static let targetSnapshotsKey = "converter_target_city_snapshots"
 
     init(cityService: CityService? = nil) {
         self.cityService = cityService ?? CityService.shared
@@ -83,15 +99,67 @@ final class ConverterViewModel: ObservableObject {
         do {
             let cities = try cityService.getAllCities()
             availableCities = cities
-
-            if sourceCity == nil && !cities.isEmpty {
-                sourceCity = cities.first
-            }
-            if targetCities.isEmpty && cities.count > 1 {
-                targetCities = Array(cities.dropFirst().prefix(3))
-            }
         } catch {
             errorMessage = String(localized: "converter.load.cities.failed")
+        }
+    }
+
+    /// 仅在用户从未选择过起点时使用设置页当前城市；已保存的选择不受时钟列表影响。
+    func applyDefaultSource(currentCity: CityModel?) {
+        guard sourceCity == nil,
+              UserDefaults.standard.object(forKey: Self.sourceSnapshotKey) == nil else {
+            return
+        }
+        sourceCity = currentCity
+    }
+
+    private func makeCity(from snapshot: ConverterCitySnapshot) -> CityModel {
+        if let match = availableCities.first(where: {
+            CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId)
+                == CityIdentity.key(cityEn: snapshot.cityEn, timezoneId: snapshot.timezoneId)
+        }) {
+            return match
+        }
+        return CityModel(
+            cityName: snapshot.cityName,
+            cityEn: snapshot.cityEn,
+            timezoneId: snapshot.timezoneId,
+            country: snapshot.country
+        )
+    }
+
+    func restoreSavedCities(currentCity: CityModel?) {
+        loadCities()
+
+        if let data = UserDefaults.standard.data(forKey: Self.sourceSnapshotKey),
+           let snapshot = try? JSONDecoder().decode(ConverterCitySnapshot.self, from: data) {
+            sourceCity = makeCity(from: snapshot)
+        } else {
+            sourceCity = currentCity
+        }
+
+        if let data = UserDefaults.standard.data(forKey: Self.targetSnapshotsKey),
+           let snapshots = try? JSONDecoder().decode([ConverterCitySnapshot].self, from: data) {
+            targetCities = snapshots.map(makeCity(from:))
+        } else {
+            targetCities = []
+        }
+    }
+
+    private func saveSourceSnapshot() {
+        guard let sourceCity else {
+            UserDefaults.standard.removeObject(forKey: Self.sourceSnapshotKey)
+            return
+        }
+        if let data = try? JSONEncoder().encode(ConverterCitySnapshot(city: sourceCity)) {
+            UserDefaults.standard.set(data, forKey: Self.sourceSnapshotKey)
+        }
+    }
+
+    private func saveTargetSnapshots() {
+        let snapshots = targetCities.map(ConverterCitySnapshot.init)
+        if let data = try? JSONEncoder().encode(snapshots) {
+            UserDefaults.standard.set(data, forKey: Self.targetSnapshotsKey)
         }
     }
 
@@ -181,6 +249,8 @@ final class ConverterViewModel: ObservableObject {
         if let date {
             sourceDate = date
         }
+        saveSourceSnapshot()
+        saveTargetSnapshots()
         refreshFormat()
     }
 
@@ -232,6 +302,7 @@ final class ConverterViewModel: ObservableObject {
             return
         }
         targetCities.append(city)
+        saveTargetSnapshots()
     }
 
     func setSource(_ city: CityModel) {
@@ -240,10 +311,13 @@ final class ConverterViewModel: ObservableObject {
         targetCities.removeAll {
             CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId) == cityKey
         }
+        saveSourceSnapshot()
+        saveTargetSnapshots()
     }
 
     func removeTarget(id: UUID) {
         targetCities.removeAll { $0.id == id }
+        saveTargetSnapshots()
     }
 
     func addCity(cityName: String, cityEn: String, timezoneId: String, country: String = "") {
@@ -258,12 +332,6 @@ final class ConverterViewModel: ObservableObject {
                 )
             }
             availableCities = try cityService.getAllCities()
-            if sourceCity == nil {
-                sourceCity = availableCities.first
-            }
-            if targetCities.isEmpty && availableCities.count > 1 {
-                targetCities = Array(availableCities.dropFirst().prefix(3))
-            }
         } catch {
             errorMessage = String(localized: "converter.add.city.failed")
         }

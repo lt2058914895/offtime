@@ -11,7 +11,6 @@ struct ConverterView: View {
     @State private var showTimePicker = false
     @State private var showCitySelector = false
     @State private var isSelectingSource = true
-    @State private var lastSeenCitiesRevision: Int = 0
     @ScaledMetric(relativeTo: .body) private var flowIndicatorSize: CGFloat = 44
     private let embedsNavigationStack: Bool
     private let prefill: ConverterPrefill?
@@ -25,6 +24,28 @@ struct ConverterView: View {
     private var isIPad: Bool { horizontalSizeClass == .regular }
     private var isLandscape: Bool { verticalSizeClass == .compact }
     private var usesHorizontalLayout: Bool { isIPad || isLandscape }
+
+    private var currentCityModel: CityModel? {
+        guard let timezoneId = appEnvironment.settings.currentCityTimezoneId else {
+            return nil
+        }
+        let currentCityEn = appEnvironment.settings.currentCityEn
+        let matchedCity = viewModel.availableCities.first { city in
+            guard city.timezoneId == timezoneId else { return false }
+            guard let currentCityEn else { return true }
+            return CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
+                == CityIdentity.key(cityEn: currentCityEn, timezoneId: timezoneId)
+        }
+        if let matchedCity {
+            return matchedCity
+        }
+        let names = CityService.matchCity(for: timezoneId)
+        return CityModel(
+            cityName: appEnvironment.settings.currentCityName ?? names.name,
+            cityEn: appEnvironment.settings.currentCityEn ?? names.en,
+            timezoneId: timezoneId
+        )
+    }
 
     var body: some View {
         if embedsNavigationStack {
@@ -63,18 +84,16 @@ struct ConverterView: View {
         }
         .onAppear {
             viewModel.use24Hour = appEnvironment.settings.use24Hour
-            viewModel.refreshFormat()
-            if appEnvironment.citiesRevision != lastSeenCitiesRevision {
-                lastSeenCitiesRevision = appEnvironment.citiesRevision
-                viewModel.loadCities()
-            }
+            viewModel.restoreSavedCities(currentCity: currentCityModel)
             applyPrefillIfNeeded()
+        }
+        .onChange(of: appEnvironment.settings.currentCityTimezoneId) { _, _ in
+            viewModel.applyDefaultSource(currentCity: currentCityModel)
         }
         .onChange(of: prefill) { _, _ in
             applyPrefillIfNeeded()
         }
         .onChange(of: appEnvironment.citiesRevision) { _, newValue in
-            lastSeenCitiesRevision = newValue
             viewModel.loadCities()
         }
         .toast(message: $viewModel.errorMessage)
