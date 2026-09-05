@@ -123,9 +123,6 @@ struct ConverterView: View {
             NavigationStack {
                 ConverterTimePickerSheet(
                     sourceDate: $viewModel.sourceDate,
-                    onSetCurrentTime: {
-                        viewModel.sourceDate = viewModel.currentSourceCityDate()
-                    },
                     onDone: {
                         showTimePicker = false
                     }
@@ -531,7 +528,6 @@ private struct CardView<Content: View>: View {
 
 private struct ConverterTimePickerSheet: View {
     @Binding var sourceDate: Date
-    let onSetCurrentTime: () -> Void
     let onDone: () -> Void
 
     private var selectedHour: Int {
@@ -580,11 +576,6 @@ private struct ConverterTimePickerSheet: View {
         .navigationTitle(String(localized: "converter.select.time"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(String(localized: "converter.current.time")) {
-                    onSetCurrentTime()
-                }
-            }
             ToolbarItem(placement: .confirmationAction) {
                 Button(String(localized: "common.done")) {
                     onDone()
