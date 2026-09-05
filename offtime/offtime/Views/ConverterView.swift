@@ -11,102 +11,98 @@ struct ConverterView: View {
     @State private var showTimePicker = false
     @State private var showCitySelector = false
     @State private var isSelectingSource = true
-    /// 上次见到的城市数据版本号，用于切回 Tab 时判断是否需要静默刷新
     @State private var lastSeenCitiesRevision: Int = 0
-    /// swap 按钮尺寸随 body Dynamic Type 同步缩放，避免图标在大字下撑出固定圆形
     @ScaledMetric(relativeTo: .body) private var swapButtonSize: CGFloat = 44
     private let embedsNavigationStack: Bool
-    /// 外部跳转预填（如会议页推荐的窗口），每次 id 变化都会重新应用一次
     private let prefill: ConverterPrefill?
     @State private var appliedPrefillID: UUID?
+
+    private let durationOptions = [0, 15, 30, 45, 60, 90, 120]
 
     init(embedsNavigationStack: Bool = true, prefill: ConverterPrefill? = nil) {
         self.embedsNavigationStack = embedsNavigationStack
         self.prefill = prefill
     }
-    
+
     private var isIPad: Bool { horizontalSizeClass == .regular }
-    /// iPhone 横屏（compact vertical）：改走横向布局，充分利用宽度，避免两卡片纵向堆叠
     private var isLandscape: Bool { verticalSizeClass == .compact }
     private var usesHorizontalLayout: Bool { isIPad || isLandscape }
-    
+
     var body: some View {
         if embedsNavigationStack {
-        NavigationStack(path: $path) {
-            converterContent
-        }
+            NavigationStack(path: $path) {
+                converterContent
+            }
         } else {
             converterContent
         }
     }
 
     private var converterContent: some View {
-            ScrollView {
-                if usesHorizontalLayout {
-                    // iPad 或 iPhone 横屏：源/目标卡片横向并排，充分利用宽度
-                    HStack(alignment: .center, spacing: 16) {
-                        sourceCard
-                        swapButton
-                        targetCard
-                    }
-                    .padding(.horizontal, isIPad ? 24 : 16)
-                    .padding(.vertical, 16)
-                } else {
-                    // iPhone 竖屏：纵向排列
-                    VStack(spacing: 16) {
-                        sourceCard
-                        swapButton
-                        targetCard
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 20)
+        ScrollView {
+            VStack(spacing: 16) {
+                sourceCard
+                swapButton
+                targetCard
+            }
+            .padding(.horizontal, usesHorizontalLayout && isIPad ? 24 : 16)
+            .padding(.vertical, usesHorizontalLayout ? 16 : 20)
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(String(localized: "tab.converter"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                ShareLink(item: conversionShareText) {
+                    Image(systemName: "square.and.arrow.up")
                 }
+                .accessibilityLabel(String(localized: "converter.share.result"))
+                .disabled(viewModel.sourceCity == nil || viewModel.results.isEmpty)
             }
-            .background(Color(.systemGroupedBackground))
-            .navigationTitle(String(localized: "tab.converter"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    ShareLink(item: conversionShareText) {
-                        Image(systemName: "square.and.arrow.up")
-                    }
-                    .accessibilityLabel(String(localized: "converter.share.result"))
-                    .disabled(viewModel.sourceCity == nil || viewModel.targetCity == nil)
-                }
-            }
-            .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
-                viewModel.use24Hour = newValue
-            }
-            .onAppear {
-                viewModel.use24Hour = appEnvironment.settings.use24Hour
-                viewModel.refreshFormat()
-                if appEnvironment.citiesRevision != lastSeenCitiesRevision {
-                    lastSeenCitiesRevision = appEnvironment.citiesRevision
-                    viewModel.loadCities()
-                }
-                applyPrefillIfNeeded()
-            }
-            .onChange(of: prefill) { _, _ in
-                applyPrefillIfNeeded()
-            }
-            .onChange(of: appEnvironment.citiesRevision) { _, newValue in
-                lastSeenCitiesRevision = newValue
+        }
+        .onChange(of: appEnvironment.settings.use24Hour) { _, newValue in
+            viewModel.use24Hour = newValue
+        }
+        .onAppear {
+            viewModel.use24Hour = appEnvironment.settings.use24Hour
+            viewModel.refreshFormat()
+            if appEnvironment.citiesRevision != lastSeenCitiesRevision {
+                lastSeenCitiesRevision = appEnvironment.citiesRevision
                 viewModel.loadCities()
             }
-            .toast(message: $viewModel.errorMessage)
+            applyPrefillIfNeeded()
+        }
+        .onChange(of: prefill) { _, _ in
+            applyPrefillIfNeeded()
+        }
+        .onChange(of: appEnvironment.citiesRevision) { _, newValue in
+            lastSeenCitiesRevision = newValue
+            viewModel.loadCities()
+        }
+        .toast(message: $viewModel.errorMessage)
     }
-    
+
     private var sourceCard: some View {
         CardView {
             VStack(spacing: 12) {
-                cityButton(title: String(localized: "converter.source.city"), city: viewModel.sourceCity, action: {
-                    isSelectingSource = true
-                    showCitySelector = true
-                })
-                
+                cityButton(
+                    title: String(localized: "converter.source.city"),
+                    city: viewModel.sourceCity,
+                    action: {
+                        isSelectingSource = true
+                        showCitySelector = true
+                    }
+                )
+
                 Divider()
-                
+
+                Divider()
+
                 datePickerRow
+
+                Divider()
+
+                durationRow
             }
         }
         .sheet(isPresented: $showDatePicker) {
@@ -119,7 +115,7 @@ struct ConverterView: View {
                     )
                     .datePickerStyle(.graphical)
                     .labelsHidden()
-                    
+
                     Spacer()
                 }
                 .padding()
@@ -143,7 +139,7 @@ struct ConverterView: View {
                     )
                     .datePickerStyle(.wheel)
                     .labelsHidden()
-                    
+
                     Spacer()
                 }
                 .padding()
@@ -167,16 +163,37 @@ struct ConverterView: View {
                         country: city.country
                     )
                     if isSelectingSource {
-                        viewModel.sourceCity = model
+                        viewModel.setSource(model)
                     } else {
-                        viewModel.targetCity = model
+                        viewModel.addTarget(model)
                     }
                     showCitySelector = false
                 })
             }
         }
     }
-    
+
+    private var durationRow: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "hourglass")
+                .font(.callout)
+                .foregroundColor(.secondary)
+            Text(String(localized: "converter.duration"))
+                .font(.subheadline.weight(.medium))
+            Spacer()
+            Picker(
+                String(localized: "converter.duration"),
+                selection: $viewModel.durationMinutes
+            ) {
+                ForEach(durationOptions, id: \.self) { minutes in
+                    Text(String(format: String(localized: "meeting.settings.duration.format"), minutes))
+                        .tag(minutes)
+                }
+            }
+            .pickerStyle(.menu)
+        }
+    }
+
     private var swapButton: some View {
         Button(action: {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
@@ -186,122 +203,128 @@ struct ConverterView: View {
             Image(systemName: usesHorizontalLayout ? "arrow.left.arrow.right" : "arrow.up.arrow.down")
                 .font(.body.weight(.semibold))
                 .foregroundColor(Color(.systemGray2))
-                // 尺寸随 body Dynamic Type 同步缩放，图标与圆形始终保持比例，不再裁切
                 .frame(width: swapButtonSize, height: swapButtonSize)
                 .background(Color(.secondarySystemGroupedBackground))
                 .clipShape(Circle())
                 .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
-                .contentShape(Circle()) // 确保整个圆形区域可点
+                .contentShape(Circle())
         }
-        // 封顶到 accessibility3：图标按钮视觉无需无限放大，VoiceOver 由 accessibilityLabel 兜底
         .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .scaleEffect(viewModel.isSwapping ? 0.9 : 1.0)
         .accessibilityLabel(String(localized: "accessibility.swap.cities"))
+        .disabled(viewModel.targetCities.isEmpty)
+        .opacity(viewModel.targetCities.isEmpty ? 0.5 : 1)
     }
-    
+
     private var targetCard: some View {
         CardView {
             VStack(spacing: 12) {
-                cityButton(title: String(localized: "converter.target.city"), city: viewModel.targetCity, action: {
-                    isSelectingSource = false
-                    showCitySelector = true
-                })
-                
-                Divider()
-                
-                resultDateTimeRow
-            }
-        }
-    }
-    
-    /// 时差颜色：与时钟列表一致（0h 灰、+ 绿、- 红）
-    private var timeDifferenceColor: Color {
-        let offset = viewModel.timeDifference
-        if offset == "0h" { return .secondary }
-        return offset.hasPrefix("+") ? .green : .red
-    }
+                HStack {
+                    Text(String(localized: "converter.target.city"))
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color(.systemGray2))
+                    Spacer()
+                    Button {
+                        isSelectingSource = false
+                        showCitySelector = true
+                    } label: {
+                        Label(String(localized: "converter.add.target"), systemImage: "plus.circle.fill")
+                            .font(.subheadline.weight(.semibold))
+                    }
+                }
 
-    private var resultDateTimeRow: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(String(localized: "converter.datetime"))
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(Color(.systemGray3))
-            
-            // 大字 Dynamic Type 下 HStack 放不下时自动回退 VStack，避免溢出
-            ViewThatFits(in: .horizontal) {
-                HStack(alignment: .center) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "calendar")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text(viewModel.resultDate)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(Color(.label))
-                        if let crossDay = viewModel.crossDay {
-                            CrossDayBadge(label: crossDay)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 6) {
-                        Image(systemName: "clock")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text(viewModel.resultTime)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(Color(.label))
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 4) {
-                        Image(systemName: "globe")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        if !viewModel.timeDifference.isEmpty {
-                            Text(viewModel.timeDifference)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(timeDifferenceColor)
+                if viewModel.results.isEmpty {
+                    Text(String(localized: "converter.select.city.hint"))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 12)
+                } else {
+                    ForEach(viewModel.results) { result in
+                        targetResultRow(result)
+                        if result.id != viewModel.results.last?.id {
+                            Divider()
                         }
                     }
                 }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "calendar")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text(viewModel.resultDate)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(Color(.label))
-                        if let crossDay = viewModel.crossDay {
-                            CrossDayBadge(label: crossDay)
-                        }
-                    }
-                    HStack(spacing: 6) {
-                        Image(systemName: "clock")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        Text(viewModel.resultTime)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(Color(.label))
-                    }
-                    HStack(spacing: 4) {
-                        Image(systemName: "globe")
-                            .font(.callout)
-                            .foregroundColor(Color(.secondaryLabel))
-                        if !viewModel.timeDifference.isEmpty {
-                            Text(viewModel.timeDifference)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(timeDifferenceColor)
-                        }
-                    }
+            }
+        }
+    }
+
+    private func targetResultRow(_ result: ConvertedTimeResult) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn))
+                    .font(.headline)
+                    .lineLimit(2)
+                Spacer()
+                HStack(spacing: 4) {
+                    Image(systemName: "globe")
+                        .font(.caption)
+                    Text(result.differenceText)
+                        .font(.caption.weight(.semibold))
+                        .monospacedDigit()
+                        .foregroundColor(timeDifferenceColor(result.differenceText))
+                }
+                Button {
+                    viewModel.removeTarget(id: result.id)
+                } label: {
+                    Image(systemName: "minus.circle")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+                .accessibilityLabel(String(localized: "converter.remove.target"))
+            }
+
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .font(.callout)
+                    .foregroundColor(Color(.secondaryLabel))
+                Text(result.dateText)
+                    .font(.subheadline.weight(.semibold))
+                    .monospacedDigit()
+                if let endDateText = result.endDateText {
+                    Image(systemName: "arrow.right")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text(endDateText)
+                        .font(.subheadline.weight(.semibold))
+                        .monospacedDigit()
+                }
+                if let crossDay = result.crossDayText {
+                    CrossDayBadge(label: crossDay)
+                }
+            }
+
+            HStack(spacing: 6) {
+                Image(systemName: "clock")
+                    .font(.callout)
+                    .foregroundColor(Color(.secondaryLabel))
+                Text(result.timeText)
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                if let endTime = result.endTimeText {
+                    Text("– \(endTime)")
+                        .font(.title3.weight(.semibold))
+                        .monospacedDigit()
+                }
+                Spacer()
+                if let duration = result.durationText {
+                    Text(duration)
+                        .font(.caption.weight(.medium))
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(Color.accentColor.opacity(0.12))
+                        .clipShape(Capsule())
                 }
             }
         }
         .accessibilityElement(children: .combine)
+    }
+
+    private func timeDifferenceColor(_ offset: String) -> Color {
+        if offset == "0h" { return .secondary }
+        return offset.hasPrefix("+") ? .green : .red
     }
 
     private func cityButton(title: String, city: CityModel?, action: @escaping () -> Void) -> some View {
@@ -310,7 +333,7 @@ struct ConverterView: View {
                 .font(.body)
                 .fontWeight(.semibold)
                 .foregroundColor(Color(.systemGray2))
-            
+
             Button(action: action) {
                 HStack(alignment: .center) {
                     if let city {
@@ -332,9 +355,8 @@ struct ConverterView: View {
                             .font(.headline)
                             .foregroundColor(Color(.systemGray4))
                     }
-                    
+
                     Spacer()
-                    
                     Image(systemName: "chevron.right")
                         .font(.body)
                         .foregroundColor(Color(.systemGray4))
@@ -346,42 +368,58 @@ struct ConverterView: View {
             }
         }
     }
-    
+
     private static let sourceDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
         return formatter
     }()
-    
+
     private static let sourceTimeFormatter24: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter
     }()
-    
+
     private static let sourceTimeFormatter12: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
-        // amSymbol/pmSymbol 走系统 locale 自动本地化（午前/午後、오전/오후 等）
         return formatter
     }()
-    
+
     private var sourceTimeFormatter: DateFormatter {
         viewModel.use24Hour ? Self.sourceTimeFormatter24 : Self.sourceTimeFormatter12
     }
-    
-    /// 分享文案：「源城市 源日期 源时间 = 目标城市 目标日期 目标时间」
+
     private var conversionShareText: String {
-        let srcName = viewModel.sourceCity.map { CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn) } ?? ""
-        let srcDate = Self.sourceDateFormatter.string(from: viewModel.sourceDate)
-        let srcTime = sourceTimeFormatter.string(from: viewModel.sourceDate)
-        let tgtName = viewModel.targetCity.map { CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn) } ?? ""
-        return "\(srcName) \(srcDate) \(srcTime) = \(tgtName) \(viewModel.resultDate) \(viewModel.resultTime)"
+        guard let sourceCity = viewModel.sourceCity else { return "" }
+        let sourceName = CityDisplay.primaryName(cityName: sourceCity.cityName, cityEn: sourceCity.cityEn)
+        let sourceDate = Self.sourceDateFormatter.string(from: viewModel.sourceDate)
+        let sourceTime = sourceTimeFormatter.string(from: viewModel.sourceDate)
+
+        var lines = [String(localized: "converter.share.title")]
+        lines.append("\(sourceName) \(sourceDate) \(sourceTime)")
+
+        for result in viewModel.results {
+            let name = CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn)
+            var line = "• \(name) \(result.dateText) \(result.timeText)"
+            if let endTime = result.endTimeText {
+                if let endDateText = result.endDateText {
+                    line += "–\(endDateText) \(endTime)"
+                } else {
+                    line += "–\(endTime)"
+                }
+            }
+            if let crossDay = result.crossDayText {
+                line += " (\(crossDay))"
+            }
+            lines.append(line)
+        }
+        return lines.joined(separator: "\n")
     }
-    
+
     private var datePickerRow: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // 表头：窄横屏 / 大字下标签与「当前时间」按钮放不下时自动回退纵向
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .center) {
                     datePickerLabel
@@ -393,8 +431,7 @@ struct ConverterView: View {
                     currentTimeButton
                 }
             }
-            
-            // 大字 Dynamic Type 或窄屏（横屏 SE 等）放不下并排时，自动回退纵向
+
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 12) {
                     dateButton
@@ -433,14 +470,13 @@ struct ConverterView: View {
         }
     }
 
-    /// 日期选择按钮（大字下文字允许缩放避免溢出）
     private var dateButton: some View {
         Button(action: { showDatePicker = true }) {
             HStack(spacing: 6) {
                 Image(systemName: "calendar")
                     .font(.callout)
                     .foregroundColor(Color(.secondaryLabel))
-                Text(ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
+                Text(Self.sourceDateFormatter.string(from: viewModel.sourceDate))
                     .font(.body.weight(.semibold))
                     .foregroundColor(Color(.label))
                     .lineLimit(1)
@@ -453,10 +489,9 @@ struct ConverterView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(String(localized: "converter.select.date") + ": " + ConverterView.sourceDateFormatter.string(from: viewModel.sourceDate))
+        .accessibilityLabel(String(localized: "converter.select.date") + ": " + Self.sourceDateFormatter.string(from: viewModel.sourceDate))
     }
 
-    /// 时间选择按钮（大字下文字允许缩放避免溢出）
     private var timeButton: some View {
         Button(action: { showTimePicker = true }) {
             HStack(spacing: 6) {
@@ -479,7 +514,6 @@ struct ConverterView: View {
         .accessibilityLabel(String(localized: "converter.select.time") + ": " + sourceTimeFormatter.string(from: viewModel.sourceDate))
     }
 
-    /// 仅当 prefill id 未应用过时执行，避免切回 Tab 时重复覆盖用户手选
     private func applyPrefillIfNeeded() {
         guard let prefill, appliedPrefillID != prefill.id else { return }
         appliedPrefillID = prefill.id
@@ -491,15 +525,13 @@ struct ConverterView: View {
     }
 }
 
-// MARK: - CardView
-
 private struct CardView<Content: View>: View {
     let content: Content
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     var body: some View {
         content
             .padding(16)

@@ -22,38 +22,55 @@ struct ConverterPrefill: Equatable, Hashable {
     }
 }
 
+struct ConvertedTimeResult: Identifiable, Equatable {
+    let id: UUID
+    let cityName: String
+    let cityEn: String
+    let dateText: String
+    let timeText: String
+    let endTimeText: String?
+    let endDateText: String?
+    let durationText: String?
+    let differenceText: String
+    let crossDayText: String?
+}
+
 @MainActor
 final class ConverterViewModel: ObservableObject {
     @Published var sourceCity: CityModel?
-    @Published var targetCity: CityModel?
+    @Published var targetCities: [CityModel] = []
     @Published var sourceDate: Date = Date()
-    
-    @Published var resultTime: String = ""
-    @Published var resultDate: String = ""
-    @Published var timeDifference: String = ""
-    @Published var crossDay: String?
-    
+
+    @Published var results: [ConvertedTimeResult] = []
+    @Published var durationMinutes: Int = 60
     @Published var viewState: ViewState = .idle
     @Published var errorMessage: String?
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
-    
-    private let timezoneService = TimezoneService.shared
-    private let cityService = CityService.shared
-    
     @Published var availableCities: [CityModel] = []
     @Published var isSwapping: Bool = false
-    
-    init() {
+
+    private let timezoneService = TimezoneService.shared
+    private let cityService: CityService
+    private var cancellables = Set<AnyCancellable>()
+
+    init(cityService: CityService? = nil) {
+        self.cityService = cityService ?? CityService.shared
         loadCities()
-        
+
         $sourceCity
-            .combineLatest($targetCity, $sourceDate)
+            .combineLatest($targetCities, $sourceDate, $durationMinutes)
             .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
-            .sink { [weak self] source, target, date in
-                self?.convertTime(source: source, target: target, date: date)
+            .sink { [weak self] inputs in
+                let (source, targets, date, duration) = inputs
+                self?.convert(
+                    source: source,
+                    targets: targets,
+                    date: date,
+                    durationMinutes: duration
+                )
             }
             .store(in: &cancellables)
-        
+
         $use24Hour
             .dropFirst()
             .sink { [weak self] _ in
@@ -61,96 +78,125 @@ final class ConverterViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
-    private var cancellables = Set<AnyCancellable>()
-    
+
     func loadCities() {
         do {
             let cities = try cityService.getAllCities()
             availableCities = cities
-            
+
             if sourceCity == nil && !cities.isEmpty {
                 sourceCity = cities.first
             }
-            if targetCity == nil && cities.count > 1 {
-                targetCity = cities[1]
+            if targetCities.isEmpty && cities.count > 1 {
+                targetCities = Array(cities.dropFirst().prefix(3))
             }
         } catch {
             errorMessage = String(localized: "converter.load.cities.failed")
         }
     }
-    
+
     func refreshFormat() {
-        convertTime(source: sourceCity, target: targetCity, date: sourceDate)
+        convert(
+            source: sourceCity,
+            targets: targetCities,
+            date: sourceDate,
+            durationMinutes: durationMinutes
+        )
     }
 
     func isCityDaytime(_ city: CityModel?) -> Bool {
         guard let city else { return true }
         return timezoneService.isDaytime(timezoneId: city.timezoneId, date: Date())
     }
-    
-    private func convertTime(source: CityModel?, target: CityModel?, date: Date) {
-        guard let source = source, let target = target else {
-            resultTime = String(localized: "converter.select.city.hint")
-            resultDate = ""
-            timeDifference = ""
-            crossDay = nil
+
+    private func convert(
+        source: CityModel?,
+        targets: [CityModel],
+        date: Date,
+        durationMinutes: Int
+    ) {
+        guard let source, !targets.isEmpty else {
+            results = []
             return
         }
-        
-        guard let sourceTimezone = TimeZone(identifier: source.timezoneId),
-              TimeZone(identifier: target.timezoneId) != nil else {
-            resultTime = String(localized: "converter.timezone.parse.failed")
-            resultDate = ""
-            timeDifference = ""
-            crossDay = nil
+
+        guard let sourceTimezone = TimeZone(identifier: source.timezoneId) else {
+            results = []
+            errorMessage = String(localized: "converter.timezone.parse.failed")
             return
         }
-        
-        // 创建源时区日历，用于解释用户选择的时间组件
+
         var sourceCalendar = Calendar.current
         sourceCalendar.timeZone = sourceTimezone
-        
-        // 获取用户选择的时间组件（年、月、日、时、分）
-        // 注意：这里用源时区日历获取组件，但组件值是从date中提取的，date是DatePicker按本地时区解释的
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        
-        // 关键：用源时区日历将时间组件重新解释为绝对时间
-        // 这表示"用户选择的17:42是源时区（上海）的17:42"
+        let components = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: date
+        )
+
         guard let absoluteDate = sourceCalendar.date(from: components) else {
-            resultTime = String(localized: "converter.convert.failed")
-            resultDate = ""
-            timeDifference = ""
-            crossDay = nil
+            results = []
+            errorMessage = String(localized: "converter.convert.failed")
             return
         }
-        
-        // 用目标时区格式化结果
-        if use24Hour {
-            resultTime = timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate) ?? String(localized: "clock.time.parse.failed")
-        } else {
-            resultTime = timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate) ?? String(localized: "clock.time.parse.failed")
+
+        let endDate = sourceCalendar.date(
+            byAdding: .minute,
+            value: max(0, durationMinutes),
+            to: absoluteDate
+        ) ?? absoluteDate
+
+        results = targets.compactMap { target in
+            let difference = timezoneService.getTimeDifferenceBetween(
+                sourceTimezoneId: source.timezoneId,
+                targetTimezoneId: target.timezoneId,
+                date: absoluteDate
+            )
+            let timeText = use24Hour
+                ? timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: absoluteDate)
+                : timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: absoluteDate)
+            let endTimeText = use24Hour
+                ? timezoneService.getLocalTime24(timezoneId: target.timezoneId, date: endDate)
+                : timezoneService.getLocalTime12(timezoneId: target.timezoneId, date: endDate)
+            var targetCalendar = Calendar.current
+            targetCalendar.timeZone = TimeZone(identifier: target.timezoneId) ?? .current
+            let startDateComponents = targetCalendar.dateComponents([.year, .month, .day], from: absoluteDate)
+            let endDateComponents = targetCalendar.dateComponents([.year, .month, .day], from: endDate)
+            let crossesMidnight = startDateComponents != endDateComponents
+            let endDateText = durationMinutes > 0 && crossesMidnight
+                ? timezoneService.getLocalDate(timezoneId: target.timezoneId, date: endDate)
+                : nil
+
+            guard let timeText else { return nil }
+            return ConvertedTimeResult(
+                id: target.id,
+                cityName: target.cityName,
+                cityEn: target.cityEn,
+                dateText: timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? "",
+                timeText: timeText,
+                endTimeText: durationMinutes > 0 ? endTimeText : nil,
+                endDateText: endDateText,
+                durationText: durationMinutes > 0
+                    ? String(format: String(localized: "meeting.settings.duration.format"), durationMinutes)
+                    : nil,
+                differenceText: difference.offset,
+                crossDayText: difference.crossDay
+            )
         }
-        resultDate = timezoneService.getLocalDate(timezoneId: target.timezoneId, date: absoluteDate) ?? String(localized: "clock.date.parse.failed")
-        
-        // 计算源时区和目标时区之间的时差（复用 TimezoneService）
-        let diff = timezoneService.getTimeDifferenceBetween(
-            sourceTimezoneId: source.timezoneId,
-            targetTimezoneId: target.timezoneId,
-            date: absoluteDate
-        )
-        timeDifference = diff.offset
-        crossDay = diff.crossDay
-        
         viewState = .idle
     }
-    
+
     /// 应用外部跳转预填（如会议页推荐窗口）：按时区匹配已有城市，找不到时临时构建。
     func applyPrefill(sourceTimezoneId: String, targetTimezoneId: String, date: Date?) {
         let source = findOrMakeCity(timezoneId: sourceTimezoneId)
         let target = findOrMakeCity(timezoneId: targetTimezoneId)
         sourceCity = source
-        targetCity = target
+        targetCities = CityIdentity.key(
+            cityEn: source.cityEn,
+            timezoneId: source.timezoneId
+        ) == CityIdentity.key(
+            cityEn: target.cityEn,
+            timezoneId: target.timezoneId
+        ) ? [] : [target]
         if let date {
             sourceDate = date
         }
@@ -167,48 +213,85 @@ final class ConverterViewModel: ObservableObject {
 
     func swapCities() {
         isSwapping = true
-        let temp = sourceCity
-        sourceCity = targetCity
-        targetCity = temp
+        guard let firstTarget = targetCities.first else {
+            isSwapping = false
+            return
+        }
+
+        let oldSource = sourceCity
+        sourceCity = firstTarget
+        targetCities = [oldSource].compactMap { $0 } + Array(targetCities.dropFirst())
         Haptics.medium()
         Task {
-            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3秒
+            try? await Task.sleep(nanoseconds: 300_000_000)
             guard !Task.isCancelled else { return }
             await MainActor.run {
                 self.isSwapping = false
             }
         }
     }
-    
+
     func dismissError() {
         errorMessage = nil
     }
-    
+
     func currentSourceCityDate() -> Date {
-        guard let sourceCity = sourceCity,
+        guard let sourceCity,
               let sourceTimezone = TimeZone(identifier: sourceCity.timezoneId) else {
             return Date()
         }
         var sourceCalendar = Calendar.current
         sourceCalendar.timeZone = sourceTimezone
-        let components = sourceCalendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+        let components = sourceCalendar.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: Date()
+        )
         return Calendar.current.date(from: components) ?? Date()
     }
-    
+
+    func addTarget(_ city: CityModel) {
+        let cityKey = CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
+        let sourceKey = sourceCity.map {
+            CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId)
+        }
+        guard cityKey != sourceKey,
+              !targetCities.contains(where: {
+                  CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId) == cityKey
+              }) else {
+            return
+        }
+        targetCities.append(city)
+    }
+
+    func setSource(_ city: CityModel) {
+        let cityKey = CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
+        sourceCity = city
+        targetCities.removeAll {
+            CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId) == cityKey
+        }
+    }
+
+    func removeTarget(id: UUID) {
+        targetCities.removeAll { $0.id == id }
+    }
+
     func addCity(cityName: String, cityEn: String, timezoneId: String, country: String = "") {
         do {
             let exists = try cityService.hasCity(cityEn: cityEn, timezoneId: timezoneId)
             if !exists {
-                try cityService.addCity(cityName: cityName, cityEn: cityEn, timezoneId: timezoneId, country: country)
+                try cityService.addCity(
+                    cityName: cityName,
+                    cityEn: cityEn,
+                    timezoneId: timezoneId,
+                    country: country
+                )
             }
-            // 重新加载城市列表
-            let cities = try cityService.getAllCities()
-            availableCities = cities
-            if sourceCity == nil && !cities.isEmpty {
-                sourceCity = cities.first
+            availableCities = try cityService.getAllCities()
+            if sourceCity == nil {
+                sourceCity = availableCities.first
             }
-            if targetCity == nil && cities.count > 1 {
-                targetCity = cities[1]
+            if targetCities.isEmpty && availableCities.count > 1 {
+                targetCities = Array(availableCities.dropFirst().prefix(3))
             }
         } catch {
             errorMessage = String(localized: "converter.add.city.failed")
