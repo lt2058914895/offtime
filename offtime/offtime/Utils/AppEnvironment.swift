@@ -19,28 +19,56 @@ final class AppEnvironment: ObservableObject {
 
     private let logger = Logger(subsystem: "lt.offtime", category: "AppEnvironment")
     private var minuteTimer: Timer?
+    private let backupService = PersistentStoreBackupService()
 
     init() {
-        let schema = Schema([CityModel.self, MeetingModel.self, ReminderModel.self])
+        let schema = Schema(versionedSchema: AppStoreSchemaV1.self)
+        let storeURL = backupService.storeURL
         do {
-            let config = ModelConfiguration(isStoredInMemoryOnly: false)
-            modelContainer = try ModelContainer(for: schema, configurations: [config])
+            _ = try backupService.createBackup(for: storeURL)
         } catch {
-            // Schema 变更导致旧存储不兼容，删除旧存储文件后重建（一次性数据丢失）
-            logger.error("SwiftData ModelContainer 创建失败，尝试删除旧存储: \(error.localizedDescription)")
-            if let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-                let storeURL = appSupport.appendingPathComponent("default.store")
-                try? FileManager.default.removeItem(at: storeURL)
-                try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("-wal"))
-                try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("-shm"))
-            }
+            logger.error("SwiftData 存储备份失败: \(error.localizedDescription)")
+        }
+
+        do {
+            let config = ModelConfiguration(schema: schema, url: storeURL)
+            modelContainer = try ModelContainer(
+                for: schema,
+                migrationPlan: AppStoreMigrationPlan.self,
+                configurations: [config]
+            )
+        } catch {
+            logger.error("SwiftData 迁移失败，准备恢复备份: \(error.localizedDescription)")
+
             do {
-                let config = ModelConfiguration(isStoredInMemoryOnly: false)
-                modelContainer = try ModelContainer(for: schema, configurations: [config])
+                guard let backup = backupService.latestBackup(for: storeURL) else {
+                    throw CocoaError(.fileNoSuchFile)
+                }
+                try backupService.restore(backup, to: storeURL)
+                let config = ModelConfiguration(schema: schema, url: storeURL)
+                modelContainer = try ModelContainer(
+                    for: schema,
+                    migrationPlan: AppStoreMigrationPlan.self,
+                    configurations: [config]
+                )
             } catch {
-                // 重建仍失败，用内存容器兜底避免崩溃
-                logger.error("SwiftData 重建仍失败，回退内存模式: \(error.localizedDescription)")
-                modelContainer = try! ModelContainer(for: schema, configurations: [ModelConfiguration(isStoredInMemoryOnly: true)])
+                logger.error("SwiftData 恢复备份后仍失败，隔离坏库: \(error.localizedDescription)")
+                _ = try? backupService.quarantineCurrentStore(at: storeURL)
+
+                do {
+                    let config = ModelConfiguration(schema: schema, url: storeURL)
+                    modelContainer = try ModelContainer(
+                        for: schema,
+                        migrationPlan: AppStoreMigrationPlan.self,
+                        configurations: [config]
+                    )
+                } catch {
+                    logger.error("SwiftData 新存储创建失败，回退内存模式: \(error.localizedDescription)")
+                    modelContainer = try! ModelContainer(
+                        for: schema,
+                        configurations: [ModelConfiguration(isStoredInMemoryOnly: true)]
+                    )
+                }
             }
         }
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
