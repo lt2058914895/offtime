@@ -54,13 +54,6 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.converter)
 
-            MeetingView(activeTab: $selectedTab)
-                .tabItem {
-                    Image(systemName: "person.2")
-                    Text(String(localized: "tab.meeting"))
-                }
-                .tag(AppTab.meeting)
-
             SettingsView()
                 .tabItem {
                     Image(systemName: "gear")

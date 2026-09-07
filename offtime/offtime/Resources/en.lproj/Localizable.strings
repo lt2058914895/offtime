@@ -189,7 +189,9 @@
 "settings.theme" = "Appearance";
 "settings.version" = "Version";
 "settings.tools" = "Tools";
-"settings.meetings" = "Meeting Slots & Reminders";
+"settings.meetings" = "Meeting Slot Recommendations";
+"settings.meeting.recommendation.title" = "Meeting Slot Recommendations";
+"settings.meeting.recommendation.subtitle" = "Find the best shared meeting time automatically";
 "reminder.list.title" = "Reminders";
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";

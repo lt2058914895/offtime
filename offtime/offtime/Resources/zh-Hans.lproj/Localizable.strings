@@ -189,7 +189,9 @@
 "settings.theme" = "外观主题";
 "settings.version" = "版本号";
 "settings.tools" = "工具";
-"settings.meetings" = "会议档期与提醒";
+"settings.meetings" = "会议档期推荐";
+"settings.meeting.recommendation.title" = "会议档期推荐";
+"settings.meeting.recommendation.subtitle" = "自动推荐全员都合适的开会时段";
 "reminder.list.title" = "提醒";
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";

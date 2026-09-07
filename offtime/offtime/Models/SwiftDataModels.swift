@@ -239,7 +239,6 @@ enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
 enum AppTab: Hashable {
     case clock
     case converter
-    case meeting
     case settings
 }
 
@@ -247,6 +246,7 @@ enum AppRoute: Hashable {
     case cityPicker
     case citySelector
     case supportPage
+    case meetingRecommendation
     case cityDetail(UUID)
     case reminderList
 }

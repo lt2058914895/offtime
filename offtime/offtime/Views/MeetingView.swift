@@ -3,7 +3,6 @@ import SwiftData
 
 /// 多时区会议规划：勾选城市 + 设置时长与会议日期 → 自动按各城市工作时间生成推荐档期 → 加入会议列表。
 struct MeetingView: View {
-    @Binding var activeTab: AppTab
     @StateObject private var viewModel = MeetingViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.modelContext) private var modelContext
@@ -15,6 +14,8 @@ struct MeetingView: View {
     @State private var conflictMeetingID: UUID?
     @State private var showMeetingRecords = false
     @State private var highlightedMeetingID: UUID?
+    @State private var isAppeared = false
+    var embedsNavigationStack: Bool = true
 
     private let timezoneService = TimezoneService.shared
 
@@ -22,10 +23,9 @@ struct MeetingView: View {
         appEnvironment.settings.use24Hour
     }
 
-    /// 会议页与时钟页共享同一套分钟时钟；两页均视为「活跃域」，
-    /// 由各自 onAppear/onChange 校正启停（start/stop 均幂等，无竞争）。
+    /// 页面可见且 App 在前台时刷新分钟级时间。
     private var shouldRunTimer: Bool {
-        scenePhase == .active && (activeTab == .clock || activeTab == .meeting)
+        scenePhase == .active && isAppeared
     }
 
     private func updateTimer() {
@@ -46,44 +46,42 @@ struct MeetingView: View {
         lastSeenCitiesRevision = appEnvironment.citiesRevision
     }
 
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    participantsCard
-                    settingsCard
-                    overlapCard
-                    slotsCard
-                }
-                .padding(16)
+    private var meetingContent: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                participantsCard
+                settingsCard
+                overlapCard
+                slotsCard
             }
-            .background(Color(.systemGroupedBackground))
-            .navigationTitle(String(localized: "tab.meeting"))
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                loadParticipants()
-                updateTimer()
-            }
-            .onChange(of: activeTab) { _, newValue in
-                updateTimer()
-                if newValue == .meeting {
-                    loadParticipants()
-                }
-            }
-            .onChange(of: scenePhase) { _, _ in
-                updateTimer()
-            }
-            .onChange(of: appEnvironment.citiesRevision) { _, newValue in
-                if lastSeenCitiesRevision != newValue {
-                    loadParticipants()
-                }
-            }
-            .onChange(of: appEnvironment.settings.currentCityTimezoneId) { _, _ in
+            .padding(16)
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(String(localized: "tab.meeting"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
+        .onAppear {
+            isAppeared = true
+            loadParticipants()
+            updateTimer()
+        }
+        .onDisappear {
+            isAppeared = false
+            updateTimer()
+        }
+        .onChange(of: scenePhase) { _, _ in
+            updateTimer()
+        }
+        .onChange(of: appEnvironment.citiesRevision) { _, newValue in
+            if lastSeenCitiesRevision != newValue {
                 loadParticipants()
             }
-            .onReceive(appEnvironment.$currentDate) { date in
-                viewModel.currentDate = date
-            }
+        }
+        .onChange(of: appEnvironment.settings.currentCityTimezoneId) { _, _ in
+            loadParticipants()
+        }
+        .onReceive(appEnvironment.$currentDate) { date in
+            viewModel.currentDate = date
         }
         .sheet(item: $selectedGroup) { group in
             SlotDetailSheet(
@@ -125,6 +123,16 @@ struct MeetingView: View {
             NavigationStack {
                 MeetingListView(highlightMeetingID: highlightedMeetingID)
             }
+        }
+    }
+
+    var body: some View {
+        if embedsNavigationStack {
+            NavigationStack {
+                meetingContent
+            }
+        } else {
+            meetingContent
         }
     }
 
@@ -847,6 +855,6 @@ private struct CardView<Content: View>: View {
 }
 
 #Preview {
-    MeetingView(activeTab: .constant(.meeting))
+    MeetingView()
         .environmentObject(AppEnvironment())
 }

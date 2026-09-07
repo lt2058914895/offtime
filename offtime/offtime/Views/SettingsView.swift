@@ -86,17 +86,24 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section(String(localized: "settings.meetings")) {
-                    NavigationLink {
-                        MeetingListView()
-                    } label: {
-                        Label(String(localized: "tab.meeting"), systemImage: "calendar.badge.clock")
-                    }
+                Section(String(localized: "reminder.list.title")) {
                     NavigationLink {
                         ReminderListView()
                     } label: {
                         Label(String(localized: "reminder.list.title"), systemImage: "bell.fill")
                     }
+                }
+
+                Section {
+                    Button {
+                        path.append(AppRoute.meetingRecommendation)
+                    } label: {
+                        MeetingRecommendationCard()
+                    }
+                    .buttonStyle(.plain)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparator(.hidden)
                 }
 
                 Section(String(localized: "settings.display")) {
@@ -178,6 +185,8 @@ struct SettingsView: View {
                 switch route {
                 case .supportPage:
                     SupportPageView()
+                case .meetingRecommendation:
+                    MeetingView(embedsNavigationStack: false)
                 default:
                     EmptyView()
                 }
@@ -266,6 +275,65 @@ struct SettingsView: View {
         } catch {
             viewModel.errorMessage = String(localized: "settings.export.failed")
         }
+    }
+}
+
+private struct MeetingRecommendationCard: View {
+    var body: some View {
+        HStack(spacing: 16) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.accentColor, Color.accentColor.opacity(0.68)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                Image(systemName: "calendar.badge.clock")
+                    .font(.title3.weight(.semibold))
+                    .foregroundColor(.white)
+            }
+            .frame(width: 52, height: 52)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(String(localized: "settings.meeting.recommendation.title"))
+                    .font(.title3.weight(.semibold))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                Text(String(localized: "settings.meeting.recommendation.subtitle"))
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 8)
+
+            Image(systemName: "chevron.right")
+                .font(.footnote.weight(.semibold))
+                .foregroundColor(.accentColor)
+                .frame(width: 28, height: 28)
+                .background(Color.accentColor.opacity(0.12))
+                .clipShape(Circle())
+
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 20)
+        .frame(maxWidth: .infinity, minHeight: 96, alignment: .leading)
+        .background(
+            LinearGradient(
+                colors: [Color.accentColor.opacity(0.12), Color.accentColor.opacity(0.04)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: RoundedRectangle(cornerRadius: 20)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
+        }
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 3)
     }
 }
 
