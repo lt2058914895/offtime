@@ -50,9 +50,8 @@ struct MeetingView: View {
     private var meetingContent: some View {
         ScrollView {
             VStack(spacing: 16) {
-                participantsCard
+                participantOverlapCard
                 settingsCard
-                overlapCard
                 slotsCard
             }
             .padding(16)
@@ -98,7 +97,7 @@ struct MeetingView: View {
             loadParticipants()
         }
         .onReceive(appEnvironment.$currentDate) { date in
-            viewModel.currentDate = date
+            viewModel.updateCurrentDate(date)
         }
         .sheet(item: $selectedGroup) { group in
             SlotDetailSheet(
@@ -179,25 +178,50 @@ struct MeetingView: View {
         return true
     }
 
-    // MARK: - 参与者卡片
+    // MARK: - 参与者与工作时段重叠卡片
 
-    private var participantsCard: some View {
+    private var participantOverlapCard: some View {
         CardView {
             VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(String(localized: "meeting.participants.title"))
                         .font(.headline)
-                    Text(String(localized: "meeting.participants.subtitle"))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                }
+                Text(String(localized: "meeting.participants.subtitle"))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                VStack(spacing: 8) {
+                    ForEach(viewModel.participants) { participant in
+                        participantChip(participant)
+                    }
                 }
 
-                VStack(spacing: 0) {
-                    ForEach(viewModel.participants) { participant in
-                        participantRow(participant)
-                        if participant.id != viewModel.participants.last?.id {
-                            Divider()
+                if viewModel.selectedParticipants.count > 1 {
+                    Divider()
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                            Text(String(localized: "meeting.overlap.all"))
+                                .font(.headline)
+                            Spacer(minLength: 8)
+                            overlapStatusLabel
                         }
+                        if viewModel.overlap.hourlyOverlap.contains(true) {
+                            Text(String(localized: "meeting.overlap.subtitle"))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text(String(localized: "meeting.overlap.subtitle.none"))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        HoursBar(
+                            hours: viewModel.overlap.hourlyOverlap,
+                            color: .green,
+                            markerHour: viewModel.overlap.currentLocalHour
+                        )
+                        hourScale
                     }
                 }
 
@@ -210,45 +234,82 @@ struct MeetingView: View {
         }
     }
 
-    private func participantRow(_ participant: MeetingParticipant) -> some View {
+    private func participantChip(_ participant: MeetingParticipant) -> some View {
         let isSelected = viewModel.selectedIDs.contains(participant.id)
         return Button {
             withAnimation(.snappy(duration: 0.2)) {
                 viewModel.toggleParticipant(participant)
             }
         } label: {
-            HStack(spacing: 12) {
+            HStack(alignment: .center, spacing: 8) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
+                    .font(.subheadline)
                     .foregroundStyle(isSelected ? Color.accentColor : Color(.systemGray3))
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 4) {
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .center, spacing: 6) {
                         Text(CityDisplay.primaryName(cityName: participant.cityName, cityEn: participant.cityEn))
-                            .font(.body.weight(.medium))
-                        if let secondary = CityDisplay.secondaryName(cityName: participant.cityName, cityEn: participant.cityEn) {
-                            Text(secondary)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
+                            .font(.subheadline.weight(.medium))
+                            .lineLimit(1)
+
                         if participant.isLocal {
                             Text(String(localized: "meeting.local.badge"))
                                 .font(.caption2.weight(.semibold))
-                                .padding(.horizontal, 6)
+                                .padding(.horizontal, 5)
                                 .padding(.vertical, 1)
                                 .background(Color.accentColor.opacity(0.15))
                                 .cornerRadius(4)
                         }
+
+                        Spacer(minLength: 0)
+
+                        dayNightBadge(for: participant)
                     }
-                    Text(currentTimeText(for: participant))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+
+                    HStack(alignment: .center, spacing: 8) {
+                        Text("\(String(localized: "meeting.work.hours")): \(workingHoursText(for: participant))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                            .monospacedDigit()
+                    }
                 }
-                Spacer()
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(10)
+            .background(isSelected ? Color.accentColor.opacity(0.10) : Color(.systemGray6))
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? Color.accentColor.opacity(0.35) : Color.clear, lineWidth: 1)
+            )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .padding(.vertical, 8)
+    }
+
+    private func dayNightBadge(for participant: MeetingParticipant) -> some View {
+        let isDaytime = isDaytime(for: participant)
+        return Text(currentTimeText(for: participant))
+            .font(.caption.weight(.semibold))
+            .monospacedDigit()
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(isDaytime ? Color(red: 110 / 255.0, green: 168 / 255.0, blue: 220 / 255.0) : Color(red: 23 / 255.0, green: 55 / 255.0, blue: 94 / 255.0))
+        .foregroundColor(.white)
+        .clipShape(Capsule())
+        .accessibilityLabel(String(localized: isDaytime ? "accessibility.daytime" : "accessibility.nighttime"))
+    }
+
+    private func isDaytime(for participant: MeetingParticipant) -> Bool {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: participant.timezoneId) ?? .current
+        let hour = calendar.component(.hour, from: viewModel.currentDate)
+        return hour >= 6 && hour < 18
+    }
+
+    private func workingHoursText(for participant: MeetingParticipant) -> String {
+        String(format: "%02d:00–%02d:00", participant.workStartHour, participant.workEndHour)
     }
 
     private func currentTimeText(for participant: MeetingParticipant) -> String {
@@ -463,65 +524,6 @@ struct MeetingView: View {
             .cornerRadius(6)
     }
 
-    // MARK: - 全天工作重叠卡片
-
-    private var overlapCard: some View {
-        CardView {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(String(localized: "meeting.overlap.title"))
-                        .font(.headline)
-                    Spacer(minLength: 8)
-                    if viewModel.selectedParticipants.count >= 2 {
-                        overlapStatusLabel
-                    }
-                }
-                Text(String(localized: "meeting.overlap.subtitle"))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                if viewModel.selectedParticipants.count < 2 {
-                    Text(String(localized: "meeting.overlap.hint"))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .padding(.vertical, 4)
-                } else {
-                    VStack(spacing: 8) {
-                        ForEach(viewModel.selectedParticipants) { participant in
-                            HStack(spacing: 10) {
-                                Text(CityDisplay.primaryName(cityName: participant.cityName, cityEn: participant.cityEn))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 76, alignment: .leading)
-                                    .lineLimit(1)
-                                HoursBar(
-                                    hours: viewModel.workingHours(for: participant),
-                                    color: .blue.opacity(0.75),
-                                    markerHour: nil
-                                )
-                            }
-                        }
-
-                        Divider()
-
-                        HStack(spacing: 10) {
-                            Text(String(localized: "meeting.overlap.all"))
-                                .font(.caption.weight(.semibold))
-                                .frame(width: 76, alignment: .leading)
-                            HoursBar(
-                                hours: viewModel.overlap.hourlyOverlap,
-                                color: .green,
-                                markerHour: viewModel.overlap.currentLocalHour
-                            )
-                        }
-
-                        hourScaleRow
-                    }
-                }
-            }
-        }
-    }
-
     private var overlapStatusLabel: some View {
         let overlap = viewModel.overlap
         if overlap.isCurrentlyOverlapping {
@@ -529,22 +531,14 @@ struct MeetingView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundColor(.green)
         }
-        if let next = viewModel.nextWindow {
-            return Text("\(String(localized: "meeting.overlap.next")) \(nextWindowText(next))")
+        if overlap.hourlyOverlap.contains(true) {
+            return Text(String(localized: "meeting.overlap.available"))
                 .font(.caption.weight(.semibold))
                 .foregroundColor(.secondary)
         }
         return Text(String(localized: "meeting.overlap.none"))
             .font(.caption.weight(.semibold))
             .foregroundColor(.secondary)
-    }
-
-    private var hourScaleRow: some View {
-        HStack(spacing: 10) {
-            Text("")
-                .frame(width: 76, alignment: .leading)
-            hourScale
-        }
     }
 
     /// 24 小时刻度：0/6/12/18 位于对应分段边界，24 贴右缘，与 HoursBar 的 24 个小段对齐
@@ -572,39 +566,11 @@ struct MeetingView: View {
         return timezoneService.getLocalTime12(timezoneId: viewModel.localTimezoneId, date: date) ?? ""
     }
 
-    /// 相对今天的日期前缀：今天为空；明日为「明日」；更远的日子显示具体日期。
-    private func dayPrefix(for date: Date) -> String {
-        guard let localTimezone = TimeZone(identifier: viewModel.localTimezoneId) else {
-            return ""
-        }
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = localTimezone
-        let todayStart = calendar.dateInterval(of: .day, for: viewModel.currentDate)?.start ?? viewModel.currentDate
-        let targetStart = calendar.dateInterval(of: .day, for: date)?.start ?? date
-        let dayDiff = calendar.dateComponents([.day], from: todayStart, to: targetStart).day ?? 0
-        switch dayDiff {
-        case ...0:
-            return ""
-        case 1:
-            return String(localized: "clock.tomorrow")
-        default:
-            var style = Date.FormatStyle.dateTime.month(.defaultDigits).day().weekday(.abbreviated)
-            style.timeZone = calendar.timeZone
-            return date.formatted(style)
-        }
-    }
-
     /// 档期时间段标题：本地起止时间（会议日期已由日期选择器展示，不再重复日期前缀）
     private func groupRangeText(_ group: MeetingSlotGroup) -> String {
         "\(formatLocalTime(group.startDate))–\(formatLocalTime(group.endDate))"
     }
 
-    /// 下一个重叠窗口的开始时间，跨天带「明日」前缀
-    private func nextWindowText(_ window: MeetingWindow) -> String {
-        let time = formatLocalTime(window.startDate)
-        let prefix = dayPrefix(for: window.startDate)
-        return prefix.isEmpty ? time : "\(prefix) \(time)"
-    }
 }
 
 // MARK: - 24 小时色条
@@ -626,15 +592,15 @@ private struct HoursBar: View {
                     height: height
                 )
                 let segmentColor = hours[hour] ? color : Color(.systemGray5)
-                context.fill(Path(roundedRect: rect, cornerRadius: 1), with: .color(segmentColor))
+                context.fill(Path(roundedRect: rect, cornerRadius: 2), with: .color(segmentColor))
             }
             if let markerHour {
                 let x = CGFloat(markerHour) * segW
-                let marker = CGRect(x: x - 1, y: -1.5, width: 2, height: height + 3)
+                let marker = CGRect(x: x - 1, y: -2, width: 2, height: height + 4)
                 context.fill(Path(roundedRect: marker, cornerRadius: 1), with: .color(.red))
             }
         }
-        .frame(height: 6)
+        .frame(height: 14)
         .accessibilityHidden(true)
     }
 }

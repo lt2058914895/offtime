@@ -108,6 +108,7 @@
 "meeting.participants.subtitle" = "勾选要一起安排会议的城市";
 "meeting.participants.hint" = "在时钟页添加更多城市，即可一起规划";
 "meeting.local.badge" = "本地";
+"meeting.work.hours" = "工作时段";
 "meeting.settings.title" = "会议设置";
 "meeting.settings.duration" = "会议时长";
 "meeting.settings.duration.format" = "%d 分钟";
@@ -132,13 +133,14 @@
 "meeting.state.working" = "工作中";
 "meeting.state.offwork" = "非工作时间";
 "meeting.state.sleeping" = "睡眠中";
-"meeting.overlap.title" = "全天工作重叠";
-"meeting.overlap.subtitle" = "以你的本地时间为轴，红色为当前时刻";
+"meeting.overlap.title" = "工作时段重叠";
+"meeting.overlap.subtitle" = "以你的本地时间为轴，红色为当前时刻，绿色为重叠时段";
+"meeting.overlap.subtitle.none" = "可在时钟列表的城市详情页调整工作时段";
 "meeting.overlap.hint" = "勾选至少 2 个城市查看重叠";
-"meeting.overlap.all" = "全员";
+"meeting.overlap.all" = "工作时段重叠";
 "meeting.overlap.now" = "正在重叠";
-"meeting.overlap.next" = "下次";
-"meeting.overlap.none" = "今日无重叠";
+"meeting.overlap.available" = "存在重叠";
+"meeting.overlap.none" = "无重叠";
 "meeting.detail.title" = "档期详情";
 "meeting.detail.subtitle" = "该时段在各城市的对应时间";
 "meeting.detail.range.hint" = "该时间范围内都可添加会议档期、可在下方手动选择开始时间";

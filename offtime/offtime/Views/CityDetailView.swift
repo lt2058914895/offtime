@@ -510,13 +510,33 @@ struct CityDetailView: View {
     }
 
     private func workHoursSteppers(start: Binding<Int>, end: Binding<Int>) -> some View {
-        HStack(spacing: 16) {
+        let validatedStart = Binding<Int>(
+            get: { start.wrappedValue },
+            set: { newValue in
+                start.wrappedValue = newValue
+                if end.wrappedValue <= newValue {
+                    end.wrappedValue = min(24, newValue + 1)
+                }
+            }
+        )
+        let validatedEnd = Binding<Int>(
+            get: { end.wrappedValue },
+            set: { newValue in
+                if newValue <= start.wrappedValue {
+                    end.wrappedValue = min(24, start.wrappedValue + 1)
+                } else {
+                    end.wrappedValue = newValue
+                }
+            }
+        )
+
+        return HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(String(localized: "detail.work.start"))
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Stepper(value: start, in: 0...23) {
-                    Text(String(format: "%02d:00", start.wrappedValue))
+                Stepper(value: validatedStart, in: 0...23) {
+                    Text(String(format: "%02d:00", validatedStart.wrappedValue))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .monospacedDigit()
@@ -528,8 +548,8 @@ struct CityDetailView: View {
                 Text(String(localized: "detail.work.end"))
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Stepper(value: end, in: 1...24) {
-                    Text(String(format: "%02d:00", end.wrappedValue))
+                Stepper(value: validatedEnd, in: 1...24) {
+                    Text(String(format: "%02d:00", validatedEnd.wrappedValue))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .monospacedDigit()

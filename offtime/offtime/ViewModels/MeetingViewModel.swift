@@ -40,19 +40,6 @@ final class MeetingViewModel: ObservableObject {
         )
     }
 
-    var windows: [MeetingWindow] {
-        MeetingPlannerService.windows(
-            hourlyOverlap: overlap.hourlyOverlap,
-            localTimezoneId: localTimezoneId,
-            date: currentDate
-        )
-    }
-
-    /// 距离现在最近的（下一个）重叠窗口：窗口 startDate 恒为未来时间，取最早即最近
-    var nextWindow: MeetingWindow? {
-        windows.min { $0.startDate < $1.startDate }
-    }
-
     /// 推荐档期（已按「全员工作 > 非睡眠 > 少数人牺牲」排序）
     var slots: [MeetingSlot] {
         MeetingPlannerService.recommendedSlots(
@@ -108,14 +95,6 @@ final class MeetingViewModel: ObservableObject {
     /// 选中城市的英文名称（用于保存会议记录）
     var participantEnNames: [String] {
         selectedParticipants.map(\.cityEn)
-    }
-
-    func workingHours(for participant: MeetingParticipant) -> [Bool] {
-        MeetingPlannerService.workingHours(
-            participant: participant,
-            localTimezoneId: localTimezoneId,
-            date: currentDate
-        )
     }
 
     /// 保存最近一次成功添加会议时的参与者选中状态，下次进入会议页时自动恢复。
@@ -197,6 +176,11 @@ final class MeetingViewModel: ObservableObject {
     }
 
     /// 会议日期默认从「今天」开始；跨天后自动把已过日期校正到今天。
+    func updateCurrentDate(_ date: Date) {
+        currentDate = date
+        normalizeMeetingDateIfNeeded()
+    }
+
     private func normalizeMeetingDateIfNeeded() {
         guard let today = dateOptions.first else { return }
         if meetingDate < today {

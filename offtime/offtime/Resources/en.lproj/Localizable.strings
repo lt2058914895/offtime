@@ -108,6 +108,7 @@
 "meeting.participants.subtitle" = "Select the cities to include";
 "meeting.participants.hint" = "Add more cities in the Clock tab to include them";
 "meeting.local.badge" = "Local";
+"meeting.work.hours" = "Working hours";
 "meeting.settings.title" = "Meeting Settings";
 "meeting.settings.duration" = "Duration";
 "meeting.settings.duration.format" = "%d min";
@@ -133,12 +134,13 @@
 "meeting.state.offwork" = "Outside work";
 "meeting.state.sleeping" = "Sleeping";
 "meeting.overlap.title" = "Working Hours Overlap";
-"meeting.overlap.subtitle" = "24-hour axis in your local time; red marks now";
+"meeting.overlap.subtitle" = "24-hour axis in your local time; red marks now, green marks overlap";
+"meeting.overlap.subtitle.none" = "Adjust working hours from each city's detail page in the Clock list";
 "meeting.overlap.hint" = "Select at least 2 cities to see overlap";
-"meeting.overlap.all" = "Everyone";
+"meeting.overlap.all" = "Working hours overlap";
 "meeting.overlap.now" = "Overlapping now";
-"meeting.overlap.next" = "Next";
-"meeting.overlap.none" = "No overlap today";
+"meeting.overlap.available" = "Overlap available";
+"meeting.overlap.none" = "No overlap";
 "meeting.detail.title" = "Slot Details";
 "meeting.detail.subtitle" = "Corresponding times in each city";
 "meeting.detail.range.hint" = "You can add a meeting slot anywhere in this time range and choose a start time below.";

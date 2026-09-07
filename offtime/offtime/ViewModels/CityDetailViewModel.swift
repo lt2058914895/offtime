@@ -33,10 +33,18 @@ final class CityDetailViewModel: ObservableObject {
         self.reminderService = reminderService ?? CityReminderService(
             modelContainer: CityService.shared.modelContainer
         )
-        self.targetWorkStart = city.workStartHour
-        self.targetWorkEnd = city.workEndHour
-        self.localWorkStart = city.localWorkStart
-        self.localWorkEnd = city.localWorkEnd
+        let targetWorkHours = Self.validatedWorkHours(
+            start: city.workStartHour,
+            end: city.workEndHour
+        )
+        let localWorkHours = Self.validatedWorkHours(
+            start: city.localWorkStart,
+            end: city.localWorkEnd
+        )
+        self.targetWorkStart = targetWorkHours.start
+        self.targetWorkEnd = targetWorkHours.end
+        self.localWorkStart = localWorkHours.start
+        self.localWorkEnd = localWorkHours.end
     }
 
     // MARK: - Time Display
@@ -272,11 +280,25 @@ final class CityDetailViewModel: ObservableObject {
     }
 
     func saveWorkHours() {
-        city.workStartHour = targetWorkStart
-        city.workEndHour = targetWorkEnd
-        city.localWorkStart = localWorkStart
-        city.localWorkEnd = localWorkEnd
+        let targetWorkHours = Self.validatedWorkHours(
+            start: targetWorkStart,
+            end: targetWorkEnd
+        )
+        let localWorkHours = Self.validatedWorkHours(
+            start: localWorkStart,
+            end: localWorkEnd
+        )
+        city.workStartHour = targetWorkHours.start
+        city.workEndHour = targetWorkHours.end
+        city.localWorkStart = localWorkHours.start
+        city.localWorkEnd = localWorkHours.end
         try? CityService.shared.modelContainer.mainContext.save()
+    }
+
+    private static func validatedWorkHours(start: Int, end: Int) -> (start: Int, end: Int) {
+        let validatedStart = min(max(start, 0), 23)
+        let validatedEnd = min(max(end, 1), 24)
+        return (validatedStart, max(validatedEnd, validatedStart + 1))
     }
 
     // MARK: - City Reminder
