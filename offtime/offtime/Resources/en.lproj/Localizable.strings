@@ -143,7 +143,7 @@
 "meeting.detail.subtitle" = "Corresponding times in each city";
 "meeting.detail.range.hint" = "You can add a meeting slot anywhere in this time range and choose a start time below.";
 "meeting.detail.select.start" = "Select meeting start time";
-"meeting.detail.add" = "Add to Meeting Slots";
+"meeting.detail.add" = "Add to Recommended Records";
 "meeting.add.success" = "Meeting slot added. See it in Settings > Meeting Slots.";
 "meeting.add.conflict" = "This time conflicts with an existing meeting slot";
 "meeting.add.conflict.title" = "Cannot Add Meeting Slot";
@@ -192,6 +192,7 @@
 "settings.meetings" = "Meeting Slot Recommendations";
 "settings.meeting.recommendation.title" = "Meeting Slot Recommendations";
 "settings.meeting.recommendation.subtitle" = "Find the best shared meeting time automatically";
+"meeting.recommendation.records" = "Records";
 "reminder.list.title" = "Reminders";
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";

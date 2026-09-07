@@ -7,6 +7,7 @@ struct MeetingView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dismiss) private var dismiss
     @State private var lastSeenCitiesRevision: Int = 0
     @State private var selectedGroup: MeetingSlotGroup?
     @State private var toastMessage: String?
@@ -57,9 +58,25 @@ struct MeetingView: View {
             .padding(16)
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(String(localized: "tab.meeting"))
+        .navigationTitle(String(localized: "settings.meeting.recommendation.title"))
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(String(localized: "meeting.recommendation.records")) {
+                    highlightedMeetingID = nil
+                    showMeetingRecords = true
+                }
+            }
+        }
         .onAppear {
             isAppeared = true
             loadParticipants()
