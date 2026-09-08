@@ -467,22 +467,26 @@ struct MeetingView: View {
         Button {
             selectedGroup = group
         } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "calendar.badge.clock")
-                    .font(.title3)
-                    .foregroundColor(.accentColor)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(groupRangeText(group))
-                        .font(.subheadline.weight(.semibold))
+            HStack(spacing: 4) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(groupStartRangeText(group))
+                        .font(.title3.weight(.semibold))
+                        .monospacedDigit()
                         .lineLimit(1)
-                        .layoutPriority(1)
+                        .layoutPriority(2)
+
+                    Text(String(
+                        format: String(localized: "meeting.slots.start.meta"),
+                        group.optionStartDates.count,
+                        group.durationMinutes
+                    ))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+                    .layoutPriority(1)
                 }
                 Spacer(minLength: 0)
                 slotTierBadge(group)
-                Text(String(localized: "meeting.slots.view"))
-                    .font(.caption.weight(.semibold))
-                    .foregroundColor(.accentColor)
-                    .fixedSize()
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.semibold))
                     .foregroundColor(Color(.systemGray3))
@@ -507,7 +511,7 @@ struct MeetingView: View {
             text = String(localized: "meeting.slots.tier.all")
             color = .green
         case 1:
-            text = String(format: String(localized: "meeting.slots.tier.adjust"), group.awakeCount)
+            text = String(format: String(localized: "meeting.slots.tier.offwork"), group.awakeCount)
             color = .orange
         default:
             text = String(format: String(localized: "meeting.slots.tier.sleeping"), group.sleepingCount)
@@ -515,8 +519,11 @@ struct MeetingView: View {
         }
         return Text(text)
             .font(.caption2.weight(.semibold))
-            .multilineTextAlignment(.center)
+            .lineLimit(2)
             .fixedSize(horizontal: false, vertical: true)
+            .minimumScaleFactor(0.6)
+            .multilineTextAlignment(.center)
+            .layoutPriority(-1)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
             .background(color.opacity(0.14))
@@ -566,9 +573,13 @@ struct MeetingView: View {
         return timezoneService.getLocalTime12(timezoneId: viewModel.localTimezoneId, date: date) ?? ""
     }
 
-    /// 档期时间段标题：本地起止时间（会议日期已由日期选择器展示，不再重复日期前缀）
+    /// 档期状态时段标题：展示状态持续的本地起止区间
     private func groupRangeText(_ group: MeetingSlotGroup) -> String {
-        "\(formatLocalTime(group.startDate))–\(formatLocalTime(group.endDate))"
+        return "\(formatLocalTime(group.startDate))–\(formatLocalTime(group.endDate))"
+    }
+
+    private func groupStartRangeText(_ group: MeetingSlotGroup) -> String {
+        return groupRangeText(group)
     }
 
 }

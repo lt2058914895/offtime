@@ -172,9 +172,9 @@ enum MeetingPlannerService {
 enum MeetingParticipantState: Equatable {
     /// 工作时间
     case working
-    /// 醒着但不在工作时间（需牺牲）
+    /// 非工作且不在固定免打扰时段
     case awake
-    /// 睡眠时间
+    /// 固定免打扰时段：每座城市本地 23:00–07:00
     case sleeping
 }
 
@@ -182,15 +182,18 @@ enum MeetingParticipantState: Equatable {
 struct MeetingSlot: Identifiable, Hashable {
     var id: String { "\(Int(startDate.timeIntervalSince1970))-\(durationMinutes)" }
     let startDate: Date
+    let segmentStart: Date
+    let segmentEnd: Date
     let durationMinutes: Int
     let workingCount: Int
     let awakeCount: Int
     let sleepingCount: Int
-    /// 0 = 全员工作；1 = 无人睡眠；2 = 有人睡眠
+    /// 0 = 全员工作；1 = 无人睡眠；2 = 有城市在睡眠
     let tier: Int
 }
 
-/// 由相邻 30 分钟档期合并而成的候选时间段：用户可在组内自行选择具体开始时间。
+/// 一个连续状态时段内的候选开始时间。
+/// endDate 表示状态时段结束时间，不一定表示会议结束时间。
 struct MeetingSlotGroup: Identifiable, Hashable {
     var id: String {
         "\(Int(startDate.timeIntervalSince1970))-\(Int(endDate.timeIntervalSince1970))-\(tier)"
@@ -223,34 +226,47 @@ struct MeetingConstraint: Identifiable, Hashable {
 }
 
 extension MeetingPlannerService {
-    /// 默认睡眠窗口（与日常作息一致）：22:00 入睡、07:00 起床
-    static let sleepStartHour = 22
-    static let sleepEndHour = 7
+    /// 硬性判定所有城市本地的固定免打扰窗口。
+    private static let sleepStartHour = 23
+    private static let sleepEndHour = 7
+
+    private static func isSleeping(
+        _ participant: MeetingParticipant,
+        at date: Date
+    ) -> Bool {
+        guard let timezone = TimeZone(identifier: participant.timezoneId) else {
+            return false
+        }
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let minutes = hour * 60 + minute
+
+        let sleepStart = Self.sleepStartHour * 60
+        let sleepEnd = Self.sleepEndHour * 60
+        guard sleepStart != sleepEnd else { return false }
+
+        if sleepStart < sleepEnd {
+            return minutes >= sleepStart && minutes < sleepEnd
+        }
+        return minutes >= sleepStart || minutes < sleepEnd
+    }
 
     /// 参与者在指定绝对时刻的状态（按其自身时区判断）
     static func state(of participant: MeetingParticipant, at date: Date) -> MeetingParticipantState {
-        guard let timezone = TimeZone(identifier: participant.timezoneId) else {
-            return .awake
-        }
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = timezone
-        let minutes = calendar.component(.hour, from: date) * 60 + calendar.component(.minute, from: date)
-
-        let workStart = participant.workStartHour * 60
-        let workEnd = participant.workEndHour * 60
-        if minutes >= workStart && minutes < workEnd {
+        if isWorking(participant, at: date) {
             return .working
         }
-        let sleepStart = sleepStartHour * 60
-        let sleepEnd = sleepEndHour * 60
-        if minutes >= sleepStart || minutes < sleepEnd {
+        if isSleeping(participant, at: date) {
             return .sleeping
         }
         return .awake
     }
 
     /// 参与者在 [startDate, endDate) 整段区间内的最差状态：
-    /// 任一时间点处于睡眠 → 睡眠；任一时间点不在工作时间 → 非工作时间；全程在工作时间 → 工作中。
+    /// 任一时间点处于固定免打扰时段 → 睡眠；否则不在工作时间 → 非工作时间；全程在工作时间 → 工作中。
     static func state(
         of participant: MeetingParticipant,
         from startDate: Date,
@@ -259,27 +275,14 @@ extension MeetingPlannerService {
         guard endDate > startDate else {
             return state(of: participant, at: startDate)
         }
-        guard let timezone = TimeZone(identifier: participant.timezoneId) else {
-            return .awake
-        }
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = timezone
-
-        let workStart = participant.workStartHour * 60
-        let workEnd = participant.workEndHour * 60
-        let sleepStart = sleepStartHour * 60
-        let sleepEnd = sleepEndHour * 60
-
         var result: MeetingParticipantState = .working
         var cursor = startDate
         while cursor < endDate {
-            let minutes = calendar.component(.hour, from: cursor) * 60
-                + calendar.component(.minute, from: cursor)
             let current: MeetingParticipantState
-            if minutes >= sleepStart || minutes < sleepEnd {
-                current = .sleeping
-            } else if minutes >= workStart && minutes < workEnd {
+            if isWorking(participant, at: cursor) {
                 current = .working
+            } else if isSleeping(participant, at: cursor) {
+                current = .sleeping
             } else {
                 current = .awake
             }
@@ -290,10 +293,24 @@ extension MeetingPlannerService {
         return result
     }
 
-    /// 在本地可选范围内按 30 分钟步长生成候选档期，并按
-    /// 「全员工作 > 非睡眠 > 少数人牺牲」打分排序。
-    /// 在指定日期范围内按 30 分钟步长生成候选档期，并按
-    /// 「全员工作 > 非睡眠 > 少数人牺牲」打分排序。
+    private static func isWorking(
+        _ participant: MeetingParticipant,
+        at date: Date
+    ) -> Bool {
+        guard let timezone = TimeZone(identifier: participant.timezoneId) else {
+            return false
+        }
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+        let minutes = calendar.component(.hour, from: date) * 60
+            + calendar.component(.minute, from: date)
+        return minutes >= participant.workStartHour * 60
+            && minutes < participant.workEndHour * 60
+    }
+
+    /// 将连续状态时段分割后生成候选档期，并按
+    /// 「全员工作 > 非工作时间城市更少 > 睡眠城市更少 > 时间更早」排序。
     /// 已过时刻会被跳过，因此结果里的 startDate 恒为未来时间。
     static func recommendedSlots(
         participants: [MeetingParticipant],
@@ -307,7 +324,8 @@ extension MeetingPlannerService {
         guard let localTimezone = TimeZone(identifier: localTimezoneId),
               !participants.isEmpty,
               durationMinutes > 0,
-              endDate >= startDate else {
+              endDate >= startDate,
+              stepMinutes > 0 else {
             return []
         }
 
@@ -319,48 +337,54 @@ extension MeetingPlannerService {
         }
 
         var slots: [MeetingSlot] = []
+        let rangeEndDate = rangeEnd.addingTimeInterval(24 * 60 * 60)
+        let boundaries = statusSegmentBoundaries(
+            participants: participants,
+            localTimezoneId: localTimezoneId,
+            rangeStart: rangeStart,
+            rangeEnd: rangeEnd
+        )
 
-        var day = rangeStart
-        while day <= rangeEnd {
-            let maxOffset = 24 * 60 - durationMinutes
+        for index in 0..<max(0, boundaries.count - 1) {
+            let segmentStart = max(boundaries[index], rangeStart)
+            let segmentEnd = min(boundaries[index + 1], rangeEndDate)
+            let segmentDuration = segmentEnd.timeIntervalSince(segmentStart)
+            guard segmentDuration >= Double(durationMinutes) * 60 else { continue }
+
+            let midpoint = segmentStart.addingTimeInterval(segmentDuration / 2)
+            var working = 0
+            var awake = 0
+            var sleeping = 0
+            for participant in participants {
+                let participantState = state(of: participant, at: midpoint)
+                switch participantState {
+                case .working: working += 1
+                case .awake: awake += 1
+                case .sleeping: sleeping += 1
+                }
+            }
+
+            let tier: Int = working == participants.count ? 0 : (sleeping == 0 ? 1 : 2)
             var offset = 0
-            while offset <= maxOffset {
-                guard let slotStart = calendar.date(byAdding: .minute, value: offset, to: day),
-                      slotStart > date else {
-                    offset += stepMinutes
-                    continue
+            while true {
+                guard let slotStart = calendar.date(byAdding: .minute, value: offset, to: segmentStart),
+                      slotStart.addingTimeInterval(Double(durationMinutes) * 60) <= segmentEnd else {
+                    break
                 }
-
-                var working = 0
-                var sleeping = 0
-                var awake = 0
-                for participant in participants {
-                    let slotEnd = slotStart.addingTimeInterval(Double(durationMinutes) * 60)
-                    switch state(of: participant, from: slotStart, to: slotEnd) {
-                    case .working: working += 1
-                    case .sleeping: sleeping += 1
-                    case .awake: awake += 1
-                    }
+                if slotStart > date {
+                    slots.append(MeetingSlot(
+                        startDate: slotStart,
+                        segmentStart: segmentStart,
+                        segmentEnd: segmentEnd,
+                        durationMinutes: durationMinutes,
+                        workingCount: working,
+                        awakeCount: awake,
+                        sleepingCount: sleeping,
+                        tier: tier
+                    ))
                 }
-                // 全员都在睡眠的档期没有参考价值，跳过
-                if sleeping == participants.count {
-                    offset += stepMinutes
-                    continue
-                }
-
-                let tier: Int = working == participants.count ? 0 : (sleeping == 0 ? 1 : 2)
-                slots.append(MeetingSlot(
-                    startDate: slotStart,
-                    durationMinutes: durationMinutes,
-                    workingCount: working,
-                    awakeCount: awake,
-                    sleepingCount: sleeping,
-                    tier: tier
-                ))
                 offset += stepMinutes
             }
-            guard let nextDay = calendar.date(byAdding: .day, value: 1, to: day) else { break }
-            day = nextDay
         }
 
         return slots.sorted {
@@ -371,7 +395,54 @@ extension MeetingPlannerService {
         }
     }
 
-    /// 将 30 分钟粒度的候选档期合并为时间段：时间相邻、状态（tier 与计数）一致的档期合并为一组。
+    private static func statusSegmentBoundaries(
+        participants: [MeetingParticipant],
+        localTimezoneId: String,
+        rangeStart: Date,
+        rangeEnd: Date
+    ) -> [Date] {
+        guard let localTimezone = TimeZone(identifier: localTimezoneId) else {
+            return []
+        }
+
+        var localCalendar = Calendar(identifier: .gregorian)
+        localCalendar.timeZone = localTimezone
+        guard let firstLocalDay = localCalendar.dateInterval(of: .day, for: rangeStart)?.start,
+              let lastLocalDay = localCalendar.dateInterval(of: .day, for: rangeEnd)?.start else {
+            return []
+        }
+
+        var boundaries: [Date] = [rangeStart, rangeEnd.addingTimeInterval(24 * 60 * 60)]
+        for participant in participants {
+            guard let timezone = TimeZone(identifier: participant.timezoneId) else { continue }
+            var participantCalendar = Calendar(identifier: .gregorian)
+            participantCalendar.timeZone = timezone
+
+            var day = participantCalendar.startOfDay(for: firstLocalDay.addingTimeInterval(-24 * 60 * 60))
+            let lastDay = participantCalendar.startOfDay(for: lastLocalDay.addingTimeInterval(24 * 60 * 60))
+            let boundaryHours = [0, Self.sleepEndHour, participant.workStartHour, participant.workEndHour, Self.sleepStartHour]
+
+            while day <= lastDay {
+                for boundaryHour in boundaryHours {
+                    if let boundary = participantCalendar.date(byAdding: .hour, value: boundaryHour, to: day) {
+                        boundaries.append(boundary)
+                    }
+                }
+                guard let nextDay = participantCalendar.date(byAdding: .day, value: 1, to: day) else { break }
+                day = nextDay
+            }
+        }
+
+        var uniqueBoundaries: [Date] = []
+        for boundary in boundaries.sorted() where uniqueBoundaries.last != boundary {
+            uniqueBoundaries.append(boundary)
+        }
+        return uniqueBoundaries
+    }
+
+    private static let slotStepSeconds = 30 * 60
+
+    /// 将候选开始时间合并为状态时段：时间相邻且级别一致；睡眠/免打扰时段在数量变化时也不拆分。
     static func slotGroups(from slots: [MeetingSlot]) -> [MeetingSlotGroup] {
         let sorted = slots.sorted { $0.startDate < $1.startDate }
         var groups: [MeetingSlotGroup] = []
@@ -379,7 +450,8 @@ extension MeetingPlannerService {
 
         func flush() {
             guard let first = current.first, let last = current.last else { return }
-            let endDate = last.startDate.addingTimeInterval(Double(last.durationMinutes) * 60)
+            let endDate = last.segmentEnd
+            let sleepingCount = current.map(\.sleepingCount).max() ?? 0
             groups.append(
                 MeetingSlotGroup(
                     startDate: first.startDate,
@@ -388,7 +460,7 @@ extension MeetingPlannerService {
                     tier: first.tier,
                     workingCount: first.workingCount,
                     awakeCount: first.awakeCount,
-                    sleepingCount: first.sleepingCount,
+                    sleepingCount: sleepingCount,
                     optionStartDates: current.map(\.startDate)
                 )
             )
@@ -397,7 +469,8 @@ extension MeetingPlannerService {
 
         for slot in sorted {
             let isAdjacent = current.last.map {
-                slot.startDate == $0.startDate.addingTimeInterval(30 * 60)
+                slot.startDate == $0.startDate.addingTimeInterval(Double(Self.slotStepSeconds))
+                    || slot.segmentStart == $0.segmentEnd
             } ?? false
             let sameProfile = current.last.map {
                 $0.tier == slot.tier
@@ -406,7 +479,8 @@ extension MeetingPlannerService {
                     && $0.sleepingCount == slot.sleepingCount
                     && $0.durationMinutes == slot.durationMinutes
             } ?? false
-            if isAdjacent && sameProfile {
+            let sameQuietHours = current.last?.tier == 2 && slot.tier == 2
+            if isAdjacent && (sameProfile || sameQuietHours) {
                 current.append(slot)
             } else {
                 flush()

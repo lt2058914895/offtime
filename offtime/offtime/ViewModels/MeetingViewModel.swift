@@ -40,7 +40,7 @@ final class MeetingViewModel: ObservableObject {
         )
     }
 
-    /// 推荐档期（已按「全员工作 > 非睡眠 > 少数人牺牲」排序）
+    /// 推荐档期（已按「全员工作 > 非工作时间城市少 > 睡眠城市少」排序）
     var slots: [MeetingSlot] {
         MeetingPlannerService.recommendedSlots(
             participants: selectedParticipants,
@@ -223,6 +223,8 @@ final class MeetingViewModel: ObservableObject {
         }
         let slot = MeetingSlot(
             startDate: startDate,
+            segmentStart: startDate,
+            segmentEnd: endDate,
             durationMinutes: durationMinutes,
             workingCount: selectedParticipants.count,
             awakeCount: 0,

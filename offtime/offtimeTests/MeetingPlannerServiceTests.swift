@@ -172,40 +172,31 @@ final class MeetingPlannerServiceTests: XCTestCase {
         let top = try! XCTUnwrap(slots.first)
         XCTAssertEqual(top.tier, 0)
         XCTAssertEqual(top.workingCount, 2)
-        XCTAssertEqual(top.sleepingCount, 0)
         XCTAssertEqual(top.awakeCount, 0)
+        XCTAssertEqual(top.sleepingCount, 0)
         XCTAssertEqual(shanghaiCalendar().component(.hour, from: top.startDate), 16)
     }
 
     func testRecommendedSlotsSortsByTier() {
-        // 上海+洛杉矶：上海 9–18 内洛杉矶处于睡眠（上海轴 13:00–22:00），无全员工作档期；
-        // 09:00–12:30 为 tier 1（无人睡眠），13:00 起为 tier 2（洛杉矶睡眠）
         let slots = MeetingPlannerService.recommendedSlots(
             participants: [shanghai, losAngeles],
             localTimezoneId: "Asia/Shanghai",
             durationMinutes: 60,
             startDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
             endDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
-            date: date(hour: 12, timezoneId: "Asia/Shanghai")
+            date: date(hour: 0, timezoneId: "Asia/Shanghai")
         )
 
         XCTAssertFalse(slots.isEmpty)
         XCTAssertEqual(slots.first?.tier, 1)
+        XCTAssertEqual(slots.first?.awakeCount, 2)
         XCTAssertEqual(slots.first?.sleepingCount, 0)
-        XCTAssertEqual(slots.first?.awakeCount, 1)
-
-        guard let firstSleepingIndex = slots.firstIndex(where: { $0.tier == 2 }) else {
-            return XCTFail("expected tier 2 slots")
-        }
-        XCTAssertTrue(slots[..<firstSleepingIndex].allSatisfy { $0.tier == 1 })
-        XCTAssertTrue(slots[firstSleepingIndex...].allSatisfy { $0.tier == 2 })
-        XCTAssertEqual(slots[firstSleepingIndex].sleepingCount, 1)
-        XCTAssertEqual(slots[firstSleepingIndex].workingCount, 1)
+        XCTAssertTrue(slots.contains { $0.tier == 2 })
     }
 
     func testRecommendedSlotsPreferFewerSacrificesWithinTier() {
         // 同一时区、不同工作时段：p1/p2 9–18，p3 11–16，p4 14–18
-        // 14:00 起全员工作（tier 0）；11:00–14:00 仅 p4 牺牲；09:00–11:00 有 2 人牺牲
+        // 14:00–16:00 全员工作（tier 0）；11:00–14:00 仅 p4 不在工作；09:00–11:00 有 2 人不在工作
         let p1 = MeetingParticipant(id: "1", cityName: "A", cityEn: "A", timezoneId: "Asia/Shanghai", workStartHour: 9, workEndHour: 18, isLocal: true)
         let p2 = MeetingParticipant(id: "2", cityName: "B", cityEn: "B", timezoneId: "Asia/Shanghai", workStartHour: 9, workEndHour: 18, isLocal: false)
         let p3 = MeetingParticipant(id: "3", cityName: "C", cityEn: "C", timezoneId: "Asia/Shanghai", workStartHour: 11, workEndHour: 16, isLocal: false)
@@ -217,7 +208,7 @@ final class MeetingPlannerServiceTests: XCTestCase {
             durationMinutes: 60,
             startDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
             endDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
-            date: date(hour: 12, timezoneId: "Asia/Shanghai")
+            date: date(hour: 0, timezoneId: "Asia/Shanghai")
         )
 
         XCTAssertEqual(slots.first?.tier, 0)
@@ -225,13 +216,132 @@ final class MeetingPlannerServiceTests: XCTestCase {
 
         let firstNonAll = try! XCTUnwrap(slots.first { $0.tier == 1 })
         XCTAssertEqual(firstNonAll.awakeCount, 1)
+        XCTAssertEqual(firstNonAll.sleepingCount, 0)
         XCTAssertEqual(shanghaiCalendar().component(.hour, from: firstNonAll.startDate), 11)
 
         let nineSlot = try! XCTUnwrap(slots.first { shanghaiCalendar().component(.hour, from: $0.startDate) == 9 })
+        XCTAssertEqual(nineSlot.tier, 1)
         XCTAssertEqual(nineSlot.awakeCount, 2)
+        XCTAssertEqual(nineSlot.sleepingCount, 0)
         let nineIndex = try! XCTUnwrap(slots.firstIndex { $0.id == nineSlot.id })
         let nonAllIndex = try! XCTUnwrap(slots.firstIndex { $0.id == firstNonAll.id })
         XCTAssertGreaterThan(nineIndex, nonAllIndex)
+    }
+
+    func testRecommendedSlotsRankAwakeBuffersBeforeSleep() {
+        let shanghai = MeetingParticipant(
+            id: "sh",
+            cityName: "Shanghai",
+            cityEn: "Shanghai",
+            timezoneId: "Asia/Shanghai",
+            workStartHour: 9,
+            workEndHour: 18,
+            isLocal: true
+        )
+        let calgary = MeetingParticipant(
+            id: "yyc",
+            cityName: "Calgary",
+            cityEn: "Calgary",
+            timezoneId: "America/Edmonton",
+            workStartHour: 9,
+            workEndHour: 20,
+            isLocal: false
+        )
+
+        let slots = MeetingPlannerService.recommendedSlots(
+            participants: [shanghai, calgary],
+            localTimezoneId: "Asia/Shanghai",
+            durationMinutes: 60,
+            startDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
+            endDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
+            date: date(hour: 0, timezoneId: "Asia/Shanghai")
+        )
+
+        let allWorking = try! XCTUnwrap(slots.first)
+        XCTAssertEqual(allWorking.startDate, date(hour: 9, timezoneId: "Asia/Shanghai"))
+        XCTAssertEqual(allWorking.tier, 0)
+
+        let awakeSlot = try! XCTUnwrap(slots.first { $0.startDate == date(hour: 10, timezoneId: "Asia/Shanghai") })
+        XCTAssertEqual(awakeSlot.tier, 1)
+        XCTAssertEqual(awakeSlot.awakeCount, 1)
+        XCTAssertEqual(awakeSlot.sleepingCount, 0)
+
+        let sleepingSlot = try! XCTUnwrap(slots.first { $0.startDate == date(hour: 13, timezoneId: "Asia/Shanghai") })
+        XCTAssertEqual(sleepingSlot.tier, 2)
+        XCTAssertEqual(sleepingSlot.sleepingCount, 1)
+
+        let awakeIndex = try! XCTUnwrap(slots.firstIndex { $0.id == awakeSlot.id })
+        let sleepingIndex = try! XCTUnwrap(slots.firstIndex { $0.id == sleepingSlot.id })
+        XCTAssertLessThan(awakeIndex, sleepingIndex)
+    }
+
+    func testRecommendedSlotsSegmentAndOrderByExample() {
+        let calgary = MeetingParticipant(
+            id: "yyc",
+            cityName: "Calgary",
+            cityEn: "Calgary",
+            timezoneId: "America/Edmonton",
+            workStartHour: 9,
+            workEndHour: 20,
+            isLocal: false
+        )
+
+        let slots = MeetingPlannerService.recommendedSlots(
+            participants: [shanghai, calgary],
+            localTimezoneId: "Asia/Shanghai",
+            durationMinutes: 60,
+            startDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
+            endDate: date(hour: 0, timezoneId: "Asia/Shanghai"),
+            date: date(hour: 0, timezoneId: "Asia/Shanghai")
+        )
+
+        let groups = MeetingPlannerService.slotGroups(from: slots)
+        let ordered = groups.map { group in
+            let endHour = shanghaiCalendar().component(.hour, from: group.endDate)
+            return (
+                start: shanghaiCalendar().component(.hour, from: group.startDate),
+                end: endHour == 0 ? 24 : endHour,
+                tier: group.tier,
+                awake: group.awakeCount,
+                sleeping: group.sleepingCount
+            )
+        }
+
+        XCTAssertEqual(ordered.count, 7)
+        XCTAssertEqual(ordered[0], (start: 9, end: 10, tier: 0, awake: 0, sleeping: 0))
+        XCTAssertEqual(ordered[1], (start: 7, end: 9, tier: 1, awake: 1, sleeping: 0))
+        XCTAssertEqual(ordered[2], (start: 10, end: 13, tier: 1, awake: 1, sleeping: 0))
+        XCTAssertEqual(ordered[3], (start: 21, end: 23, tier: 1, awake: 2, sleeping: 0))
+        XCTAssertEqual(ordered[4], (start: 0, end: 7, tier: 2, awake: 0, sleeping: 1))
+        XCTAssertEqual(ordered[5], (start: 13, end: 21, tier: 2, awake: 0, sleeping: 1))
+        XCTAssertEqual(ordered[6], (start: 23, end: 24, tier: 2, awake: 0, sleeping: 1))
+    }
+
+    func testSleepingUsesFixedLocalQuietHours() {
+        XCTAssertTrue(
+            MeetingPlannerService.state(
+                of: shanghai,
+                at: date(hour: 23, timezoneId: "Asia/Shanghai")
+            ) == .sleeping
+        )
+        XCTAssertTrue(
+            MeetingPlannerService.state(
+                of: shanghai,
+                at: date(hour: 6, minute: 59, timezoneId: "Asia/Shanghai")
+            ) == .sleeping
+        )
+        XCTAssertFalse(
+            MeetingPlannerService.state(
+                of: shanghai,
+                at: date(hour: 22, minute: 59, timezoneId: "Asia/Shanghai")
+            ) == .sleeping
+        )
+        XCTAssertFalse(
+            MeetingPlannerService.state(
+                of: shanghai,
+                at: date(hour: 7, timezoneId: "Asia/Shanghai")
+            ) == .sleeping
+        )
     }
 
     func testRecommendedSlotsSkipsPassedSlotsAndSpansDays() {
@@ -343,9 +453,9 @@ final class MeetingPlannerServiceTests: XCTestCase {
         let d1 = date(hour: 16, minute: 30, timezoneId: "Asia/Shanghai")
         let d2 = date(hour: 17, timezoneId: "Asia/Shanghai")
         let slots = [
-            MeetingSlot(startDate: d0, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
-            MeetingSlot(startDate: d1, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
-            MeetingSlot(startDate: d2, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0)
+            MeetingSlot(startDate: d0, segmentStart: d0, segmentEnd: date(hour: 17, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d1, segmentStart: d0, segmentEnd: date(hour: 17, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d2, segmentStart: d0, segmentEnd: date(hour: 17, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0)
         ]
 
         let groups = MeetingPlannerService.slotGroups(from: slots)
@@ -363,8 +473,8 @@ final class MeetingPlannerServiceTests: XCTestCase {
         let d0 = date(hour: 16, timezoneId: "Asia/Shanghai")
         let d1 = date(hour: 16, minute: 30, timezoneId: "Asia/Shanghai")
         let slots = [
-            MeetingSlot(startDate: d0, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
-            MeetingSlot(startDate: d1, durationMinutes: 30, workingCount: 1, awakeCount: 1, sleepingCount: 0, tier: 1)
+            MeetingSlot(startDate: d0, segmentStart: d0, segmentEnd: d1, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d1, segmentStart: d0, segmentEnd: d1, durationMinutes: 30, workingCount: 1, awakeCount: 1, sleepingCount: 0, tier: 1)
         ]
 
         let groups = MeetingPlannerService.slotGroups(from: slots)
@@ -376,12 +486,47 @@ final class MeetingPlannerServiceTests: XCTestCase {
         XCTAssertEqual(groups[1].optionStartDates, [d1])
     }
 
+    func testSlotGroupsMergeAdjacentStatusSegmentsWithSameCounts() {
+        let d0 = date(hour: 13, timezoneId: "Asia/Shanghai")
+        let d1 = date(hour: 14, timezoneId: "Asia/Shanghai")
+        let slots = [
+            MeetingSlot(startDate: d0, segmentStart: d0, segmentEnd: d1, durationMinutes: 60, workingCount: 1, awakeCount: 0, sleepingCount: 1, tier: 2),
+            MeetingSlot(startDate: d1, segmentStart: d1, segmentEnd: date(hour: 18, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 1, awakeCount: 0, sleepingCount: 1, tier: 2)
+        ]
+
+        let groups = MeetingPlannerService.slotGroups(from: slots)
+
+        XCTAssertEqual(groups.count, 1)
+        let group = try! XCTUnwrap(groups.first)
+        XCTAssertEqual(group.startDate, d0)
+        XCTAssertEqual(group.endDate, date(hour: 18, timezoneId: "Asia/Shanghai"))
+        XCTAssertEqual(group.optionStartDates, [d0, d1])
+    }
+
+    func testSlotGroupsMergeAdjacentSleepSegmentsRegardlessOfCounts() {
+        let d0 = date(hour: 13, timezoneId: "Asia/Shanghai")
+        let d1 = date(hour: 14, timezoneId: "Asia/Shanghai")
+        let slots = [
+            MeetingSlot(startDate: d0, segmentStart: d0, segmentEnd: d1, durationMinutes: 60, workingCount: 1, awakeCount: 0, sleepingCount: 1, tier: 2),
+            MeetingSlot(startDate: d1, segmentStart: d1, segmentEnd: date(hour: 18, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 0, awakeCount: 0, sleepingCount: 2, tier: 2)
+        ]
+
+        let groups = MeetingPlannerService.slotGroups(from: slots)
+
+        XCTAssertEqual(groups.count, 1)
+        let group = try! XCTUnwrap(groups.first)
+        XCTAssertEqual(group.startDate, d0)
+        XCTAssertEqual(group.endDate, date(hour: 18, timezoneId: "Asia/Shanghai"))
+        XCTAssertEqual(group.sleepingCount, 2)
+        XCTAssertEqual(group.optionStartDates, [d0, d1])
+    }
+
     func testSlotGroupsDoNotMergeAcrossGap() {
         let d0 = date(hour: 16, timezoneId: "Asia/Shanghai")
         let d1 = date(hour: 17, timezoneId: "Asia/Shanghai")
         let slots = [
-            MeetingSlot(startDate: d0, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
-            MeetingSlot(startDate: d1, durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0)
+            MeetingSlot(startDate: d0, segmentStart: d0, segmentEnd: date(hour: 16, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d1, segmentStart: d1, segmentEnd: date(hour: 17, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 30, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0)
         ]
 
         let groups = MeetingPlannerService.slotGroups(from: slots)
@@ -391,6 +536,29 @@ final class MeetingPlannerServiceTests: XCTestCase {
 
     func testSlotGroupsEmptyInputReturnsEmpty() {
         XCTAssertTrue(MeetingPlannerService.slotGroups(from: []).isEmpty)
+    }
+
+    func testSlotGroupsUseNonOverlappingStartRanges() {
+        let d0 = date(hour: 7, timezoneId: "Asia/Shanghai")
+        let d1 = date(hour: 7, minute: 30, timezoneId: "Asia/Shanghai")
+        let d2 = date(hour: 8, timezoneId: "Asia/Shanghai")
+        let d3 = date(hour: 8, minute: 30, timezoneId: "Asia/Shanghai")
+        let d4 = date(hour: 9, timezoneId: "Asia/Shanghai")
+        let slots = [
+            MeetingSlot(startDate: d0, segmentStart: d0, segmentEnd: date(hour: 9, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d1, segmentStart: d0, segmentEnd: date(hour: 9, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d2, segmentStart: d0, segmentEnd: date(hour: 9, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d3, segmentStart: d0, segmentEnd: date(hour: 9, minute: 30, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 2, awakeCount: 0, sleepingCount: 0, tier: 0),
+            MeetingSlot(startDate: d4, segmentStart: d4, segmentEnd: date(hour: 10, timezoneId: "Asia/Shanghai"), durationMinutes: 60, workingCount: 1, awakeCount: 1, sleepingCount: 0, tier: 1)
+        ]
+
+        let groups = MeetingPlannerService.slotGroups(from: slots)
+
+        XCTAssertEqual(groups.count, 2)
+        XCTAssertEqual(groups[0].startDate, d0)
+        XCTAssertEqual(groups[0].endDate, date(hour: 9, minute: 30, timezoneId: "Asia/Shanghai"))
+        XCTAssertEqual(groups[1].startDate, d4)
+        XCTAssertEqual(groups[1].endDate, date(hour: 10, timezoneId: "Asia/Shanghai"))
     }
 
     // MARK: - 整段会议区间状态
@@ -432,7 +600,7 @@ final class MeetingPlannerServiceTests: XCTestCase {
         )
     }
 
-    func testStateOverIntervalTouchingSleepIsSleeping() {
+    func testStateOverIntervalTouchingOffWorkIsOffWork() {
         let seoul = MeetingParticipant(
             id: "sel",
             cityName: "Seoul",
@@ -442,7 +610,7 @@ final class MeetingPlannerServiceTests: XCTestCase {
             workEndHour: 18,
             isLocal: false
         )
-        // 06:30–07:30：跨过 07:00 起床点 → 睡眠
+        // 06:30–07:30：跨过 07:00 起床点 → 非工作时间
         let start = date(hour: 6, minute: 30, timezoneId: "Asia/Seoul")
         let end = date(hour: 7, minute: 30, timezoneId: "Asia/Seoul")
         XCTAssertEqual(
@@ -451,7 +619,7 @@ final class MeetingPlannerServiceTests: XCTestCase {
         )
     }
 
-    func testRecommendedSlotsNotAllWorkingWhenMeetingExtendsPastWorkEnd() {
+    func testRecommendedSlotsSplitsAtWorkBoundary() {
         let beijing = MeetingParticipant(
             id: "bj",
             cityName: "Beijing",
@@ -479,11 +647,11 @@ final class MeetingPlannerServiceTests: XCTestCase {
             date: date(hour: 0, timezoneId: "Asia/Shanghai")
         )
 
-        // 09:00 北京 = 10:00–11:00 首尔，全程在工作时间内 → 全员可开会
+        // 09:00 北京 = 10:00 首尔；共同工作时段到北京 17:00 结束
         let allWorking = slots.first { $0.tier == 0 }
         XCTAssertEqual(allWorking?.startDate, date(hour: 9, timezoneId: "Asia/Shanghai"))
-        // 16:30 北京 = 17:30–18:30 首尔，超出下班时间 → 不能算全员可开会
-        let lateSlot = slots.first { $0.startDate == date(hour: 16, minute: 30, timezoneId: "Asia/Shanghai") }
+        // 17:00 北京 = 18:00 首尔下班后的状态时段 → 不算全员工作
+        let lateSlot = slots.first { $0.startDate == date(hour: 17, timezoneId: "Asia/Shanghai") }
         XCTAssertEqual(lateSlot?.tier, 1)
         XCTAssertEqual(lateSlot?.awakeCount, 1)
     }
