@@ -183,6 +183,8 @@
 "converter.add.city.failed" = "添加城市失败";
 "converter.add.target" = "添加";
 "converter.remove.target" = "移除目标城市";
+"converter.swap.cities" = "交换起点城市与第一个目标城市";
+"converter.no.target.city" = "请先添加目标城市";
 
 // MARK: - Settings
 "settings.title" = "设置";

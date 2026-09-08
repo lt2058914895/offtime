@@ -315,6 +315,19 @@ final class ConverterViewModel: ObservableObject {
         saveTargetSnapshots()
     }
 
+    func swapSourceWithFirstTarget() {
+        guard let firstTarget = targetCities.first, let source = sourceCity else {
+            errorMessage = String(localized: "converter.no.target.city")
+            return
+        }
+
+        sourceCity = firstTarget
+        targetCities[0] = source
+        saveSourceSnapshot()
+        saveTargetSnapshots()
+        refreshFormat()
+    }
+
     func removeTarget(id: UUID) {
         targetCities.removeAll { $0.id == id }
         saveTargetSnapshots()

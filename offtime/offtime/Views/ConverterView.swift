@@ -170,15 +170,20 @@ struct ConverterView: View {
     }
 
     private var flowIndicator: some View {
-        Image(systemName: "arrow.down")
-            .font(.body.weight(.semibold))
-            .foregroundColor(Color(.systemGray2))
-            .frame(width: flowIndicatorSize, height: flowIndicatorSize)
-            .background(Color(.secondarySystemGroupedBackground))
-            .clipShape(Circle())
-            .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
-            .dynamicTypeSize(...DynamicTypeSize.accessibility3)
-            .accessibilityHidden(true)
+        Button {
+            viewModel.swapSourceWithFirstTarget()
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.body.weight(.semibold))
+                .foregroundColor(Color(.systemGray2))
+                .frame(width: flowIndicatorSize, height: flowIndicatorSize)
+                .background(Color(.secondarySystemGroupedBackground))
+                .clipShape(Circle())
+                .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "converter.swap.cities"))
     }
 
     private var targetCard: some View {
