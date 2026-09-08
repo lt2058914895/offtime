@@ -57,6 +57,18 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack(path: $path) {
             List {
+                Section {
+                    Button {
+                        path.append(AppRoute.meetingRecommendation)
+                    } label: {
+                        MeetingRecommendationCard()
+                    }
+                    .buttonStyle(.plain)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparator(.hidden)
+                }
+
                 // MARK: - 当前城市
                 Section(String(localized: "settings.current.city")) {
                     NavigationLink {
@@ -92,18 +104,6 @@ struct SettingsView: View {
                     } label: {
                         Label(String(localized: "reminder.list.title"), systemImage: "bell.fill")
                     }
-                }
-
-                Section {
-                    Button {
-                        path.append(AppRoute.meetingRecommendation)
-                    } label: {
-                        MeetingRecommendationCard()
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
                 }
 
                 Section(String(localized: "settings.display")) {

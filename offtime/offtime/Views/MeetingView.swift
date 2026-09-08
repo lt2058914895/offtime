@@ -400,11 +400,6 @@ struct MeetingView: View {
                         .foregroundColor(.secondary)
                 }
 
-                if viewModel.selectedParticipants.count >= 2,
-                   viewModel.maxOverlapMinutes < viewModel.durationMinutes {
-                    insufficientOverlapNotice
-                }
-
                 if viewModel.slotGroups.isEmpty {
                     Text(String(localized: "meeting.slots.empty"))
                         .font(.subheadline)
@@ -419,49 +414,6 @@ struct MeetingView: View {
                 }
             }
         }
-    }
-
-    /// 全员重叠不足会议时长时的提示：无重叠 / 重叠不足 + 建议。
-    private var insufficientOverlapNotice: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if viewModel.maxOverlapMinutes == 0 {
-                Text(String(localized: "meeting.slots.overlap.none"))
-                    .font(.subheadline.weight(.medium))
-                Text(String(localized: "meeting.slots.overlap.none.suggest"))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            } else {
-                Text(String(format: String(localized: "meeting.slots.overlap.short"), viewModel.maxOverlapMinutes))
-                    .font(.subheadline.weight(.medium))
-                if !viewModel.constraints.isEmpty {
-                    Text(String(format: String(localized: "meeting.slots.overlap.constraints"), constraintText))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                Text(String(format: String(localized: "meeting.slots.overlap.short.suggest"), viewModel.maxOverlapMinutes))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(Color.orange.opacity(0.12))
-        .cornerRadius(10)
-    }
-
-    private var constraintText: String {
-        let parts = viewModel.constraints.map { constraint -> String in
-            let hour = constraint.kind == .start
-                ? constraint.participant.workStartHour
-                : constraint.participant.workEndHour
-            let time = String(format: "%02d:00", hour)
-            let name = CityDisplay.primaryName(cityName: constraint.participant.cityName, cityEn: constraint.participant.cityEn)
-            if constraint.kind == .start {
-                return String(format: String(localized: "meeting.slots.constraint.start"), name, time)
-            }
-            return String(format: String(localized: "meeting.slots.constraint.end"), name, time)
-        }
-        return parts.joined(separator: String(localized: "meeting.slots.constraints.join"))
     }
 
     private func slotGroupRow(_ group: MeetingSlotGroup) -> some View {

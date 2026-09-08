@@ -270,7 +270,7 @@ struct CityDetailView: View {
                         Image(systemName: viewModel.overlap.isCurrentlyOverlapping ? "phone.fill" : "phone")
                         Text(viewModel.overlapStatusText)
                     }
-                    .font(.caption2)
+                    .font(.caption2.weight(.semibold))
                     .foregroundColor(viewModel.overlap.isCurrentlyOverlapping ? .green : .secondary)
                     .lineLimit(1)
                 }

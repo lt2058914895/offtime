@@ -72,7 +72,7 @@ struct WorkingHoursBar: View {
                     .font(.system(size: 9))
                 Text(statusText)
             }
-            .font(.caption2)
+            .font(.caption2.weight(.semibold))
             .foregroundColor(overlap.isCurrentlyOverlapping ? .green : .secondary)
             .lineLimit(1)
         }
