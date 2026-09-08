@@ -144,11 +144,12 @@
 "meeting.overlap.available" = "Overlap available";
 "meeting.overlap.none" = "No overlap";
 "meeting.detail.title" = "Slot Details";
-"meeting.detail.subtitle" = "Corresponding times in each city";
+"meeting.detail.subtitle" = "Times in each city";
 "meeting.detail.range.hint" = "This status stays the same throughout the range; choose a meeting start time below.";
 "meeting.detail.select.start" = "Select meeting start time";
 "meeting.detail.add" = "Add to Recommended Records";
-"meeting.add.success" = "Meeting slot added. See it in Settings > Meeting Slots.";
+"meeting.detail.duration" = "%d min";
+"meeting.add.success" = "Meeting slot added. See it in Recommended Records.";
 "meeting.add.conflict" = "This time conflicts with an existing meeting slot";
 "meeting.add.conflict.title" = "Cannot Add Meeting Slot";
 "meeting.add.conflict.view" = "View";

@@ -144,11 +144,12 @@
 "meeting.overlap.available" = "存在重叠";
 "meeting.overlap.none" = "无重叠";
 "meeting.detail.title" = "档期详情";
-"meeting.detail.subtitle" = "该时段在各城市的对应时间";
+"meeting.detail.subtitle" = "各城市的对应时间";
 "meeting.detail.range.hint" = "该区间内状态保持一致，请在下方选择会议开始时间";
 "meeting.detail.select.start" = "选择会议开始时间";
 "meeting.detail.add" = "添加到推荐记录";
-"meeting.add.success" = "会议档期添加成功，可在设置-会议档期页面查看";
+"meeting.detail.duration" = "%d 分钟";
+"meeting.add.success" = "添加成功，可在推荐记录查看";
 "meeting.add.conflict" = "该时间与已有会议档期冲突，请选择其他时间";
 "meeting.add.conflict.title" = "无法添加会议档期";
 "meeting.add.conflict.view" = "去查看";

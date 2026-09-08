@@ -119,6 +119,7 @@ struct MeetingView: View {
                     }
                 }
             )
+            .presentationDetents([.large])
             .alert(
                 String(localized: "meeting.add.conflict.title"),
                 isPresented: $showConflictAlert
@@ -650,131 +651,20 @@ private struct SlotDetailSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
-                if group.optionStartDates.count > 1 {
-                    VStack(spacing: 8) {
-                        Text(rangeText)
-                            .font(.title2.weight(.bold))
-                        VStack(spacing: 4) {
-                            Text(String(localized: "meeting.detail.range.hint"))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color(.tertiarySystemFill))
-                        .cornerRadius(8)
-                    }
-                    .padding(.top, 8)
-                }
-
-                if group.optionStartDates.count > 1 {
-                    HStack {
-                        Text(String(localized: "meeting.detail.select.start"))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                        Spacer()
-                        Menu {
-                            ForEach(group.optionStartDates, id: \.self) { startDate in
-                                Button(startTimeText(startDate)) {
-                                    selectedStartDate = startDate
-                                }
-                            }
-                        } label: {
-                            HStack(spacing: 6) {
-                                Text(startTimeText(selectedStartDate))
-                                    .font(.body.weight(.semibold))
-                                    .foregroundColor(.accentColor)
-                                Image(systemName: "chevron.down")
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundColor(.accentColor)
-                            }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(Color.accentColor.opacity(0.1))
-                            .cornerRadius(10)
-                        }
-                    }
-                    .padding(.horizontal, 4)
-                }
-
-                VStack(spacing: 4) {
-                    HStack(alignment: .center, spacing: 8) {
-                        Text(meetingDateString)
-                            .font(.subheadline.weight(.bold))
-                        Text(meetingTimeText(selectedStartDate))
-                            .font(.title2.weight(.bold))
-                    }
-                    Text(String(localized: "meeting.detail.subtitle"))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.top, 8)
-
-                let detail = makeDetail(selectedStartDate)
-                VStack(spacing: 0) {
-                    ForEach(detail.rows) { row in
-                        HStack(spacing: 12) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                HStack(spacing: 6) {
-                                    Text(CityDisplay.primaryName(cityName: row.cityName, cityEn: row.cityEn))
-                                        .font(.body.weight(.medium))
-                                    if row.isLocal {
-                                        Text(String(localized: "meeting.local.badge"))
-                                            .font(.caption2.weight(.semibold))
-                                            .padding(.horizontal, 6)
-                                            .padding(.vertical, 1)
-                                            .background(Color.accentColor.opacity(0.15))
-                                            .cornerRadius(4)
-                                    }
-                                }
-                                if let secondary = CityDisplay.secondaryName(cityName: row.cityName, cityEn: row.cityEn) {
-                                    Text(secondary)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            Spacer()
-                            VStack(alignment: .trailing, spacing: 3) {
-                                Text(row.timeText)
-                                    .font(.body.weight(.semibold))
-                                    .multilineTextAlignment(.trailing)
-                                HStack(spacing: 4) {
-                                    Circle()
-                                        .fill(stateColor(row.state))
-                                        .frame(width: 6, height: 6)
-                                    Text(stateLabel(row.state))
-                                        .font(.caption)
-                                        .foregroundColor(stateColor(row.state))
-                                }
-                            }
-                        }
-                        .padding(.vertical, 10)
-                        if row.id != detail.rows.last?.id {
-                            Divider()
-                        }
-                    }
+            ScrollView {
+                VStack(spacing: 12) {
+                    overviewCard
+                    selectedTimeCard
+                    cityTimeCard
                 }
                 .padding(.horizontal, 16)
-                .background(Color(.secondarySystemGroupedBackground))
-                .cornerRadius(16)
-
-                Button {
-                    onAdd(selectedStartDate)
-                } label: {
-                    Label(String(localized: "meeting.detail.add"), systemImage: "plus.circle.fill")
-                        .font(.body.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 6)
-                }
-                .buttonStyle(.borderedProminent)
-
-                Spacer()
+                .padding(.top, 8)
+                .padding(.bottom, 24)
             }
-            .padding(16)
             .background(Color(.systemGroupedBackground))
+            .safeAreaInset(edge: .bottom) {
+                addButton
+            }
             .navigationTitle(String(localized: "meeting.detail.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -788,6 +678,195 @@ private struct SlotDetailSheet: View {
                 }
             }
         }
+    }
+
+    private var overviewCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                Text(rangeText)
+                    .font(.title3.weight(.bold))
+                    .monospacedDigit()
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                Spacer(minLength: 0)
+                statusBadge
+            }
+
+            if group.optionStartDates.count > 1 {
+                startTimeSelector
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(16)
+    }
+
+    private var selectedTimeCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(meetingDateString)
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(.secondary)
+
+            Text(meetingTimeText(selectedStartDate))
+                .font(.system(.largeTitle, design: .rounded).weight(.bold))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(String(format: String(localized: "meeting.detail.duration"), group.durationMinutes))
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(Color.accentColor.opacity(0.12))
+                .clipShape(Capsule())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(16)
+    }
+
+    private var startTimeSelector: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(String(localized: "meeting.detail.select.start"))
+                .font(.subheadline.weight(.semibold))
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            StartTimeFlowLayout(spacing: 8) {
+                ForEach(group.optionStartDates, id: \.self) { startDate in
+                    let isSelected = startDate == selectedStartDate
+                    Button {
+                        selectedStartDate = startDate
+                    } label: {
+                        Text(startTimeText(startDate))
+                            .font(.subheadline.weight(isSelected ? .bold : .medium))
+                            .monospacedDigit()
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 7)
+                            .background(isSelected ? Color.accentColor : Color(.tertiarySystemFill))
+                            .foregroundColor(isSelected ? .white : .primary)
+                            .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(16)
+    }
+
+    private var cityTimeCard: some View {
+        let detail = makeDetail(selectedStartDate)
+        return VStack(spacing: 0) {
+            Text(String(localized: "meeting.detail.subtitle"))
+                .font(.subheadline.weight(.semibold))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+
+            ForEach(detail.rows) { row in
+                cityRow(row)
+                if row.id != detail.rows.last?.id {
+                    Divider()
+                        .padding(.leading, 16)
+                }
+            }
+        }
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(16)
+    }
+
+    private func cityRow(_ row: MeetingSlotRow) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(spacing: 6) {
+                    Text(CityDisplay.primaryName(cityName: row.cityName, cityEn: row.cityEn))
+                        .font(.body.weight(.semibold))
+                        .lineLimit(1)
+                    if row.isLocal {
+                        Text(String(localized: "meeting.local.badge"))
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 1)
+                            .background(Color.accentColor.opacity(0.15))
+                            .clipShape(Capsule())
+                    }
+                }
+                if let secondary = CityDisplay.secondaryName(cityName: row.cityName, cityEn: row.cityEn) {
+                    Text(secondary)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer(minLength: 8)
+
+            VStack(alignment: .trailing, spacing: 5) {
+                Text(row.timeText)
+                    .font(.body.weight(.bold))
+                    .monospacedDigit()
+                    .multilineTextAlignment(.trailing)
+                    .lineLimit(2)
+
+                Text(stateLabel(row.state))
+                    .font(.caption2.weight(.semibold))
+                    .foregroundColor(stateColor(row.state))
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 2)
+                    .background(stateColor(row.state).opacity(0.13))
+                    .clipShape(Capsule())
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+    }
+
+    private var statusBadge: some View {
+        let text: String
+        let color: Color
+        switch group.tier {
+        case 0:
+            text = String(localized: "meeting.slots.tier.all")
+            color = .green
+        case 1:
+            text = String(format: String(localized: "meeting.slots.tier.offwork"), group.awakeCount)
+            color = .orange
+        default:
+            text = String(format: String(localized: "meeting.slots.tier.sleeping"), group.sleepingCount)
+            color = Color(.systemGray)
+        }
+
+        return Text(text)
+            .font(.caption.weight(.semibold))
+            .lineLimit(2)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(color.opacity(0.14))
+            .foregroundColor(color)
+            .clipShape(Capsule())
+    }
+
+    private var addButton: some View {
+        Button {
+            onAdd(selectedStartDate)
+        } label: {
+            Text(String(localized: "meeting.detail.add"))
+                .font(.body.weight(.semibold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+        }
+        .buttonStyle(.borderedProminent)
+        .padding(.horizontal, 16)
+        .padding(.top, 10)
+        .padding(.bottom, 12)
+        .background(.bar)
     }
 
     private func startTimeText(_ date: Date) -> String {
@@ -845,6 +924,66 @@ private struct CardView<Content: View>: View {
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(16)
             .shadow(color: Color.black.opacity(0.03), radius: 4)
+    }
+}
+
+private struct StartTimeFlowLayout: Layout {
+    var spacing: CGFloat = 8
+
+    func sizeThatFits(
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) -> CGSize {
+        let maxWidth = proposal.width ?? .infinity
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        var totalWidth: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x > 0, x + size.width > maxWidth {
+                x = 0
+                y += rowHeight + spacing
+                rowHeight = 0
+            }
+
+            x += size.width + spacing
+            rowHeight = max(rowHeight, size.height)
+            totalWidth = max(totalWidth, x - spacing)
+        }
+
+        let height = subviews.isEmpty ? 0 : y + rowHeight
+        return CGSize(width: maxWidth.isFinite ? maxWidth : totalWidth, height: height)
+    }
+
+    func placeSubviews(
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) {
+        var x = bounds.minX
+        var y = bounds.minY
+        var rowHeight: CGFloat = 0
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x > bounds.minX, x + size.width > bounds.maxX {
+                x = bounds.minX
+                y += rowHeight + spacing
+                rowHeight = 0
+            }
+
+            subview.place(
+                at: CGPoint(x: x, y: y),
+                anchor: .topLeading,
+                proposal: ProposedViewSize(size)
+            )
+            x += size.width + spacing
+            rowHeight = max(rowHeight, size.height)
+        }
     }
 }
 
