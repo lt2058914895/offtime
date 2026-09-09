@@ -20,9 +20,9 @@ final class ReminderListViewModel: ObservableObject {
               let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
             return [:]
         }
-        return Dictionary(uniqueKeysWithValues: cities.map {
-            ("\($0.cityEn)|\($0.timezoneId)", $0.country)
-        })
+        return cities.reduce(into: [String: String]()) {
+            $0["\($1.cityEn)|\($1.timezoneId)"] = $1.country
+        }
     }()
 
     init(reminderService: CityReminderService? = nil) {

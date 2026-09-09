@@ -880,22 +880,6 @@
     "continent": "america"
   },
   {
-    "id": "111",
-    "cityName": "蒙特雷",
-    "cityEn": "Monterrey",
-    "timezoneId": "America/Monterrey",
-    "country": "MX",
-    "continent": "america"
-  },
-  {
-    "id": "112",
-    "cityName": "瓜达拉哈拉",
-    "cityEn": "Guadalajara",
-    "timezoneId": "America/Mexico_City",
-    "country": "MX",
-    "continent": "america"
-  },
-  {
     "id": "113",
     "cityName": "迈阿密",
     "cityEn": "Miami",
@@ -7966,5 +7950,8053 @@
     "timezoneId": "America/Nuuk",
     "country": "GL",
     "continent": "arctic"
+  },
+  {
+    "id": "1002",
+    "cityName": "巨港",
+    "cityEn": "Palembang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1003",
+    "cityName": "巴厘巴板",
+    "cityEn": "Balikpapan",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1004",
+    "cityName": "梭罗",
+    "cityEn": "Surakarta",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1005",
+    "cityName": "玛琅",
+    "cityEn": "Malang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1006",
+    "cityName": "巴东",
+    "cityEn": "Padang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1007",
+    "cityName": "坤甸",
+    "cityEn": "Pontianak",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1008",
+    "cityName": "查亚普拉",
+    "cityEn": "Jayapura",
+    "timezoneId": "Asia/Jayapura",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1009",
+    "cityName": "登巴萨",
+    "cityEn": "Denpasar",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1010",
+    "cityName": "古邦",
+    "cityEn": "Kupang",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1011",
+    "cityName": "安汶",
+    "cityEn": "Ambon",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1012",
+    "cityName": "大城",
+    "cityEn": "Ayutthaya",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1013",
+    "cityName": "合艾",
+    "cityEn": "Hat Yai",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1014",
+    "cityName": "呵叻",
+    "cityEn": "Nakhon Ratchasima",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1015",
+    "cityName": "乌隆他尼",
+    "cityEn": "Udon Thani",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1016",
+    "cityName": "乌汶他尼",
+    "cityEn": "Ubon Ratchathani",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1017",
+    "cityName": "北碧",
+    "cityEn": "Kanchanaburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1018",
+    "cityName": "素可泰",
+    "cityEn": "Sukhothai",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1019",
+    "cityName": "拜县",
+    "cityEn": "Pai",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1020",
+    "cityName": "芹苴",
+    "cityEn": "Can Tho",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1021",
+    "cityName": "大叻",
+    "cityEn": "Da Lat",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1022",
+    "cityName": "头顿",
+    "cityEn": "Vung Tau",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1023",
+    "cityName": "归仁",
+    "cityEn": "Quy Nhon",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1024",
+    "cityName": "宁平",
+    "cityEn": "Ninh Binh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1025",
+    "cityName": "沙坝",
+    "cityEn": "Sapa",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1026",
+    "cityName": "怡保",
+    "cityEn": "Ipoh",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1027",
+    "cityName": "关丹",
+    "cityEn": "Kuantan",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1028",
+    "cityName": "哥打巴鲁",
+    "cityEn": "Kota Bharu",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1029",
+    "cityName": "亚罗士打",
+    "cityEn": "Alor Setar",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1030",
+    "cityName": "布城",
+    "cityEn": "Putrajaya",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1031",
+    "cityName": "美里",
+    "cityEn": "Miri",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1032",
+    "cityName": "山打根",
+    "cityEn": "Sandakan",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1033",
+    "cityName": "伊洛伊洛",
+    "cityEn": "Iloilo",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1034",
+    "cityName": "巴科洛德",
+    "cityEn": "Bacolod",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1035",
+    "cityName": "卡加延德奥罗",
+    "cityEn": "Cagayan de Oro",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1036",
+    "cityName": "塔比拉兰",
+    "cityEn": "Tagbilaran",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1037",
+    "cityName": "锡亚高",
+    "cityEn": "Siargao",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1038",
+    "cityName": "黎牙实比",
+    "cityEn": "Legazpi",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1039",
+    "cityName": "三宝颜",
+    "cityEn": "Zamboanga",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1040",
+    "cityName": "内比都",
+    "cityEn": "Naypyidaw",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1041",
+    "cityName": "东枝",
+    "cityEn": "Taunggyi",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1042",
+    "cityName": "毛淡棉",
+    "cityEn": "Mawlamyine",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1043",
+    "cityName": "马德望",
+    "cityEn": "Battambang",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1044",
+    "cityName": "贡布",
+    "cityEn": "Kampot",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1045",
+    "cityName": "巴色",
+    "cityEn": "Pakse",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1046",
+    "cityName": "万荣",
+    "cityEn": "Vang Vieng",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1047",
+    "cityName": "沙湾拿吉",
+    "cityEn": "Savannakhet",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1048",
+    "cityName": "包考",
+    "cityEn": "Baucau",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1049",
+    "cityName": "班达亚齐",
+    "cityEn": "Banda Aceh",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1050",
+    "cityName": "北干巴鲁",
+    "cityEn": "Pekanbaru",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1051",
+    "cityName": "占碑",
+    "cityEn": "Jambi",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1052",
+    "cityName": "明古鲁",
+    "cityEn": "Bengkulu",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1053",
+    "cityName": "楠榜",
+    "cityEn": "Bandar Lampung",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1054",
+    "cityName": "邦加槟港",
+    "cityEn": "Pangkal Pinang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1055",
+    "cityName": "丹戎槟榔",
+    "cityEn": "Tanjung Pinang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1056",
+    "cityName": "井里汶",
+    "cityEn": "Cirebon",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1057",
+    "cityName": "马格朗",
+    "cityEn": "Magelang",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1058",
+    "cityName": "外南梦",
+    "cityEn": "Banyuwangi",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1059",
+    "cityName": "马辰",
+    "cityEn": "Banjarmasin",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1060",
+    "cityName": "三马林达",
+    "cityEn": "Samarinda",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1061",
+    "cityName": "帕卢",
+    "cityEn": "Palu",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1062",
+    "cityName": "索龙",
+    "cityEn": "Sorong",
+    "timezoneId": "Asia/Jayapura",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1063",
+    "cityName": "特尔纳特",
+    "cityEn": "Ternate",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1064",
+    "cityName": "那空沙旺",
+    "cityEn": "Nakhon Sawan",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1065",
+    "cityName": "彭世洛",
+    "cityEn": "Phitsanulok",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1066",
+    "cityName": "孔敬",
+    "cityEn": "Khon Kaen",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1067",
+    "cityName": "廊开",
+    "cityEn": "Nong Khai",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1068",
+    "cityName": "黎府",
+    "cityEn": "Loei",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1069",
+    "cityName": "南邦",
+    "cityEn": "Lampang",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1070",
+    "cityName": "夜丰颂",
+    "cityEn": "Mae Hong Son",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1071",
+    "cityName": "叻丕",
+    "cityEn": "Ratchaburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1072",
+    "cityName": "罗勇",
+    "cityEn": "Rayong",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1073",
+    "cityName": "尖竹汶",
+    "cityEn": "Chanthaburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1074",
+    "cityName": "邦美蜀",
+    "cityEn": "Buon Ma Thuot",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1075",
+    "cityName": "波来古",
+    "cityEn": "Pleiku",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1076",
+    "cityName": "荣市",
+    "cityEn": "Vinh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1077",
+    "cityName": "清化",
+    "cityEn": "Thanh Hoa",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1078",
+    "cityName": "南定",
+    "cityEn": "Nam Dinh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1079",
+    "cityName": "太原",
+    "cityEn": "Thai Nguyen",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1080",
+    "cityName": "越池",
+    "cityEn": "Viet Tri",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1081",
+    "cityName": "河静",
+    "cityEn": "Ha Tinh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1082",
+    "cityName": "洞海",
+    "cityEn": "Dong Hoi",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1083",
+    "cityName": "藩切",
+    "cityEn": "Phan Thiet",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1084",
+    "cityName": "莎阿南",
+    "cityEn": "Shah Alam",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1085",
+    "cityName": "八打灵再也",
+    "cityEn": "Petaling Jaya",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1086",
+    "cityName": "巴生",
+    "cityEn": "Klang",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1087",
+    "cityName": "芙蓉",
+    "cityEn": "Seremban",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1088",
+    "cityName": "太平",
+    "cityEn": "Taiping",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1089",
+    "cityName": "亚娄",
+    "cityEn": "Kangar",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1090",
+    "cityName": "纳闽",
+    "cityEn": "Labuan",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1091",
+    "cityName": "斗湖",
+    "cityEn": "Tawau",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1092",
+    "cityName": "碧瑶",
+    "cityEn": "Baguio",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1093",
+    "cityName": "安吉利斯",
+    "cityEn": "Angeles",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1094",
+    "cityName": "维甘",
+    "cityEn": "Vigan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1095",
+    "cityName": "拉瓦格",
+    "cityEn": "Laoag",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1096",
+    "cityName": "土格加劳",
+    "cityEn": "Tuguegarao",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1097",
+    "cityName": "那牙",
+    "cityEn": "Naga",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1098",
+    "cityName": "杜马盖地",
+    "cityEn": "Dumaguete",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1099",
+    "cityName": "独鲁万",
+    "cityEn": "Tacloban",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1100",
+    "cityName": "武端",
+    "cityEn": "Butuan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1101",
+    "cityName": "将军市",
+    "cityEn": "General Santos",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1102",
+    "cityName": "勃固",
+    "cityEn": "Bago",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1103",
+    "cityName": "勃生",
+    "cityEn": "Pathein",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1104",
+    "cityName": "密支那",
+    "cityEn": "Myitkyina",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1105",
+    "cityName": "实兑",
+    "cityEn": "Sittwe",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1106",
+    "cityName": "蒙育瓦",
+    "cityEn": "Monywa",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1107",
+    "cityName": "帕安",
+    "cityEn": "Hpa-An",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1108",
+    "cityName": "白马",
+    "cityEn": "Kep",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1109",
+    "cityName": "波贝",
+    "cityEn": "Poipet",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1110",
+    "cityName": "磅湛",
+    "cityEn": "Kampong Cham",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1111",
+    "cityName": "菩萨",
+    "cityEn": "Pursat",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1112",
+    "cityName": "上丁",
+    "cityEn": "Stung Treng",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1113",
+    "cityName": "他曲",
+    "cityEn": "Thakhek",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1114",
+    "cityName": "沙拉湾",
+    "cityEn": "Salavan",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1115",
+    "cityName": "塞公",
+    "cityEn": "Sekong",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1116",
+    "cityName": "阿速坡",
+    "cityEn": "Attapeu",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1117",
+    "cityName": "马利亚纳",
+    "cityEn": "Maliana",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1118",
+    "cityName": "苏艾",
+    "cityEn": "Suai",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1119",
+    "cityName": "欧库西",
+    "cityEn": "Oecusse",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1120",
+    "cityName": "马来奕",
+    "cityEn": "Kuala Belait",
+    "timezoneId": "Asia/Brunei",
+    "country": "BN",
+    "continent": "asia"
+  },
+  {
+    "id": "1121",
+    "cityName": "诗里亚",
+    "cityEn": "Seria",
+    "timezoneId": "Asia/Brunei",
+    "country": "BN",
+    "continent": "asia"
+  },
+  {
+    "id": "1122",
+    "cityName": "都东",
+    "cityEn": "Tutong",
+    "timezoneId": "Asia/Brunei",
+    "country": "BN",
+    "continent": "asia"
+  },
+  {
+    "id": "1123",
+    "cityName": "肯达里",
+    "cityEn": "Kendari",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1124",
+    "cityName": "哥伦打洛",
+    "cityEn": "Gorontalo",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1125",
+    "cityName": "比通",
+    "cityEn": "Bitung",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1126",
+    "cityName": "比马",
+    "cityEn": "Bima",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1127",
+    "cityName": "毛梅雷",
+    "cityEn": "Maumere",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1128",
+    "cityName": "瓦因加普",
+    "cityEn": "Waingapu",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1129",
+    "cityName": "打拉根",
+    "cityEn": "Tarakan",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1130",
+    "cityName": "马老奇",
+    "cityEn": "Merauke",
+    "timezoneId": "Asia/Jayapura",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1131",
+    "cityName": "洛坤",
+    "cityEn": "Nakhon Si Thammarat",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1132",
+    "cityName": "宋卡",
+    "cityEn": "Songkhla",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1133",
+    "cityName": "董里",
+    "cityEn": "Trang",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1134",
+    "cityName": "素叻他尼",
+    "cityEn": "Surat Thani",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1135",
+    "cityName": "春蓬",
+    "cityEn": "Chumphon",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1136",
+    "cityName": "巴蜀",
+    "cityEn": "Prachuap Khiri Khan",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1137",
+    "cityName": "帕",
+    "cityEn": "Phrae",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1138",
+    "cityName": "难府",
+    "cityEn": "Nan",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1139",
+    "cityName": "帕尧",
+    "cityEn": "Phayao",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1140",
+    "cityName": "猜也蓬",
+    "cityEn": "Chaiyaphum",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1141",
+    "cityName": "武里南",
+    "cityEn": "Buriram",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1142",
+    "cityName": "素林",
+    "cityEn": "Surin",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1143",
+    "cityName": "金瓯",
+    "cityEn": "Ca Mau",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1144",
+    "cityName": "龙川",
+    "cityEn": "Long Xuyen",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1145",
+    "cityName": "美湫",
+    "cityEn": "My Tho",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1146",
+    "cityName": "槟椥",
+    "cityEn": "Ben Tre",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1147",
+    "cityName": "茶荣",
+    "cityEn": "Tra Vinh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1148",
+    "cityName": "朔庄",
+    "cityEn": "Soc Trang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1149",
+    "cityName": "迪石",
+    "cityEn": "Rach Gia",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1150",
+    "cityName": "河仙",
+    "cityEn": "Ha Tien",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1151",
+    "cityName": "居銮",
+    "cityEn": "Kluang",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1152",
+    "cityName": "峇株巴辖",
+    "cityEn": "Batu Pahat",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1153",
+    "cityName": "昔加末",
+    "cityEn": "Segamat",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1154",
+    "cityName": "丰盛港",
+    "cityEn": "Mersing",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1155",
+    "cityName": "根地咬",
+    "cityEn": "Keningau",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1156",
+    "cityName": "古达",
+    "cityEn": "Kudat",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1157",
+    "cityName": "马蒂",
+    "cityEn": "Mati",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1158",
+    "cityName": "迪戈斯",
+    "cityEn": "Digos",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1159",
+    "cityName": "科罗纳达尔",
+    "cityEn": "Koronadal",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1160",
+    "cityName": "基达帕万",
+    "cityEn": "Kidapawan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1161",
+    "cityName": "卑谬",
+    "cityEn": "Pyay",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1162",
+    "cityName": "东吁",
+    "cityEn": "Taungoo",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1163",
+    "cityName": "眉提拉",
+    "cityEn": "Meiktila",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1164",
+    "cityName": "土瓦",
+    "cityEn": "Dawei",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1165",
+    "cityName": "墨吉",
+    "cityEn": "Myeik",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1166",
+    "cityName": "景栋",
+    "cityEn": "Kengtung",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1167",
+    "cityName": "磅同",
+    "cityEn": "Kampong Thom",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1168",
+    "cityName": "戈公",
+    "cityEn": "Koh Kong",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1169",
+    "cityName": "磅清扬",
+    "cityEn": "Kampong Chhnang",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1170",
+    "cityName": "茶胶",
+    "cityEn": "Takeo",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1171",
+    "cityName": "柴桢",
+    "cityEn": "Svay Rieng",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1172",
+    "cityName": "桔井",
+    "cityEn": "Kratie",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1173",
+    "cityName": "琅南塔",
+    "cityEn": "Luang Namtha",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1174",
+    "cityName": "乌多姆塞",
+    "cityEn": "Oudomxay",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1175",
+    "cityName": "丰沙湾",
+    "cityEn": "Phonsavan",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1176",
+    "cityName": "桑怒",
+    "cityEn": "Sam Neua",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1177",
+    "cityName": "会晒",
+    "cityEn": "Houayxay",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1178",
+    "cityName": "萨梅",
+    "cityEn": "Same",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1179",
+    "cityName": "艾莱乌",
+    "cityEn": "Aileu",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1180",
+    "cityName": "埃尔梅拉",
+    "cityEn": "Ermera",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1181",
+    "cityName": "利基卡",
+    "cityEn": "Liquica",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1182",
+    "cityName": "邦阿",
+    "cityEn": "Bangar",
+    "timezoneId": "Asia/Brunei",
+    "country": "BN",
+    "continent": "asia"
+  },
+  {
+    "id": "1183",
+    "cityName": "帕朗卡拉亚",
+    "cityEn": "Palangka Raya",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1184",
+    "cityName": "丹戎塞洛",
+    "cityEn": "Tanjung Selor",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1185",
+    "cityName": "马穆朱",
+    "cityEn": "Mamuju",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1186",
+    "cityName": "索菲菲",
+    "cityEn": "Sofifi",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1187",
+    "cityName": "马诺夸里",
+    "cityEn": "Manokwari",
+    "timezoneId": "Asia/Jayapura",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1188",
+    "cityName": "马塔兰",
+    "cityEn": "Mataram",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1189",
+    "cityName": "春武里",
+    "cityEn": "Chonburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1190",
+    "cityName": "达叻",
+    "cityEn": "Trat",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1191",
+    "cityName": "那空帕农",
+    "cityEn": "Nakhon Phanom",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1192",
+    "cityName": "穆达汉",
+    "cityEn": "Mukdahan",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1193",
+    "cityName": "益梭通",
+    "cityEn": "Yasothon",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1194",
+    "cityName": "四色菊",
+    "cityEn": "Sisaket",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1195",
+    "cityName": "马哈沙拉堪",
+    "cityEn": "Maha Sarakham",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1196",
+    "cityName": "加拉信",
+    "cityEn": "Kalasin",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1197",
+    "cityName": "萨空那空",
+    "cityEn": "Sakon Nakhon",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1198",
+    "cityName": "碧差汶",
+    "cityEn": "Phetchabun",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1199",
+    "cityName": "甘烹碧",
+    "cityEn": "Kamphaeng Phet",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1200",
+    "cityName": "华富里",
+    "cityEn": "Lopburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1201",
+    "cityName": "边和市",
+    "cityEn": "Bien Hoa",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1202",
+    "cityName": "土龙木",
+    "cityEn": "Thu Dau Mot",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1203",
+    "cityName": "高岭",
+    "cityEn": "Cao Lanh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1204",
+    "cityName": "永隆",
+    "cityEn": "Vinh Long",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1205",
+    "cityName": "新安",
+    "cityEn": "Tan An",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1206",
+    "cityName": "西宁",
+    "cityEn": "Tay Ninh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1207",
+    "cityName": "三岐",
+    "cityEn": "Tam Ky",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1208",
+    "cityName": "广义",
+    "cityEn": "Quang Ngai",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1209",
+    "cityName": "绥和",
+    "cityEn": "Tuy Hoa",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1210",
+    "cityName": "藩朗",
+    "cityEn": "Phan Rang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1211",
+    "cityName": "崑嵩",
+    "cityEn": "Kon Tum",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1212",
+    "cityName": "永安",
+    "cityEn": "Vinh Yen",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1213",
+    "cityName": "老街",
+    "cityEn": "Lao Cai",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1214",
+    "cityName": "奠边府",
+    "cityEn": "Dien Bien Phu",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1215",
+    "cityName": "山萝",
+    "cityEn": "Son La",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1216",
+    "cityName": "瓜拉丁加奴",
+    "cityEn": "Kuala Terengganu",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1217",
+    "cityName": "诗巫",
+    "cityEn": "Sibu",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1218",
+    "cityName": "民都鲁",
+    "cityEn": "Bintulu",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1219",
+    "cityName": "伊利甘",
+    "cityEn": "Iligan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1220",
+    "cityName": "奥萨米斯",
+    "cityEn": "Ozamiz",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1221",
+    "cityName": "帕加迪安",
+    "cityEn": "Pagadian",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1222",
+    "cityName": "迪波洛格",
+    "cityEn": "Dipolog",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1223",
+    "cityName": "马拉维",
+    "cityEn": "Marawi",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1224",
+    "cityName": "哥打巴托",
+    "cityEn": "Cotabato",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1225",
+    "cityName": "马来巴来",
+    "cityEn": "Malaybalay",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1226",
+    "cityName": "苏里高市",
+    "cityEn": "Surigao City",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1227",
+    "cityName": "垒固",
+    "cityEn": "Loikaw",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1228",
+    "cityName": "哈卡",
+    "cityEn": "Hakha",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1229",
+    "cityName": "实皆",
+    "cityEn": "Sagaing",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1230",
+    "cityName": "马圭",
+    "cityEn": "Magway",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1231",
+    "cityName": "柏威夏",
+    "cityEn": "Preah Vihear",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1232",
+    "cityName": "森隆",
+    "cityEn": "Samraong",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1233",
+    "cityName": "诗梳风",
+    "cityEn": "Sisophon",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1234",
+    "cityName": "拜林",
+    "cityEn": "Pailin",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1235",
+    "cityName": "达克茂",
+    "cityEn": "Ta Khmau",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1236",
+    "cityName": "磅士卑",
+    "cityEn": "Kampong Speu",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1237",
+    "cityName": "波萝勉",
+    "cityEn": "Prey Veng",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1238",
+    "cityName": "苏翁",
+    "cityEn": "Suong",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1239",
+    "cityName": "邦隆",
+    "cityEn": "Banlung",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1240",
+    "cityName": "森莫诺隆",
+    "cityEn": "Sen Monorom",
+    "timezoneId": "Asia/Phnom_Penh",
+    "country": "KH",
+    "continent": "asia"
+  },
+  {
+    "id": "1241",
+    "cityName": "丰沙里",
+    "cityEn": "Phongsali",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1242",
+    "cityName": "沙耶武里",
+    "cityEn": "Xaignabouli",
+    "timezoneId": "Asia/Vientiane",
+    "country": "LA",
+    "continent": "asia"
+  },
+  {
+    "id": "1243",
+    "cityName": "马纳图托",
+    "cityEn": "Manatuto",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1244",
+    "cityName": "维克克",
+    "cityEn": "Viqueque",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1245",
+    "cityName": "洛斯帕洛斯",
+    "cityEn": "Lospalos",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1246",
+    "cityName": "艾纳罗",
+    "cityEn": "Ainaro",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1247",
+    "cityName": "阿陶罗",
+    "cityEn": "Atauro",
+    "timezoneId": "Asia/Dili",
+    "country": "TL",
+    "continent": "asia"
+  },
+  {
+    "id": "1248",
+    "cityName": "茂物",
+    "cityEn": "Bogor",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1249",
+    "cityName": "德波",
+    "cityEn": "Depok",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1250",
+    "cityName": "勿加泗",
+    "cityEn": "Bekasi",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1251",
+    "cityName": "披迈",
+    "cityEn": "Cimahi",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1252",
+    "cityName": "塔西克马拉亚",
+    "cityEn": "Tasikmalaya",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1253",
+    "cityName": "萨拉蒂加",
+    "cityEn": "Salatiga",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1254",
+    "cityName": "古突士",
+    "cityEn": "Kudus",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1255",
+    "cityName": "捷布拉",
+    "cityEn": "Jepara",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1256",
+    "cityName": "特加尔",
+    "cityEn": "Tegal",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1257",
+    "cityName": "北加浪岸",
+    "cityEn": "Pekalongan",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1258",
+    "cityName": "谏义里",
+    "cityEn": "Kediri",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1259",
+    "cityName": "庞越",
+    "cityEn": "Probolinggo",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1260",
+    "cityName": "任抹",
+    "cityEn": "Jember",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1261",
+    "cityName": "新加拉惹",
+    "cityEn": "Singaraja",
+    "timezoneId": "Asia/Makassar",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1262",
+    "cityName": "佛丕",
+    "cityEn": "Phetchaburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1263",
+    "cityName": "巴真",
+    "cityEn": "Prachinburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1264",
+    "cityName": "沙缴",
+    "cityEn": "Sa Kaeo",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1265",
+    "cityName": "北柳",
+    "cityEn": "Chachoengsao",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1266",
+    "cityName": "北标",
+    "cityEn": "Saraburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1267",
+    "cityName": "乌泰他尼",
+    "cityEn": "Uthai Thani",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1268",
+    "cityName": "猜纳",
+    "cityEn": "Chai Nat",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1269",
+    "cityName": "信武里",
+    "cityEn": "Sing Buri",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1270",
+    "cityName": "来兴",
+    "cityEn": "Tak",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1271",
+    "cityName": "程逸",
+    "cityEn": "Uttaradit",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1272",
+    "cityName": "北宁",
+    "cityEn": "Bac Ninh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1273",
+    "cityName": "北江",
+    "cityEn": "Bac Giang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1274",
+    "cityName": "海阳",
+    "cityEn": "Hai Duong",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1275",
+    "cityName": "兴安",
+    "cityEn": "Hung Yen",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1276",
+    "cityName": "太平",
+    "cityEn": "Thai Binh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1277",
+    "cityName": "河江",
+    "cityEn": "Ha Giang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1278",
+    "cityName": "高平",
+    "cityEn": "Cao Bang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1279",
+    "cityName": "北件",
+    "cityEn": "Bac Kan",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1280",
+    "cityName": "宣光",
+    "cityEn": "Tuyen Quang",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1281",
+    "cityName": "奠边",
+    "cityEn": "Dien Bien",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1282",
+    "cityName": "莱州",
+    "cityEn": "Lai Chau",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1283",
+    "cityName": "和平",
+    "cityEn": "Hoa Binh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1284",
+    "cityName": "拿笃",
+    "cityEn": "Lahad Datu",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1285",
+    "cityName": "林梦",
+    "cityEn": "Limbang",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1286",
+    "cityName": "老越",
+    "cityEn": "Lawas",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1287",
+    "cityName": "泗里街",
+    "cityEn": "Sarikei",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1288",
+    "cityName": "斯里阿曼",
+    "cityEn": "Sri Aman",
+    "timezoneId": "Asia/Kuching",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1289",
+    "cityName": "安顺",
+    "cityEn": "Teluk Intan",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1290",
+    "cityName": "巴斯科",
+    "cityEn": "Basco",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1291",
+    "cityName": "比拉克",
+    "cityEn": "Virac",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1292",
+    "cityName": "索索贡",
+    "cityEn": "Sorsogon",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1293",
+    "cityName": "马斯巴特",
+    "cityEn": "Masbate",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1294",
+    "cityName": "达特",
+    "cityEn": "Daet",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1295",
+    "cityName": "卢塞纳",
+    "cityEn": "Lucena",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1296",
+    "cityName": "八打雁",
+    "cityEn": "Batangas",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1297",
+    "cityName": "利巴",
+    "cityEn": "Lipa",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1298",
+    "cityName": "卡兰巴",
+    "cityEn": "Calamba",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1299",
+    "cityName": "圣罗萨",
+    "cityEn": "Santa Rosa",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1300",
+    "cityName": "安蒂波洛",
+    "cityEn": "Antipolo",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1301",
+    "cityName": "罗哈斯",
+    "cityEn": "Roxas",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1302",
+    "cityName": "卡劳",
+    "cityEn": "Kalaw",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1303",
+    "cityName": "娘水镇",
+    "cityEn": "Nyaungshwe",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1304",
+    "cityName": "眉苗",
+    "cityEn": "Pyin Oo Lwin",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1305",
+    "cityName": "腊戌",
+    "cityEn": "Lashio",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1306",
+    "cityName": "皎脉",
+    "cityEn": "Kyaukme",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1307",
+    "cityName": "昔卜",
+    "cityEn": "Hsipaw",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1308",
+    "cityName": "巴杜",
+    "cityEn": "Batu",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1309",
+    "cityName": "马都恩",
+    "cityEn": "Madiun",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1310",
+    "cityName": "波诺罗戈",
+    "cityEn": "Ponorogo",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1311",
+    "cityName": "博若内戈罗",
+    "cityEn": "Bojonegoro",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1312",
+    "cityName": "土班",
+    "cityEn": "Tuban",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1313",
+    "cityName": "格雷斯",
+    "cityEn": "Gresik",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1314",
+    "cityName": "莫佐克托",
+    "cityEn": "Mojokerto",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1315",
+    "cityName": "巴苏鲁安",
+    "cityEn": "Pasuruan",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1316",
+    "cityName": "西多阿尔霍",
+    "cityEn": "Sidoarjo",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1317",
+    "cityName": "布利塔尔",
+    "cityEn": "Blitar",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1318",
+    "cityName": "西杜邦多",
+    "cityEn": "Situbondo",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1319",
+    "cityName": "邦多沃索",
+    "cityEn": "Bondowoso",
+    "timezoneId": "Asia/Jakarta",
+    "country": "ID",
+    "continent": "asia"
+  },
+  {
+    "id": "1320",
+    "cityName": "北榄",
+    "cityEn": "Samut Prakan",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1321",
+    "cityName": "暖武里",
+    "cityEn": "Nonthaburi",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1322",
+    "cityName": "巴吞他尼",
+    "cityEn": "Pathum Thani",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1323",
+    "cityName": "佛统",
+    "cityEn": "Nakhon Pathom",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1324",
+    "cityName": "龙仔厝",
+    "cityEn": "Samut Sakhon",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1325",
+    "cityName": "夜功",
+    "cityEn": "Samut Songkhram",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1326",
+    "cityName": "那空那育",
+    "cityEn": "Nakhon Nayok",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1327",
+    "cityName": "红统",
+    "cityEn": "Ang Thong",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1328",
+    "cityName": "披集",
+    "cityEn": "Phichit",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1329",
+    "cityName": "布根堪",
+    "cityEn": "Bueng Kan",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1330",
+    "cityName": "农磨兰普",
+    "cityEn": "Nong Bua Lamphu",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1331",
+    "cityName": "黎逸",
+    "cityEn": "Roi Et",
+    "timezoneId": "Asia/Bangkok",
+    "country": "TH",
+    "continent": "asia"
+  },
+  {
+    "id": "1332",
+    "cityName": "东河",
+    "cityEn": "Dong Ha",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1333",
+    "cityName": "渭川",
+    "cityEn": "Vi Thanh",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1334",
+    "cityName": "嘉义",
+    "cityEn": "Gia Nghia",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1335",
+    "cityName": "同帅",
+    "cityEn": "Dong Xoai",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1336",
+    "cityName": "薄辽",
+    "cityEn": "Bac Lieu",
+    "timezoneId": "Asia/Ho_Chi_Minh",
+    "country": "VN",
+    "continent": "asia"
+  },
+  {
+    "id": "1337",
+    "cityName": "麻坡",
+    "cityEn": "Muar",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1338",
+    "cityName": "哥打丁宜",
+    "cityEn": "Kota Tinggi",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1339",
+    "cityName": "古来",
+    "cityEn": "Kulai",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1340",
+    "cityName": "巴西古当",
+    "cityEn": "Pasir Gudang",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1341",
+    "cityName": "士乃",
+    "cityEn": "Senai",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1342",
+    "cityName": "士古来",
+    "cityEn": "Skudai",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1343",
+    "cityName": "瓜拉雪兰莪",
+    "cityEn": "Kuala Selangor",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1344",
+    "cityName": "沙白安南",
+    "cityEn": "Sabak Bernam",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1345",
+    "cityName": "加影",
+    "cityEn": "Kajang",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1346",
+    "cityName": "拉旺",
+    "cityEn": "Rawang",
+    "timezoneId": "Asia/Kuala_Lumpur",
+    "country": "MY",
+    "continent": "asia"
+  },
+  {
+    "id": "1347",
+    "cityName": "圣费尔南多",
+    "cityEn": "San Fernando",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1348",
+    "cityName": "卡瓦延",
+    "cityEn": "Cauayan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1349",
+    "cityName": "伊拉甘",
+    "cityEn": "Ilagan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1350",
+    "cityName": "阿帕里",
+    "cityEn": "Aparri",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1351",
+    "cityName": "圣安娜",
+    "cityEn": "Santa Ana",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1352",
+    "cityName": "达古潘",
+    "cityEn": "Dagupan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1353",
+    "cityName": "乌达内塔",
+    "cityEn": "Urdaneta",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1354",
+    "cityName": "阿拉米诺斯",
+    "cityEn": "Alaminos",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1355",
+    "cityName": "林加延",
+    "cityEn": "Lingayen",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1356",
+    "cityName": "塔拉克",
+    "cityEn": "Tarlac",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1357",
+    "cityName": "奥隆阿波",
+    "cityEn": "Olongapo",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1358",
+    "cityName": "卡巴纳图安",
+    "cityEn": "Cabanatuan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1359",
+    "cityName": "帕拉延",
+    "cityEn": "Palayan",
+    "timezoneId": "Asia/Manila",
+    "country": "PH",
+    "continent": "asia"
+  },
+  {
+    "id": "1360",
+    "cityName": "木姐",
+    "cityEn": "Muse",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1361",
+    "cityName": "南散",
+    "cityEn": "Namhsan",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1362",
+    "cityName": "平达亚",
+    "cityEn": "Pindaya",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1363",
+    "cityName": "良乌",
+    "cityEn": "Nyaung-U",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1364",
+    "cityName": "包多",
+    "cityEn": "Pakokku",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1365",
+    "cityName": "皎勃东",
+    "cityEn": "Chauk",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1366",
+    "cityName": "仁安羌",
+    "cityEn": "Yenangyaung",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1367",
+    "cityName": "东敦枝",
+    "cityEn": "Taungdwingyi",
+    "timezoneId": "Asia/Yangon",
+    "country": "MM",
+    "continent": "asia"
+  },
+  {
+    "id": "1368",
+    "cityName": "埃森",
+    "cityEn": "Essen",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1369",
+    "cityName": "多特蒙德",
+    "cityEn": "Dortmund",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1370",
+    "cityName": "杜伊斯堡",
+    "cityEn": "Duisburg",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1371",
+    "cityName": "波恩",
+    "cityEn": "Bonn",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1372",
+    "cityName": "土伦",
+    "cityEn": "Toulon",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1373",
+    "cityName": "格勒诺布尔",
+    "cityEn": "Grenoble",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1374",
+    "cityName": "第戎",
+    "cityEn": "Dijon",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1375",
+    "cityName": "兰斯",
+    "cityEn": "Reims",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1376",
+    "cityName": "勒阿弗尔",
+    "cityEn": "Le Havre",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1377",
+    "cityName": "昂热",
+    "cityEn": "Angers",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1378",
+    "cityName": "萨拉戈萨",
+    "cityEn": "Zaragoza",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1379",
+    "cityName": "穆尔西亚",
+    "cityEn": "Murcia",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1380",
+    "cityName": "巴利亚多利德",
+    "cityEn": "Valladolid",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1381",
+    "cityName": "维哥",
+    "cityEn": "Vigo",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1382",
+    "cityName": "拉科鲁尼亚",
+    "cityEn": "A Coruña",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1383",
+    "cityName": "科尔多瓦",
+    "cityEn": "Córdoba",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1384",
+    "cityName": "巴里",
+    "cityEn": "Bari",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "1385",
+    "cityName": "帕多瓦",
+    "cityEn": "Padua",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "1386",
+    "cityName": "的里雅斯特",
+    "cityEn": "Trieste",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "1387",
+    "cityName": "布雷西亚",
+    "cityEn": "Brescia",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "1388",
+    "cityName": "帕尔马",
+    "cityEn": "Parma",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "1389",
+    "cityName": "莱斯特",
+    "cityEn": "Leicester",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "1390",
+    "cityName": "朴茨茅斯",
+    "cityEn": "Portsmouth",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "1391",
+    "cityName": "考文垂",
+    "cityEn": "Coventry",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "1392",
+    "cityName": "纽约市",
+    "cityEn": "New York City",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "1393",
+    "cityName": "巴亚尔塔港",
+    "cityEn": "Puerto Vallarta",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1394",
+    "cityName": "普埃布拉",
+    "cityEn": "Puebla",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1395",
+    "cityName": "克雷塔罗",
+    "cityEn": "Querétaro",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1396",
+    "cityName": "莱昂",
+    "cityEn": "León",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1397",
+    "cityName": "圣米格尔-德阿连德",
+    "cityEn": "San Miguel de Allende",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1398",
+    "cityName": "卡波圣卢卡斯",
+    "cityEn": "Cabo San Lucas",
+    "timezoneId": "America/Hermosillo",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1399",
+    "cityName": "阿卡普尔科",
+    "cityEn": "Acapulco",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1400",
+    "cityName": "莫雷利亚",
+    "cityEn": "Morelia",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1401",
+    "cityName": "韦拉克鲁斯",
+    "cityEn": "Veracruz",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1402",
+    "cityName": "贾斯珀",
+    "cityEn": "Jasper",
+    "timezoneId": "America/Edmonton",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "1403",
+    "cityName": "基洛纳",
+    "cityEn": "Kelowna",
+    "timezoneId": "America/Vancouver",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "1404",
+    "cityName": "马德普拉塔",
+    "cityEn": "Mar del Plata",
+    "timezoneId": "America/Argentina/Buenos_Aires",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "1405",
+    "cityName": "图文巴",
+    "cityEn": "Toowoomba",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1406",
+    "cityName": "巴拉瑞特",
+    "cityEn": "Ballarat",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1407",
+    "cityName": "本迪戈",
+    "cityEn": "Bendigo",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1408",
+    "cityName": "罗克汉普顿",
+    "cityEn": "Rockhampton",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1409",
+    "cityName": "麦凯",
+    "cityEn": "Mackay",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1410",
+    "cityName": "班达伯格",
+    "cityEn": "Bundaberg",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1411",
+    "cityName": "赫维湾",
+    "cityEn": "Hervey Bay",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1412",
+    "cityName": "格拉德斯通",
+    "cityEn": "Gladstone",
+    "timezoneId": "Australia/Brisbane",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1413",
+    "cityName": "旺阿雷",
+    "cityEn": "Whangarei",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "1414",
+    "cityName": "陶波",
+    "cityEn": "Taupo",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "1415",
+    "cityName": "因弗卡吉尔",
+    "cityEn": "Invercargill",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "1416",
+    "cityName": "多多马",
+    "cityEn": "Dodoma",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1417",
+    "cityName": "亚穆苏克罗",
+    "cityEn": "Yamoussoukro",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "1418",
+    "cityName": "波多诺伏",
+    "cityEn": "Porto-Novo",
+    "timezoneId": "Africa/Porto-Novo",
+    "country": "BJ",
+    "continent": "africa"
+  },
+  {
+    "id": "1419",
+    "cityName": "巴塔",
+    "cityEn": "Bata",
+    "timezoneId": "Africa/Malabo",
+    "country": "GQ",
+    "continent": "africa"
+  },
+  {
+    "id": "1420",
+    "cityName": "卢本巴希",
+    "cityEn": "Lubumbashi",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1421",
+    "cityName": "姆布吉马伊",
+    "cityEn": "Mbuji-Mayi",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1422",
+    "cityName": "基桑加尼",
+    "cityEn": "Kisangani",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1423",
+    "cityName": "戈马",
+    "cityEn": "Goma",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1424",
+    "cityName": "马塔迪",
+    "cityEn": "Matadi",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1425",
+    "cityName": "布卡武",
+    "cityEn": "Bukavu",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1426",
+    "cityName": "卡诺",
+    "cityEn": "Kano",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1427",
+    "cityName": "伊巴丹",
+    "cityEn": "Ibadan",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1428",
+    "cityName": "哈科特港",
+    "cityEn": "Port Harcourt",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1429",
+    "cityName": "库马西",
+    "cityEn": "Kumasi",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1430",
+    "cityName": "布瓦凯",
+    "cityEn": "Bouake",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "1431",
+    "cityName": "圣路易",
+    "cityEn": "Saint-Louis",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "1432",
+    "cityName": "黑角",
+    "cityEn": "Pointe-Noire",
+    "timezoneId": "Africa/Brazzaville",
+    "country": "CG",
+    "continent": "africa"
+  },
+  {
+    "id": "1433",
+    "cityName": "贝拉",
+    "cityEn": "Beira",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1434",
+    "cityName": "布拉瓦约",
+    "cityEn": "Bulawayo",
+    "timezoneId": "Africa/Harare",
+    "country": "ZW",
+    "continent": "africa"
+  },
+  {
+    "id": "1435",
+    "cityName": "基特韦",
+    "cityEn": "Kitwe",
+    "timezoneId": "Africa/Lusaka",
+    "country": "ZM",
+    "continent": "africa"
+  },
+  {
+    "id": "1436",
+    "cityName": "纳库鲁",
+    "cityEn": "Nakuru",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "1437",
+    "cityName": "吉萨",
+    "cityEn": "Giza",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "1440",
+    "cityName": "维多利亚",
+    "cityEn": "Victoria",
+    "timezoneId": "America/Vancouver",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "1441",
+    "cityName": "圣约翰斯",
+    "cityEn": "St. John's",
+    "timezoneId": "America/St_Johns",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "1447",
+    "cityName": "托卢卡",
+    "cityEn": "Toluca",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1451",
+    "cityName": "哈尔科夫",
+    "cityEn": "Kharkiv",
+    "timezoneId": "Europe/Kyiv",
+    "country": "UA",
+    "continent": "europe"
+  },
+  {
+    "id": "1452",
+    "cityName": "第聂伯罗",
+    "cityEn": "Dnipro",
+    "timezoneId": "Europe/Kyiv",
+    "country": "UA",
+    "continent": "europe"
+  },
+  {
+    "id": "1453",
+    "cityName": "扎波罗热",
+    "cityEn": "Zaporizhzhia",
+    "timezoneId": "Europe/Kyiv",
+    "country": "UA",
+    "continent": "europe"
+  },
+  {
+    "id": "1454",
+    "cityName": "帕特雷",
+    "cityEn": "Patras",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "1455",
+    "cityName": "拉里萨",
+    "cityEn": "Larissa",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "1456",
+    "cityName": "约阿尼纳",
+    "cityEn": "Ioannina",
+    "timezoneId": "Europe/Athens",
+    "country": "GR",
+    "continent": "europe"
+  },
+  {
+    "id": "1457",
+    "cityName": "克卢日-纳波卡",
+    "cityEn": "Cluj-Napoca",
+    "timezoneId": "Europe/Bucharest",
+    "country": "RO",
+    "continent": "europe"
+  },
+  {
+    "id": "1458",
+    "cityName": "蒂米什瓦拉",
+    "cityEn": "Timisoara",
+    "timezoneId": "Europe/Bucharest",
+    "country": "RO",
+    "continent": "europe"
+  },
+  {
+    "id": "1459",
+    "cityName": "雅西",
+    "cityEn": "Iasi",
+    "timezoneId": "Europe/Bucharest",
+    "country": "RO",
+    "continent": "europe"
+  },
+  {
+    "id": "1460",
+    "cityName": "康斯坦察",
+    "cityEn": "Constanta",
+    "timezoneId": "Europe/Bucharest",
+    "country": "RO",
+    "continent": "europe"
+  },
+  {
+    "id": "1461",
+    "cityName": "普罗夫迪夫",
+    "cityEn": "Plovdiv",
+    "timezoneId": "Europe/Sofia",
+    "country": "BG",
+    "continent": "europe"
+  },
+  {
+    "id": "1463",
+    "cityName": "纽卡斯尔",
+    "cityEn": "Newcastle",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1472",
+    "cityName": "哈密尔顿",
+    "cityEn": "Hamilton",
+    "timezoneId": "Pacific/Auckland",
+    "country": "NZ",
+    "continent": "oceania"
+  },
+  {
+    "id": "1474",
+    "cityName": "占贾",
+    "cityEn": "Ganja",
+    "timezoneId": "Asia/Baku",
+    "country": "AZ",
+    "continent": "asia"
+  },
+  {
+    "id": "1475",
+    "cityName": "苏姆盖特",
+    "cityEn": "Sumqayit",
+    "timezoneId": "Asia/Baku",
+    "country": "AZ",
+    "continent": "asia"
+  },
+  {
+    "id": "1476",
+    "cityName": "明盖恰乌尔",
+    "cityEn": "Mingachevir",
+    "timezoneId": "Asia/Baku",
+    "country": "AZ",
+    "continent": "asia"
+  },
+  {
+    "id": "1477",
+    "cityName": "久姆里",
+    "cityEn": "Gyumri",
+    "timezoneId": "Asia/Yerevan",
+    "country": "AM",
+    "continent": "asia"
+  },
+  {
+    "id": "1478",
+    "cityName": "瓦纳佐尔",
+    "cityEn": "Vanadzor",
+    "timezoneId": "Asia/Yerevan",
+    "country": "AM",
+    "continent": "asia"
+  },
+  {
+    "id": "1479",
+    "cityName": "库尔纳",
+    "cityEn": "Khulna",
+    "timezoneId": "Asia/Dhaka",
+    "country": "BD",
+    "continent": "asia"
+  },
+  {
+    "id": "1480",
+    "cityName": "拉杰沙希",
+    "cityEn": "Rajshahi",
+    "timezoneId": "Asia/Dhaka",
+    "country": "BD",
+    "continent": "asia"
+  },
+  {
+    "id": "1481",
+    "cityName": "锡尔赫特",
+    "cityEn": "Sylhet",
+    "timezoneId": "Asia/Dhaka",
+    "country": "BD",
+    "continent": "asia"
+  },
+  {
+    "id": "1483",
+    "cityName": "库塔伊西",
+    "cityEn": "Kutaisi",
+    "timezoneId": "Asia/Tbilisi",
+    "country": "GE",
+    "continent": "asia"
+  },
+  {
+    "id": "1484",
+    "cityName": "额尔登特",
+    "cityEn": "Erdenet",
+    "timezoneId": "Asia/Ulaanbaatar",
+    "country": "MN",
+    "continent": "asia"
+  },
+  {
+    "id": "1485",
+    "cityName": "达尔汗",
+    "cityEn": "Darhan",
+    "timezoneId": "Asia/Ulaanbaatar",
+    "country": "MN",
+    "continent": "asia"
+  },
+  {
+    "id": "1486",
+    "cityName": "坎大哈",
+    "cityEn": "Kandahar",
+    "timezoneId": "Asia/Kabul",
+    "country": "AF",
+    "continent": "asia"
+  },
+  {
+    "id": "1487",
+    "cityName": "都拉斯",
+    "cityEn": "Durres",
+    "timezoneId": "Europe/Tirane",
+    "country": "AL",
+    "continent": "europe"
+  },
+  {
+    "id": "1489",
+    "cityName": "本格拉",
+    "cityEn": "Benguela",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "1491",
+    "cityName": "莫斯塔尔",
+    "cityEn": "Mostar",
+    "timezoneId": "Europe/Sarajevo",
+    "country": "BA",
+    "continent": "europe"
+  },
+  {
+    "id": "1492",
+    "cityName": "博博迪乌拉索",
+    "cityEn": "Bobo-Dioulasso",
+    "timezoneId": "Africa/Ouagadougou",
+    "country": "BF",
+    "continent": "africa"
+  },
+  {
+    "id": "1494",
+    "cityName": "吉特加",
+    "cityEn": "Gitega",
+    "timezoneId": "Africa/Bujumbura",
+    "country": "BI",
+    "continent": "africa"
+  },
+  {
+    "id": "1495",
+    "cityName": "弗里波特",
+    "cityEn": "Freeport",
+    "timezoneId": "America/Nassau",
+    "country": "BS",
+    "continent": "america"
+  },
+  {
+    "id": "1496",
+    "cityName": "彭措林",
+    "cityEn": "Phuentsholing",
+    "timezoneId": "Asia/Thimphu",
+    "country": "BT",
+    "continent": "asia"
+  },
+  {
+    "id": "1497",
+    "cityName": "弗朗西斯敦",
+    "cityEn": "Francistown",
+    "timezoneId": "Africa/Gaborone",
+    "country": "BW",
+    "continent": "africa"
+  },
+  {
+    "id": "1498",
+    "cityName": "布列斯特",
+    "cityEn": "Brest",
+    "timezoneId": "Europe/Minsk",
+    "country": "BY",
+    "continent": "europe"
+  },
+  {
+    "id": "1499",
+    "cityName": "伯利兹城",
+    "cityEn": "Belize City",
+    "timezoneId": "America/Belize",
+    "country": "BZ",
+    "continent": "america"
+  },
+  {
+    "id": "1500",
+    "cityName": "贝贝拉蒂",
+    "cityEn": "Berberati",
+    "timezoneId": "Africa/Bangui",
+    "country": "CF",
+    "continent": "africa"
+  },
+  {
+    "id": "1502",
+    "cityName": "阿拉胡埃拉",
+    "cityEn": "Alajuela",
+    "timezoneId": "America/Costa_Rica",
+    "country": "CR",
+    "continent": "america"
+  },
+  {
+    "id": "1503",
+    "cityName": "圣地亚哥",
+    "cityEn": "Santiago de Cuba",
+    "timezoneId": "America/Havana",
+    "country": "CU",
+    "continent": "america"
+  },
+  {
+    "id": "1504",
+    "cityName": "明德卢",
+    "cityEn": "Mindelo",
+    "timezoneId": "Atlantic/Cape_Verde",
+    "country": "CV",
+    "continent": "africa"
+  },
+  {
+    "id": "1505",
+    "cityName": "利马索尔",
+    "cityEn": "Limassol",
+    "timezoneId": "Asia/Nicosia",
+    "country": "CY",
+    "continent": "europe"
+  },
+  {
+    "id": "1506",
+    "cityName": "奥胡斯",
+    "cityEn": "Aarhus",
+    "timezoneId": "Europe/Copenhagen",
+    "country": "DK",
+    "continent": "europe"
+  },
+  {
+    "id": "1507",
+    "cityName": "塔尔图",
+    "cityEn": "Tartu",
+    "timezoneId": "Europe/Tallinn",
+    "country": "EE",
+    "continent": "europe"
+  },
+  {
+    "id": "1508",
+    "cityName": "克伦",
+    "cityEn": "Keren",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "1509",
+    "cityName": "让蒂尔港",
+    "cityEn": "Port-Gentil",
+    "timezoneId": "Africa/Libreville",
+    "country": "GA",
+    "continent": "africa"
+  },
+  {
+    "id": "1511",
+    "cityName": "塞雷昆达",
+    "cityEn": "Serekunda",
+    "timezoneId": "Africa/Banjul",
+    "country": "GM",
+    "continent": "africa"
+  },
+  {
+    "id": "1512",
+    "cityName": "康康",
+    "cityEn": "Kankan",
+    "timezoneId": "Africa/Conakry",
+    "country": "GN",
+    "continent": "africa"
+  },
+  {
+    "id": "1513",
+    "cityName": "克萨尔特南戈",
+    "cityEn": "Quetzaltenango",
+    "timezoneId": "America/Guatemala",
+    "country": "GT",
+    "continent": "america"
+  },
+  {
+    "id": "1514",
+    "cityName": "圣佩德罗苏拉",
+    "cityEn": "San Pedro Sula",
+    "timezoneId": "America/Tegucigalpa",
+    "country": "HN",
+    "continent": "america"
+  },
+  {
+    "id": "1515",
+    "cityName": "海地角",
+    "cityEn": "Cap-Haitien",
+    "timezoneId": "America/Port-au-Prince",
+    "country": "HT",
+    "continent": "america"
+  },
+  {
+    "id": "1516",
+    "cityName": "阿克雷里",
+    "cityEn": "Akureyri",
+    "timezoneId": "Atlantic/Reykjavik",
+    "country": "IS",
+    "continent": "europe"
+  },
+  {
+    "id": "1517",
+    "cityName": "蒙特哥贝",
+    "cityEn": "Montego Bay",
+    "timezoneId": "America/Jamaica",
+    "country": "JM",
+    "continent": "america"
+  },
+  {
+    "id": "1518",
+    "cityName": "的黎波里",
+    "cityEn": "Tripoli",
+    "timezoneId": "Asia/Beirut",
+    "country": "LB",
+    "continent": "asia"
+  },
+  {
+    "id": "1519",
+    "cityName": "考纳斯",
+    "cityEn": "Kaunas",
+    "timezoneId": "Europe/Vilnius",
+    "country": "LT",
+    "continent": "europe"
+  },
+  {
+    "id": "1520",
+    "cityName": "陶格夫匹尔斯",
+    "cityEn": "Daugavpils",
+    "timezoneId": "Europe/Riga",
+    "country": "LV",
+    "continent": "europe"
+  },
+  {
+    "id": "1521",
+    "cityName": "班加西",
+    "cityEn": "Benghazi",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "1522",
+    "cityName": "伯尔兹",
+    "cityEn": "Balti",
+    "timezoneId": "Europe/Chisinau",
+    "country": "MD",
+    "continent": "europe"
+  },
+  {
+    "id": "1523",
+    "cityName": "布德瓦",
+    "cityEn": "Budva",
+    "timezoneId": "Europe/Podgorica",
+    "country": "ME",
+    "continent": "europe"
+  },
+  {
+    "id": "1524",
+    "cityName": "图阿马西纳",
+    "cityEn": "Toamasina",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "1525",
+    "cityName": "奥赫里德",
+    "cityEn": "Ohrid",
+    "timezoneId": "Europe/Skopje",
+    "country": "MK",
+    "continent": "europe"
+  },
+  {
+    "id": "1526",
+    "cityName": "锡卡索",
+    "cityEn": "Sikasso",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "1528",
+    "cityName": "努瓦迪布",
+    "cityEn": "Nouadhibou",
+    "timezoneId": "Africa/Nouakchott",
+    "country": "MR",
+    "continent": "africa"
+  },
+  {
+    "id": "1529",
+    "cityName": "布兰太尔",
+    "cityEn": "Blantyre",
+    "timezoneId": "Africa/Blantyre",
+    "country": "MW",
+    "continent": "africa"
+  },
+  {
+    "id": "1531",
+    "cityName": "鲸湾港",
+    "cityEn": "Walvis Bay",
+    "timezoneId": "Africa/Windhoek",
+    "country": "NA",
+    "continent": "africa"
+  },
+  {
+    "id": "1532",
+    "cityName": "津德尔",
+    "cityEn": "Zinder",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "1533",
+    "cityName": "莱城",
+    "cityEn": "Lae",
+    "timezoneId": "Pacific/Port_Moresby",
+    "country": "PG",
+    "continent": "oceania"
+  },
+  {
+    "id": "1534",
+    "cityName": "东方市",
+    "cityEn": "Ciudad del Este",
+    "timezoneId": "America/Asuncion",
+    "country": "PY",
+    "continent": "america"
+  },
+  {
+    "id": "1535",
+    "cityName": "布塔雷",
+    "cityEn": "Butare",
+    "timezoneId": "Africa/Kigali",
+    "country": "RW",
+    "continent": "africa"
+  },
+  {
+    "id": "1536",
+    "cityName": "恩图曼",
+    "cityEn": "Omdurman",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "1537",
+    "cityName": "马里博尔",
+    "cityEn": "Maribor",
+    "timezoneId": "Europe/Ljubljana",
+    "country": "SI",
+    "continent": "europe"
+  },
+  {
+    "id": "1538",
+    "cityName": "科希策",
+    "cityEn": "Kosice",
+    "timezoneId": "Europe/Bratislava",
+    "country": "SK",
+    "continent": "europe"
+  },
+  {
+    "id": "1539",
+    "cityName": "博城",
+    "cityEn": "Bo",
+    "timezoneId": "Africa/Freetown",
+    "country": "SL",
+    "continent": "africa"
+  },
+  {
+    "id": "1541",
+    "cityName": "哈尔格萨",
+    "cityEn": "Hargeisa",
+    "timezoneId": "Africa/Mogadishu",
+    "country": "SO",
+    "continent": "africa"
+  },
+  {
+    "id": "1542",
+    "cityName": "瓦乌",
+    "cityEn": "Wau",
+    "timezoneId": "Africa/Juba",
+    "country": "SS",
+    "continent": "africa"
+  },
+  {
+    "id": "1543",
+    "cityName": "蒙杜",
+    "cityEn": "Moundou",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "1544",
+    "cityName": "卡拉",
+    "cityEn": "Kara",
+    "timezoneId": "Africa/Lome",
+    "country": "TG",
+    "continent": "africa"
+  },
+  {
+    "id": "1545",
+    "cityName": "恩德培",
+    "cityEn": "Entebbe",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "1546",
+    "cityName": "马拉开波",
+    "cityEn": "Maracaibo",
+    "timezoneId": "America/Caracas",
+    "country": "VE",
+    "continent": "america"
+  },
+  {
+    "id": "1547",
+    "cityName": "亚丁",
+    "cityEn": "Aden",
+    "timezoneId": "Asia/Aden",
+    "country": "YE",
+    "continent": "asia"
+  },
+  {
+    "id": "1550",
+    "cityName": "塔富纳",
+    "cityEn": "Tafuna",
+    "timezoneId": "Pacific/Pago_Pago",
+    "country": "AS",
+    "continent": "oceania"
+  },
+  {
+    "id": "1551",
+    "cityName": "阿鲁汤加",
+    "cityEn": "Arutanga",
+    "timezoneId": "Pacific/Rarotonga",
+    "country": "CK",
+    "continent": "oceania"
+  },
+  {
+    "id": "1552",
+    "cityName": "迪德多",
+    "cityEn": "Dededo",
+    "timezoneId": "Pacific/Guam",
+    "country": "GU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1553",
+    "cityName": "埃贝耶",
+    "cityEn": "Ebeye",
+    "timezoneId": "Pacific/Majuro",
+    "country": "MH",
+    "continent": "oceania"
+  },
+  {
+    "id": "1554",
+    "cityName": "加拉潘",
+    "cityEn": "Garapan",
+    "timezoneId": "Pacific/Saipan",
+    "country": "MP",
+    "continent": "oceania"
+  },
+  {
+    "id": "1555",
+    "cityName": "蒙多雷",
+    "cityEn": "Mont-Dore",
+    "timezoneId": "Pacific/Noumea",
+    "country": "NC",
+    "continent": "oceania"
+  },
+  {
+    "id": "1556",
+    "cityName": "卢甘维尔",
+    "cityEn": "Luganville",
+    "timezoneId": "Pacific/Efate",
+    "country": "VU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1557",
+    "cityName": "贝蒂奥",
+    "cityEn": "Betio",
+    "timezoneId": "Pacific/Tarawa",
+    "country": "KI",
+    "continent": "oceania"
+  },
+  {
+    "id": "1558",
+    "cityName": "科洛尼亚",
+    "cityEn": "Kolonia",
+    "timezoneId": "Pacific/Pohnpei",
+    "country": "FM",
+    "continent": "oceania"
+  },
+  {
+    "id": "1559",
+    "cityName": "德尼戈莫杜",
+    "cityEn": "Denigomodu",
+    "timezoneId": "Pacific/Nauru",
+    "country": "NR",
+    "continent": "oceania"
+  },
+  {
+    "id": "1560",
+    "cityName": "丰加法莱",
+    "cityEn": "Fongafale",
+    "timezoneId": "Pacific/Funafuti",
+    "country": "TV",
+    "continent": "oceania"
+  },
+  {
+    "id": "1561",
+    "cityName": "奈阿富",
+    "cityEn": "Neiafu",
+    "timezoneId": "Pacific/Tongatapu",
+    "country": "TO",
+    "continent": "oceania"
+  },
+  {
+    "id": "1562",
+    "cityName": "吉佐",
+    "cityEn": "Gizo",
+    "timezoneId": "Pacific/Guadalcanal",
+    "country": "SB",
+    "continent": "oceania"
+  },
+  {
+    "id": "1563",
+    "cityName": "格拉茨",
+    "cityEn": "Graz",
+    "timezoneId": "Europe/Vienna",
+    "country": "AT",
+    "continent": "europe"
+  },
+  {
+    "id": "1564",
+    "cityName": "林茨",
+    "cityEn": "Linz",
+    "timezoneId": "Europe/Vienna",
+    "country": "AT",
+    "continent": "europe"
+  },
+  {
+    "id": "1565",
+    "cityName": "列日",
+    "cityEn": "Liege",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "1566",
+    "cityName": "瓦尔纳",
+    "cityEn": "Varna",
+    "timezoneId": "Europe/Sofia",
+    "country": "BG",
+    "continent": "europe"
+  },
+  {
+    "id": "1567",
+    "cityName": "布尔加斯",
+    "cityEn": "Burgas",
+    "timezoneId": "Europe/Sofia",
+    "country": "BG",
+    "continent": "europe"
+  },
+  {
+    "id": "1568",
+    "cityName": "里耶卡",
+    "cityEn": "Rijeka",
+    "timezoneId": "Europe/Zagreb",
+    "country": "HR",
+    "continent": "europe"
+  },
+  {
+    "id": "1569",
+    "cityName": "布尔诺",
+    "cityEn": "Brno",
+    "timezoneId": "Europe/Prague",
+    "country": "CZ",
+    "continent": "europe"
+  },
+  {
+    "id": "1570",
+    "cityName": "俄斯特拉发",
+    "cityEn": "Ostrava",
+    "timezoneId": "Europe/Prague",
+    "country": "CZ",
+    "continent": "europe"
+  },
+  {
+    "id": "1571",
+    "cityName": "欧登塞",
+    "cityEn": "Odense",
+    "timezoneId": "Europe/Copenhagen",
+    "country": "DK",
+    "continent": "europe"
+  },
+  {
+    "id": "1572",
+    "cityName": "坦佩雷",
+    "cityEn": "Tampere",
+    "timezoneId": "Europe/Helsinki",
+    "country": "FI",
+    "continent": "europe"
+  },
+  {
+    "id": "1573",
+    "cityName": "图尔库",
+    "cityEn": "Turku",
+    "timezoneId": "Europe/Helsinki",
+    "country": "FI",
+    "continent": "europe"
+  },
+  {
+    "id": "1581",
+    "cityName": "德布勒森",
+    "cityEn": "Debrecen",
+    "timezoneId": "Europe/Budapest",
+    "country": "HU",
+    "continent": "europe"
+  },
+  {
+    "id": "1582",
+    "cityName": "利默里克",
+    "cityEn": "Limerick",
+    "timezoneId": "Europe/Dublin",
+    "country": "IE",
+    "continent": "europe"
+  },
+  {
+    "id": "1586",
+    "cityName": "普利茅斯",
+    "cityEn": "Plymouth",
+    "timezoneId": "Europe/London",
+    "country": "GB",
+    "continent": "europe"
+  },
+  {
+    "id": "1589",
+    "cityName": "格罗宁根",
+    "cityEn": "Groningen",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "1590",
+    "cityName": "斯塔万格",
+    "cityEn": "Stavanger",
+    "timezoneId": "Europe/Oslo",
+    "country": "NO",
+    "continent": "europe"
+  },
+  {
+    "id": "1591",
+    "cityName": "波兹南",
+    "cityEn": "Poznan",
+    "timezoneId": "Europe/Warsaw",
+    "country": "PL",
+    "continent": "europe"
+  },
+  {
+    "id": "1592",
+    "cityName": "科英布拉",
+    "cityEn": "Coimbra",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "1594",
+    "cityName": "伏尔加格勒",
+    "cityEn": "Volgograd",
+    "timezoneId": "Europe/Volgograd",
+    "country": "RU",
+    "continent": "europe"
+  },
+  {
+    "id": "1595",
+    "cityName": "诺维萨德",
+    "cityEn": "Novi Sad",
+    "timezoneId": "Europe/Belgrade",
+    "country": "RS",
+    "continent": "europe"
+  },
+  {
+    "id": "1598",
+    "cityName": "科尔多瓦",
+    "cityEn": "Cordoba",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1599",
+    "cityName": "乌普萨拉",
+    "cityEn": "Uppsala",
+    "timezoneId": "Europe/Stockholm",
+    "country": "SE",
+    "continent": "europe"
+  },
+  {
+    "id": "1600",
+    "cityName": "卢加诺",
+    "cityEn": "Lugano",
+    "timezoneId": "Europe/Zurich",
+    "country": "CH",
+    "continent": "europe"
+  },
+  {
+    "id": "1601",
+    "cityName": "科尼亚",
+    "cityEn": "Konya",
+    "timezoneId": "Europe/Istanbul",
+    "country": "TR",
+    "continent": "europe"
+  },
+  {
+    "id": "1603",
+    "cityName": "普诺",
+    "cityEn": "Puno",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "1604",
+    "cityName": "特鲁希略",
+    "cityEn": "Trujillo",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "1605",
+    "cityName": "伊基托斯",
+    "cityEn": "Iquitos",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "1606",
+    "cityName": "昆卡",
+    "cityEn": "Cuenca",
+    "timezoneId": "America/Guayaquil",
+    "country": "EC",
+    "continent": "america"
+  },
+  {
+    "id": "1607",
+    "cityName": "曼塔",
+    "cityEn": "Manta",
+    "timezoneId": "America/Guayaquil",
+    "country": "EC",
+    "continent": "america"
+  },
+  {
+    "id": "1608",
+    "cityName": "布卡拉曼加",
+    "cityEn": "Bucaramanga",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "1609",
+    "cityName": "圣玛尔塔",
+    "cityEn": "Santa Marta",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "1610",
+    "cityName": "罗萨里奥",
+    "cityEn": "Rosario",
+    "timezoneId": "America/Argentina/Buenos_Aires",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "1611",
+    "cityName": "萨尔塔",
+    "cityEn": "Salta",
+    "timezoneId": "America/Argentina/Salta",
+    "country": "AR",
+    "continent": "america"
+  },
+  {
+    "id": "1616",
+    "cityName": "贝宁城",
+    "cityEn": "Benin City",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1617",
+    "cityName": "德雷达瓦",
+    "cityEn": "Dire Dawa",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "1622",
+    "cityName": "博帕尔",
+    "cityEn": "Bhopal",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "1623",
+    "cityName": "芒特甘比尔",
+    "cityEn": "Mount Gambier",
+    "timezoneId": "Australia/Adelaide",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1624",
+    "cityName": "米尔杜拉",
+    "cityEn": "Mildura",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1625",
+    "cityName": "沃加沃加",
+    "cityEn": "Wagga Wagga",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1626",
+    "cityName": "科夫斯港",
+    "cityEn": "Coffs Harbour",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1627",
+    "cityName": "班伯里",
+    "cityEn": "Bunbury",
+    "timezoneId": "Australia/Perth",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "1630",
+    "cityName": "捷斯",
+    "cityEn": "Thies",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "1631",
+    "cityName": "塔马利",
+    "cityEn": "Tamale",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1632",
+    "cityName": "科霍戈",
+    "cityEn": "Korhogo",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "1633",
+    "cityName": "库杜古",
+    "cityEn": "Koudougou",
+    "timezoneId": "Africa/Ouagadougou",
+    "country": "BF",
+    "continent": "africa"
+  },
+  {
+    "id": "1634",
+    "cityName": "马拉迪",
+    "cityEn": "Maradi",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "1635",
+    "cityName": "索科托",
+    "cityEn": "Sokoto",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1636",
+    "cityName": "加鲁阿",
+    "cityEn": "Garoua",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1637",
+    "cityName": "阿贝歇",
+    "cityEn": "Abeche",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "1638",
+    "cityName": "卡萨拉",
+    "cityEn": "Kassala",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "1639",
+    "cityName": "默克莱",
+    "cityEn": "Mekelle",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "1641",
+    "cityName": "基苏木",
+    "cityEn": "Kisumu",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "1645",
+    "cityName": "切图马尔",
+    "cityEn": "Chetumal",
+    "timezoneId": "America/Cancun",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1646",
+    "cityName": "安提瓜危地马拉",
+    "cityEn": "Antigua Guatemala",
+    "timezoneId": "America/Guatemala",
+    "country": "GT",
+    "continent": "america"
+  },
+  {
+    "id": "1649",
+    "cityName": "圣安娜",
+    "cityEn": "Santa Ana",
+    "timezoneId": "America/El_Salvador",
+    "country": "SV",
+    "continent": "america"
+  },
+  {
+    "id": "1650",
+    "cityName": "莱昂",
+    "cityEn": "Leon",
+    "timezoneId": "America/Managua",
+    "country": "NI",
+    "continent": "america"
+  },
+  {
+    "id": "1652",
+    "cityName": "大卫",
+    "cityEn": "David",
+    "timezoneId": "America/Panama",
+    "country": "PA",
+    "continent": "america"
+  },
+  {
+    "id": "1653",
+    "cityName": "卡马圭",
+    "cityEn": "Camaguey",
+    "timezoneId": "America/Havana",
+    "country": "CU",
+    "continent": "america"
+  },
+  {
+    "id": "1656",
+    "cityName": "约恩苏",
+    "cityEn": "Joensuu",
+    "timezoneId": "Europe/Helsinki",
+    "country": "FI",
+    "continent": "europe"
+  },
+  {
+    "id": "1657",
+    "cityName": "罗斯基勒",
+    "cityEn": "Roskilde",
+    "timezoneId": "Europe/Copenhagen",
+    "country": "DK",
+    "continent": "europe"
+  },
+  {
+    "id": "1658",
+    "cityName": "沃特福德",
+    "cityEn": "Waterford",
+    "timezoneId": "Europe/Dublin",
+    "country": "IE",
+    "continent": "europe"
+  },
+  {
+    "id": "1660",
+    "cityName": "巴约讷",
+    "cityEn": "Bayonne",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1661",
+    "cityName": "赫罗纳",
+    "cityEn": "Girona",
+    "timezoneId": "Europe/Madrid",
+    "country": "ES",
+    "continent": "europe"
+  },
+  {
+    "id": "1662",
+    "cityName": "阿威罗",
+    "cityEn": "Aveiro",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "1663",
+    "cityName": "墨西拿",
+    "cityEn": "Messina",
+    "timezoneId": "Europe/Rome",
+    "country": "IT",
+    "continent": "europe"
+  },
+  {
+    "id": "1671",
+    "cityName": "哥印拜陀",
+    "cityEn": "Coimbatore",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "1673",
+    "cityName": "锡亚尔科特",
+    "cityEn": "Sialkot",
+    "timezoneId": "Asia/Karachi",
+    "country": "PK",
+    "continent": "asia"
+  },
+  {
+    "id": "1676",
+    "cityName": "比拉特纳加尔",
+    "cityEn": "Biratnagar",
+    "timezoneId": "Asia/Kathmandu",
+    "country": "NP",
+    "continent": "asia"
+  },
+  {
+    "id": "1677",
+    "cityName": "普纳卡",
+    "cityEn": "Punakha",
+    "timezoneId": "Asia/Thimphu",
+    "country": "BT",
+    "continent": "asia"
+  },
+  {
+    "id": "1678",
+    "cityName": "阿克托别",
+    "cityEn": "Aktobe",
+    "timezoneId": "Asia/Aqtobe",
+    "country": "KZ",
+    "continent": "asia"
+  },
+  {
+    "id": "1679",
+    "cityName": "安集延",
+    "cityEn": "Andijan",
+    "timezoneId": "Asia/Tashkent",
+    "country": "UZ",
+    "continent": "asia"
+  },
+  {
+    "id": "1680",
+    "cityName": "卡拉科尔",
+    "cityEn": "Karakol",
+    "timezoneId": "Asia/Bishkek",
+    "country": "KG",
+    "continent": "asia"
+  },
+  {
+    "id": "1687",
+    "cityName": "恩吉鲁穆德",
+    "cityEn": "Ngerulmud",
+    "timezoneId": "Pacific/Palau",
+    "country": "PW",
+    "continent": "oceania"
+  },
+  {
+    "id": "1688",
+    "cityName": "拉包尔",
+    "cityEn": "Rabaul",
+    "timezoneId": "Pacific/Port_Moresby",
+    "country": "PG",
+    "continent": "oceania"
+  },
+  {
+    "id": "1689",
+    "cityName": "卢班戈",
+    "cityEn": "Lubango",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "1690",
+    "cityName": "帕拉库",
+    "cityEn": "Parakou",
+    "timezoneId": "Africa/Porto-Novo",
+    "country": "BJ",
+    "continent": "africa"
+  },
+  {
+    "id": "1691",
+    "cityName": "马翁",
+    "cityEn": "Maun",
+    "timezoneId": "Africa/Gaborone",
+    "country": "BW",
+    "continent": "africa"
+  },
+  {
+    "id": "1694",
+    "cityName": "巴富萨姆",
+    "cityEn": "Bafoussam",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1696",
+    "cityName": "宾博",
+    "cityEn": "Bimbo",
+    "timezoneId": "Africa/Bangui",
+    "country": "CF",
+    "continent": "africa"
+  },
+  {
+    "id": "1699",
+    "cityName": "多利西",
+    "cityEn": "Dolisie",
+    "timezoneId": "Africa/Brazzaville",
+    "country": "CG",
+    "continent": "africa"
+  },
+  {
+    "id": "1701",
+    "cityName": "奥博克",
+    "cityEn": "Obock",
+    "timezoneId": "Africa/Djibouti",
+    "country": "DJ",
+    "continent": "africa"
+  },
+  {
+    "id": "1702",
+    "cityName": "艾斯尤特",
+    "cityEn": "Asyut",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "1705",
+    "cityName": "巴赫达尔",
+    "cityEn": "Bahir Dar",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "1709",
+    "cityName": "恩泽雷科雷",
+    "cityEn": "Nzerekore",
+    "timezoneId": "Africa/Conakry",
+    "country": "GN",
+    "continent": "africa"
+  },
+  {
+    "id": "1710",
+    "cityName": "巴法塔",
+    "cityEn": "Bafata",
+    "timezoneId": "Africa/Bissau",
+    "country": "GW",
+    "continent": "africa"
+  },
+  {
+    "id": "1713",
+    "cityName": "马费滕",
+    "cityEn": "Mafeteng",
+    "timezoneId": "Africa/Maseru",
+    "country": "LS",
+    "continent": "africa"
+  },
+  {
+    "id": "1714",
+    "cityName": "加尔恩加",
+    "cityEn": "Gbarnga",
+    "timezoneId": "Africa/Monrovia",
+    "country": "LR",
+    "continent": "africa"
+  },
+  {
+    "id": "1715",
+    "cityName": "米苏拉塔",
+    "cityEn": "Misrata",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "1717",
+    "cityName": "松巴",
+    "cityEn": "Zomba",
+    "timezoneId": "Africa/Blantyre",
+    "country": "MW",
+    "continent": "africa"
+  },
+  {
+    "id": "1718",
+    "cityName": "莫普提",
+    "cityEn": "Mopti",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "1720",
+    "cityName": "瓦科阿",
+    "cityEn": "Vacoas",
+    "timezoneId": "Indian/Mauritius",
+    "country": "MU",
+    "continent": "africa"
+  },
+  {
+    "id": "1722",
+    "cityName": "楠普拉",
+    "cityEn": "Nampula",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1734",
+    "cityName": "姆万扎",
+    "cityEn": "Mwanza",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1735",
+    "cityName": "索科德",
+    "cityEn": "Sokode",
+    "timezoneId": "Africa/Lome",
+    "country": "TG",
+    "continent": "africa"
+  },
+  {
+    "id": "1736",
+    "cityName": "斯法克斯",
+    "cityEn": "Sfax",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "1737",
+    "cityName": "古卢",
+    "cityEn": "Gulu",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "1738",
+    "cityName": "恩多拉",
+    "cityEn": "Ndola",
+    "timezoneId": "Africa/Lusaka",
+    "country": "ZM",
+    "continent": "africa"
+  },
+  {
+    "id": "1741",
+    "cityName": "万博",
+    "cityEn": "Huambo",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "1745",
+    "cityName": "恩戈齐",
+    "cityEn": "Ngozi",
+    "timezoneId": "Africa/Bujumbura",
+    "country": "BI",
+    "continent": "africa"
+  },
+  {
+    "id": "1748",
+    "cityName": "班吉",
+    "cityEn": "Bangassou",
+    "timezoneId": "Africa/Bangui",
+    "country": "CF",
+    "continent": "africa"
+  },
+  {
+    "id": "1750",
+    "cityName": "穆察穆杜",
+    "cityEn": "Mutsamudu",
+    "timezoneId": "Indian/Comoro",
+    "country": "KM",
+    "continent": "africa"
+  },
+  {
+    "id": "1753",
+    "cityName": "阿里萨比赫",
+    "cityEn": "Ali Sabieh",
+    "timezoneId": "Africa/Djibouti",
+    "country": "DJ",
+    "continent": "africa"
+  },
+  {
+    "id": "1756",
+    "cityName": "马萨瓦",
+    "cityEn": "Massawa",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "1759",
+    "cityName": "布里卡马",
+    "cityEn": "Brikama",
+    "timezoneId": "Africa/Banjul",
+    "country": "GM",
+    "continent": "africa"
+  },
+  {
+    "id": "1768",
+    "cityName": "安齐拉贝",
+    "cityEn": "Antsirabe",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "1770",
+    "cityName": "塞古",
+    "cityEn": "Segou",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "1771",
+    "cityName": "基法",
+    "cityEn": "Kiffa",
+    "timezoneId": "Africa/Nouakchott",
+    "country": "MR",
+    "continent": "africa"
+  },
+  {
+    "id": "1775",
+    "cityName": "奥沙卡蒂",
+    "cityEn": "Oshakati",
+    "timezoneId": "Africa/Windhoek",
+    "country": "NA",
+    "continent": "africa"
+  },
+  {
+    "id": "1780",
+    "cityName": "安斯布瓦洛",
+    "cityEn": "Anse Boileau",
+    "timezoneId": "Indian/Mahe",
+    "country": "SC",
+    "continent": "africa"
+  },
+  {
+    "id": "1781",
+    "cityName": "凯内马",
+    "cityEn": "Kenema",
+    "timezoneId": "Africa/Freetown",
+    "country": "SL",
+    "continent": "africa"
+  },
+  {
+    "id": "1788",
+    "cityName": "金贾",
+    "cityEn": "Jinja",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "1793",
+    "cityName": "圣克鲁斯",
+    "cityEn": "Santa Cruz de la Sierra",
+    "timezoneId": "America/La_Paz",
+    "country": "BO",
+    "continent": "america"
+  },
+  {
+    "id": "1794",
+    "cityName": "坎皮纳斯",
+    "cityEn": "Campinas",
+    "timezoneId": "America/Sao_Paulo",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "1798",
+    "cityName": "利比里亚",
+    "cityEn": "Liberia",
+    "timezoneId": "America/Costa_Rica",
+    "country": "CR",
+    "continent": "america"
+  },
+  {
+    "id": "1801",
+    "cityName": "安巴托",
+    "cityEn": "Ambato",
+    "timezoneId": "America/Guayaquil",
+    "country": "EC",
+    "continent": "america"
+  },
+  {
+    "id": "1802",
+    "cityName": "圣米格尔",
+    "cityEn": "San Miguel",
+    "timezoneId": "America/El_Salvador",
+    "country": "SV",
+    "continent": "america"
+  },
+  {
+    "id": "1803",
+    "cityName": "圣乔治",
+    "cityEn": "Saint George's",
+    "timezoneId": "America/Grenada",
+    "country": "GD",
+    "continent": "america"
+  },
+  {
+    "id": "1805",
+    "cityName": "林登",
+    "cityEn": "Linden",
+    "timezoneId": "America/Guyana",
+    "country": "GY",
+    "continent": "america"
+  },
+  {
+    "id": "1807",
+    "cityName": "乔洛马",
+    "cityEn": "Choloma",
+    "timezoneId": "America/Tegucigalpa",
+    "country": "HN",
+    "continent": "america"
+  },
+  {
+    "id": "1809",
+    "cityName": "瓜达拉哈拉",
+    "cityEn": "Guadalajara",
+    "timezoneId": "America/Mexico_City",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1810",
+    "cityName": "马萨亚",
+    "cityEn": "Masaya",
+    "timezoneId": "America/Managua",
+    "country": "NI",
+    "continent": "america"
+  },
+  {
+    "id": "1811",
+    "cityName": "科隆",
+    "cityEn": "Colon",
+    "timezoneId": "America/Panama",
+    "country": "PA",
+    "continent": "america"
+  },
+  {
+    "id": "1814",
+    "cityName": "庞塞",
+    "cityEn": "Ponce",
+    "timezoneId": "America/Puerto_Rico",
+    "country": "PR",
+    "continent": "america"
+  },
+  {
+    "id": "1819",
+    "cityName": "查瓜纳斯",
+    "cityEn": "Chaguanas",
+    "timezoneId": "America/Port_of_Spain",
+    "country": "TT",
+    "continent": "america"
+  },
+  {
+    "id": "1820",
+    "cityName": "弗雷斯诺",
+    "cityEn": "Fresno",
+    "timezoneId": "America/Los_Angeles",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "1821",
+    "cityName": "萨尔托",
+    "cityEn": "Salto",
+    "timezoneId": "America/Montevideo",
+    "country": "UY",
+    "continent": "america"
+  },
+  {
+    "id": "1822",
+    "cityName": "瓦伦西亚",
+    "cityEn": "Valencia",
+    "timezoneId": "America/Caracas",
+    "country": "VE",
+    "continent": "america"
+  },
+  {
+    "id": "1823",
+    "cityName": "奥尔圣斯",
+    "cityEn": "All Saints",
+    "timezoneId": "America/Antigua",
+    "country": "AG",
+    "continent": "america"
+  },
+  {
+    "id": "1826",
+    "cityName": "斯佩茨敦",
+    "cityEn": "Speightstown",
+    "timezoneId": "America/Barbados",
+    "country": "BB",
+    "continent": "america"
+  },
+  {
+    "id": "1827",
+    "cityName": "奥兰治沃克",
+    "cityEn": "Orange Walk",
+    "timezoneId": "America/Belize",
+    "country": "BZ",
+    "continent": "america"
+  },
+  {
+    "id": "1828",
+    "cityName": "科恰班巴",
+    "cityEn": "Cochabamba",
+    "timezoneId": "America/La_Paz",
+    "country": "BO",
+    "continent": "america"
+  },
+  {
+    "id": "1829",
+    "cityName": "贝伦",
+    "cityEn": "Belem",
+    "timezoneId": "America/Belem",
+    "country": "BR",
+    "continent": "america"
+  },
+  {
+    "id": "1831",
+    "cityName": "安托法加斯塔",
+    "cityEn": "Antofagasta",
+    "timezoneId": "America/Santiago",
+    "country": "CL",
+    "continent": "america"
+  },
+  {
+    "id": "1832",
+    "cityName": "巴兰基亚",
+    "cityEn": "Barranquilla",
+    "timezoneId": "America/Bogota",
+    "country": "CO",
+    "continent": "america"
+  },
+  {
+    "id": "1834",
+    "cityName": "奥尔金",
+    "cityEn": "Holguin",
+    "timezoneId": "America/Havana",
+    "country": "CU",
+    "continent": "america"
+  },
+  {
+    "id": "1835",
+    "cityName": "朴次茅斯",
+    "cityEn": "Portsmouth",
+    "timezoneId": "America/Dominica",
+    "country": "DM",
+    "continent": "america"
+  },
+  {
+    "id": "1838",
+    "cityName": "古亚夫",
+    "cityEn": "Gouyave",
+    "timezoneId": "America/Grenada",
+    "country": "GD",
+    "continent": "america"
+  },
+  {
+    "id": "1839",
+    "cityName": "埃斯昆特拉",
+    "cityEn": "Escuintla",
+    "timezoneId": "America/Guatemala",
+    "country": "GT",
+    "continent": "america"
+  },
+  {
+    "id": "1840",
+    "cityName": "新阿姆斯特丹",
+    "cityEn": "New Amsterdam",
+    "timezoneId": "America/Guyana",
+    "country": "GY",
+    "continent": "america"
+  },
+  {
+    "id": "1841",
+    "cityName": "雅克梅勒",
+    "cityEn": "Jacmel",
+    "timezoneId": "America/Port-au-Prince",
+    "country": "HT",
+    "continent": "america"
+  },
+  {
+    "id": "1843",
+    "cityName": "西班牙镇",
+    "cityEn": "Spanish Town",
+    "timezoneId": "America/Jamaica",
+    "country": "JM",
+    "continent": "america"
+  },
+  {
+    "id": "1844",
+    "cityName": "蒙特雷",
+    "cityEn": "Monterrey",
+    "timezoneId": "America/Monterrey",
+    "country": "MX",
+    "continent": "america"
+  },
+  {
+    "id": "1845",
+    "cityName": "布卢菲尔兹",
+    "cityEn": "Bluefields",
+    "timezoneId": "America/Managua",
+    "country": "NI",
+    "continent": "america"
+  },
+  {
+    "id": "1847",
+    "cityName": "恩卡纳西翁",
+    "cityEn": "Encarnacion",
+    "timezoneId": "America/Asuncion",
+    "country": "PY",
+    "continent": "america"
+  },
+  {
+    "id": "1849",
+    "cityName": "马亚圭斯",
+    "cityEn": "Mayaguez",
+    "timezoneId": "America/Puerto_Rico",
+    "country": "PR",
+    "continent": "america"
+  },
+  {
+    "id": "1850",
+    "cityName": "桑迪波因特",
+    "cityEn": "Sandy Point",
+    "timezoneId": "America/St_Kitts",
+    "country": "KN",
+    "continent": "america"
+  },
+  {
+    "id": "1851",
+    "cityName": "旧堡",
+    "cityEn": "Vieux Fort",
+    "timezoneId": "America/St_Lucia",
+    "country": "LC",
+    "continent": "america"
+  },
+  {
+    "id": "1852",
+    "cityName": "巴鲁瓦利",
+    "cityEn": "Barrouallie",
+    "timezoneId": "America/St_Vincent",
+    "country": "VC",
+    "continent": "america"
+  },
+  {
+    "id": "1853",
+    "cityName": "新尼克里",
+    "cityEn": "Nieuw Nickerie",
+    "timezoneId": "America/Paramaribo",
+    "country": "SR",
+    "continent": "america"
+  },
+  {
+    "id": "1854",
+    "cityName": "圣费尔南多",
+    "cityEn": "San Fernando",
+    "timezoneId": "America/Port_of_Spain",
+    "country": "TT",
+    "continent": "america"
+  },
+  {
+    "id": "1856",
+    "cityName": "派桑杜",
+    "cityEn": "Paysandu",
+    "timezoneId": "America/Montevideo",
+    "country": "UY",
+    "continent": "america"
+  },
+  {
+    "id": "1858",
+    "cityName": "帕勒姆",
+    "cityEn": "Parham",
+    "timezoneId": "America/Antigua",
+    "country": "AG",
+    "continent": "america"
+  },
+  {
+    "id": "1860",
+    "cityName": "西端",
+    "cityEn": "West End",
+    "timezoneId": "America/Nassau",
+    "country": "BS",
+    "continent": "america"
+  },
+  {
+    "id": "1861",
+    "cityName": "奥伊斯廷斯",
+    "cityEn": "Oistins",
+    "timezoneId": "America/Barbados",
+    "country": "BB",
+    "continent": "america"
+  },
+  {
+    "id": "1862",
+    "cityName": "圣伊格纳西奥",
+    "cityEn": "San Ignacio",
+    "timezoneId": "America/Belize",
+    "country": "BZ",
+    "continent": "america"
+  },
+  {
+    "id": "1866",
+    "cityName": "康塞普西翁",
+    "cityEn": "Concepcion",
+    "timezoneId": "America/Santiago",
+    "country": "CL",
+    "continent": "america"
+  },
+  {
+    "id": "1868",
+    "cityName": "埃雷迪亚",
+    "cityEn": "Heredia",
+    "timezoneId": "America/Costa_Rica",
+    "country": "CR",
+    "continent": "america"
+  },
+  {
+    "id": "1870",
+    "cityName": "马里戈特",
+    "cityEn": "Marigot",
+    "timezoneId": "America/Dominica",
+    "country": "DM",
+    "continent": "america"
+  },
+  {
+    "id": "1872",
+    "cityName": "索亚潘戈",
+    "cityEn": "Soyapango",
+    "timezoneId": "America/El_Salvador",
+    "country": "SV",
+    "continent": "america"
+  },
+  {
+    "id": "1873",
+    "cityName": "索泰尔",
+    "cityEn": "Sauteurs",
+    "timezoneId": "America/Grenada",
+    "country": "GD",
+    "continent": "america"
+  },
+  {
+    "id": "1876",
+    "cityName": "戈纳伊夫",
+    "cityEn": "Gonaives",
+    "timezoneId": "America/Port-au-Prince",
+    "country": "HT",
+    "continent": "america"
+  },
+  {
+    "id": "1877",
+    "cityName": "拉塞瓦",
+    "cityEn": "La Ceiba",
+    "timezoneId": "America/Tegucigalpa",
+    "country": "HN",
+    "continent": "america"
+  },
+  {
+    "id": "1878",
+    "cityName": "奥乔里奥斯",
+    "cityEn": "Ocho Rios",
+    "timezoneId": "America/Jamaica",
+    "country": "JM",
+    "continent": "america"
+  },
+  {
+    "id": "1880",
+    "cityName": "希诺特佩",
+    "cityEn": "Jinotepe",
+    "timezoneId": "America/Managua",
+    "country": "NI",
+    "continent": "america"
+  },
+  {
+    "id": "1881",
+    "cityName": "圣地亚哥",
+    "cityEn": "Santiago",
+    "timezoneId": "America/Panama",
+    "country": "PA",
+    "continent": "america"
+  },
+  {
+    "id": "1883",
+    "cityName": "奇克拉约",
+    "cityEn": "Chiclayo",
+    "timezoneId": "America/Lima",
+    "country": "PE",
+    "continent": "america"
+  },
+  {
+    "id": "1884",
+    "cityName": "巴亚蒙",
+    "cityEn": "Bayamon",
+    "timezoneId": "America/Puerto_Rico",
+    "country": "PR",
+    "continent": "america"
+  },
+  {
+    "id": "1885",
+    "cityName": "卡永",
+    "cityEn": "Cayon",
+    "timezoneId": "America/St_Kitts",
+    "country": "KN",
+    "continent": "america"
+  },
+  {
+    "id": "1886",
+    "cityName": "苏弗里耶尔",
+    "cityEn": "Soufriere",
+    "timezoneId": "America/St_Lucia",
+    "country": "LC",
+    "continent": "america"
+  },
+  {
+    "id": "1887",
+    "cityName": "乔治敦",
+    "cityEn": "Georgetown",
+    "timezoneId": "America/St_Vincent",
+    "country": "VC",
+    "continent": "america"
+  },
+  {
+    "id": "1888",
+    "cityName": "阿尔比纳",
+    "cityEn": "Albina",
+    "timezoneId": "America/Paramaribo",
+    "country": "SR",
+    "continent": "america"
+  },
+  {
+    "id": "1890",
+    "cityName": "恩冈代雷",
+    "cityEn": "Ngaoundere",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1891",
+    "cityName": "贝尔图阿",
+    "cityEn": "Bertoua",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1893",
+    "cityName": "马鲁阿",
+    "cityEn": "Maroua",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1894",
+    "cityName": "埃博洛瓦",
+    "cityEn": "Ebolowa",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1895",
+    "cityName": "克里比",
+    "cityEn": "Kribi",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "1896",
+    "cityName": "科尔韦齐",
+    "cityEn": "Kolwezi",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1897",
+    "cityName": "姆班扎恩古古",
+    "cityEn": "Mbanza-Ngungu",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1898",
+    "cityName": "基奎特",
+    "cityEn": "Kikwit",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1900",
+    "cityName": "金杜",
+    "cityEn": "Kindu",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1902",
+    "cityName": "奇卡帕",
+    "cityEn": "Tshikapa",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1904",
+    "cityName": "伊西罗",
+    "cityEn": "Isiro",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "1905",
+    "cityName": "奥布阿西",
+    "cityEn": "Obuasi",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1906",
+    "cityName": "海岸角",
+    "cityEn": "Cape Coast",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1907",
+    "cityName": "科福里杜亚",
+    "cityEn": "Koforidua",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1908",
+    "cityName": "苏尼亚尼",
+    "cityEn": "Sunyani",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1909",
+    "cityName": "荷城",
+    "cityEn": "Ho",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "1910",
+    "cityName": "达洛亚",
+    "cityEn": "Daloa",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "1911",
+    "cityName": "圣佩德罗",
+    "cityEn": "San-Pedro",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "1913",
+    "cityName": "曼",
+    "cityEn": "Man",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "1914",
+    "cityName": "奥博莫绍",
+    "cityEn": "Ogbomosho",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1915",
+    "cityName": "奥尼查",
+    "cityEn": "Onitsha",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1916",
+    "cityName": "阿巴",
+    "cityEn": "Aba",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1917",
+    "cityName": "埃努古",
+    "cityEn": "Enugu",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1919",
+    "cityName": "明纳",
+    "cityEn": "Minna",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1920",
+    "cityName": "马库尔迪",
+    "cityEn": "Makurdi",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1921",
+    "cityName": "乌约",
+    "cityEn": "Uyo",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "1923",
+    "cityName": "德西",
+    "cityEn": "Dessie",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "1924",
+    "cityName": "吉马",
+    "cityEn": "Jimma",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "1925",
+    "cityName": "阿瓦萨",
+    "cityEn": "Awasa",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "1926",
+    "cityName": "姆巴拉拉",
+    "cityEn": "Mbarara",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "1930",
+    "cityName": "姆贝亚",
+    "cityEn": "Mbeya",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1931",
+    "cityName": "坦噶",
+    "cityEn": "Tanga",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1932",
+    "cityName": "莫罗戈罗",
+    "cityEn": "Morogoro",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1933",
+    "cityName": "基戈马",
+    "cityEn": "Kigoma",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1934",
+    "cityName": "埃尔多雷特",
+    "cityEn": "Eldoret",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "1936",
+    "cityName": "锡卡",
+    "cityEn": "Thika",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "1937",
+    "cityName": "马林迪",
+    "cityEn": "Malindi",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "1939",
+    "cityName": "洛比托",
+    "cityEn": "Lobito",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "1940",
+    "cityName": "马兰热",
+    "cityEn": "Malanje",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "1943",
+    "cityName": "利文斯敦",
+    "cityEn": "Livingstone",
+    "timezoneId": "Africa/Lusaka",
+    "country": "ZM",
+    "continent": "africa"
+  },
+  {
+    "id": "1944",
+    "cityName": "穆塔雷",
+    "cityEn": "Mutare",
+    "timezoneId": "Africa/Harare",
+    "country": "ZW",
+    "continent": "africa"
+  },
+  {
+    "id": "1945",
+    "cityName": "圭鲁",
+    "cityEn": "Gweru",
+    "timezoneId": "Africa/Harare",
+    "country": "ZW",
+    "continent": "africa"
+  },
+  {
+    "id": "1947",
+    "cityName": "克利马内",
+    "cityEn": "Quelimane",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1948",
+    "cityName": "太特",
+    "cityEn": "Tete",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1949",
+    "cityName": "马哈赞加",
+    "cityEn": "Mahajanga",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "1950",
+    "cityName": "菲亚纳兰楚阿",
+    "cityEn": "Fianarantsoa",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "1951",
+    "cityName": "济金绍尔",
+    "cityEn": "Ziguinchor",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "1954",
+    "cityName": "阿加德兹",
+    "cityEn": "Agadez",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "1955",
+    "cityName": "萨赫",
+    "cityEn": "Sarh",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "1956",
+    "cityName": "苏丹港",
+    "cityEn": "Port Sudan",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "1960",
+    "cityName": "君士坦丁",
+    "cityEn": "Constantine",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1961",
+    "cityName": "安纳巴",
+    "cityEn": "Annaba",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "1969",
+    "cityName": "尼姆",
+    "cityEn": "Nimes",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1970",
+    "cityName": "克莱蒙费朗",
+    "cityEn": "Clermont-Ferrand",
+    "timezoneId": "Europe/Paris",
+    "country": "FR",
+    "continent": "europe"
+  },
+  {
+    "id": "1973",
+    "cityName": "汉诺威",
+    "cityEn": "Hannover",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1975",
+    "cityName": "卡尔斯鲁厄",
+    "cityEn": "Karlsruhe",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1976",
+    "cityName": "明斯特",
+    "cityEn": "Munster",
+    "timezoneId": "Europe/Berlin",
+    "country": "DE",
+    "continent": "europe"
+  },
+  {
+    "id": "1988",
+    "cityName": "布拉加",
+    "cityEn": "Braga",
+    "timezoneId": "Europe/Lisbon",
+    "country": "PT",
+    "continent": "europe"
+  },
+  {
+    "id": "2011",
+    "cityName": "特隆赫姆",
+    "cityEn": "Trondheim",
+    "timezoneId": "Europe/Oslo",
+    "country": "NO",
+    "continent": "europe"
+  },
+  {
+    "id": "2017",
+    "cityName": "奥卢",
+    "cityEn": "Oulu",
+    "timezoneId": "Europe/Helsinki",
+    "country": "FI",
+    "continent": "europe"
+  },
+  {
+    "id": "2025",
+    "cityName": "塞格德",
+    "cityEn": "Szeged",
+    "timezoneId": "Europe/Budapest",
+    "country": "HU",
+    "continent": "europe"
+  },
+  {
+    "id": "2037",
+    "cityName": "比托拉",
+    "cityEn": "Bitola",
+    "timezoneId": "Europe/Skopje",
+    "country": "MK",
+    "continent": "europe"
+  },
+  {
+    "id": "2038",
+    "cityName": "斯库台",
+    "cityEn": "Shkoder",
+    "timezoneId": "Europe/Tirane",
+    "country": "AL",
+    "continent": "europe"
+  },
+  {
+    "id": "2039",
+    "cityName": "巴菲亚",
+    "cityEn": "Bafia",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "2040",
+    "cityName": "丰班",
+    "cityEn": "Foumban",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "2041",
+    "cityName": "蒂科",
+    "cityEn": "Tiko",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "2042",
+    "cityName": "林贝",
+    "cityEn": "Limbé",
+    "timezoneId": "Africa/Douala",
+    "country": "CM",
+    "continent": "africa"
+  },
+  {
+    "id": "2043",
+    "cityName": "姆韦内迪图",
+    "cityEn": "Mwene-Ditu",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "2044",
+    "cityName": "博马",
+    "cityEn": "Boma",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "2045",
+    "cityName": "班顿杜",
+    "cityEn": "Bandundu",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "2046",
+    "cityName": "姆班达卡",
+    "cityEn": "Mbandaka",
+    "timezoneId": "Africa/Kinshasa",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "2047",
+    "cityName": "卡莱米",
+    "cityEn": "Kalemie",
+    "timezoneId": "Africa/Lubumbashi",
+    "country": "CD",
+    "continent": "africa"
+  },
+  {
+    "id": "2048",
+    "cityName": "特奇曼",
+    "cityEn": "Techiman",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "2049",
+    "cityName": "瓦城",
+    "cityEn": "Wa",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "2050",
+    "cityName": "马迪纳",
+    "cityEn": "Madina",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "2051",
+    "cityName": "阿桑ankese",
+    "cityEn": "Asamankese",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "2052",
+    "cityName": "迪沃",
+    "cityEn": "Divo",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "2053",
+    "cityName": "加尼奥阿",
+    "cityEn": "Gagnoa",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "2054",
+    "cityName": "阿本古鲁",
+    "cityEn": "Abengourou",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "2055",
+    "cityName": "阿尼亚马",
+    "cityEn": "Anyama",
+    "timezoneId": "Africa/Abidjan",
+    "country": "CI",
+    "continent": "africa"
+  },
+  {
+    "id": "2056",
+    "cityName": "扎里亚",
+    "cityEn": "Zaria",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2057",
+    "cityName": "伊洛林",
+    "cityEn": "Ilorin",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2058",
+    "cityName": "奥索博",
+    "cityEn": "Osogbo",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2059",
+    "cityName": "伊费",
+    "cityEn": "Ife",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2060",
+    "cityName": "阿多埃基蒂",
+    "cityEn": "Ado-Ekiti",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2061",
+    "cityName": "阿库雷",
+    "cityEn": "Akure",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2062",
+    "cityName": "奥沃",
+    "cityEn": "Owo",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2063",
+    "cityName": "贡贝",
+    "cityEn": "Gombe",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2064",
+    "cityName": "包奇",
+    "cityEn": "Bauchi",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2065",
+    "cityName": "约拉",
+    "cityEn": "Yola",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2066",
+    "cityName": "贾林戈",
+    "cityEn": "Jalingo",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2067",
+    "cityName": "洛科贾",
+    "cityEn": "Lokoja",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2068",
+    "cityName": "阿萨巴",
+    "cityEn": "Asaba",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2069",
+    "cityName": "瓦里",
+    "cityEn": "Warri",
+    "timezoneId": "Africa/Lagos",
+    "country": "NG",
+    "continent": "africa"
+  },
+  {
+    "id": "2070",
+    "cityName": "塞夫维维奥索",
+    "cityEn": "Sefwi Wiawso",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "2071",
+    "cityName": "金坦波",
+    "cityEn": "Kintampo",
+    "timezoneId": "Africa/Accra",
+    "country": "GH",
+    "continent": "africa"
+  },
+  {
+    "id": "2072",
+    "cityName": "阿达迪马里亚姆",
+    "cityEn": "Adadi Mariam",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2073",
+    "cityName": "德布雷塔博",
+    "cityEn": "Debre Tabor",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2074",
+    "cityName": "沃尔迪亚",
+    "cityEn": "Woldia",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2075",
+    "cityName": "罗贝",
+    "cityEn": "Robe",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2076",
+    "cityName": "内肯特",
+    "cityEn": "Nekemte",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2077",
+    "cityName": "登比多洛",
+    "cityEn": "Dembi Dolo",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2078",
+    "cityName": "甘贝拉",
+    "cityEn": "Gambela",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2079",
+    "cityName": "阿尔巴门奇",
+    "cityEn": "Arba Minch",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2080",
+    "cityName": "索多",
+    "cityEn": "Sodo",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2081",
+    "cityName": "霍萨埃纳",
+    "cityEn": "Hosaena",
+    "timezoneId": "Africa/Addis_Ababa",
+    "country": "ET",
+    "continent": "africa"
+  },
+  {
+    "id": "2082",
+    "cityName": "门德费拉",
+    "cityEn": "Mendefera",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "2083",
+    "cityName": "德凯姆哈雷",
+    "cityEn": "Dekemhare",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "2084",
+    "cityName": "巴伦图",
+    "cityEn": "Barentu",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "2085",
+    "cityName": "阿迪凯赫",
+    "cityEn": "Adi Keyh",
+    "timezoneId": "Africa/Asmara",
+    "country": "ER",
+    "continent": "africa"
+  },
+  {
+    "id": "2086",
+    "cityName": "纳卡松戈拉",
+    "cityEn": "Nakasongola",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2087",
+    "cityName": "马辛迪",
+    "cityEn": "Masindi",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2088",
+    "cityName": "霍伊马",
+    "cityEn": "Hoima",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2089",
+    "cityName": "福特波特",
+    "cityEn": "Fort Portal",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2090",
+    "cityName": "卡塞塞",
+    "cityEn": "Kasese",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2091",
+    "cityName": "索罗提",
+    "cityEn": "Soroti",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2092",
+    "cityName": "托罗罗",
+    "cityEn": "Tororo",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2093",
+    "cityName": "姆巴莱",
+    "cityEn": "Mbale",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2094",
+    "cityName": "伊甘加",
+    "cityEn": "Iganga",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2095",
+    "cityName": "穆科诺",
+    "cityEn": "Mukono",
+    "timezoneId": "Africa/Kampala",
+    "country": "UG",
+    "continent": "africa"
+  },
+  {
+    "id": "2096",
+    "cityName": "巴巴蒂",
+    "cityEn": "Babati",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2097",
+    "cityName": "辛吉达",
+    "cityEn": "Singida",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2098",
+    "cityName": "伊林加",
+    "cityEn": "Iringa",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2099",
+    "cityName": "松盖阿",
+    "cityEn": "Songea",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2100",
+    "cityName": "松巴万加",
+    "cityEn": "Sumbawanga",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2101",
+    "cityName": "卡苏卢",
+    "cityEn": "Kasulu",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2102",
+    "cityName": "恩加拉",
+    "cityEn": "Ngara",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2103",
+    "cityName": "巴里亚迪",
+    "cityEn": "Bariadi",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2104",
+    "cityName": "穆索马",
+    "cityEn": "Musoma",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2105",
+    "cityName": "邦达",
+    "cityEn": "Bunda",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2106",
+    "cityName": "塔里梅",
+    "cityEn": "Tarime",
+    "timezoneId": "Africa/Dar_es_Salaam",
+    "country": "TZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2107",
+    "cityName": "凯里乔",
+    "cityEn": "Kericho",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2108",
+    "cityName": "邦戈马",
+    "cityEn": "Bungoma",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2109",
+    "cityName": "布西亚",
+    "cityEn": "Busia",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2110",
+    "cityName": "沃伊",
+    "cityEn": "Voi",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2111",
+    "cityName": "拉穆",
+    "cityEn": "Lamu",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2112",
+    "cityName": "瓦吉尔",
+    "cityEn": "Wajir",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2113",
+    "cityName": "曼德拉",
+    "cityEn": "Mandera",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2114",
+    "cityName": "马萨比特",
+    "cityEn": "Marsabit",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2115",
+    "cityName": "马拉拉尔",
+    "cityEn": "Maralal",
+    "timezoneId": "Africa/Nairobi",
+    "country": "KE",
+    "continent": "africa"
+  },
+  {
+    "id": "2116",
+    "cityName": "卡宾达",
+    "cityEn": "Cabinda",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2117",
+    "cityName": "威热",
+    "cityEn": "Uige",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2118",
+    "cityName": "恩达拉坦多",
+    "cityEn": "Ndalatando",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2119",
+    "cityName": "卡西托",
+    "cityEn": "Caxito",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2120",
+    "cityName": "松贝",
+    "cityEn": "Sumbe",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2121",
+    "cityName": "梅农盖",
+    "cityEn": "Menongue",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2122",
+    "cityName": "卢埃纳",
+    "cityEn": "Luena",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2123",
+    "cityName": "索里莫",
+    "cityEn": "Saurimo",
+    "timezoneId": "Africa/Luanda",
+    "country": "AO",
+    "continent": "africa"
+  },
+  {
+    "id": "2124",
+    "cityName": "钦德",
+    "cityEn": "Chinde",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2125",
+    "cityName": "卡亚",
+    "cityEn": "Caia",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2126",
+    "cityName": "戈龙戈萨",
+    "cityEn": "Gorongosa",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2127",
+    "cityName": "希莫尤",
+    "cityEn": "Chimoio",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2128",
+    "cityName": "利欣加",
+    "cityEn": "Lichinga",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2129",
+    "cityName": "彭巴",
+    "cityEn": "Pemba",
+    "timezoneId": "Africa/Maputo",
+    "country": "MZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2130",
+    "cityName": "安布西特拉",
+    "cityEn": "Ambositra",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "2131",
+    "cityName": "安齐拉纳纳",
+    "cityEn": "Antsiranana",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "2132",
+    "cityName": "桑巴瓦",
+    "cityEn": "Sambava",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "2133",
+    "cityName": "穆龙达瓦",
+    "cityEn": "Morondava",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "2134",
+    "cityName": "图利亚拉",
+    "cityEn": "Toliara",
+    "timezoneId": "Indian/Antananarivo",
+    "country": "MG",
+    "continent": "africa"
+  },
+  {
+    "id": "2135",
+    "cityName": "祖埃拉特",
+    "cityEn": "Zouerate",
+    "timezoneId": "Africa/Nouakchott",
+    "country": "MR",
+    "continent": "africa"
+  },
+  {
+    "id": "2136",
+    "cityName": "凯埃迪",
+    "cityEn": "Kaedi",
+    "timezoneId": "Africa/Nouakchott",
+    "country": "MR",
+    "continent": "africa"
+  },
+  {
+    "id": "2137",
+    "cityName": "布提米特",
+    "cityEn": "Boutilimit",
+    "timezoneId": "Africa/Nouakchott",
+    "country": "MR",
+    "continent": "africa"
+  },
+  {
+    "id": "2138",
+    "cityName": "科尔达",
+    "cityEn": "Kolda",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "2139",
+    "cityName": "卢加",
+    "cityEn": "Louga",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "2140",
+    "cityName": "考拉克",
+    "cityEn": "Kaolack",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "2141",
+    "cityName": "久尔贝勒",
+    "cityEn": "Diourbel",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "2142",
+    "cityName": "法蒂克",
+    "cityEn": "Fatick",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "2143",
+    "cityName": "凯杜古",
+    "cityEn": "Kedougou",
+    "timezoneId": "Africa/Dakar",
+    "country": "SN",
+    "continent": "africa"
+  },
+  {
+    "id": "2144",
+    "cityName": "加奥",
+    "cityEn": "Gao",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "2145",
+    "cityName": "廷巴克图",
+    "cityEn": "Timbuktu",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "2146",
+    "cityName": "卡耶斯",
+    "cityEn": "Kayes",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "2147",
+    "cityName": "迪奥罗",
+    "cityEn": "Dioro",
+    "timezoneId": "Africa/Bamako",
+    "country": "ML",
+    "continent": "africa"
+  },
+  {
+    "id": "2148",
+    "cityName": "塔瓦",
+    "cityEn": "Tahoua",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "2149",
+    "cityName": "多索",
+    "cityEn": "Dosso",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "2150",
+    "cityName": "迪法",
+    "cityEn": "Diffa",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "2151",
+    "cityName": "赛",
+    "cityEn": "Say",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "2152",
+    "cityName": "加亚",
+    "cityEn": "Gaya",
+    "timezoneId": "Africa/Niamey",
+    "country": "NE",
+    "continent": "africa"
+  },
+  {
+    "id": "2153",
+    "cityName": "邦戈尔",
+    "cityEn": "Bongor",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "2154",
+    "cityName": "多巴",
+    "cityEn": "Doba",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "2155",
+    "cityName": "博尔",
+    "cityEn": "Bol",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "2156",
+    "cityName": "法亚拉尔若",
+    "cityEn": "Faya-Largeau",
+    "timezoneId": "Africa/Ndjamena",
+    "country": "TD",
+    "continent": "africa"
+  },
+  {
+    "id": "2157",
+    "cityName": "法希尔",
+    "cityEn": "El Fasher",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "2158",
+    "cityName": "加达里夫",
+    "cityEn": "Gedaref",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "2159",
+    "cityName": "科斯提",
+    "cityEn": "Kosti",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "2160",
+    "cityName": "尼亚拉",
+    "cityEn": "Nyala",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "2161",
+    "cityName": "杰奈纳",
+    "cityEn": "Geneina",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "2162",
+    "cityName": "扎林盖",
+    "cityEn": "Zalingei",
+    "timezoneId": "Africa/Khartoum",
+    "country": "SD",
+    "continent": "africa"
+  },
+  {
+    "id": "2163",
+    "cityName": "塞卜哈",
+    "cityEn": "Sabha",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "2164",
+    "cityName": "苏尔特",
+    "cityEn": "Sirte",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "2165",
+    "cityName": "图卜鲁格",
+    "cityEn": "Tobruk",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "2166",
+    "cityName": "库夫拉",
+    "cityEn": "Kufra",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "2167",
+    "cityName": "纳卢特",
+    "cityEn": "Nalut",
+    "timezoneId": "Africa/Tripoli",
+    "country": "LY",
+    "continent": "africa"
+  },
+  {
+    "id": "2168",
+    "cityName": "加贝斯",
+    "cityEn": "Gabes",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "2169",
+    "cityName": "凯鲁万",
+    "cityEn": "Kairouan",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "2170",
+    "cityName": "比塞大",
+    "cityEn": "Bizerte",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "2171",
+    "cityName": "让杜巴",
+    "cityEn": "Jendouba",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "2172",
+    "cityName": "托泽尔",
+    "cityEn": "Tozeur",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "2173",
+    "cityName": "塔塔温",
+    "cityEn": "Tataouine",
+    "timezoneId": "Africa/Tunis",
+    "country": "TN",
+    "continent": "africa"
+  },
+  {
+    "id": "2174",
+    "cityName": "盖尔达耶",
+    "cityEn": "Ghardaia",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2175",
+    "cityName": "贝沙尔",
+    "cityEn": "Bechar",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2176",
+    "cityName": "特莱姆森",
+    "cityEn": "Tlemcen",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2177",
+    "cityName": "塞蒂夫",
+    "cityEn": "Setif",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2178",
+    "cityName": "布利达",
+    "cityEn": "Blida",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2179",
+    "cityName": "巴特纳",
+    "cityEn": "Batna",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2180",
+    "cityName": "比斯克拉",
+    "cityEn": "Biskra",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2181",
+    "cityName": "阿德拉尔",
+    "cityEn": "Adrar",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2182",
+    "cityName": "塔曼拉塞特",
+    "cityEn": "Tamanrasset",
+    "timezoneId": "Africa/Algiers",
+    "country": "DZ",
+    "continent": "africa"
+  },
+  {
+    "id": "2183",
+    "cityName": "曼苏拉",
+    "cityEn": "Mansoura",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2184",
+    "cityName": "坦塔",
+    "cityEn": "Tanta",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2185",
+    "cityName": "宰加济格",
+    "cityEn": "Zagazig",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2186",
+    "cityName": "达米埃塔",
+    "cityEn": "Damietta",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2187",
+    "cityName": "伊斯梅利亚",
+    "cityEn": "Ismailia",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2188",
+    "cityName": "苏伊士",
+    "cityEn": "Suez",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2189",
+    "cityName": "锡瓦",
+    "cityEn": "Siwa",
+    "timezoneId": "Africa/Cairo",
+    "country": "EG",
+    "continent": "africa"
+  },
+  {
+    "id": "2190",
+    "cityName": "拉什特",
+    "cityEn": "Rasht",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2191",
+    "cityName": "大不里士",
+    "cityEn": "Tabriz",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2192",
+    "cityName": "克尔曼",
+    "cityEn": "Kerman",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2193",
+    "cityName": "扎黑丹",
+    "cityEn": "Zahedan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2194",
+    "cityName": "库姆",
+    "cityEn": "Qom",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2195",
+    "cityName": "亚兹德",
+    "cityEn": "Yazd",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2196",
+    "cityName": "阿巴丹",
+    "cityEn": "Abadan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2197",
+    "cityName": "克尔曼沙赫",
+    "cityEn": "Kermanshah",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2198",
+    "cityName": "乌尔米耶",
+    "cityEn": "Urmia",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2199",
+    "cityName": "萨里",
+    "cityEn": "Sari",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2200",
+    "cityName": "哈马丹",
+    "cityEn": "Hamedan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2201",
+    "cityName": "阿尔达比勒",
+    "cityEn": "Ardabil",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2202",
+    "cityName": "布什尔",
+    "cityEn": "Bushehr",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2203",
+    "cityName": "赞詹",
+    "cityEn": "Zanjan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2204",
+    "cityName": "萨南达季",
+    "cityEn": "Sanandaj",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2205",
+    "cityName": "霍拉马巴德",
+    "cityEn": "Khorramabad",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2206",
+    "cityName": "伊拉姆",
+    "cityEn": "Ilam",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2207",
+    "cityName": "塞姆南",
+    "cityEn": "Semnan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2208",
+    "cityName": "加兹温",
+    "cityEn": "Qazvin",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2209",
+    "cityName": "卡尚",
+    "cityEn": "Kashan",
+    "timezoneId": "Asia/Tehran",
+    "country": "IR",
+    "continent": "asia"
+  },
+  {
+    "id": "2210",
+    "cityName": "奥兰加巴德",
+    "cityEn": "Aurangabad",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2211",
+    "cityName": "纳西克",
+    "cityEn": "Nashik",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2212",
+    "cityName": "拉杰科特",
+    "cityEn": "Rajkot",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2213",
+    "cityName": "巴罗达",
+    "cityEn": "Vadodara",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2214",
+    "cityName": "焦特布尔",
+    "cityEn": "Jodhpur",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2215",
+    "cityName": "科塔",
+    "cityEn": "Kota",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2216",
+    "cityName": "阿杰梅尔",
+    "cityEn": "Ajmer",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2217",
+    "cityName": "贾伊瑟尔梅尔",
+    "cityEn": "Jaisalmer",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2218",
+    "cityName": "查谟",
+    "cityEn": "Jammu",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2219",
+    "cityName": "斯利那加",
+    "cityEn": "Srinagar",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2220",
+    "cityName": "卢迪亚纳",
+    "cityEn": "Ludhiana",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2221",
+    "cityName": "昌迪加尔",
+    "cityEn": "Chandigarh",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2222",
+    "cityName": "德拉敦",
+    "cityEn": "Dehradun",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2223",
+    "cityName": "兰辛",
+    "cityEn": "Lansing",
+    "timezoneId": "America/Detroit",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2224",
+    "cityName": "安娜堡",
+    "cityEn": "Ann Arbor",
+    "timezoneId": "America/Detroit",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2225",
+    "cityName": "麦迪逊",
+    "cityEn": "Madison",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2226",
+    "cityName": "得梅因",
+    "cityEn": "Des Moines",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2227",
+    "cityName": "奥马哈",
+    "cityEn": "Omaha",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2228",
+    "cityName": "威奇托",
+    "cityEn": "Wichita",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2229",
+    "cityName": "塔尔萨",
+    "cityEn": "Tulsa",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2230",
+    "cityName": "小石城",
+    "cityEn": "Little Rock",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2231",
+    "cityName": "杰克逊",
+    "cityEn": "Jackson",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2232",
+    "cityName": "诺克斯维尔",
+    "cityEn": "Knoxville",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2233",
+    "cityName": "查塔努加",
+    "cityEn": "Chattanooga",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2234",
+    "cityName": "阿什维尔",
+    "cityEn": "Asheville",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2235",
+    "cityName": "格林斯伯勒",
+    "cityEn": "Greensboro",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2236",
+    "cityName": "诺福克",
+    "cityEn": "Norfolk",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2237",
+    "cityName": "弗吉尼亚海滩",
+    "cityEn": "Virginia Beach",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2238",
+    "cityName": "罗切斯特",
+    "cityEn": "Rochester",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2239",
+    "cityName": "雪城",
+    "cityEn": "Syracuse",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2240",
+    "cityName": "奥尔巴尼",
+    "cityEn": "Albany",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2241",
+    "cityName": "斯克兰顿",
+    "cityEn": "Scranton",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2242",
+    "cityName": "纽瓦克",
+    "cityEn": "Newark",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2243",
+    "cityName": "特伦顿",
+    "cityEn": "Trenton",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2244",
+    "cityName": "威尔明顿",
+    "cityEn": "Wilmington",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2245",
+    "cityName": "哥伦比亚",
+    "cityEn": "Columbia",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2246",
+    "cityName": "格林维尔",
+    "cityEn": "Greenville",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2247",
+    "cityName": "默特尔比奇",
+    "cityEn": "Myrtle Beach",
+    "timezoneId": "America/New_York",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2248",
+    "cityName": "哈勒姆",
+    "cityEn": "Haarlem",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2249",
+    "cityName": "莱顿",
+    "cityEn": "Leiden",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2250",
+    "cityName": "代尔夫特",
+    "cityEn": "Delft",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2251",
+    "cityName": "奈梅亨",
+    "cityEn": "Nijmegen",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2252",
+    "cityName": "蒂尔堡",
+    "cityEn": "Tilburg",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2253",
+    "cityName": "布雷达",
+    "cityEn": "Breda",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2254",
+    "cityName": "阿纳姆",
+    "cityEn": "Arnhem",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2255",
+    "cityName": "恩斯赫德",
+    "cityEn": "Enschede",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2256",
+    "cityName": "阿珀尔多伦",
+    "cityEn": "Apeldoorn",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2257",
+    "cityName": "阿默斯福特",
+    "cityEn": "Amersfoort",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2258",
+    "cityName": "马斯特里赫特",
+    "cityEn": "Maastricht",
+    "timezoneId": "Europe/Amsterdam",
+    "country": "NL",
+    "continent": "europe"
+  },
+  {
+    "id": "2259",
+    "cityName": "鲁汶",
+    "cityEn": "Leuven",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "2260",
+    "cityName": "沙勒罗瓦",
+    "cityEn": "Charleroi",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "2261",
+    "cityName": "那慕尔",
+    "cityEn": "Namur",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "2262",
+    "cityName": "哈瑟尔特",
+    "cityEn": "Hasselt",
+    "timezoneId": "Europe/Brussels",
+    "country": "BE",
+    "continent": "europe"
+  },
+  {
+    "id": "2263",
+    "cityName": "曼杜拉",
+    "cityEn": "Mandurah",
+    "timezoneId": "Australia/Perth",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2264",
+    "cityName": "罗金厄姆",
+    "cityEn": "Rockingham",
+    "timezoneId": "Australia/Perth",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2265",
+    "cityName": "梅尔顿",
+    "cityEn": "Melton",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2266",
+    "cityName": "弗兰克斯顿",
+    "cityEn": "Frankston",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2267",
+    "cityName": "克兰本",
+    "cityEn": "Cranbourne",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2268",
+    "cityName": "韦里比",
+    "cityEn": "Werribee",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2269",
+    "cityName": "麦夸里港",
+    "cityEn": "Port Macquarie",
+    "timezoneId": "Australia/Sydney",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2270",
+    "cityName": "谢珀顿",
+    "cityEn": "Shepparton",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2271",
+    "cityName": "瓦南布尔",
+    "cityEn": "Warrnambool",
+    "timezoneId": "Australia/Melbourne",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2272",
+    "cityName": "卡尔古利",
+    "cityEn": "Kalgoorlie",
+    "timezoneId": "Australia/Perth",
+    "country": "AU",
+    "continent": "oceania"
+  },
+  {
+    "id": "2277",
+    "cityName": "塔西拉克",
+    "cityEn": "Tasiilaq",
+    "timezoneId": "America/Nuuk",
+    "country": "GL",
+    "continent": "arctic"
+  },
+  {
+    "id": "2278",
+    "cityName": "西西米尤特",
+    "cityEn": "Sisimiut",
+    "timezoneId": "America/Nuuk",
+    "country": "GL",
+    "continent": "arctic"
+  },
+  {
+    "id": "2280",
+    "cityName": "彭萨科拉",
+    "cityEn": "Pensacola",
+    "timezoneId": "America/Chicago",
+    "country": "US",
+    "continent": "america"
+  },
+  {
+    "id": "2281",
+    "cityName": "金斯顿",
+    "cityEn": "Kingston",
+    "timezoneId": "America/Toronto",
+    "country": "CA",
+    "continent": "america"
+  },
+  {
+    "id": "2282",
+    "cityName": "西姆拉",
+    "cityEn": "Shimla",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2283",
+    "cityName": "坎普尔",
+    "cityEn": "Kanpur",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
+  },
+  {
+    "id": "2284",
+    "cityName": "西加托卡",
+    "cityEn": "Sigatoka",
+    "timezoneId": "Pacific/Fiji",
+    "country": "FJ",
+    "continent": "oceania"
+  },
+  {
+    "id": "2285",
+    "cityName": "瓜廖尔",
+    "cityEn": "Gwalior",
+    "timezoneId": "Asia/Kolkata",
+    "country": "IN",
+    "continent": "asia"
   }
 ]

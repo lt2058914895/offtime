@@ -66,9 +66,9 @@ final class ClockListViewModel: ObservableObject {
               let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
             return [:]
         }
-        return Dictionary(uniqueKeysWithValues: cities.map {
-            ("\($0.cityEn)|\($0.timezoneId)", $0.country)
-        })
+        return cities.reduce(into: [String: String]()) {
+            $0["\($1.cityEn)|\($1.timezoneId)"] = $1.country
+        }
     }()
 
     /// 城市国家码：优先取模型字段，旧数据为空时从内置城市目录按 英文名+时区 补全
