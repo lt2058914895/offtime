@@ -107,10 +107,14 @@ final class CityPickerViewModel: ObservableObject {
         (Bundle.main.preferredLocalizations.first ?? "zh-Hans").hasPrefix("zh")
     }
 
-    /// 当前界面语言下的国家名（缓存）
+    /// 当前界面语言下的国家名（缓存）；中文环境额外附带英文名，便于跨语言识别
     private func countryName(for code: String) -> String {
         if let cached = cachedCountryNames[code] { return cached }
-        let name = Self.displayLocale.localizedString(forRegionCode: code) ?? code
+        let localizedName = Self.displayLocale.localizedString(forRegionCode: code) ?? code
+        let englishName = Self.englishLocale.localizedString(forRegionCode: code) ?? code
+        let name = Self.isChineseLocale && localizedName != englishName
+            ? "\(localizedName) \(englishName)"
+            : localizedName
         cachedCountryNames[code] = name
         return name
     }
