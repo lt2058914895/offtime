@@ -251,12 +251,6 @@ enum AppRoute: Hashable {
     case reminderList
 }
 
-struct TimezoneInfo: Equatable {
-    let id: String
-    let name: String
-    let offset: TimeInterval
-}
-
 struct CitySuggestion: Equatable, Identifiable, Codable {
     let id: String
     let cityName: String
