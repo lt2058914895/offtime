@@ -210,6 +210,9 @@
 "settings.import.cities" = "Import City List";
 "settings.about" = "About";
 "settings.support" = "Feedback";
+"settings.widget.section" = "Widget";
+"settings.add.widget" = "Add Widget";
+"settings.add.widget.subtitle" = "Put %@ on your Home Screen or Lock Screen";
 "settings.load.failed" = "Failed to load settings";
 "settings.save.failed" = "Failed to save settings";
 "settings.save.theme.failed" = "Failed to save theme";
@@ -221,6 +224,39 @@
 "settings.import.merge" = "Merge with existing";
 "settings.import.replace" = "Replace all cities";
 "settings.import.confirm.message" = "Replace will clear all current cities. Merge will keep existing cities and add new ones.";
+
+// MARK: - Widget Guide
+"widget.guide.subtitle" = "See every city's time without opening the app";
+"widget.guide.home.title" = "Add to Home Screen";
+"widget.guide.home.step1.title" = "Touch and hold";
+"widget.guide.home.step1.detail" = "an empty area";
+"widget.guide.home.step2.title" = "Tap +";
+"widget.guide.home.step2.detail" = "top-left corner";
+"widget.guide.home.step3.title" = "Pick %@";
+"widget.guide.home.step3.detail" = "choose a size, add";
+"widget.guide.home.hint" = "Optional: touch and hold the widget → Edit Widget to pick the cities; leave it empty to follow your clock list order.";
+"widget.guide.lock.title" = "Add to Lock Screen";
+"widget.guide.lock.step1.title" = "Touch and hold";
+"widget.guide.lock.step1.detail" = "then tap Customize";
+"widget.guide.lock.step2.title" = "Tap a slot";
+"widget.guide.lock.step2.detail" = "below the time";
+"widget.guide.lock.step3.title" = "Pick %@";
+"widget.guide.lock.step3.detail" = "then a style";
+"widget.guide.lock.footer" = "The Lock Screen supports circular, rectangular and inline styles: circular shows the first city, rectangular shows the first two.";
+"widget.guide.size.title" = "Available Sizes";
+"widget.guide.size.small" = "Small";
+"widget.guide.size.medium" = "Medium";
+"widget.guide.size.large" = "Large";
+"widget.guide.size.caption.small" = "Shows 1 city";
+"widget.guide.size.caption.medium" = "Shows 2 cities";
+"widget.guide.size.caption.large" = "Shows up to 6 cities";
+"widget.guide.size.footer" = "Want a different size? Remove the widget and add it again with the steps above.";
+"widget.guide.tips.title" = "Tips";
+"widget.guide.tips.order" = "The widget shows the same cities as the app, so add your cities in the app first.";
+"widget.guide.tips.refresh" = "After changing cities or the 12/24-hour format, open the app once to refresh the widget.";
+"widget.guide.tips.empty" = "Seeing \"Open %@ to add a city\"? Open the app once and it will appear.";
+"widget.guide.mock.date" = "Wed, Sep 16";
+"widget.guide.mock.local" = "Local";
 
 // MARK: - Theme
 "theme.system" = "System";

@@ -68,7 +68,12 @@ struct OffTimeWidget: Widget {
         AppIntentConfiguration(kind: kind, intent: OffTimeWidgetConfigurationIntent.self, provider: OffTimeProvider()) { entry in
             OffTimeWidgetView(entry: entry)
         }
-        .configurationDisplayName("OffTime")
+        // 组件库里的名字跟随系统语言：中文 = 世界时钟、英文 = OffTime，
+        // 与 App 名称（CFBundleDisplayName）保持一致，避免用户按「世界时钟」找不到组件。
+        .configurationDisplayName(Text(String(
+            localized: "widget.gallery.name",
+            defaultValue: "OffTime"
+        )))
         .description(Text(String(
             localized: "widget.gallery.description",
             defaultValue: "See the current time in several cities; the order matches your clock list"

@@ -21,20 +21,12 @@ struct SettingsView: View {
         URL(string: "itms-apps://itunes.apple.com/app/id\(appStoreID)?action=write-review")!
     }
 
-    /// App 显示名：读取 Info.plist 的 CFBundleDisplayName（会自动取当前语言的本地化值，
-    /// 中文=世界时钟、英文=OffTime），跟随系统语言，避免硬编码。
-    private var appDisplayName: String {
-        (Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String)
-            ?? (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String)
-            ?? "OffTime"
-    }
-
     /// 分享 App 的正文：本地化 App 显示名 + 推荐文案 + 下载链接。
     /// 用纯文本而非 URL：apps.apple.com 链接的 OG 元数据是站点级通用模板（"Today - App Store"），
     /// 无论 ShareLink(item: URL) 还是 UIActivityViewController(items: [url]) 都会被渠道抓成该通用文案；
     /// 纯文本不走 OG 抓取，文案完全可控，链接在文本中仍可点击。
     private var shareAppMessage: String {
-        "\(appDisplayName) — \(String(localized: "share.app.body"))\n\(appStoreURL.absoluteString)"
+        "\(AppDisplay.name) — \(String(localized: "share.app.body"))\n\(appStoreURL.absoluteString)"
     }
 
     /// 版本号：读 CFBundleShortVersionString，如 "1.0"
@@ -103,6 +95,26 @@ struct SettingsView: View {
                         ReminderListView()
                     } label: {
                         Label(String(localized: "reminder.list.title"), systemImage: "bell.fill")
+                    }
+                }
+
+                // MARK: - 小组件
+                Section(String(localized: "settings.widget.section")) {
+                    NavigationLink {
+                        AddWidgetGuideView()
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "square.grid.2x2.fill")
+                                .foregroundColor(.blue)
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(String(localized: "settings.add.widget"))
+                                    .foregroundColor(.primary)
+                                Text(AppDisplay.text("settings.add.widget.subtitle", AppDisplay.name))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
                     }
                 }
 

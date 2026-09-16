@@ -1,6 +1,7 @@
 /* OffTime Widgets - English localization */
 
 // MARK: - Gallery
+"widget.gallery.name" = "OffTime";
 "widget.gallery.description" = "See the current time in several cities; the order matches your clock list";
 
 // MARK: - City row

@@ -210,6 +210,9 @@
 "settings.import.cities" = "导入城市列表";
 "settings.about" = "关于";
 "settings.support" = "问题反馈";
+"settings.widget.section" = "小组件";
+"settings.add.widget" = "添加小组件";
+"settings.add.widget.subtitle" = "把%@放到主屏幕或锁定屏幕";
 "settings.load.failed" = "加载设置失败";
 "settings.save.failed" = "保存设置失败";
 "settings.save.theme.failed" = "保存主题失败";
@@ -221,6 +224,39 @@
 "settings.import.merge" = "合并到现有城市";
 "settings.import.replace" = "替换所有城市";
 "settings.import.confirm.message" = "替换将清空当前所有城市，合并将保留现有城市并追加新城市。";
+
+// MARK: - Widget Guide
+"widget.guide.subtitle" = "不用打开 App，点亮屏幕就能看到各地时间";
+"widget.guide.home.title" = "添加到主屏幕";
+"widget.guide.home.step1.title" = "长按桌面";
+"widget.guide.home.step1.detail" = "按住空白处";
+"widget.guide.home.step2.title" = "点左上角 ＋";
+"widget.guide.home.step2.detail" = "图标抖动后出现";
+"widget.guide.home.step3.title" = "选%@";
+"widget.guide.home.step3.detail" = "挑好尺寸再添加";
+"widget.guide.home.hint" = "可选：长按组件 → 编辑小组件，勾选要显示的城市；不勾选就按时钟列表顺序显示。";
+"widget.guide.lock.title" = "添加到锁定屏幕";
+"widget.guide.lock.step1.title" = "长按锁屏";
+"widget.guide.lock.step1.detail" = "解锁后点「自定义」";
+"widget.guide.lock.step2.title" = "点组件区域";
+"widget.guide.lock.step2.detail" = "时间下方或底部";
+"widget.guide.lock.step3.title" = "选%@";
+"widget.guide.lock.step3.detail" = "再挑一个样式";
+"widget.guide.lock.footer" = "锁屏支持圆形、矩形、行内样式：圆形显示第 1 个城市，矩形显示前 2 个。";
+"widget.guide.size.title" = "支持的尺寸";
+"widget.guide.size.small" = "小";
+"widget.guide.size.medium" = "中";
+"widget.guide.size.large" = "大";
+"widget.guide.size.caption.small" = "显示 1 个城市";
+"widget.guide.size.caption.medium" = "显示 2 个城市";
+"widget.guide.size.caption.large" = "最多显示 6 个城市";
+"widget.guide.size.footer" = "想换尺寸？删掉组件，按上面的步骤重新添加一次就好。";
+"widget.guide.tips.title" = "小提示";
+"widget.guide.tips.order" = "组件显示的城市与 App 的城市列表一致，请先在 App 里添加城市。";
+"widget.guide.tips.refresh" = "增删城市或切换 12/24 小时制后，打开一次 App 即可刷新组件。";
+"widget.guide.tips.empty" = "组件显示「打开%@添加城市」？打开一次 App 就会显示。";
+"widget.guide.mock.date" = "周三 9月16日";
+"widget.guide.mock.local" = "本地";
 
 // MARK: - Theme
 "theme.system" = "跟随系统";

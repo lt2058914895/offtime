@@ -45,6 +45,27 @@ extension String {
     }
 }
 
+// MARK: - App 名称
+
+/// App 显示名工具。
+///
+/// 名称取 Info.plist 的 CFBundleDisplayName，会跟随系统语言自动切换
+/// （中文 = 世界时钟，英文 = OffTime），因此文案里不要硬编码品牌名。
+enum AppDisplay {
+    /// 当前语言下的 App 名称
+    static var name: String {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String)
+            ?? (Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String)
+            ?? "OffTime"
+    }
+
+    /// 带 App 名称的本地化文案：字符串表里用 %@ 占位，例如中文 "选%@"、英文 "Pick %@"。
+    /// 占位符两侧是否留空格由各语言自己决定，所以不做统一拼接。
+    static func text(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: NSLocalizedString(key, comment: ""), arguments)
+    }
+}
+
 struct ToastModifier: ViewModifier {
     @Binding var message: String?
     @State private var dismissTask: Task<Void, Never>?
