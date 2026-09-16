@@ -264,7 +264,7 @@
 "theme.dark" = "深色";
 
 // MARK: - Onboarding
-"onboarding.welcome.title" = "欢迎使用 OffTime";
+"onboarding.welcome.title" = "欢迎使用%@";
 "onboarding.welcome.subtitle" = "跨境沟通、国际行程，时区一目了然";
 "onboarding.cities.title" = "添加你关心的城市";
 "onboarding.cities.subtitle" = "已为你加入本地城市，再添加几个常关注的城市吧";

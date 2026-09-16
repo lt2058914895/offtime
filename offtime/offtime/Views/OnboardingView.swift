@@ -36,7 +36,7 @@ struct OnboardingView: View {
             Image(systemName: "globe")
                 .font(.system(size: 80))
                 .foregroundColor(.accentColor)
-            Text(String(localized: "onboarding.welcome.title"))
+            Text(AppDisplay.text("onboarding.welcome.title", AppDisplay.name))
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)

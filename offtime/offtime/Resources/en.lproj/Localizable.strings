@@ -264,7 +264,7 @@
 "theme.dark" = "Dark";
 
 // MARK: - Onboarding
-"onboarding.welcome.title" = "Welcome to OffTime";
+"onboarding.welcome.title" = "Welcome to %@";
 "onboarding.welcome.subtitle" = "Cross-border communication and international travel — time zones at a glance";
 "onboarding.cities.title" = "Add cities you track";
 "onboarding.cities.subtitle" = "Your local city is already added. Add a few more you check often.";
