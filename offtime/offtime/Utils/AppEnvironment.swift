@@ -20,6 +20,7 @@ final class AppEnvironment: ObservableObject {
     private let logger = Logger(subsystem: "lt.offtime", category: "AppEnvironment")
     private var minuteTimer: Timer?
     private let backupService = PersistentStoreBackupService()
+    private var cityStoreObserver: NSObjectProtocol?
 
     init() {
         let schema = Schema(versionedSchema: AppStoreSchemaV1.self)
@@ -73,6 +74,7 @@ final class AppEnvironment: ObservableObject {
         }
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
         CityService.shared.modelContainer = modelContainer
+        observeCityStoreChanges()
         // 首帧渲染前同步读取引导状态，避免非新用户进入 App 时引导页一闪而过
         loadOnboardingState()
     }
@@ -84,6 +86,7 @@ final class AppEnvironment: ObservableObject {
         loadSettings()
         // 导入旧版通知提醒、补齐被系统删除的通知，并清理孤立提醒
         synchronizeReminders()
+        publishWidgetSnapshot()
     }
 
     // MARK: - 分钟时钟
@@ -111,6 +114,24 @@ final class AppEnvironment: ObservableObject {
     func stopMinuteClock() {
         minuteTimer?.invalidate()
         minuteTimer = nil
+    }
+
+    // MARK: - Widget 数据同步
+
+    private func observeCityStoreChanges() {
+        cityStoreObserver = NotificationCenter.default.addObserver(
+            forName: .cityStoreDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.publishWidgetSnapshot()
+            }
+        }
+    }
+
+    func publishWidgetSnapshot() {
+        WidgetSnapshotService.publish(modelContainer: modelContainer, settings: settings)
     }
 
     // MARK: - 首启种子城市
@@ -195,6 +216,7 @@ final class AppEnvironment: ObservableObject {
             UserDefaults.standard.removeObject(forKey: "settings_currentCityEn")
         }
         settings = newSettings
+        publishWidgetSnapshot()
     }
 
     /// 切换当前城市：从城市库选择后更新时区、名称（工作时间由各城市详情页独立维护）
@@ -214,6 +236,12 @@ final class AppEnvironment: ObservableObject {
             return .light
         case .dark:
             return .dark
+        }
+    }
+
+    deinit {
+        if let cityStoreObserver {
+            NotificationCenter.default.removeObserver(cityStoreObserver)
         }
     }
 }

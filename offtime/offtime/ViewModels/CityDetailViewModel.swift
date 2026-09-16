@@ -293,6 +293,7 @@ final class CityDetailViewModel: ObservableObject {
         city.localWorkStart = localWorkHours.start
         city.localWorkEnd = localWorkHours.end
         try? CityService.shared.modelContainer.mainContext.save()
+        NotificationCenter.default.post(name: .cityStoreDidChange, object: nil)
     }
 
     private static func validatedWorkHours(start: Int, end: Int) -> (start: Int, end: Int) {

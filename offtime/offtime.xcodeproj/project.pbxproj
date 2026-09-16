@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA0000000000000000000002 /* OffTimeWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* OffTimeWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		024CF815D289B7FB2D77ECA7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,11 +25,33 @@
 			remoteGlobalIDString = 690C5C5A3010918200CF6812;
 			remoteInfo = offtime;
 		};
+		AA0000000000000000000003 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 690C5C533010918200CF6812 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA0000000000000000000005;
+			remoteInfo = OffTimeWidgets;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA0000000000000000000014 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA0000000000000000000002 /* OffTimeWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		690C5C5B3010918200CF6812 /* offtime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = offtime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7F48B34B8B6D8D321C58F7 /* offtimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = offtimeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000000000000000000001 /* OffTimeWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OffTimeWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B754A053B4B8C469E5762938 /* offtimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = offtimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -46,6 +72,16 @@
 				AAAA00000000000000000001 /* Exceptions for "offtime" folder in "offtime" target */,
 			);
 			path = offtime;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000012 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000013 /* offtimeWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = offtimeWidgets;
 			sourceTree = "<group>";
 		};
 		D739EF742E91EB5552BFE690 /* offtimeUITests */ = {
@@ -82,6 +118,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA0000000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -89,6 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				690C5C5D3010918200CF6812 /* offtime */,
+				AA0000000000000000000012 /* Shared */,
+				AA0000000000000000000013 /* offtimeWidgets */,
 				690C5C5C3010918200CF6812 /* Products */,
 				D0A8228B1206DDB69EE5D39A /* Frameworks */,
 				DCB07EE770D49393768472D3 /* offtimeTests */,
@@ -100,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				690C5C5B3010918200CF6812 /* offtime.app */,
+				AA0000000000000000000001 /* OffTimeWidgets.appex */,
 				B754A053B4B8C469E5762938 /* offtimeTests.xctest */,
 				7E7F48B34B8B6D8D321C58F7 /* offtimeUITests.xctest */,
 			);
@@ -123,13 +169,16 @@
 				690C5C573010918200CF6812 /* Sources */,
 				690C5C583010918200CF6812 /* Frameworks */,
 				690C5C593010918200CF6812 /* Resources */,
+				AA0000000000000000000014 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AA0000000000000000000004 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				690C5C5D3010918200CF6812 /* offtime */,
+				AA0000000000000000000012 /* Shared */,
 			);
 			name = offtime;
 			productName = offtime;
@@ -156,6 +205,27 @@
 			productName = offtimeUITests;
 			productReference = 7E7F48B34B8B6D8D321C58F7 /* offtimeUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		AA0000000000000000000005 /* OffTimeWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA0000000000000000000009 /* Build configuration list for PBXNativeTarget "OffTimeWidgets" */;
+			buildPhases = (
+				AA0000000000000000000006 /* Sources */,
+				AA0000000000000000000007 /* Frameworks */,
+				AA0000000000000000000008 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AA0000000000000000000012 /* Shared */,
+				AA0000000000000000000013 /* offtimeWidgets */,
+			);
+			name = OffTimeWidgets;
+			productName = OffTimeWidgets;
+			productReference = AA0000000000000000000001 /* OffTimeWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		BFA476F8B010086544950FD4 /* offtimeTests */ = {
 			isa = PBXNativeTarget;
@@ -195,6 +265,9 @@
 						CreatedOnToolsVersion = 26.4.1;
 						TestTargetID = 690C5C5A3010918200CF6812;
 					};
+					AA0000000000000000000005 = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
 					BFA476F8B010086544950FD4 = {
 						CreatedOnToolsVersion = 26.4.1;
 						TestTargetID = 690C5C5A3010918200CF6812;
@@ -217,6 +290,7 @@
 			projectRoot = "";
 			targets = (
 				690C5C5A3010918200CF6812 /* offtime */,
+				AA0000000000000000000005 /* OffTimeWidgets */,
 				BFA476F8B010086544950FD4 /* offtimeTests */,
 				7168D7E06BCAEBE9D9557AAE /* offtimeUITests */,
 			);
@@ -245,10 +319,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA0000000000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		690C5C573010918200CF6812 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000000000000000000006 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -277,6 +365,11 @@
 			name = offtime;
 			target = 690C5C5A3010918200CF6812 /* offtime */;
 			targetProxy = 024CF815D289B7FB2D77ECA7 /* PBXContainerItemProxy */;
+		};
+		AA0000000000000000000004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA0000000000000000000005 /* OffTimeWidgets */;
+			targetProxy = AA0000000000000000000003 /* PBXContainerItemProxy */;
 		};
 		BDC270C5E86E0E8EC479B284 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -464,6 +557,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Config/OffTime.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
@@ -497,6 +591,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Config/OffTime.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = CV7ZT772HQ;
@@ -518,6 +613,62 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AA0000000000000000000010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Config/OffTimeWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = CV7ZT772HQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/OffTimeWidgets-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OffTime Widgets";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = lt.offtime.OffTimeWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Config/OffTimeWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = CV7ZT772HQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/OffTimeWidgets-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OffTime Widgets";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = lt.offtime.OffTimeWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -600,6 +751,15 @@
 			buildConfigurations = (
 				690C5C673010918800CF6812 /* Debug */,
 				690C5C683010918800CF6812 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA0000000000000000000009 /* Build configuration list for PBXNativeTarget "OffTimeWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000011 /* Release */,
+				AA0000000000000000000010 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,0 +1,24 @@
+/* OffTime 小组件 - 简体中文本地化 */
+
+// MARK: - 组件库
+"widget.gallery.description" = "查看多个城市的当前时间；展示顺序与时钟列表一致";
+
+// MARK: - 城市行
+"widget.city.local" = "本地";
+"widget.daytime" = "白天";
+"widget.nighttime" = "夜晚";
+
+// MARK: - 空状态
+"widget.empty.title" = "打开 OffTime 添加城市";
+"widget.empty.subtitle" = "在 App 里添加的城市会显示在这里";
+
+// MARK: - 配置项
+"widget.intent.title" = "OffTime 城市";
+"widget.intent.description" = "选择小组件要展示的城市；展示顺序始终与时钟列表一致。";
+"widget.intent.cities" = "显示城市";
+"widget.intent.city.type" = "城市";
+
+// MARK: - 共享文案（TimezoneService）
+"clock.tomorrow" = "明日";
+"clock.yesterday" = "昨日";
+"clock.dst.summer" = "夏令时";

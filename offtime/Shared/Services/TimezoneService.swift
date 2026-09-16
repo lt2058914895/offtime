@@ -81,10 +81,23 @@ final class TimezoneService {
         return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
     }
 
+    /// 月日文本，**包含星期**（如「09/16周三」）。
+    /// 界面若单独展示星期，请改用 `getMonthDayOnly`，否则会出现星期重复展示。
     func getMonthDay(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
         let format = DateFormatter.dateFormat(
             fromTemplate: "MMEd",
+            options: 0,
+            locale: Locale.current
+        ) ?? "MM/dd"
+        return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
+    }
+
+    /// 月日文本，不包含星期，供需要单独展示星期的界面使用。
+    func getMonthDayOnly(timezoneId: String, date: Date = Date()) -> String? {
+        guard let timezone = timezone(for: timezoneId) else { return nil }
+        let format = DateFormatter.dateFormat(
+            fromTemplate: "MMMd",
             options: 0,
             locale: Locale.current
         ) ?? "MM/dd"

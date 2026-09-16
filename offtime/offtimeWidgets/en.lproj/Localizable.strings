@@ -1,0 +1,24 @@
+/* OffTime Widgets - English localization */
+
+// MARK: - Gallery
+"widget.gallery.description" = "See the current time in several cities; the order matches your clock list";
+
+// MARK: - City row
+"widget.city.local" = "Local";
+"widget.daytime" = "Daytime";
+"widget.nighttime" = "Nighttime";
+
+// MARK: - Empty state
+"widget.empty.title" = "Open OffTime to add a city";
+"widget.empty.subtitle" = "Cities you add in the app show up here";
+
+// MARK: - Configuration
+"widget.intent.title" = "OffTime Cities";
+"widget.intent.description" = "Pick the cities this widget shows; the order always matches your clock list.";
+"widget.intent.cities" = "Cities to show";
+"widget.intent.city.type" = "City";
+
+// MARK: - Shared strings (TimezoneService)
+"clock.tomorrow" = "Tomorrow";
+"clock.yesterday" = "Yesterday";
+"clock.dst.summer" = "DST";

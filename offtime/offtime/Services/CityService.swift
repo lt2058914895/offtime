@@ -1,6 +1,10 @@
 import Foundation
 import SwiftData
 
+extension Notification.Name {
+    static let cityStoreDidChange = Notification.Name("lt.offtime.cityStoreDidChange")
+}
+
 @MainActor
 final class CityService {
     static let shared = CityService()
@@ -37,6 +41,7 @@ final class CityService {
         )
         ctx.insert(city)
         try ctx.save()
+        notifyCityStoreDidChange()
     }
 
     /// 按身份键查找已添加城市：先按 IANA 时区过滤，再在内存中比对规范化英文名。
@@ -63,6 +68,7 @@ final class CityService {
         }
         ctx.delete(city)
         try ctx.save()
+        notifyCityStoreDidChange()
 
         // 清理该城市关联的提醒持久化数据与通知
         Task {
@@ -85,6 +91,7 @@ final class CityService {
             }
         }
         try ctx.save()
+        notifyCityStoreDidChange()
 
         // 清理关联的提醒持久化数据与通知
         Task {
@@ -121,6 +128,7 @@ final class CityService {
         }
         city.sortIndex = sortIndex
         try ctx.save()
+        notifyCityStoreDidChange()
     }
     
     func reorderCities(_ cities: [CityModel], context: ModelContext? = nil) throws {
@@ -129,6 +137,7 @@ final class CityService {
             city.sortIndex = index
         }
         try ctx.save()
+        notifyCityStoreDidChange()
     }
     
     func hasCity(cityEn: String, timezoneId: String, context: ModelContext? = nil) throws -> Bool {
@@ -213,6 +222,7 @@ final class CityService {
             }
         }
         try ctx.save()
+        notifyCityStoreDidChange()
     }
     
     // MARK: - City Name Matching（静态方法，供 AppEnvironment 等外部调用）
@@ -236,4 +246,10 @@ enum CityError: Error, Equatable {
     case notFound
     case databaseError(String)
     case unsupportedSchemaVersion
+}
+
+private extension CityService {
+    func notifyCityStoreDidChange() {
+        NotificationCenter.default.post(name: .cityStoreDidChange, object: nil)
+    }
 }
