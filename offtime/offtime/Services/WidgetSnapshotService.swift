@@ -32,6 +32,13 @@ enum WidgetSnapshotService {
                 updatedAt: Date()
             )
 
+            // 内容没变化就不写盘、也不请求刷新：WidgetKit 的刷新次数有配额，
+            // 被浪费掉会让真正需要刷新的时候（加了城市）反而刷不出来。
+            if WidgetSnapshotStore.isUpToDate(with: snapshot) {
+                logger.debug("Widget 快照内容未变化，跳过刷新")
+                return
+            }
+
             WidgetSnapshotStore.save(snapshot)
             WidgetCenter.shared.reloadAllTimelines()
         } catch {

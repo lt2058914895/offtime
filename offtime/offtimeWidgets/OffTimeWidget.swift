@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import WidgetKit
 import AppIntents
+import os
 
 struct OffTimeEntry: TimelineEntry {
     let date: Date
@@ -12,10 +13,20 @@ struct OffTimeProvider: AppIntentTimelineProvider {
     typealias Intent = OffTimeWidgetConfigurationIntent
     typealias Entry = OffTimeEntry
 
+    /// 组件侧诊断：读不到共享数据时在系统日志里留痕，便于用 Console.app / Xcode 定位
+    /// 「组件一直没有数据」到底是 App 没发布过快照，还是 App Group 不可用。
+    private static let logger = Logger(subsystem: "lt.offtime", category: "OffTimeProvider")
+
     func placeholder(in context: Context) -> OffTimeEntry {
-        // 占位（redacted）渲染：优先用用户真实数据，读不到时用示例城市，
-        // 否则画廊里大尺寸组件的占位会空掉一大片，像是「数据没加载出来」。
-        OffTimeEntry(date: Date(), snapshot: WidgetSnapshotStore.load() ?? .sample())
+        // 占位（redacted）渲染要跟真实条目「同形」：有共享数据就用真实城市，
+        // 没有就用空态——两者都不含示例城市，避免用户看到「先显示了几个陌生城市，
+        // 随后又变成空的」，大尺寸组件行数多，这种跳变最明显。
+        // 只有预览（组件画廊 / Xcode）才用示例城市：预览环境读不到 App 写下的数据，
+        // 给空态会让画廊里的大尺寸占位空掉一大片。
+        OffTimeEntry(
+            date: Date(),
+            snapshot: WidgetSnapshotStore.load() ?? (context.isPreview ? .sample() : .empty())
+        )
     }
 
     func snapshot(for configuration: OffTimeWidgetConfigurationIntent, in context: Context) async -> OffTimeEntry {
@@ -23,21 +34,33 @@ struct OffTimeProvider: AppIntentTimelineProvider {
     }
 
     func timeline(for configuration: OffTimeWidgetConfigurationIntent, in context: Context) async -> Timeline<OffTimeEntry> {
+        let now = Date()
         let snapshot = snapshot(for: configuration)
-        // 首个条目落在「当前这一分钟」，保证组件刚添加/刷新时立刻有可渲染条目；
-        // 同时约定一个刷新期限，避免分钟精度退化后一直沿用旧时间线。
-        let plan = WidgetTimelineSchedule.plan(from: Date())
+        // 首个条目就是请求时刻，保证组件刚添加/刷新时立刻有可渲染条目；
+        // 同时约定刷新期限：有数据时等分钟精度结束，没数据时段间隔重试（避免空态一直挂着）。
+        let plan = WidgetTimelineSchedule.plan(from: now)
         let entries = plan.dates.map { date in
             OffTimeEntry(date: date, snapshot: snapshot)
         }
-        return Timeline(entries: entries, policy: .after(plan.reloadDate))
+        let reloadDate = WidgetTimelineSchedule.reloadDate(
+            after: now,
+            hasCities: !snapshot.cities.isEmpty,
+            plan: plan
+        )
+        return Timeline(entries: entries, policy: .after(reloadDate))
     }
 
     private func snapshot(for configuration: OffTimeWidgetConfigurationIntent, isPreview: Bool = false) -> WidgetSnapshot {
         // 读不到共享快照（App 还没发布过 / App Group 不可用）时给出空快照，
         // 让组件显示「打开 App 添加城市」，而不是拿设备时区伪造一个城市掩盖问题。
         // 例外：Xcode / 组件画廊预览本身读不到 App 写下的数据，用示例快照，避免预览空白。
-        let base = WidgetSnapshotStore.load() ?? (isPreview ? .sample() : .empty())
+        let stored = WidgetSnapshotStore.load()
+        if stored == nil, !isPreview {
+            Self.logger.error(
+                "组件读不到共享快照：App Group 可用=\(WidgetSnapshotStore.isAppGroupAvailable, privacy: .public)"
+            )
+        }
+        let base = stored ?? (isPreview ? .sample() : .empty())
         guard let selectedCities = configuration.cities, !selectedCities.isEmpty else {
             return base
         }
@@ -258,11 +281,15 @@ struct OffTimeWidgetView: View {
     }
 
     /// 与本地城市的关系：本地 → 「本地」，其他城市 → 时差，同一时区 → nil。
-    private func relation(for city: WidgetCitySnapshot) -> (text: String, color: Color)? {
+    /// 时差由调用方传入（`dateRow` 已经算过），避免同一行重复计算。
+    private func relation(
+        for city: WidgetCitySnapshot,
+        difference: (offset: String, crossDay: String?)?
+    ) -> (text: String, color: Color)? {
         if city.isLocal {
             return (String(localized: "widget.city.local", defaultValue: "Local"), .accentColor)
         }
-        guard let difference = timeDifference(for: city) else { return nil }
+        guard let difference, difference.offset != "0h" else { return nil }
         return (difference.offset, .secondary)
     }
 
@@ -270,8 +297,11 @@ struct OffTimeWidgetView: View {
     /// `showsRelation` 为真时在行尾接上「与本地城市的关系」——三个尺寸的时差/本地都放在这里，
     /// 紧跟在日期后面一起读，城市行则留给更大的城市名。
     private func dateRow(for city: WidgetCitySnapshot, showsRelation: Bool = false) -> some View {
-        HStack(spacing: 4) {
-            if let crossDay = timeDifference(for: city)?.crossDay {
+        // 跨天标记和行尾的时差都来自同一次计算；大尺寸要渲染 6 行，重复计算会成倍放大开销。
+        let difference = timeDifference(for: city)
+
+        return HStack(spacing: 4) {
+            if let crossDay = difference?.crossDay {
                 crossDayBadge(crossDay)
             }
 
@@ -281,7 +311,7 @@ struct OffTimeWidgetView: View {
                 .monospacedDigit()
                 .foregroundStyle(.secondary)
 
-            if showsRelation, let relation = relation(for: city) {
+            if showsRelation, let relation = relation(for: city, difference: difference) {
                 Text("·")
                     .foregroundStyle(.tertiary)
                 Text(relation.text)

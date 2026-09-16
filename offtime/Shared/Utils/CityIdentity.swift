@@ -36,10 +36,10 @@ enum CityIdentity {
 /// 城市名本地化显示工具：根据 App 当前语言动态选择主/副显示名。
 /// 中文环境 → cityName 为主、cityEn 为副；非中文环境 → cityEn 为主、cityName 为副。
 enum CityDisplay {
-    /// App 实际使用的本地化语言是否为中文
-    static var isChineseLocale: Bool {
-        Bundle.main.preferredLocalizations.first?.hasPrefix("zh") ?? false
-    }
+    /// App 实际使用的本地化语言是否为中文。
+    /// 进程内只解析一次：`preferredLocalizations` 每次都要访问 bundle，
+    /// 小组件渲染大尺寸时一行会调用两次（主名 + 副名），6 行就是十几次。
+    static let isChineseLocale: Bool = Bundle.main.preferredLocalizations.first?.hasPrefix("zh") ?? false
 
     /// 主显示名：中文环境返回 cityName，非中文环境返回 cityEn
     static func primaryName(cityName: String, cityEn: String) -> String {

@@ -19,6 +19,15 @@ struct WidgetSnapshot: Codable, Hashable {
 }
 
 extension WidgetSnapshot {
+    /// 内容是否等价：忽略 `updatedAt`。
+    /// 时间戳每次发布都会变，但它不代表组件要展示的内容变化；用它比较会导致每次
+    /// 打开设置/进后台都请求一次刷新，白耗 WidgetKit 的刷新配额。
+    func hasSameContent(as other: WidgetSnapshot) -> Bool {
+        cities == other.cities
+            && localTimezoneId == other.localTimezoneId
+            && use24Hour == other.use24Hour
+    }
+
     static func fallback(date: Date = Date()) -> WidgetSnapshot {
         let timezone = TimeZone.current
         let rawName = timezone.identifier.split(separator: "/").last.map(String.init) ?? timezone.identifier
