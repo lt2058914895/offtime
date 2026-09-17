@@ -2,9 +2,7 @@
 
 // MARK: - Gallery
 "widget.gallery.name" = "OffTime";
-"widget.gallery.description" = "See the current time in several cities; the order matches your clock list";
-"widget.gallery.medium3.name" = "OffTime · 3 Cities";
-"widget.gallery.medium3.description" = "Show up to three cities; rows expand evenly when fewer are selected";
+"widget.gallery.description" = "Shows the default order from your clock list; edit the widget to choose which cities to display";
 
 // MARK: - City row
 "widget.city.local" = "Local";

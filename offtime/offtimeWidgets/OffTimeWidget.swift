@@ -99,7 +99,7 @@ struct OffTimeWidget: Widget {
         )))
         .description(Text(String(
             localized: "widget.gallery.description",
-            defaultValue: "See the current time in several cities; the order matches your clock list"
+            defaultValue: "Shows the default order from your clock list; edit the widget to choose which cities to display"
         )))
         .supportedFamilies([
             .systemSmall,
@@ -122,12 +122,12 @@ struct OffTimeMediumThreeCitiesWidget: Widget {
             OffTimeWidgetView(entry: entry, showsThreeCities: true)
         }
         .configurationDisplayName(Text(String(
-            localized: "widget.gallery.medium3.name",
-            defaultValue: "OffTime · 3 Cities"
+            localized: "widget.gallery.name",
+            defaultValue: "OffTime"
         )))
         .description(Text(String(
-            localized: "widget.gallery.medium3.description",
-            defaultValue: "Show up to three cities in one compact medium widget"
+            localized: "widget.gallery.description",
+            defaultValue: "Shows the default order from your clock list; edit the widget to choose which cities to display"
         )))
         .supportedFamilies([
             .systemMedium
@@ -153,7 +153,7 @@ struct OffTimeLargeWidget: Widget {
         )))
         .description(Text(String(
             localized: "widget.gallery.description",
-            defaultValue: "See the current time in several cities; the order matches your clock list"
+            defaultValue: "Shows the default order from your clock list; edit the widget to choose which cities to display"
         )))
         .supportedFamilies([
             .systemLarge
