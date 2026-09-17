@@ -243,7 +243,7 @@
 "widget.guide.lock.step2.detail" = "时间下方或底部";
 "widget.guide.lock.step3.title" = "选%@";
 "widget.guide.lock.step3.detail" = "再挑一个样式";
-"widget.guide.lock.footer" = "锁屏支持圆形、矩形、行内样式：圆形显示第 1 个城市，矩形显示前 2 个。";
+"widget.guide.lock.footer" = "锁屏支持圆形、矩形、行内样式：圆形显示第 1 个城市，矩形显示前 3 个。";
 "widget.guide.size.title" = "支持的尺寸";
 "widget.guide.size.small" = "小";
 "widget.guide.size.medium" = "中";

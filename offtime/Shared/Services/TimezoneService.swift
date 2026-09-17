@@ -55,6 +55,16 @@ final class TimezoneService {
         guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "h:mm a").string(from: date)
     }
+
+    /// Widget 专用时间：保留 12/24 小时制设置，但省略 AM/PM / 上午下午，
+    /// 避免“下午2:49”这类宽文本在小尺寸组件中溢出。
+    func getWidgetTime(timezoneId: String, use24Hour: Bool, date: Date = Date()) -> String? {
+        guard let timezone = timezone(for: timezoneId) else { return nil }
+        return makeFormatter(
+            timezone: timezone,
+            dateFormat: use24Hour ? "HH:mm" : "h:mm"
+        ).string(from: date)
+    }
     
     func getLocalDate(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }

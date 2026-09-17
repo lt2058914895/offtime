@@ -3,6 +3,8 @@
 // MARK: - 组件库
 "widget.gallery.name" = "世界时钟";
 "widget.gallery.description" = "查看多个城市的当前时间；展示顺序与时钟列表一致";
+"widget.gallery.medium3.name" = "世界时钟 · 3城";
+"widget.gallery.medium3.description" = "最多显示 3 个城市；城市不足时自动均分组件高度";
 
 // MARK: - 城市行
 "widget.city.local" = "本地";

@@ -5,5 +5,7 @@ import WidgetKit
 struct OffTimeWidgetsBundle: WidgetBundle {
     var body: some Widget {
         OffTimeWidget()
+        OffTimeMediumThreeCitiesWidget()
+        OffTimeLargeWidget()
     }
 }

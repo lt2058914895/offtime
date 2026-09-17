@@ -104,10 +104,60 @@ struct OffTimeWidget: Widget {
         .supportedFamilies([
             .systemSmall,
             .systemMedium,
-            .systemLarge,
             .accessoryCircular,
             .accessoryRectangular,
             .accessoryInline
+        ])
+    }
+}
+
+struct OffTimeMediumThreeCitiesWidget: Widget {
+    private let kind = "OffTimeMediumThreeCitiesWidget"
+
+    var body: some WidgetConfiguration {
+        AppIntentConfiguration(
+            kind: kind,
+            intent: OffTimeWidgetConfigurationIntent.self,
+            provider: OffTimeProvider()
+        ) { entry in
+            OffTimeWidgetView(entry: entry, showsThreeCities: true)
+        }
+        .configurationDisplayName(Text(String(
+            localized: "widget.gallery.medium3.name",
+            defaultValue: "OffTime · 3 Cities"
+        )))
+        .description(Text(String(
+            localized: "widget.gallery.medium3.description",
+            defaultValue: "Show up to three cities in one compact medium widget"
+        )))
+        .supportedFamilies([
+            .systemMedium
+        ])
+        .contentMarginsDisabled()
+    }
+}
+
+struct OffTimeLargeWidget: Widget {
+    private let kind = "OffTimeLargeWidget"
+
+    var body: some WidgetConfiguration {
+        AppIntentConfiguration(
+            kind: kind,
+            intent: OffTimeWidgetConfigurationIntent.self,
+            provider: OffTimeProvider()
+        ) { entry in
+            OffTimeWidgetView(entry: entry)
+        }
+        .configurationDisplayName(Text(String(
+            localized: "widget.gallery.name",
+            defaultValue: "OffTime"
+        )))
+        .description(Text(String(
+            localized: "widget.gallery.description",
+            defaultValue: "See the current time in several cities; the order matches your clock list"
+        )))
+        .supportedFamilies([
+            .systemLarge
         ])
     }
 }
@@ -116,6 +166,7 @@ struct OffTimeWidgetView: View {
     @Environment(\.widgetFamily) private var family
 
     let entry: OffTimeEntry
+    var showsThreeCities = false
 
     private var snapshot: WidgetSnapshot { entry.snapshot }
     private var cities: [WidgetCitySnapshot] { snapshot.cities }
@@ -130,7 +181,11 @@ struct OffTimeWidgetView: View {
             case .accessoryInline:
                 accessoryInline
             case .systemMedium:
-                systemMedium
+                if showsThreeCities {
+                    systemMediumThreeCities
+                } else {
+                    systemMedium
+                }
             case .systemLarge:
                 systemLarge
             default:
@@ -157,9 +212,8 @@ struct OffTimeWidgetView: View {
                     Spacer(minLength: 4)
 
                     Text(timeText(for: city))
-                        .font(.system(size: 46, weight: .semibold, design: .rounded))
+                        .font(.system(size: 38, weight: .semibold, design: .rounded))
                         .monospacedDigit()
-                        .minimumScaleFactor(0.5)
                         .lineLimit(1)
 
                     Spacer(minLength: 4)
@@ -203,7 +257,6 @@ struct OffTimeWidgetView: View {
             Text(timeText(for: city))
                 .font(.system(size: 34, weight: .semibold, design: .rounded))
                 .monospacedDigit()
-                .minimumScaleFactor(0.5)
                 .lineLimit(1)
 
             Spacer(minLength: 4)
@@ -211,6 +264,51 @@ struct OffTimeWidgetView: View {
             dateRow(for: city, showsRelation: true)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+
+    // MARK: - 中尺寸（3 城）
+    //
+    // 纵向均分行高；不足 3 个城市时，剩余高度继续平分给现有城市行。
+
+    private var systemMediumThreeCities: some View {
+        let shownCities = Array(cities.prefix(3))
+        return Group {
+            if shownCities.isEmpty {
+                emptyState
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(shownCities.enumerated()), id: \.element.id) { index, city in
+                        mediumThreeCitiesRow(for: city)
+                            .frame(maxHeight: .infinity)
+
+                        if index < shownCities.count - 1 {
+                            Divider()
+                                .padding(.horizontal, 12)
+                        }
+                    }
+                }
+                .padding(.vertical, 4)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            }
+        }
+    }
+
+    private func mediumThreeCitiesRow(for city: WidgetCitySnapshot) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                titleRow(for: city, font: .headline)
+                dateRow(for: city, showsRelation: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(timeText(for: city))
+                .font(.system(size: 20, weight: .semibold, design: .rounded))
+                .monospacedDigit()
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+        }
+        .padding(.horizontal, 12)
         .accessibilityElement(children: .combine)
     }
 
@@ -241,7 +339,7 @@ struct OffTimeWidgetView: View {
     private func cityRow(_ city: WidgetCitySnapshot) -> some View {
         HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                titleRow(for: city, showsEnglishName: true)
+                titleRow(for: city)
                 dateRow(for: city, showsRelation: true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -257,39 +355,28 @@ struct OffTimeWidgetView: View {
 
     // MARK: - 行内组件
 
-    /// 城市行：昼夜图标 + 城市名（大尺寸附带英文名）。
+    /// 城市行：昼夜图标 + 城市名。
     /// 「与本地城市的关系」统一由日期行承载，三个尺寸位置一致。
-    private func titleRow(for city: WidgetCitySnapshot, showsEnglishName: Bool = false) -> some View {
-        HStack(spacing: 6) {
+    private func titleRow(for city: WidgetCitySnapshot, font: Font = .title3) -> some View {
+        HStack(alignment: .top, spacing: 6) {
             daypartIcon(for: city)
 
             Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
-                .font(.title3)
+                .font(font)
                 .fontWeight(.semibold)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-
-            if showsEnglishName,
-               let secondaryName = CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn) {
-                Text(secondaryName)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-            }
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+                .minimumScaleFactor(0.6)
         }
     }
 
-    /// 与本地城市的关系：本地 → 「本地」，其他城市 → 时差，同一时区 → nil。
+    /// 与本地城市的关系：始终展示时差；0h 也直接展示。
     /// 时差由调用方传入（`dateRow` 已经算过），避免同一行重复计算。
     private func relation(
         for city: WidgetCitySnapshot,
         difference: (offset: String, crossDay: String?)?
     ) -> (text: String, color: Color)? {
-        if city.isLocal {
-            return (String(localized: "widget.city.local", defaultValue: "Local"), .accentColor)
-        }
-        guard let difference, difference.offset != "0h" else { return nil }
+        guard let difference, !difference.offset.isEmpty else { return nil }
         return (difference.offset, .secondary)
     }
 
@@ -353,16 +440,16 @@ struct OffTimeWidgetView: View {
     private var accessoryCircular: some View {
         Group {
             if let city = cities.first {
-                VStack(spacing: 1) {
+                VStack(spacing: 0) {
                     Text(shortTimeText(for: city))
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
-                        .minimumScaleFactor(0.6)
                         .lineLimit(1)
                     Text(displayName(for: city))
-                        .font(.system(size: 8, weight: .medium))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 15, weight: .medium))
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(-2)
+                        .minimumScaleFactor(0.5)
                 }
                 .accessibilityElement(children: .combine)
             } else {
@@ -372,21 +459,34 @@ struct OffTimeWidgetView: View {
     }
 
     private var accessoryRectangular: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            ForEach(cities.prefix(2)) { city in
+        let shownCities = Array(cities.prefix(3))
+        let fontSize: CGFloat = switch shownCities.count {
+        case 0, 1: 20
+        case 2: 17
+        default: 14
+        }
+
+        return VStack(alignment: .leading, spacing: shownCities.count == 3 ? 1 : 3) {
+            ForEach(shownCities) { city in
                 HStack(spacing: 6) {
                     Text(displayName(for: city))
-                        .font(.caption2)
-                        .lineLimit(1)
+                        .font(.system(size: fontSize, weight: .medium))
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(-2)
+                        .minimumScaleFactor(0.5)
                     Spacer(minLength: 4)
                     Text(timeText(for: city))
-                        .font(.caption)
-                        .fontWeight(.semibold)
+                        .font(.system(size: fontSize, weight: .semibold, design: .rounded))
                         .monospacedDigit()
+                        .lineLimit(1)
+                        .layoutPriority(1)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .accessibilityElement(children: .combine)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 
     private var accessoryInline: some View {
@@ -395,6 +495,10 @@ struct OffTimeWidgetView: View {
                 .map { "\(displayName(for: $0)) \(timeText(for: $0))" }
                 .joined(separator: " · ")
         )
+            .font(.system(size: 15, weight: .semibold, design: .rounded))
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
     }
 
     private var emptyState: some View {
@@ -437,11 +541,11 @@ struct OffTimeWidgetView: View {
     }
 
     private func timeText(for city: WidgetCitySnapshot) -> String {
-        let timezoneService = TimezoneService.shared
-        if snapshot.use24Hour {
-            return timezoneService.getLocalTime24(timezoneId: city.timezoneId, date: entry.date) ?? "--:--"
-        }
-        return timezoneService.getLocalTime12(timezoneId: city.timezoneId, date: entry.date) ?? "--:--"
+        TimezoneService.shared.getWidgetTime(
+            timezoneId: city.timezoneId,
+            use24Hour: snapshot.use24Hour,
+            date: entry.date
+        ) ?? "--:--"
     }
 
     private func shortTimeText(for city: WidgetCitySnapshot) -> String {
@@ -464,15 +568,13 @@ struct OffTimeWidgetView: View {
         return [weekday, date].filter { !$0.isEmpty }.joined(separator: " ")
     }
 
-    /// 与本地城市的时差和跨天提示；本地城市或同一时区返回 nil。
+    /// 与本地城市的时差和跨天提示；同一时区返回 0h。
     private func timeDifference(for city: WidgetCitySnapshot) -> (offset: String, crossDay: String?)? {
-        guard city.timezoneId != snapshot.localTimezoneId else { return nil }
-
         let difference = TimezoneService.shared.getTimeDifferenceBetween(
             sourceTimezoneId: snapshot.localTimezoneId,
             targetTimezoneId: city.timezoneId,
             date: entry.date
         )
-        return difference.offset == "0h" ? nil : difference
+        return difference.offset.isEmpty ? nil : difference
     }
 }

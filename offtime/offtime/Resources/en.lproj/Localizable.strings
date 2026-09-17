@@ -243,7 +243,7 @@
 "widget.guide.lock.step2.detail" = "below the time";
 "widget.guide.lock.step3.title" = "Pick %@";
 "widget.guide.lock.step3.detail" = "then a style";
-"widget.guide.lock.footer" = "The Lock Screen supports circular, rectangular and inline styles: circular shows the first city, rectangular shows the first two.";
+"widget.guide.lock.footer" = "The Lock Screen supports circular, rectangular and inline styles: circular shows the first city, rectangular shows the first three.";
 "widget.guide.size.title" = "Available Sizes";
 "widget.guide.size.small" = "Small";
 "widget.guide.size.medium" = "Medium";
