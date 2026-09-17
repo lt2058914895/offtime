@@ -67,6 +67,7 @@ struct MeetingView: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {

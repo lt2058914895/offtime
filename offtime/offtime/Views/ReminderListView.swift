@@ -68,6 +68,7 @@ struct ReminderListView: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
                 }
             }
         }

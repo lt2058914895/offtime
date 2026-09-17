@@ -10,6 +10,7 @@ import SwiftUI
 struct AddWidgetGuideView: View {
     /// 尺寸预览当前选中的档位，默认中尺寸（最常用的取舍）
     @State private var selectedSize: WidgetSizeOption = .medium
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
@@ -37,6 +38,18 @@ struct AddWidgetGuideView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle(String(localized: "settings.add.widget"))
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
+                }
+                .accessibilityLabel(Text(String(localized: "common.back")))
+            }
+        }
         .toolbar(.hidden, for: .tabBar)
     }
 

@@ -457,6 +457,7 @@ struct SupportPageView: View {
                         dismiss()
                     } label: {
                         Image(systemName: "chevron.left")
+                            .fontWeight(.semibold)
                     }
                 }
             }

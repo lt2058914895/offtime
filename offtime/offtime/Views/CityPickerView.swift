@@ -28,6 +28,7 @@ struct CityPickerView: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
                 }
             }
         }
