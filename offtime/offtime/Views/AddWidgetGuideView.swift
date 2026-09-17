@@ -2,35 +2,18 @@ import SwiftUI
 
 /// 「添加小组件」引导页（设置页入口）。
 ///
-/// 设计目标：一眼看懂。整页只用三种信息层级——
-/// 1. 卡片标题（图标 + 一句话）；
-/// 2. 横向流程图（3 个序号图标 + 极短文案，替代原来的 5 条长列表）；
-/// 3. 与真实组件同构的示意图（小 = 1 个城市、中 = 2 个、大 = 最多 6 个，
-///    与 `OffTimeWidget.supportedFamilies` 对应）。
+/// 设计目标：把添加路径和可用尺寸放在同一张卡片里。
+/// 主屏幕卡片展示小 / 中 / 3城中 / 大尺寸；锁定屏幕卡片展示圆形 / 矩形 / 行内样式。
 struct AddWidgetGuideView: View {
-    /// 尺寸预览当前选中的档位，默认中尺寸（最常用的取舍）
-    @State private var selectedSize: WidgetSizeOption = .medium
+    @State private var selectedHomeSize: WidgetSizeOption = .medium
+    @State private var selectedLockSize: LockWidgetSizeOption = .rectangular
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                heroCard
-                stepsCard(
-                    icon: "iphone.gen3",
-                    tint: .blue,
-                    title: String(localized: "widget.guide.home.title"),
-                    steps: homeSteps,
-                    note: String(localized: "widget.guide.home.hint")
-                )
-                stepsCard(
-                    icon: "lock.fill",
-                    tint: .indigo,
-                    title: String(localized: "widget.guide.lock.title"),
-                    steps: lockSteps,
-                    note: String(localized: "widget.guide.lock.footer")
-                )
-                sizeCard
+                homeCard
+                lockCard
                 tipsCard
             }
             .padding(16)
@@ -53,73 +36,137 @@ struct AddWidgetGuideView: View {
         .toolbar(.hidden, for: .tabBar)
     }
 
-    // MARK: - 顶部说明
+    // MARK: - 主屏幕卡片
 
-    private var heroCard: some View {
-        GuideCard {
-            HStack(alignment: .center, spacing: 14) {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.accentColor, Color.accentColor.opacity(0.65)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 52, height: 52)
-                    .overlay {
-                        Image(systemName: "square.grid.2x2.fill")
-                            .font(.system(size: 24, weight: .semibold))
-                            .foregroundColor(.white)
-                    }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(AppDisplay.text("settings.add.widget.subtitle", AppDisplay.name))
-                        .font(.headline)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text(String(localized: "widget.guide.subtitle"))
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            .accessibilityElement(children: .combine)
-        }
-    }
-
-    // MARK: - 步骤卡片
-
-    private func stepsCard(
-        icon: String,
-        tint: Color,
-        title: String,
-        steps: [GuideStep],
-        note: String
-    ) -> some View {
+    private var homeCard: some View {
         GuideCard {
             VStack(alignment: .leading, spacing: 16) {
-                CardHeader(icon: icon, tint: tint, title: title)
+                CardHeader(
+                    icon: "iphone.gen3",
+                    tint: .blue,
+                    title: String(localized: "widget.guide.home.title")
+                )
 
-                HStack(alignment: .top, spacing: 0) {
-                    ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
-                        GuideFlowStep(index: index + 1, step: step)
+                flowSteps(homeSteps)
+                NoteRow(
+                    text: String(localized: "widget.guide.home.hint"),
+                    icon: "info.circle.fill"
+                )
 
-                        if index < steps.count - 1 {
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(Color.secondary.opacity(0.45))
-                                .frame(width: 18)
-                                .padding(.top, 17)
-                        }
-                    }
-                }
+                Divider()
 
-                NoteRow(text: note, icon: "info.circle.fill")
+                homeSizeSection
             }
         }
     }
 
-    /// 主屏幕路径：长按桌面 → 点「＋」→ 选 OffTime
+    private var homeSizeSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            CardHeader(
+                icon: "square.on.square",
+                tint: .teal,
+                title: String(localized: "widget.guide.size.title")
+            )
+
+            LazyVGrid(
+                columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3),
+                spacing: 8
+            ) {
+                ForEach(WidgetSizeOption.allCases) { option in
+                    SizeChip(option: option, isSelected: option == selectedHomeSize)
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.18)) {
+                                selectedHomeSize = option
+                            }
+                        }
+                        .accessibilityLabel(Text(option.title))
+                        .accessibilityValue(Text(option.cityCaption))
+                        .accessibilityAddTraits(option == selectedHomeSize ? [.isSelected] : [])
+                }
+            }
+
+            VStack(spacing: 10) {
+                WidgetMock(option: selectedHomeSize)
+
+                Text(selectedHomeSize.cityCaption)
+                    .font(.footnote)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    // MARK: - 锁定屏幕卡片
+
+    private var lockCard: some View {
+        GuideCard {
+            VStack(alignment: .leading, spacing: 16) {
+                CardHeader(
+                    icon: "lock.fill",
+                    tint: .indigo,
+                    title: String(localized: "widget.guide.lock.title")
+                )
+
+                flowSteps(lockSteps)
+                NoteRow(
+                    text: String(localized: "widget.guide.lock.footer"),
+                    icon: "info.circle.fill"
+                )
+
+                Divider()
+
+                lockSizeSection
+            }
+        }
+    }
+
+    private var lockSizeSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            CardHeader(
+                icon: "rectangle.grid.2x2",
+                tint: .purple,
+                title: String(localized: "widget.guide.size.title")
+            )
+
+            LazyVGrid(
+                columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)],
+                spacing: 8
+            ) {
+                ForEach(LockWidgetSizeOption.allCases) { option in
+                    LockSizeChip(option: option, isSelected: option == selectedLockSize)
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.18)) {
+                                selectedLockSize = option
+                            }
+                        }
+                        .accessibilityLabel(Text(option.title))
+                        .accessibilityValue(Text(option.cityCaption))
+                        .accessibilityAddTraits(option == selectedLockSize ? [.isSelected] : [])
+                }
+            }
+
+            VStack(spacing: 10) {
+                LockWidgetMock(option: selectedLockSize)
+
+                Text(selectedLockSize.cityCaption)
+                    .font(.footnote)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    private func flowSteps(_ steps: [GuideStep]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                GuideStepRow(index: index + 1, step: step, isLast: index == steps.count - 1)
+            }
+        }
+    }
+
+    /// 主屏幕路径：长按桌面 → 编辑 → 添加小组件 → 选尺寸。
     private var homeSteps: [GuideStep] {
         [
             GuideStep(
@@ -128,80 +175,57 @@ struct AddWidgetGuideView: View {
                 detail: String(localized: "widget.guide.home.step1.detail")
             ),
             GuideStep(
-                icon: "plus.circle.fill",
+                icon: "slider.horizontal.3",
                 title: String(localized: "widget.guide.home.step2.title"),
                 detail: String(localized: "widget.guide.home.step2.detail")
             ),
             GuideStep(
-                icon: "square.grid.2x2",
-                title: AppDisplay.text("widget.guide.home.step3.title", AppDisplay.name),
+                icon: "plus.rectangle.on.rectangle",
+                title: String(localized: "widget.guide.home.step3.title"),
                 detail: String(localized: "widget.guide.home.step3.detail")
+            ),
+            GuideStep(
+                icon: "magnifyingglass",
+                title: AppDisplay.text("widget.guide.home.step4.title", AppDisplay.name),
+                detail: String(localized: "widget.guide.home.step4.detail")
+            ),
+            GuideStep(
+                icon: "checkmark.circle.fill",
+                title: String(localized: "widget.guide.home.step5.title"),
+                detail: String(localized: "widget.guide.home.step5.detail")
             )
         ]
     }
 
-    /// 锁定屏幕路径：长按锁屏 → 点组件区域 → 选 OffTime 样式
+    /// 锁定屏幕路径：设置 → 墙纸 → 自定义 → 组件区域。
     private var lockSteps: [GuideStep] {
         [
             GuideStep(
-                icon: "lock.rotation",
+                icon: "gearshape.fill",
                 title: String(localized: "widget.guide.lock.step1.title"),
                 detail: String(localized: "widget.guide.lock.step1.detail")
             ),
             GuideStep(
-                icon: "rectangle.inset.filled",
+                icon: "photo.on.rectangle",
                 title: String(localized: "widget.guide.lock.step2.title"),
                 detail: String(localized: "widget.guide.lock.step2.detail")
             ),
             GuideStep(
-                icon: "circle.dashed",
-                title: AppDisplay.text("widget.guide.lock.step3.title", AppDisplay.name),
+                icon: "slider.horizontal.3",
+                title: String(localized: "widget.guide.lock.step3.title"),
                 detail: String(localized: "widget.guide.lock.step3.detail")
+            ),
+            GuideStep(
+                icon: "plus.rectangle.on.rectangle",
+                title: String(localized: "widget.guide.lock.step4.title"),
+                detail: String(localized: "widget.guide.lock.step4.detail")
+            ),
+            GuideStep(
+                icon: "checkmark.circle.fill",
+                title: AppDisplay.text("widget.guide.lock.step5.title", AppDisplay.name),
+                detail: String(localized: "widget.guide.lock.step5.detail")
             )
         ]
-    }
-
-    // MARK: - 尺寸卡片
-
-    private var sizeCard: some View {
-        GuideCard {
-            VStack(alignment: .leading, spacing: 14) {
-                CardHeader(
-                    icon: "square.on.square",
-                    tint: .teal,
-                    title: String(localized: "widget.guide.size.title")
-                )
-
-                HStack(spacing: 8) {
-                    ForEach(WidgetSizeOption.allCases) { option in
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.18)) {
-                                selectedSize = option
-                            }
-                        } label: {
-                            SizeChip(option: option, isSelected: option == selectedSize)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text(option.title))
-                        .accessibilityValue(Text(option.cityCaption))
-                        .accessibilityAddTraits(option == selectedSize ? [.isSelected] : [])
-                    }
-                }
-
-                VStack(spacing: 10) {
-                    WidgetMock(option: selectedSize)
-
-                    Text(selectedSize.cityCaption)
-                        .font(.footnote)
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 2)
-
-                NoteRow(text: String(localized: "widget.guide.size.footer"), icon: "arrow.triangle.2.circlepath")
-            }
-        }
     }
 
     // MARK: - 小提示卡片
@@ -242,10 +266,11 @@ private struct GuideStep {
     let detail: String
 }
 
-/// 尺寸档位：文案、比例与「能显示几个城市」都集中在这里，方便与 `OffTimeWidget.supportedFamilies` 对齐。
+/// 主屏尺寸档位：文案、比例与「能显示几个城市」都集中在这里，方便与 WidgetBundle 对齐。
 private enum WidgetSizeOption: String, CaseIterable, Identifiable {
     case small
     case medium
+    case mediumThree
     case large
 
     var id: String { rawValue }
@@ -254,6 +279,7 @@ private enum WidgetSizeOption: String, CaseIterable, Identifiable {
         switch self {
         case .small: return String(localized: "widget.guide.size.small")
         case .medium: return String(localized: "widget.guide.size.medium")
+        case .mediumThree: return String(localized: "widget.guide.size.medium3")
         case .large: return String(localized: "widget.guide.size.large")
         }
     }
@@ -263,6 +289,7 @@ private enum WidgetSizeOption: String, CaseIterable, Identifiable {
         switch self {
         case .small: return String(localized: "widget.guide.size.caption.small")
         case .medium: return String(localized: "widget.guide.size.caption.medium")
+        case .mediumThree: return String(localized: "widget.guide.size.caption.medium3")
         case .large: return String(localized: "widget.guide.size.caption.large")
         }
     }
@@ -272,6 +299,7 @@ private enum WidgetSizeOption: String, CaseIterable, Identifiable {
         switch self {
         case .small: return 1
         case .medium: return 2.14
+        case .mediumThree: return 2.14
         case .large: return 0.95
         }
     }
@@ -281,6 +309,7 @@ private enum WidgetSizeOption: String, CaseIterable, Identifiable {
         switch self {
         case .small: return 132
         case .medium: return 280
+        case .mediumThree: return 280
         case .large: return 240
         }
     }
@@ -290,21 +319,37 @@ private enum WidgetSizeOption: String, CaseIterable, Identifiable {
 
     /// 示意图内部字号：按预览宽度等比缩放，比例取自真实组件的字号 / 宽度
     func titleSize(_ width: CGFloat) -> CGFloat {
-        max(9.5, width * (self == .small ? 0.13 : self == .medium ? 0.06 : 0.056))
+        switch self {
+        case .small: return max(9.5, width * 0.13)
+        case .medium: return max(9.5, width * 0.06)
+        case .mediumThree: return max(8.5, width * 0.048)
+        case .large: return max(9.5, width * 0.056)
+        }
     }
 
     func timeSize(_ width: CGFloat) -> CGFloat {
-        max(12, width * (self == .small ? 0.30 : self == .medium ? 0.10 : 0.075))
+        switch self {
+        case .small: return max(12, width * 0.30)
+        case .medium: return max(12, width * 0.10)
+        case .mediumThree: return max(11, width * 0.062)
+        case .large: return max(12, width * 0.075)
+        }
     }
 
     func dateSize(_ width: CGFloat) -> CGFloat {
-        max(7.5, width * (self == .small ? 0.08 : self == .medium ? 0.034 : 0.036))
+        switch self {
+        case .small: return max(7.5, width * 0.08)
+        case .medium: return max(7.5, width * 0.034)
+        case .mediumThree: return max(7, width * 0.03)
+        case .large: return max(7.5, width * 0.036)
+        }
     }
 
     var glyphSize: CGSize {
         switch self {
         case .small: return CGSize(width: 16, height: 16)
         case .medium: return CGSize(width: 30, height: 14)
+        case .mediumThree: return CGSize(width: 30, height: 14)
         case .large: return CGSize(width: 21, height: 22)
         }
     }
@@ -322,7 +367,7 @@ private struct MockCity {
         CityDisplay.primaryName(cityName: name, cityEn: englishName)
     }
 
-    static let beijing = MockCity(name: "北京", englishName: "Beijing", time: "09:41", relation: nil, isNight: false)
+    static let beijing = MockCity(name: "北京", englishName: "Beijing", time: "09:41", relation: "0h", isNight: false)
     static let tokyo = MockCity(name: "东京", englishName: "Tokyo", time: "10:41", relation: "+1h", isNight: false)
     static let london = MockCity(name: "伦敦", englishName: "London", time: "02:41", relation: "-7h", isNight: true)
     static let newYork = MockCity(name: "纽约", englishName: "New York", time: "21:41", relation: "-12h", isNight: true)
@@ -370,46 +415,42 @@ private struct CardHeader: View {
     }
 }
 
-/// 流程图节点：序号图标 + 一行标题 + 一行极短说明
-private struct GuideFlowStep: View {
+/// 纵向步骤行：编号圆点 + 步骤标题 + 补充说明
+private struct GuideStepRow: View {
     let index: Int
     let step: GuideStep
+    let isLast: Bool
 
     var body: some View {
-        VStack(spacing: 8) {
-            ZStack(alignment: .topTrailing) {
-                Circle()
-                    .fill(Color.accentColor.opacity(0.14))
-                    .frame(width: 46, height: 46)
-                    .overlay {
-                        Image(systemName: step.icon)
-                            .font(.system(size: 19, weight: .semibold))
-                            .foregroundColor(.accentColor)
-                    }
-
+        HStack(alignment: .top, spacing: 12) {
+            VStack(spacing: 4) {
                 Text("\(index)")
-                    .font(.system(size: 11, weight: .bold))
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
-                    .frame(width: 18, height: 18)
+                    .frame(width: 24, height: 24)
                     .background(Circle().fill(Color.accentColor))
-                    .offset(x: 4, y: -3)
-            }
 
-            VStack(spacing: 2) {
-                Text(step.title)
-                    .font(.footnote)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-                    .lineLimit(2)
-                Text(step.detail)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .lineLimit(2)
+                if !isLast {
+                    RoundedRectangle(cornerRadius: 2, style: .continuous)
+                        .fill(Color.accentColor.opacity(0.18))
+                        .frame(width: 2)
+                        .frame(maxHeight: .infinity)
+                }
             }
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
+            .frame(width: 24)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Label(step.title, systemImage: step.icon)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+
+                Text(step.detail)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .top)
         .accessibilityElement(children: .combine)
     }
 }
@@ -461,6 +502,148 @@ private struct SizeChip: View {
     }
 }
 
+/// 锁屏样式档位：圆形 / 矩形分别对应 WidgetKit accessory 样式。
+private enum LockWidgetSizeOption: String, CaseIterable, Identifiable {
+    case circular
+    case rectangular
+
+    var id: String { rawValue }
+
+    var iconName: String {
+        switch self {
+        case .circular: return "circle.dashed"
+        case .rectangular: return "rectangle.inset.filled"
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .circular: return String(localized: "widget.guide.lock.size.circular")
+        case .rectangular: return String(localized: "widget.guide.lock.size.rectangular")
+        }
+    }
+
+    var cityCaption: String {
+        switch self {
+        case .circular: return String(localized: "widget.guide.lock.size.caption.circular")
+        case .rectangular: return String(localized: "widget.guide.lock.size.caption.rectangular")
+        }
+    }
+}
+
+private struct LockSizeChip: View {
+    let option: LockWidgetSizeOption
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: option.iconName)
+                .font(.system(size: 14, weight: .semibold))
+
+            Text(option.title)
+                .font(.footnote)
+                .fontWeight(.semibold)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(isSelected ? Color.indigo : Color(.tertiarySystemFill))
+        )
+        .foregroundColor(isSelected ? .white : .primary)
+    }
+}
+
+private struct LockWidgetMock: View {
+    let option: LockWidgetSizeOption
+
+    var body: some View {
+        ZStack {
+            content
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 92)
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch option {
+        case .circular:
+            circularMock
+        case .rectangular:
+            rectangularMock
+        }
+    }
+
+    private var circularMock: some View {
+        Circle()
+            .fill(
+                LinearGradient(
+                    colors: [Color.indigo.opacity(0.14), Color(.tertiarySystemFill)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .frame(width: 78, height: 78)
+            .overlay {
+                VStack(spacing: 0) {
+                    Text(MockCity.london.time)
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .monospacedDigit()
+                    Text(MockCity.london.displayName)
+                        .font(.system(size: 9, weight: .medium))
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .minimumScaleFactor(0.5)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.horizontal, 5)
+            }
+    }
+
+    private var rectangularMock: some View {
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .fill(
+                LinearGradient(
+                    colors: [Color.indigo.opacity(0.12), Color(.tertiarySystemFill)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .frame(maxWidth: 240)
+            .frame(height: 66)
+            .overlay {
+                VStack(spacing: 3) {
+                    lockRow(MockCity.london)
+                    lockRow(MockCity.newYork)
+                    lockRow(MockCity.paris)
+                }
+                .padding(.horizontal, 10)
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.06))
+            }
+    }
+
+    private func lockRow(_ city: MockCity) -> some View {
+        HStack(spacing: 6) {
+            Text(city.displayName)
+                .font(.system(size: 10, weight: .medium))
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+
+            Spacer(minLength: 4)
+
+            Text(city.time)
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                .monospacedDigit()
+        }
+        .foregroundColor(.primary)
+    }
+
+}
+
 /// 组件示意图：按真实版式渲染（小 = 城市 + 大号时间；中 = 左右两列；大 = 逐行列表），
 /// 让用户在添加前就看清成品长什么样。
 private struct WidgetMock: View {
@@ -506,6 +689,18 @@ private struct WidgetMock: View {
                 column(MockCity.beijing, width: width)
                 Divider()
                 column(MockCity.newYork, width: width)
+            }
+        case .mediumThree:
+            VStack(spacing: 0) {
+                let cities = [MockCity.beijing, MockCity.london, MockCity.newYork]
+                ForEach(Array(cities.enumerated()), id: \.offset) { index, city in
+                    row(city, width: width)
+                        .frame(maxHeight: .infinity)
+                    if index < cities.count - 1 {
+                        Divider()
+                            .padding(.horizontal, width * 0.025)
+                    }
+                }
             }
         case .large:
             VStack(spacing: 0) {
@@ -578,7 +773,7 @@ private struct WidgetMock: View {
     private func mockDateText(relation: String?) -> String {
         let date = String(localized: "widget.guide.mock.date")
         guard let relation else {
-            return "\(date) · \(String(localized: "widget.guide.mock.local"))"
+            return date
         }
         return "\(date) · \(relation)"
     }

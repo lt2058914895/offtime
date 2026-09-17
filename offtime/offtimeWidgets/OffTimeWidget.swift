@@ -105,8 +105,7 @@ struct OffTimeWidget: Widget {
             .systemSmall,
             .systemMedium,
             .accessoryCircular,
-            .accessoryRectangular,
-            .accessoryInline
+            .accessoryRectangular
         ])
     }
 }
@@ -178,8 +177,6 @@ struct OffTimeWidgetView: View {
                 accessoryCircular
             case .accessoryRectangular:
                 accessoryRectangular
-            case .accessoryInline:
-                accessoryInline
             case .systemMedium:
                 if showsThreeCities {
                     systemMediumThreeCities
@@ -489,18 +486,6 @@ struct OffTimeWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 
-    private var accessoryInline: some View {
-        Text(
-            cities.prefix(2)
-                .map { "\(displayName(for: $0)) \(timeText(for: $0))" }
-                .joined(separator: " · ")
-        )
-            .font(.system(size: 15, weight: .semibold, design: .rounded))
-            .monospacedDigit()
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-    }
-
     private var emptyState: some View {
         VStack(spacing: 6) {
             Image(systemName: "globe")
@@ -520,7 +505,7 @@ struct OffTimeWidgetView: View {
     @ViewBuilder
     private var widgetBackground: some View {
         switch family {
-        case .accessoryCircular, .accessoryRectangular, .accessoryInline:
+        case .accessoryCircular, .accessoryRectangular:
             AccessoryWidgetBackground()
         default:
             LinearGradient(
