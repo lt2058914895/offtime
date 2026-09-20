@@ -65,15 +65,8 @@ struct OffTimeProvider: AppIntentTimelineProvider {
             return base
         }
 
-        var seenIDs = Set<String>()
         let selectedIDs = Set(selectedCities.map(\.id))
-        var cities = base.cities.filter { selectedIDs.contains($0.id) }
-        seenIDs.formUnion(cities.map(\.id))
-
-        for entity in selectedCities {
-            guard seenIDs.insert(entity.id).inserted else { continue }
-            cities.append(entity.toSnapshot())
-        }
+        let cities = base.cities.filter { selectedIDs.contains($0.id) }
 
         return WidgetSnapshot(
             cities: cities,

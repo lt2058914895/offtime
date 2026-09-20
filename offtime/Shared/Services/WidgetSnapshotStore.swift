@@ -34,22 +34,25 @@ enum WidgetSnapshotStore {
     /// App Group 是否可用（不可用时 App 与扩展都读写不到共享容器）
     static var isAppGroupAvailable: Bool { containerURL != nil }
 
-    static func save(_ snapshot: WidgetSnapshot) {
+    @discardableResult
+    static func save(_ snapshot: WidgetSnapshot) -> Bool {
         guard let data = try? JSONEncoder().encode(snapshot) else {
             logger.error("Widget 快照编码失败")
-            return
+            return false
         }
         guard let fileURL else {
             logger.error("App Group \(appGroupID, privacy: .public) 不可用：快照未写入，请检查 App 与 Widget 两个 Target 的 App Groups 能力")
-            return
+            return false
         }
 
         do {
             // .atomic：先写临时文件再替换，读侧不会拿到写了一半的 JSON
             try data.write(to: fileURL, options: [.atomic])
             logger.debug("已发布 Widget 快照：\(snapshot.cities.count) 个城市")
+            return true
         } catch {
             logger.error("Widget 快照写入失败：\(error.localizedDescription)")
+            return false
         }
     }
 

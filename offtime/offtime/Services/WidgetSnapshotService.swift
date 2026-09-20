@@ -39,7 +39,7 @@ enum WidgetSnapshotService {
                 return
             }
 
-            WidgetSnapshotStore.save(snapshot)
+            guard WidgetSnapshotStore.save(snapshot) else { return }
             WidgetCenter.shared.reloadAllTimelines()
         } catch {
             logger.error("发布 Widget 快照失败: \(error.localizedDescription)")
