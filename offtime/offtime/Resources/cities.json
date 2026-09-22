@@ -6368,14 +6368,6 @@
     "continent": "america"
   },
   {
-    "id": "804",
-    "cityName": "努克",
-    "cityEn": "Nuuk",
-    "timezoneId": "America/Nuuk",
-    "country": "GL",
-    "continent": "arctic"
-  },
-  {
     "id": "805",
     "cityName": "马里戈特",
     "cityEn": "Marigot",
@@ -6478,14 +6470,6 @@
     "timezoneId": "Africa/El_Aaiun",
     "country": "EH",
     "continent": "africa"
-  },
-  {
-    "id": "818",
-    "cityName": "朗伊尔城",
-    "cityEn": "Longyearbyen",
-    "timezoneId": "Arctic/Longyearbyen",
-    "country": "SJ",
-    "continent": "arctic"
   },
   {
     "id": "819",
@@ -7784,172 +7768,12 @@
     "continent": "oceania"
   },
   {
-    "id": "981",
-    "cityName": "麦克默多站",
-    "cityEn": "McMurdo Station",
-    "timezoneId": "Antarctica/McMurdo",
-    "country": "US",
-    "continent": "antarctica"
-  },
-  {
-    "id": "982",
-    "cityName": "阿蒙森-斯科特站",
-    "cityEn": "Amundsen-Scott South Pole Station",
-    "timezoneId": "Antarctica/McMurdo",
-    "country": "US",
-    "continent": "antarctica"
-  },
-  {
-    "id": "983",
-    "cityName": "帕尔默站",
-    "cityEn": "Palmer Station",
-    "timezoneId": "Antarctica/Palmer",
-    "country": "US",
-    "continent": "antarctica"
-  },
-  {
-    "id": "984",
-    "cityName": "罗瑟拉站",
-    "cityEn": "Rothera Research Station",
-    "timezoneId": "Antarctica/Rothera",
-    "country": "GB",
-    "continent": "antarctica"
-  },
-  {
-    "id": "985",
-    "cityName": "莫森站",
-    "cityEn": "Mawson Station",
-    "timezoneId": "Antarctica/Mawson",
-    "country": "AU",
-    "continent": "antarctica"
-  },
-  {
-    "id": "986",
-    "cityName": "戴维斯站",
-    "cityEn": "Davis Station",
-    "timezoneId": "Antarctica/Davis",
-    "country": "AU",
-    "continent": "antarctica"
-  },
-  {
-    "id": "987",
-    "cityName": "凯西站",
-    "cityEn": "Casey Station",
-    "timezoneId": "Antarctica/Casey",
-    "country": "AU",
-    "continent": "antarctica"
-  },
-  {
-    "id": "988",
-    "cityName": "迪蒙迪维尔站",
-    "cityEn": "Dumont d'Urville Station",
-    "timezoneId": "Antarctica/DumontDUrville",
-    "country": "FR",
-    "continent": "antarctica"
-  },
-  {
-    "id": "989",
-    "cityName": "昭和站",
-    "cityEn": "Syowa Station",
-    "timezoneId": "Antarctica/Syowa",
-    "country": "JP",
-    "continent": "antarctica"
-  },
-  {
-    "id": "990",
-    "cityName": "特罗尔站",
-    "cityEn": "Troll Station",
-    "timezoneId": "Antarctica/Troll",
-    "country": "NO",
-    "continent": "antarctica"
-  },
-  {
-    "id": "991",
-    "cityName": "沃斯托克站",
-    "cityEn": "Vostok Station",
-    "timezoneId": "Antarctica/Vostok",
-    "country": "RU",
-    "continent": "antarctica"
-  },
-  {
-    "id": "992",
-    "cityName": "长城站",
-    "cityEn": "Great Wall Station",
-    "timezoneId": "Antarctica/Palmer",
-    "country": "CN",
-    "continent": "antarctica"
-  },
-  {
-    "id": "993",
-    "cityName": "中山站",
-    "cityEn": "Zhongshan Station",
-    "timezoneId": "Antarctica/Davis",
-    "country": "CN",
-    "continent": "antarctica"
-  },
-  {
-    "id": "994",
-    "cityName": "乌特恰维克",
-    "cityEn": "Utqiagvik",
-    "timezoneId": "America/Anchorage",
-    "country": "US",
-    "continent": "arctic"
-  },
-  {
-    "id": "995",
-    "cityName": "阿勒特",
-    "cityEn": "Alert",
-    "timezoneId": "America/Iqaluit",
-    "country": "CA",
-    "continent": "arctic"
-  },
-  {
-    "id": "996",
-    "cityName": "白马市",
-    "cityEn": "Whitehorse",
-    "timezoneId": "America/Whitehorse",
-    "country": "CA",
-    "continent": "arctic"
-  },
-  {
-    "id": "997",
-    "cityName": "耶洛奈夫",
-    "cityEn": "Yellowknife",
-    "timezoneId": "America/Yellowknife",
-    "country": "CA",
-    "continent": "arctic"
-  },
-  {
-    "id": "998",
-    "cityName": "费尔班克斯",
-    "cityEn": "Fairbanks",
-    "timezoneId": "America/Anchorage",
-    "country": "US",
-    "continent": "arctic"
-  },
-  {
     "id": "999",
     "cityName": "摩尔曼斯克",
     "cityEn": "Murmansk",
     "timezoneId": "Europe/Moscow",
     "country": "RU",
-    "continent": "arctic"
-  },
-  {
-    "id": "1000",
-    "cityName": "纳尔维克",
-    "cityEn": "Narvik",
-    "timezoneId": "Europe/Oslo",
-    "country": "NO",
-    "continent": "arctic"
-  },
-  {
-    "id": "1001",
-    "cityName": "伊卢利萨特",
-    "cityEn": "Ilulissat",
-    "timezoneId": "America/Nuuk",
-    "country": "GL",
-    "continent": "arctic"
+    "continent": "europe"
   },
   {
     "id": "1002",
@@ -15934,22 +15758,6 @@
     "timezoneId": "Australia/Perth",
     "country": "AU",
     "continent": "oceania"
-  },
-  {
-    "id": "2277",
-    "cityName": "塔西拉克",
-    "cityEn": "Tasiilaq",
-    "timezoneId": "America/Nuuk",
-    "country": "GL",
-    "continent": "arctic"
-  },
-  {
-    "id": "2278",
-    "cityName": "西西米尤特",
-    "cityEn": "Sisimiut",
-    "timezoneId": "America/Nuuk",
-    "country": "GL",
-    "continent": "arctic"
   },
   {
     "id": "2280",
