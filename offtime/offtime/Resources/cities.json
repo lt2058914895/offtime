@@ -15806,5 +15806,13 @@
     "timezoneId": "Asia/Kolkata",
     "country": "IN",
     "continent": "asia"
+  },
+  {
+    "id": "2286",
+    "cityName": "普里什蒂纳",
+    "cityEn": "Pristina",
+    "timezoneId": "Europe/Belgrade",
+    "country": "XK",
+    "continent": "europe"
   }
 ]
