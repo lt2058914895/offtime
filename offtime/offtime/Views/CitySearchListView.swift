@@ -6,6 +6,8 @@ struct CitySearchListView: View {
     @Binding var searchText: String
     let showAddButton: Bool
     let onCitySelected: (CitySuggestion) -> Void
+    @State private var scrollOffset: CGFloat = 0
+    @State private var isFarFromTop = false
 
     var body: some View {
         ZStack {
@@ -21,6 +23,13 @@ struct CitySearchListView: View {
                 }
                 .listStyle(.insetGrouped)
                 .scrollDismissesKeyboard(.immediately)
+                .modifier(ScrollOffsetReaderModifier { offset in
+                    isFarFromTop = offset > 240
+                })
+                .coordinateSpace(name: "citySearchList")
+                .onPreferenceChange(CityScrollOffsetKey.self) { offset in
+                    scrollOffset = offset
+                }
                 .overlay(alignment: .trailing) {
                     if !viewModel.isSearching && viewModel.viewState == .idle {
                         indexBar { code in
@@ -30,12 +39,41 @@ struct CitySearchListView: View {
                         }
                     }
                 }
+                .overlay(alignment: .bottomTrailing) {
+                    if showBackToTop {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                proxy.scrollTo("city.search.top", anchor: .top)
+                            }
+                        } label: {
+                            VStack(spacing: 1) {
+                                Image(systemName: "arrow.up")
+                                    .font(.headline.weight(.semibold))
+                                Text(String(localized: "city.back.to.top.short"))
+                                    .font(.caption2.weight(.medium))
+                            }
+                            .foregroundColor(.white)
+                            .frame(width: 46, height: 46)
+                            .background(Circle().fill(Color.accentColor))
+                            .shadow(color: .black.opacity(0.16), radius: 8, y: 3)
+                        }
+                        .padding(.trailing, 18)
+                        .padding(.bottom, 28)
+                        .accessibilityLabel(String(localized: "city.back.to.top"))
+                    }
+                }
             }
 
             if viewModel.viewState == .loading {
                 LoadingView()
             }
         }
+    }
+
+    private var showBackToTop: Bool {
+        !viewModel.isSearching
+            && viewModel.viewState == .idle
+            && (isFarFromTop || scrollOffset < -240)
     }
 
     // MARK: - 浏览（按国家分组）
@@ -273,8 +311,17 @@ struct CitySearchListView: View {
                 }
             }
             .padding(.vertical, 6)
+            .background(
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: CityScrollOffsetKey.self,
+                        value: proxy.frame(in: .named("citySearchList")).minY
+                    )
+                }
+            )
         }
         .listRowBackground(Color(.secondarySystemGroupedBackground))
+        .id("city.search.top")
     }
 
     // MARK: - 无结果
@@ -346,5 +393,29 @@ struct CitySearchListView: View {
             .reduce(into: "") { result, scalar in
                 result.unicodeScalars.append(scalar)
             }
+    }
+}
+
+private struct CityScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+private struct ScrollOffsetReaderModifier: ViewModifier {
+    let onChange: (CGFloat) -> Void
+
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content.onScrollGeometryChange(for: CGFloat.self) { geometry in
+                geometry.contentOffset.y
+            } action: { _, offset in
+                onChange(offset)
+            }
+        } else {
+            content
+        }
     }
 }

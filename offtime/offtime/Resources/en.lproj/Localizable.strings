@@ -86,6 +86,8 @@
 "city.search.placeholder" = "Search city or country";
 "city.search.country" = "Countries";
 "city.search.index" = "Country index";
+"city.back.to.top" = "Back to top";
+"city.back.to.top.short" = "Top";
 "city.search.count" = "%d cities found";
 "city.no.results" = "No cities found";
 "city.hint.add" = "Add this city";
