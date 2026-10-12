@@ -165,11 +165,12 @@
 
 // MARK: - Settings
 "settings.title" = "设置";
+"settings.general.section" = "通用";
 "settings.current.city" = "当前城市";
 "settings.current.city.none" = "未选择";
-"settings.display" = "显示设置";
+"settings.accessibility.section" = "辅助功能";
 "settings.24hour" = "24小时制";
-"settings.theme" = "外观主题";
+"settings.theme.section" = "主题样式";
 "settings.version" = "版本号";
 "settings.meeting.recommendation.title" = "会议档期推荐";
 "settings.meeting.recommendation.subtitle" = "自动推荐全员都合适的开会时段";
@@ -178,12 +179,10 @@
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
 "reminder.list.swipe.hint" = "往左滑动提醒可删除";
-"settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";
 "settings.about" = "关于";
 "settings.support" = "问题反馈";
-"settings.widget.section" = "小组件";
 "settings.add.widget" = "添加小组件";
 "settings.add.widget.subtitle" = "把%@放到主屏幕或锁定屏幕";
 "settings.export.failed" = "导出失败";

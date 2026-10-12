@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
@@ -36,285 +37,468 @@ struct SettingsView: View {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
     }
 
-    private var proSection: some View {
-        Section {
-            Button {
-                showProPaywall = true
-            } label: {
-                ProEntryCard(
-                    title: proAccessService.displayTitle,
-                    actionText: String(localized: "pro.entry.action"),
-                    statusText: String(localized: "pro.status.unlocked"),
-                    isUnlocked: proAccessService.isUnlocked,
-                    legacyHintText: proAccessService.isLegacyUnlocked
-                        ? String(localized: "pro.status.legacy.hint")
-                        : nil
-                )
-            }
-            .buttonStyle(.plain)
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets())
-            .listRowSeparator(.hidden)
+    private var proSectionContent: some View {
+        Button {
+            showProPaywall = true
+        } label: {
+            ProEntryCard(
+                title: proAccessService.displayTitle,
+                actionText: String(localized: "pro.entry.action"),
+                statusText: String(localized: "pro.status.unlocked"),
+                isUnlocked: proAccessService.isUnlocked,
+                legacyHintText: proAccessService.isLegacyUnlocked
+                    ? String(localized: "pro.status.legacy.hint")
+                    : nil
+            )
         }
+        .buttonStyle(.plain)
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
+        .listRowSeparator(.hidden)
     }
 
     /// 版本行：info 图标 + 版本号，纯只读展示
     private var versionRow: some View {
         HStack {
-            Label(String(localized: "settings.version"), systemImage: "info.circle.fill")
-                .foregroundColor(.secondary)
+            Image(systemName: "info.circle.fill")
+                .foregroundColor(.blue)
+
+            Text(String(localized: "settings.version"))
+                .foregroundColor(.primary)
+
             Spacer()
             Text(versionText)
                 .foregroundColor(.secondary)
         }
         .accessibilityElement(children: .combine)
     }
-    
+
+    private var settingsList: some View {
+        List {
+            proSection
+            meetingSection
+            generalSection
+            displaySection
+            aboutSection
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle(String(localized: "settings.title"))
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: AppRoute.self, destination: handleAppRoute)
+        .toast(message: $viewModel.errorMessage)
+        .toast(message: proStatusMessageBinding)
+        .sheet(isPresented: $showProPaywall) {
+            ProPaywallView()
+        }
+        .fileExporter(
+            isPresented: $isPresentingFileExporter,
+            document: exportDocument,
+            contentType: UTType.json,
+            defaultFilename: "offtime_cities"
+        ) { result in
+            handleExportResult(result)
+        }
+        .fileImporter(
+            isPresented: $isPresentingFileImporter,
+            allowedContentTypes: [UTType.json],
+            allowsMultipleSelection: false
+        ) { result in
+            handleImportResult(result)
+        }
+        .confirmationDialog(
+            String(localized: "settings.import.confirm.title"),
+            isPresented: $showImportConfirm,
+            titleVisibility: .visible
+        ) {
+            importConfirmationButtons
+        } message: {
+            Text(String(localized: "settings.import.confirm.message"))
+        }
+    }
+
+    private var proSection: some View {
+        Section {
+            proSectionContent
+        }
+    }
+
+    private var meetingSection: some View {
+        Section {
+            meetingSectionContent
+        }
+    }
+
+    private var meetingSectionContent: some View {
+        Button {
+            path.append(AppRoute.meetingRecommendation)
+        } label: {
+            MeetingRecommendationCard()
+        }
+        .buttonStyle(.plain)
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets())
+        .listRowSeparator(.hidden)
+    }
+
+    private var generalSection: some View {
+        Section(String(localized: "settings.general.section")) {
+            Button {
+                path.append(AppRoute.citySelector)
+            } label: {
+                currentCityRow
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                path.append(AppRoute.reminderList)
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "bell.fill")
+                        .foregroundColor(.blue)
+                        .font(.title3)
+
+                    Text(String(localized: "reminder.list.title"))
+                        .foregroundColor(.primary)
+
+                    Spacer()
+
+                    settingsChevron
+                }
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            themePicker
+        }
+    }
+
+    private var displaySection: some View {
+        Section(String(localized: "settings.accessibility.section")) {
+            Button {
+                path.append(AppRoute.addWidgetGuide)
+            } label: {
+                widgetRow
+            }
+            .buttonStyle(.plain)
+
+            Toggle(isOn: $viewModel.use24Hour) {
+                HStack(spacing: 12) {
+                    Image(systemName: "clock.fill")
+                        .foregroundColor(.blue)
+                        .font(.title3)
+
+                    Text(String(localized: "settings.24hour"))
+                }
+            }
+            .onChange(of: viewModel.use24Hour) {
+                viewModel.toggle24Hour()
+                appEnvironment.settings.use24Hour = viewModel.use24Hour
+            }
+
+            Button {
+                prepareExportFile()
+                isPresentingFileExporter = true
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "square.and.arrow.up.fill")
+                        .foregroundColor(.blue)
+                        .font(.title3)
+
+                    Text(String(localized: "settings.export.cities"))
+                        .foregroundColor(.primary)
+
+                    Spacer()
+
+                    settingsChevron
+                }
+            }
+
+            Button {
+                isPresentingFileImporter = true
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "square.and.arrow.down.fill")
+                        .foregroundColor(.blue)
+                        .font(.title3)
+
+                    Text(String(localized: "settings.import.cities"))
+                        .foregroundColor(.primary)
+
+                    Spacer()
+
+                    settingsChevron
+                }
+            }
+        }
+    }
+
+    private var currentCityRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "building.2.fill")
+                .foregroundColor(.blue)
+                .font(.title3)
+
+            Text(String(localized: "settings.current.city"))
+                .foregroundColor(.primary)
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 2) {
+                if let name = appEnvironment.settings.currentCityName {
+                    Text(CityDisplay.primaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name))
+                        .foregroundColor(.primary)
+
+                    if let secondary = CityDisplay.secondaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name) {
+                        Text(secondary)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                } else {
+                    Text(String(localized: "settings.current.city.none"))
+                        .foregroundColor(.secondary)
+                }
+            }
+            settingsChevron
+                .contentShape(Rectangle())
+        }
+    }
+
+    private var widgetRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "square.grid.2x2.fill")
+                .foregroundColor(.blue)
+                .font(.title3)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(localized: "settings.add.widget"))
+                    .foregroundColor(.primary)
+
+                Text(AppDisplay.text("settings.add.widget.subtitle", AppDisplay.name))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+
+            settingsChevron
+                .contentShape(Rectangle())
+        }
+    }
+
+    private var settingsChevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.footnote.weight(.semibold))
+            .foregroundColor(Color(uiColor: .tertiaryLabel))
+    }
+
+    private var themePicker: some View {
+        Menu {
+            ForEach(ThemeMode.allCases) { mode in
+                Button {
+                    handleThemeChange(mode)
+                } label: {
+                    if viewModel.themeMode == mode {
+                        Label(mode.displayName, systemImage: "checkmark")
+                    } else {
+                        Text(mode.displayName)
+                    }
+                }
+            }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "paintpalette.fill")
+                    .foregroundColor(.blue)
+                    .font(.title3)
+
+                Text(String(localized: "settings.theme.section"))
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                Text(viewModel.themeMode.displayName)
+                    .foregroundColor(.secondary)
+
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundColor(Color(uiColor: .tertiaryLabel))
+            }
+        }
+    }
+
+    private var aboutSection: some View {
+        Section(String(localized: "settings.about")) {
+            shareAppLink
+            rateAppButton
+            supportButton
+            versionRow
+        }
+    }
+
+    private var shareAppLink: some View {
+        ShareLink(
+            item: shareAppMessage,
+            subject: Text(String(localized: "share.app.subject"))
+        ) {
+            HStack {
+                Image(systemName: "arrowshape.turn.up.right.fill")
+                    .foregroundColor(.blue)
+
+                Text(String(localized: "settings.share.app"))
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                settingsChevron
+            }
+        }
+        .accessibilityLabel(String(localized: "settings.share.app"))
+    }
+
+    private var rateAppButton: some View {
+        Button {
+            UIApplication.shared.open(writeReviewURL)
+        } label: {
+            HStack {
+                Image(systemName: "star.fill")
+                    .foregroundColor(.blue)
+
+                Text(String(localized: "settings.rate.app"))
+                    .foregroundColor(.primary)
+
+                Spacer()
+                Text("★★★★★")
+                    .foregroundColor(.orange)
+
+                settingsChevron
+            }
+        }
+        .accessibilityLabel(String(localized: "settings.rate.app"))
+    }
+
+    private var supportButton: some View {
+        Button {
+            path.append(AppRoute.supportPage)
+        } label: {
+            HStack {
+                Image(systemName: "envelope.fill")
+                    .foregroundColor(.blue)
+
+                Text(String(localized: "settings.support"))
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                settingsChevron
+            }
+        }
+        }
+
+    private var proStatusMessageBinding: Binding<String?> {
+        Binding(
+            get: { proAccessService.statusMessage },
+            set: { _ in proAccessService.statusMessage = nil }
+        )
+    }
+
+    private var exportDocument: JSONFileDocument {
+        JSONFileDocument(
+            fileURL: exportFileURL ?? URL(fileURLWithPath: "/dev/null")
+        )
+    }
+
+    @ViewBuilder
+    private var importConfirmationButtons: some View {
+        Button(String(localized: "settings.import.merge")) {
+            importCities(strategy: .merge)
+        }
+
+        Button(String(localized: "settings.import.replace"), role: .destructive) {
+            importCities(strategy: .replace)
+        }
+
+        Button(String(localized: "common.cancel"), role: .cancel) {
+            pendingImportData = nil
+        }
+    }
+
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                proSection
-
-                Section {
-                    Button {
-                        path.append(AppRoute.meetingRecommendation)
-                    } label: {
-                        MeetingRecommendationCard()
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
-                }
-
-                // MARK: - 当前城市
-                Section(String(localized: "settings.current.city")) {
-                    NavigationLink {
-                        CitySelectorView(onCitySelected: { city in
-                            appEnvironment.switchCurrentCity(city)
-                        })
-                    } label: {
-                        HStack {
-                            Image(systemName: "building.2.fill")
-                                .foregroundColor(.blue)
-                                .font(.title3)
-                            VStack(alignment: .leading, spacing: 2) {
-                                if let name = appEnvironment.settings.currentCityName {
-                                    Text(CityDisplay.primaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name))
-                                        .foregroundColor(.primary)
-                                    if let secondary = CityDisplay.secondaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name) {
-                                        Text(secondary)
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                } else {
-                                    Text(String(localized: "settings.current.city.none"))
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                Section(String(localized: "reminder.list.title")) {
-                    NavigationLink {
-                        ReminderListView()
-                    } label: {
-                        Label(String(localized: "reminder.list.title"), systemImage: "bell.fill")
-                    }
-                }
-
-                // MARK: - 小组件
-                Section(String(localized: "settings.widget.section")) {
-                    NavigationLink {
-                        AddWidgetGuideView()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: "square.grid.2x2.fill")
-                                .foregroundColor(.blue)
-                                .font(.title3)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(String(localized: "settings.add.widget"))
-                                    .foregroundColor(.primary)
-                                Text(AppDisplay.text("settings.add.widget.subtitle", AppDisplay.name))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                    }
-                }
-
-                Section(String(localized: "settings.display")) {
-                    Toggle(isOn: $viewModel.use24Hour) {
-                        Text(String(localized: "settings.24hour"))
-                    }
-                    .onChange(of: viewModel.use24Hour) {
-                        viewModel.toggle24Hour()
-                        appEnvironment.settings.use24Hour = viewModel.use24Hour
-                    }
-                    
-                    Picker(String(localized: "settings.theme"), selection: $viewModel.themeMode) {
-                        ForEach(ThemeMode.allCases) { mode in
-                            Text(mode.displayName).tag(mode)
-                        }
-                    }
-                    .onChange(of: viewModel.themeMode) { _, newMode in
-                        guard ProAccessPolicy.isThemeUnlocked(
-                            newMode,
-                            isUnlocked: proAccessService.isUnlocked
-                        ) else {
-                            showProPaywall = true
-                            viewModel.themeMode = appEnvironment.settings.themeMode
-                            return
-                        }
-                        viewModel.updateTheme(newMode)
-                        var settings = appEnvironment.settings
-                        settings.themeMode = newMode
-                        appEnvironment.updateSettings(settings)
-                    }
-                }
-                
-                Section(String(localized: "settings.data.management")) {
-                    Button(action: {
-                        prepareExportFile()
-                        isPresentingFileExporter = true
-                    }) {
-                        Text(String(localized: "settings.export.cities"))
-                    }
-                    
-                    Button(action: {
-                        isPresentingFileImporter = true
-                    }) {
-                        Text(String(localized: "settings.import.cities"))
-                    }
-                }
-                
-                Section(String(localized: "settings.about")) {
-                    // 纯文本分享：apps.apple.com URL 的 OG 是通用 "Today - App Store" 模板，
-                    // 任何方式分享 URL 都会被抓成该文案；改用纯文本（应用名 + 推荐语 + 链接）绕过 OG。
-                    ShareLink(
-                        item: shareAppMessage,
-                        subject: Text(String(localized: "share.app.subject"))
-                    ) {
-                        Label(String(localized: "settings.share.app"), systemImage: "square.and.arrow.up")
-                    }
-                    .accessibilityLabel(String(localized: "settings.share.app"))
-
-                    // 直接跳 App Store 写评论页：itms-apps scheme 拉起 App Store app，
-                    // 不用 in-app 弹窗，确保每次点击都能真正进入评分界面。
-                    Button(action: {
-                        UIApplication.shared.open(writeReviewURL)
-                    }) {
-                        HStack {
-                            Label(String(localized: "settings.rate.app"), systemImage: "star.fill")
-                            Spacer()
-                            Text("★★★★★")
-                                .foregroundColor(.orange)
-                        }
-                    }
-                    .accessibilityLabel(String(localized: "settings.rate.app"))
-
-                    Button(action: {
-                        path.append(AppRoute.supportPage)
-                    }) {
-                        Label(String(localized: "settings.support"), systemImage: "envelope.fill")
-                    }
-                }
-
-                // 版本号单独一个 section，纯只读展示
-                Section {
-                    versionRow
-                }
-            }
-            .listStyle(.insetGrouped)
-            .navigationTitle(String(localized: "settings.title"))
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                case .supportPage:
-                    SupportPageView()
-                case .meetingRecommendation:
-                    MeetingView(embedsNavigationStack: false)
-                default:
-                    EmptyView()
-                }
-            }
-            .toast(message: $viewModel.errorMessage)
-            .toast(message: Binding(
-                get: { proAccessService.statusMessage },
-                set: { _ in proAccessService.statusMessage = nil }
-            ))
-            .sheet(isPresented: $showProPaywall) {
-                ProPaywallView()
-            }
-            // SwiftUI 原生文件导出
-            .fileExporter(
-                isPresented: $isPresentingFileExporter,
-                document: exportFileURL.map { JSONFileDocument(fileURL: $0) } ?? JSONFileDocument(fileURL: URL(fileURLWithPath: "/dev/null")),
-                contentType: UTType.json,
-                defaultFilename: "offtime_cities"
-            ) { result in
-                switch result {
-                case .success:
-                    viewModel.errorMessage = String(localized: "settings.export.success")
-                case .failure(let error):
-                    viewModel.errorMessage = String(localized: "settings.export.failed") + ": \(error.localizedDescription)"
-                }
-                // 清理临时文件
-                if let url = exportFileURL {
-                    try? FileManager.default.removeItem(at: url)
-                    exportFileURL = nil
-                }
-            }
-            // SwiftUI 原生文件导入
-            .fileImporter(
-                isPresented: $isPresentingFileImporter,
-                allowedContentTypes: [UTType.json],
-                allowsMultipleSelection: false
-            ) { result in
-                switch result {
-                case .success(let urls):
-                    guard let url = urls.first else { return }
-                    do {
-                        // 先读取数据，再弹确认框让用户选择导入策略，避免直接覆盖现有城市
-                        pendingImportData = try Data(contentsOf: url)
-                        showImportConfirm = true
-                    } catch {
-                        viewModel.errorMessage = String(localized: "settings.import.failed")
-                    }
-                case .failure:
-                    viewModel.errorMessage = String(localized: "settings.import.failed")
-                }
-            }
-            .confirmationDialog(
-                String(localized: "settings.import.confirm.title"),
-                isPresented: $showImportConfirm,
-                titleVisibility: .visible
-            ) {
-                Button(String(localized: "settings.import.merge")) {
-                    guard let data = pendingImportData else { return }
-                    if viewModel.importCities(from: data, strategy: .merge) {
-                        appEnvironment.citiesRevision += 1
-                        viewModel.errorMessage = String(localized: "settings.import.success")
-                    }
-                    pendingImportData = nil
-                }
-                Button(String(localized: "settings.import.replace"), role: .destructive) {
-                    guard let data = pendingImportData else { return }
-                    if viewModel.importCities(from: data, strategy: .replace) {
-                        appEnvironment.citiesRevision += 1
-                        viewModel.errorMessage = String(localized: "settings.import.success")
-                    }
-                    pendingImportData = nil
-                }
-                Button(String(localized: "common.cancel"), role: .cancel) {
-                    pendingImportData = nil
-                }
-            } message: {
-                Text(String(localized: "settings.import.confirm.message"))
-            }
-            
+            settingsList
         }
+    }
+
+    @ViewBuilder
+    private func handleAppRoute(_ route: AppRoute) -> some View {
+        switch route {
+        case .citySelector:
+            CitySelectorView(onCitySelected: { city in
+                appEnvironment.switchCurrentCity(city)
+            })
+        case .reminderList:
+            ReminderListView()
+        case .addWidgetGuide:
+            AddWidgetGuideView()
+        case .supportPage:
+            SupportPageView()
+        case .meetingRecommendation:
+            MeetingView(embedsNavigationStack: false)
+        default:
+            EmptyView()
+        }
+    }
+
+    private func handleThemeChange(_ newMode: ThemeMode) {
+        guard ProAccessPolicy.isThemeUnlocked(
+            newMode,
+            isUnlocked: proAccessService.isUnlocked
+        ) else {
+            showProPaywall = true
+            viewModel.themeMode = appEnvironment.settings.themeMode
+            return
+        }
+
+        viewModel.updateTheme(newMode)
+        var settings = appEnvironment.settings
+        settings.themeMode = newMode
+        appEnvironment.updateSettings(settings)
+    }
+
+    private func handleExportResult(_ result: Result<URL, Error>) {
+        switch result {
+        case .success:
+            viewModel.errorMessage = String(localized: "settings.export.success")
+        case .failure(let error):
+            viewModel.errorMessage = String(localized: "settings.export.failed") + ": \(error.localizedDescription)"
+        }
+
+        if let url = exportFileURL {
+            try? FileManager.default.removeItem(at: url)
+            exportFileURL = nil
+        }
+    }
+
+    private func handleImportResult(_ result: Result<[URL], Error>) {
+        switch result {
+        case .success(let urls):
+            guard let url = urls.first else { return }
+            do {
+                pendingImportData = try Data(contentsOf: url)
+                showImportConfirm = true
+            } catch {
+                viewModel.errorMessage = String(localized: "settings.import.failed")
+            }
+        case .failure:
+            viewModel.errorMessage = String(localized: "settings.import.failed")
+        }
+    }
+
+    private func importCities(strategy: ImportStrategy) {
+        guard let data = pendingImportData else { return }
+        if viewModel.importCities(from: data, strategy: strategy) {
+            appEnvironment.citiesRevision += 1
+            viewModel.errorMessage = String(localized: "settings.import.success")
+        }
+        pendingImportData = nil
     }
     
     private func prepareExportFile() {

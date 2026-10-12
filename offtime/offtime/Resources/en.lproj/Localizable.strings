@@ -165,11 +165,12 @@
 
 // MARK: - Settings
 "settings.title" = "Settings";
+"settings.general.section" = "General";
 "settings.current.city" = "Current City";
 "settings.current.city.none" = "Not Selected";
-"settings.display" = "Display";
+"settings.accessibility.section" = "Accessibility";
 "settings.24hour" = "24-Hour Format";
-"settings.theme" = "Appearance";
+"settings.theme.section" = "Theme Style";
 "settings.version" = "Version";
 "settings.meeting.recommendation.title" = "Meeting Slot Recommendations";
 "settings.meeting.recommendation.subtitle" = "Find the best shared meeting time automatically";
@@ -178,12 +179,10 @@
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
 "reminder.list.swipe.hint" = "Swipe left to delete a reminder";
-"settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";
 "settings.about" = "About";
 "settings.support" = "Feedback";
-"settings.widget.section" = "Widget";
 "settings.add.widget" = "Add Widget";
 "settings.add.widget.subtitle" = "Put %@ on your Home Screen or Lock Screen";
 "settings.export.failed" = "Export failed";

@@ -111,6 +111,8 @@ struct ClockListView: View {
                     }
                 case .reminderList:
                     EmptyView()
+                case .addWidgetGuide:
+                    EmptyView()
                 case .meetingRecommendation:
                     EmptyView()
                 }

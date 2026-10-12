@@ -245,6 +245,7 @@ enum AppTab: Hashable {
 enum AppRoute: Hashable {
     case cityPicker
     case citySelector
+    case addWidgetGuide
     case supportPage
     case meetingRecommendation
     case cityDetail(UUID)
