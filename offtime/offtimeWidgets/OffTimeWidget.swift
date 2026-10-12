@@ -162,6 +162,13 @@ struct OffTimeWidgetView: View {
 
     private var snapshot: WidgetSnapshot { entry.snapshot }
     private var cities: [WidgetCitySnapshot] { snapshot.cities }
+    private var preferredColorScheme: ColorScheme? {
+        switch snapshot.themeMode {
+        case .light: return .light
+        case .dark: return .dark
+        default: return nil
+        }
+    }
 
     var body: some View {
         Group {
@@ -185,6 +192,7 @@ struct OffTimeWidgetView: View {
         .containerBackground(for: .widget) {
             widgetBackground
         }
+        .preferredColorScheme(preferredColorScheme)
     }
 
     // MARK: - 小尺寸

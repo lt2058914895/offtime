@@ -3,7 +3,6 @@
 // MARK: - Tab Bar
 "tab.clock" = "Clock";
 "tab.converter" = "Time Converter";
-"tab.meeting" = "Meeting Slots";
 "tab.settings" = "Settings";
 
 // MARK: - Common
@@ -12,8 +11,6 @@
 "common.done" = "Done";
 "common.clear" = "Clear";
 "common.delete" = "Delete";
-"common.retry" = "Retry";
-"common.success" = "Success";
 "common.back" = "Back";
 
 // MARK: - Database Error
@@ -30,13 +27,11 @@
 "clock.copy.time" = "Copy Time";
 "clock.delete.city" = "Delete City";
 "clock.select.all" = "Select All";
-"clock.deselect.all" = "Deselect All";
 "clock.confirm.delete.selected.message" = "Are you sure you want to delete the selected cities?";
 "clock.dst.summer" = "DST";
 "clock.time.difference" = "Diff:";
 "clock.tomorrow" = "Tomorrow";
 "clock.yesterday" = "Yesterday";
-"clock.today" = "Today";
 "clock.time.parse.failed" = "Time parse failed";
 "clock.date.parse.failed" = "Date parse failed";
 "clock.reorder.hint.prefix" = "Touch and hold the handle";
@@ -53,7 +48,6 @@
 
 // MARK: - City Detail
 "detail.contactable.period" = "Contactable Period";
-"detail.contactable.now" = "Contactable now";
 "detail.contactable.none" = "No contactable hours. Try adjusting work hours.";
 "detail.current.time" = "Current Time";
 "detail.work.start" = "Start";
@@ -67,7 +61,6 @@
 "city.reminder.empty" = "No reminder periods available";
 "city.reminder.add" = "Add Reminder";
 "city.reminder.cancel" = "Cancel Reminder";
-"city.reminder.contactable.add" = "Add reminder at start";
 "city.reminder.remove" = "Remove reminder";
 "city.reminder.contactable.body" = "Current time %@, contactable now";
 "city.reminder.weekdays.only" = "Weekdays only";
@@ -94,15 +87,9 @@
 "city.hint.select" = "Select this city";
 "city.try.different" = "Try different keywords";
 "city.data.not.found" = "City data file not found";
-"city.data.load.failed" = "Failed to load city data";
 
 // MARK: - Continent Names
 "continent.hot" = "Popular";
-"continent.asia" = "Asia";
-"continent.europe" = "Europe";
-"continent.america" = "Americas";
-"continent.oceania" = "Oceania";
-"continent.africa" = "Africa";
 "continent.antarctica" = "Antarctic Stations";
 "continent.arctic" = "Arctic Towns";
 
@@ -112,43 +99,30 @@
 "meeting.participants.hint" = "Add more cities in the Clock tab to include them";
 "meeting.local.badge" = "Local";
 "meeting.work.hours" = "Working hours";
-"meeting.settings.title" = "Meeting Settings";
 "meeting.settings.duration" = "Duration";
 "meeting.settings.duration.format" = "%d min";
 "meeting.settings.range" = "Meeting date (local)";
 "meeting.slots.title" = "Recommended Slots";
 "meeting.slots.subtitle" = "Sorted by all working > fewer outside-work cities > fewer sleeping cities";
 "meeting.slots.start.meta" = "%d start times · %d min each";
-"meeting.slots.view" = "View";
 "meeting.slots.empty" = "No slots can be generated on this date";
 "meeting.slots.tier.all" = "Everyone can attend";
-"meeting.slots.tier.adjust" = "%d cities need to adjust";
 "meeting.slots.tier.offwork" = "%d cities outside work";
 "meeting.slots.tier.sleeping" = "%d cities sleeping";
 "meeting.date.today" = "Today";
 "meeting.date.tomorrow" = "Tomorrow";
-"meeting.slots.overlap.none" = "No all-working overlap on the selected date";
-"meeting.slots.overlap.none.suggest" = "Try adjusting the date, or accept the slots below that require some sacrifice";
-"meeting.slots.overlap.short" = "Longest all-working overlap is about %d min, shorter than the meeting duration";
-"meeting.slots.overlap.short.suggest" = "Try shortening the duration to %d min, or accept the slots below that require some sacrifice";
-"meeting.slots.overlap.constraints" = "Limited by: %@";
-"meeting.slots.constraint.start" = "%@ (starts work at %@)";
-"meeting.slots.constraint.end" = "%@ (ends work at %@)";
 "meeting.slots.constraints.join" = ", ";
 "meeting.state.working" = "Working";
 "meeting.state.offwork" = "Outside work";
 "meeting.state.sleeping" = "Sleeping";
-"meeting.overlap.title" = "Working Hours Overlap";
 "meeting.overlap.subtitle" = "24-hour axis in your local time; red marks now, green marks overlap";
 "meeting.overlap.subtitle.none" = "Adjust working hours from each city's detail page in the Clock list";
-"meeting.overlap.hint" = "Select at least 2 cities to see overlap";
 "meeting.overlap.all" = "Working hours overlap";
 "meeting.overlap.now" = "Overlapping now";
 "meeting.overlap.available" = "Overlap available";
 "meeting.overlap.none" = "No overlap";
 "meeting.detail.title" = "Slot Details";
 "meeting.detail.subtitle" = "Times in each city";
-"meeting.detail.range.hint" = "This status stays the same throughout the range; choose a meeting start time below.";
 "meeting.detail.select.start" = "Select meeting start time";
 "meeting.detail.add" = "Add to Recommended Records";
 "meeting.detail.duration" = "%d min";
@@ -193,20 +167,16 @@
 "settings.title" = "Settings";
 "settings.current.city" = "Current City";
 "settings.current.city.none" = "Not Selected";
-"settings.current.city.picker.title" = "Select Current City";
 "settings.display" = "Display";
 "settings.24hour" = "24-Hour Format";
 "settings.theme" = "Appearance";
 "settings.version" = "Version";
-"settings.tools" = "Tools";
-"settings.meetings" = "Meeting Slot Recommendations";
 "settings.meeting.recommendation.title" = "Meeting Slot Recommendations";
 "settings.meeting.recommendation.subtitle" = "Find the best shared meeting time automatically";
 "meeting.recommendation.records" = "Records";
 "reminder.list.title" = "Reminders";
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
-"reminder.list.target.time %@" = "Target city %@";
 "reminder.list.swipe.hint" = "Swipe left to delete a reminder";
 "settings.data.management" = "Data Management";
 "settings.export.cities" = "Export City List";
@@ -216,9 +186,6 @@
 "settings.widget.section" = "Widget";
 "settings.add.widget" = "Add Widget";
 "settings.add.widget.subtitle" = "Put %@ on your Home Screen or Lock Screen";
-"settings.load.failed" = "Failed to load settings";
-"settings.save.failed" = "Failed to save settings";
-"settings.save.theme.failed" = "Failed to save theme";
 "settings.export.failed" = "Export failed";
 "settings.export.success" = "Export successful";
 "settings.import.failed" = "Import failed, invalid file format";
@@ -229,7 +196,6 @@
 "settings.import.confirm.message" = "Replace will clear all current cities. Merge will keep existing cities and add new ones.";
 
 // MARK: - Widget Guide
-"widget.guide.subtitle" = "See every city's time without opening the app";
 "widget.guide.home.title" = "Add to Home Screen";
 "widget.guide.home.step1.title" = "Touch and hold";
 "widget.guide.home.step1.detail" = "an empty Home Screen area";
@@ -258,6 +224,31 @@
 "widget.guide.size.small" = "Small";
 "widget.guide.size.medium" = "Medium";
 "widget.guide.size.medium3" = "Medium · 3 Cities";
+
+// MARK: - Pro
+"pro.price.placeholder" = "$6.99";
+"pro.entry.action" = "Unlock";
+"pro.status.unlocked" = "Unlocked";
+"pro.status.legacy.hint" = "Automatically unlocked for existing users. Thank you!";
+"pro.legacy.purchase.prompt" = "Pro access remains available without purchasing. A purchase is appreciated if you'd like to support us.";
+"pro.restore" = "Restore Purchases";
+"pro.paywall.headline" = "Unlock %@ Pro";
+"pro.feature.cities.title" = "Unlimited Cities";
+"pro.feature.cities.detail" = "Add 4 cities free. Unlock Pro for unlimited cities.";
+"pro.feature.themes.title" = "Customize Theme Styles";
+"pro.feature.themes.detail" = "Customize app and widget theme styles.";
+"pro.purchase" = "Purchase";
+"pro.purchase.note" = "One-time purchase • Lifetime access • Family Sharing enabled";
+"pro.purchase.note.legacy.label" = "Note:";
+"pro.purchase.note.legacy.detail" = "Legacy unlock is not a real App Store purchase. Reinstalling the app or switching devices will remove Pro access.";
+"pro.product.unavailable" = "Pro is not available right now";
+"pro.purchase.success" = "Thank you for upgrading";
+"pro.purchase.pending" = "Purchase is pending approval";
+"pro.purchase.failed" = "Purchase could not be completed";
+"pro.restore.success" = "Purchases restored";
+"pro.restore.empty" = "No eligible purchases found";
+"pro.restore.failed" = "Restore could not be completed";
+"pro.city.limit" = "Free version supports up to 4 cities";
 "widget.guide.size.large" = "Large";
 "widget.guide.size.caption.small" = "Shows 1 city";
 "widget.guide.size.caption.medium" = "Shows 2 cities";
@@ -267,13 +258,11 @@
 "widget.guide.lock.size.rectangular" = "Rectangular";
 "widget.guide.lock.size.caption.circular" = "Shows the first city";
 "widget.guide.lock.size.caption.rectangular" = "Shows the first 3 cities";
-"widget.guide.size.footer" = "Want a different size? Remove the widget and add it again with the steps above.";
 "widget.guide.tips.title" = "Tips";
 "widget.guide.tips.order" = "The widget shows the same cities as the app, so add your cities in the app first.";
 "widget.guide.tips.refresh" = "After changing cities or the 12/24-hour format, open the app once to refresh the widget.";
 "widget.guide.tips.empty" = "Seeing \"Open %@ to add a city\"? Open the app once and it will appear.";
 "widget.guide.mock.date" = "Wed, Sep 16";
-"widget.guide.mock.local" = "Local";
 
 // MARK: - Theme
 "theme.system" = "System";

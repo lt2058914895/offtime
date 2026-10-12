@@ -15,6 +15,7 @@ final class WidgetSnapshotStoreTests: XCTestCase {
         cityNames: [String],
         use24Hour: Bool = true,
         localTimezoneId: String = "Asia/Shanghai",
+        themeMode: WidgetThemeMode? = nil,
         updatedAt: Date = Date()
     ) -> WidgetSnapshot {
         let cities = cityNames.map { name in
@@ -33,6 +34,7 @@ final class WidgetSnapshotStoreTests: XCTestCase {
             cities: cities,
             localTimezoneId: localTimezoneId,
             use24Hour: use24Hour,
+            themeMode: themeMode,
             updatedAt: updatedAt
         )
     }
@@ -66,6 +68,20 @@ final class WidgetSnapshotStoreTests: XCTestCase {
         XCTAssertFalse(baseline.hasSameContent(as: makeSnapshot(cityNames: ["上海", "东京"], use24Hour: false)))
         // 切换当前城市会改变 isLocal，组件上的「本地」标记要跟着变
         XCTAssertFalse(baseline.hasSameContent(as: makeSnapshot(cityNames: ["上海", "东京"], localTimezoneId: "Asia/Tokyo")))
+        XCTAssertFalse(baseline.hasSameContent(as: makeSnapshot(cityNames: ["上海", "东京"], themeMode: .dark)))
+    }
+
+    func testDecodeSupportsSnapshotsWithoutTheme() throws {
+        let legacyJSON = """
+        {"cities":[],"localTimezoneId":"Asia/Shanghai","use24Hour":true,"updatedAt":0}
+        """
+
+        let snapshot = try JSONDecoder().decode(
+            WidgetSnapshot.self,
+            from: Data(legacyJSON.utf8)
+        )
+
+        XCTAssertNil(snapshot.themeMode)
     }
 
     // MARK: - 文件读写

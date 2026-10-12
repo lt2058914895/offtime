@@ -4,8 +4,10 @@ import Combine
 /// 首次启动引导：3 步（欢迎 → 添加城市 → 功能介绍）
 struct OnboardingView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
+    @EnvironmentObject private var proAccessService: ProAccessService
     @StateObject private var viewModel = OnboardingViewModel()
     @State private var page = 0
+    @State private var limitMessage: String?
 
     var body: some View {
         TabView(selection: $page) {
@@ -13,6 +15,7 @@ struct OnboardingView: View {
             addCitiesStep.tag(1)
             featuresStep.tag(2)
         }
+        .toast(message: $limitMessage)
         .tabViewStyle(.page(indexDisplayMode: .always))
         .background(Color(.systemBackground))
         .overlay(alignment: .topTrailing) {
@@ -67,7 +70,7 @@ struct OnboardingView: View {
 
             VStack(spacing: 12) {
                 ForEach(viewModel.quickCities) { city in
-                    Button { viewModel.toggle(city) } label: {
+                    Button { toggleCity(city) } label: {
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn)).font(.body).fontWeight(.medium)
@@ -143,6 +146,19 @@ struct OnboardingView: View {
         }
         .padding(.horizontal)
         .padding(.bottom, 56)
+    }
+
+    private func toggleCity(_ city: OnboardingViewModel.QuickCity) {
+        if !viewModel.isAdded(city) {
+            guard ProAccessPolicy.canAddCity(
+                currentCount: viewModel.addedCityNames.count,
+                isUnlocked: proAccessService.isUnlocked
+            ) else {
+                limitMessage = String(localized: "pro.city.limit")
+                return
+            }
+        }
+        viewModel.toggle(city)
     }
 
     private func featureRow(icon: String, title: LocalizedStringKey, desc: LocalizedStringKey) -> some View {
@@ -231,4 +247,5 @@ private final class OnboardingViewModel: ObservableObject {
 #Preview {
     OnboardingView()
         .environmentObject(AppEnvironment())
+        .environmentObject(ProAccessService())
 }

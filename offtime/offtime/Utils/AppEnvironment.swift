@@ -79,6 +79,20 @@ final class AppEnvironment: ObservableObject {
         loadOnboardingState()
     }
 
+    /// 判断 v1.5 内购迁移时是否应视为老用户。
+    /// 任一业务数据存在，或升级前已经完成首启/引导，都应保留原有可用能力。
+    func hasLegacyProEvidence() -> Bool {
+        if UserDefaults.standard.bool(forKey: "first_launch_seeded")
+            || UserDefaults.standard.bool(forKey: "onboarding_completed") {
+            return true
+        }
+
+        let context = modelContainer.mainContext
+        return ((try? context.fetchCount(FetchDescriptor<CityModel>())) ?? 0) > 0
+            || ((try? context.fetchCount(FetchDescriptor<ReminderModel>())) ?? 0) > 0
+            || ((try? context.fetchCount(FetchDescriptor<MeetingModel>())) ?? 0) > 0
+    }
+
     /// App 启动后调用：首启种子城市、加载引导状态与设置
     func setup() {
         seedDefaultCityIfFirstLaunch()

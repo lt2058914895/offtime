@@ -1,5 +1,12 @@
 import Foundation
 
+/// 与主 App 的 `ThemeMode` 保持相同 rawValue，避免 Widget 依赖主 App Model 文件。
+enum WidgetThemeMode: Int, Codable, Hashable {
+    case system = 0
+    case light = 1
+    case dark = 2
+}
+
 struct WidgetCitySnapshot: Codable, Hashable, Identifiable {
     let id: String
     let cityName: String
@@ -15,6 +22,7 @@ struct WidgetSnapshot: Codable, Hashable {
     let cities: [WidgetCitySnapshot]
     let localTimezoneId: String
     let use24Hour: Bool
+    var themeMode: WidgetThemeMode?
     let updatedAt: Date
 }
 
@@ -26,6 +34,7 @@ extension WidgetSnapshot {
         cities == other.cities
             && localTimezoneId == other.localTimezoneId
             && use24Hour == other.use24Hour
+            && themeMode == other.themeMode
     }
 
     static func fallback(date: Date = Date()) -> WidgetSnapshot {
@@ -47,6 +56,7 @@ extension WidgetSnapshot {
             cities: [city],
             localTimezoneId: timezone.identifier,
             use24Hour: true,
+            themeMode: nil,
             updatedAt: date
         )
     }
@@ -63,6 +73,7 @@ extension WidgetSnapshot {
             cities: [],
             localTimezoneId: localTimezoneId,
             use24Hour: use24Hour,
+            themeMode: nil,
             updatedAt: date
         )
     }
@@ -109,6 +120,7 @@ extension WidgetSnapshot {
             cities: cities,
             localTimezoneId: localTimezoneId,
             use24Hour: true,
+            themeMode: nil,
             updatedAt: date
         )
     }

@@ -1,0 +1,40 @@
+{
+  "identifier" : "8F3B24D5-8550-4B6C-8E58-1F1B4F54B884",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "6.99",
+      "familyShareable" : true,
+      "internalID" : "6F7A4E4C481B44C282F8F7A19E5F8B67",
+      "localizations" : [
+        {
+          "description" : "Unlock unlimited cities and app/widget themes.",
+          "displayName" : "OffTime Pro",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "一次购买，解锁无限城市以及 App 与小组件主题外观。",
+          "displayName" : "世界时钟 Pro",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "offtime.pro.lifetime",
+      "referenceName" : "OffTime Pro Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "OFFTIME-APP-INTERNAL-ID",
+    "_developerTeamID" : "CV7ZT772HQ",
+    "_lastSynchronizedDate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

@@ -3,7 +3,6 @@
 // MARK: - Tab Bar
 "tab.clock" = "时钟";
 "tab.converter" = "时区转换";
-"tab.meeting" = "会议档期";
 "tab.settings" = "设置";
 
 // MARK: - Common
@@ -12,8 +11,6 @@
 "common.done" = "完成";
 "common.clear" = "清除";
 "common.delete" = "删除";
-"common.retry" = "重试";
-"common.success" = "成功";
 "common.back" = "返回";
 
 // MARK: - Database Error
@@ -30,13 +27,11 @@
 "clock.copy.time" = "复制时间";
 "clock.delete.city" = "删除城市";
 "clock.select.all" = "全选";
-"clock.deselect.all" = "取消全选";
 "clock.confirm.delete.selected.message" = "确定要删除选中的城市吗？";
 "clock.dst.summer" = "夏令时";
 "clock.time.difference" = "时差:";
 "clock.tomorrow" = "明日";
 "clock.yesterday" = "昨日";
-"clock.today" = "今天";
 "clock.time.parse.failed" = "时间解析失败";
 "clock.date.parse.failed" = "日期解析失败";
 "clock.reorder.hint.prefix" = "按住右侧图标";
@@ -53,7 +48,6 @@
 
 // MARK: - City Detail
 "detail.contactable.period" = "可联系时段";
-"detail.contactable.now" = "当前可联系";
 "detail.contactable.none" = "无可联系时段，调整工作时段试试";
 "detail.current.time" = "当前时间";
 "detail.work.start" = "开始";
@@ -67,7 +61,6 @@
 "city.reminder.empty" = "暂无可提醒时段";
 "city.reminder.add" = "添加提醒";
 "city.reminder.cancel" = "取消提醒";
-"city.reminder.contactable.add" = "为此时段起点添加提醒";
 "city.reminder.remove" = "移除提醒";
 "city.reminder.contactable.body" = "当前时间 %@，可联系了";
 "city.reminder.weekdays.only" = "仅工作日";
@@ -94,15 +87,9 @@
 "city.hint.select" = "选择此城市";
 "city.try.different" = "请更换关键词";
 "city.data.not.found" = "城市数据文件未找到";
-"city.data.load.failed" = "城市数据加载失败";
 
 // MARK: - Continent Names
 "continent.hot" = "热门";
-"continent.asia" = "亚洲";
-"continent.europe" = "欧洲";
-"continent.america" = "美洲";
-"continent.oceania" = "大洋洲";
-"continent.africa" = "非洲";
 "continent.antarctica" = "南极洲科考站";
 "continent.arctic" = "北极区域城镇";
 
@@ -112,43 +99,30 @@
 "meeting.participants.hint" = "在时钟页添加更多城市，即可一起规划";
 "meeting.local.badge" = "本地";
 "meeting.work.hours" = "工作时段";
-"meeting.settings.title" = "会议设置";
 "meeting.settings.duration" = "会议时长";
 "meeting.settings.duration.format" = "%d 分钟";
 "meeting.settings.range" = "会议日期(本地)";
 "meeting.slots.title" = "推荐档期";
 "meeting.slots.subtitle" = "按「全员工作 > 非工作时间城市少 > 睡眠城市少」排序";
 "meeting.slots.start.meta" = "%d 个开始时间 · 每场 %d 分钟";
-"meeting.slots.view" = "查看";
 "meeting.slots.empty" = "所选日期暂无可生成档期";
 "meeting.slots.tier.all" = "全员可开会";
-"meeting.slots.tier.adjust" = "%d 个城市需调整";
 "meeting.slots.tier.offwork" = "%d 个城市非工作时间";
 "meeting.slots.tier.sleeping" = "%d 个城市在睡眠";
 "meeting.date.today" = "今天";
 "meeting.date.tomorrow" = "明天";
-"meeting.slots.overlap.none" = "所选日期无全员工作重叠时段";
-"meeting.slots.overlap.none.suggest" = "建议调整会议日期，或接受下方需牺牲的档期";
-"meeting.slots.overlap.short" = "全员重叠最长约 %d 分钟，不足会议时长";
-"meeting.slots.overlap.short.suggest" = "建议将时长缩短至 %d 分钟内，或接受下方需牺牲的档期";
-"meeting.slots.overlap.constraints" = "受限于：%@";
-"meeting.slots.constraint.start" = "%@（%@ 上班）";
-"meeting.slots.constraint.end" = "%@（%@ 下班）";
 "meeting.slots.constraints.join" = "、";
 "meeting.state.working" = "工作中";
 "meeting.state.offwork" = "非工作时间";
 "meeting.state.sleeping" = "睡眠中";
-"meeting.overlap.title" = "工作时段重叠";
 "meeting.overlap.subtitle" = "以你的本地时间为轴，红色为当前时刻，绿色为重叠时段";
 "meeting.overlap.subtitle.none" = "可在时钟列表的城市详情页调整工作时段";
-"meeting.overlap.hint" = "勾选至少 2 个城市查看重叠";
 "meeting.overlap.all" = "工作时段重叠";
 "meeting.overlap.now" = "正在重叠";
 "meeting.overlap.available" = "存在重叠";
 "meeting.overlap.none" = "无重叠";
 "meeting.detail.title" = "档期详情";
 "meeting.detail.subtitle" = "各城市的对应时间";
-"meeting.detail.range.hint" = "该区间内状态保持一致，请在下方选择会议开始时间";
 "meeting.detail.select.start" = "选择会议开始时间";
 "meeting.detail.add" = "添加到推荐记录";
 "meeting.detail.duration" = "%d 分钟";
@@ -193,20 +167,16 @@
 "settings.title" = "设置";
 "settings.current.city" = "当前城市";
 "settings.current.city.none" = "未选择";
-"settings.current.city.picker.title" = "选择当前城市";
 "settings.display" = "显示设置";
 "settings.24hour" = "24小时制";
 "settings.theme" = "外观主题";
 "settings.version" = "版本号";
-"settings.tools" = "工具";
-"settings.meetings" = "会议档期推荐";
 "settings.meeting.recommendation.title" = "会议档期推荐";
 "settings.meeting.recommendation.subtitle" = "自动推荐全员都合适的开会时段";
 "meeting.recommendation.records" = "推荐记录";
 "reminder.list.title" = "提醒";
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
-"reminder.list.target.time %@" = "目标城市 %@";
 "reminder.list.swipe.hint" = "往左滑动提醒可删除";
 "settings.data.management" = "数据管理";
 "settings.export.cities" = "导出城市列表";
@@ -216,9 +186,6 @@
 "settings.widget.section" = "小组件";
 "settings.add.widget" = "添加小组件";
 "settings.add.widget.subtitle" = "把%@放到主屏幕或锁定屏幕";
-"settings.load.failed" = "加载设置失败";
-"settings.save.failed" = "保存设置失败";
-"settings.save.theme.failed" = "保存主题失败";
 "settings.export.failed" = "导出失败";
 "settings.export.success" = "导出成功";
 "settings.import.failed" = "导入失败，文件格式错误";
@@ -229,7 +196,6 @@
 "settings.import.confirm.message" = "替换将清空当前所有城市，合并将保留现有城市并追加新城市。";
 
 // MARK: - Widget Guide
-"widget.guide.subtitle" = "不用打开 App，点亮屏幕就能看到各地时间";
 "widget.guide.home.title" = "添加到主屏幕";
 "widget.guide.home.step1.title" = "长按桌面空白处";
 "widget.guide.home.step1.detail" = "进入桌面编辑状态";
@@ -258,6 +224,31 @@
 "widget.guide.size.small" = "小";
 "widget.guide.size.medium" = "中";
 "widget.guide.size.medium3" = "中 · 3城";
+
+// MARK: - Pro
+"pro.price.placeholder" = "$6.99";
+"pro.entry.action" = "去解锁";
+"pro.status.unlocked" = "已解锁";
+"pro.status.legacy.hint" = "老用户已自动解锁，感谢一路支持。";
+"pro.legacy.purchase.prompt" = "不购买也可以继续享受 Pro 权益；如果愿意，购买是对我们的支持。";
+"pro.restore" = "恢复购买";
+"pro.paywall.headline" = "解锁%@ Pro";
+"pro.feature.cities.title" = "无限城市";
+"pro.feature.cities.detail" = "免费添加4个城市，解锁Pro可无限添加城市";
+"pro.feature.themes.title" = "自定义主题样式";
+"pro.feature.themes.detail" = "自定义App与小组件主题样式";
+"pro.purchase" = "购买";
+"pro.purchase.note" = "一次购买 • 永久使用 • 支持家庭共享";
+"pro.purchase.note.legacy.label" = "注意:";
+"pro.purchase.note.legacy.detail" = "老用户解锁不是真实 App Store 内购，删除 App 后重装或换设备,将失去Pro权益。";
+"pro.product.unavailable" = "暂时无法加载 Pro 商品";
+"pro.purchase.success" = "感谢升级 Pro";
+"pro.purchase.pending" = "购买正在等待批准";
+"pro.purchase.failed" = "购买未完成";
+"pro.restore.success" = "已恢复购买";
+"pro.restore.empty" = "未找到可恢复的购买";
+"pro.restore.failed" = "恢复购买未完成";
+"pro.city.limit" = "免费版最多添加 4 个城市";
 "widget.guide.size.large" = "大";
 "widget.guide.size.caption.small" = "显示 1 个城市";
 "widget.guide.size.caption.medium" = "显示 2 个城市";
@@ -267,13 +258,11 @@
 "widget.guide.lock.size.rectangular" = "矩形";
 "widget.guide.lock.size.caption.circular" = "显示第 1 个城市";
 "widget.guide.lock.size.caption.rectangular" = "显示前 3 个城市";
-"widget.guide.size.footer" = "想换尺寸？删掉组件，按上面的步骤重新添加一次就好。";
 "widget.guide.tips.title" = "小提示";
 "widget.guide.tips.order" = "组件显示的城市与 App 的城市列表一致，请先在 App 里添加城市。";
 "widget.guide.tips.refresh" = "增删城市或切换 12/24 小时制后，打开一次 App 即可刷新组件。";
 "widget.guide.tips.empty" = "组件显示「打开%@添加城市」？打开一次 App 就会显示。";
 "widget.guide.mock.date" = "周三 9月16日";
-"widget.guide.mock.local" = "本地";
 
 // MARK: - Theme
 "theme.system" = "跟随系统";

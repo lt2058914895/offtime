@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
+    @EnvironmentObject private var proAccessService: ProAccessService
     @State private var path = NavigationPath()
     @State private var isPresentingFileExporter = false
     @State private var isPresentingFileImporter = false
@@ -11,6 +12,7 @@ struct SettingsView: View {
     /// 导入流程：先读取文件数据到内存，再弹确认框让用户选择「合并 / 替换」策略
     @State private var pendingImportData: Data?
     @State private var showImportConfirm = false
+    @State private var showProPaywall = false
     
     /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接与评分跳转
     private let appStoreID = "6794565774"
@@ -34,6 +36,28 @@ struct SettingsView: View {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
     }
 
+    private var proSection: some View {
+        Section {
+            Button {
+                showProPaywall = true
+            } label: {
+                ProEntryCard(
+                    title: proAccessService.displayTitle,
+                    actionText: String(localized: "pro.entry.action"),
+                    statusText: String(localized: "pro.status.unlocked"),
+                    isUnlocked: proAccessService.isUnlocked,
+                    legacyHintText: proAccessService.isLegacyUnlocked
+                        ? String(localized: "pro.status.legacy.hint")
+                        : nil
+                )
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+        }
+    }
+
     /// 版本行：info 图标 + 版本号，纯只读展示
     private var versionRow: some View {
         HStack {
@@ -49,6 +73,8 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack(path: $path) {
             List {
+                proSection
+
                 Section {
                     Button {
                         path.append(AppRoute.meetingRecommendation)
@@ -133,8 +159,18 @@ struct SettingsView: View {
                         }
                     }
                     .onChange(of: viewModel.themeMode) { _, newMode in
+                        guard ProAccessPolicy.isThemeUnlocked(
+                            newMode,
+                            isUnlocked: proAccessService.isUnlocked
+                        ) else {
+                            showProPaywall = true
+                            viewModel.themeMode = appEnvironment.settings.themeMode
+                            return
+                        }
                         viewModel.updateTheme(newMode)
-                        appEnvironment.settings.themeMode = newMode
+                        var settings = appEnvironment.settings
+                        settings.themeMode = newMode
+                        appEnvironment.updateSettings(settings)
                     }
                 }
                 
@@ -204,6 +240,13 @@ struct SettingsView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
+            .toast(message: Binding(
+                get: { proAccessService.statusMessage },
+                set: { _ in proAccessService.statusMessage = nil }
+            ))
+            .sheet(isPresented: $showProPaywall) {
+                ProPaywallView()
+            }
             // SwiftUI 原生文件导出
             .fileExporter(
                 isPresented: $isPresentingFileExporter,
@@ -330,7 +373,8 @@ private struct MeetingRecommendationCard: View {
                 .clipShape(Circle())
 
         }
-        .padding(.horizontal, 18)
+        .padding(.leading, 18)
+        .padding(.trailing, 12)
         .padding(.vertical, 20)
         .frame(maxWidth: .infinity, minHeight: 96, alignment: .leading)
         .background(
@@ -346,6 +390,87 @@ private struct MeetingRecommendationCard: View {
                 .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
         }
         .shadow(color: .black.opacity(0.06), radius: 8, y: 3)
+    }
+}
+
+private struct ProEntryCard: View {
+    let title: String
+    let actionText: String
+    let statusText: String
+    let isUnlocked: Bool
+    let legacyHintText: String?
+
+    var body: some View {
+        HStack(spacing: 16) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(
+                        LinearGradient(
+                            colors: [.orange, .orange.opacity(0.68)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                Image(systemName: "crown.fill")
+                    .font(.title3.weight(.semibold))
+                    .foregroundColor(.white)
+            }
+            .frame(width: 52, height: 52)
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
+                    Text(title)
+                        .font(.title3.weight(.semibold))
+                        .foregroundColor(.primary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+
+                    Spacer(minLength: 8)
+
+                    HStack(spacing: 4) {
+                        Text(isUnlocked ? statusText : actionText)
+                            .font(.subheadline.weight(.semibold))
+
+                        Image(systemName: isUnlocked ? "checkmark.circle.fill" : "chevron.right")
+                            .font(.subheadline.weight(.semibold))
+                    }
+                    .foregroundColor(.orange)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 5)
+                    .background(Color.orange.opacity(0.12), in: Capsule())
+                    .fixedSize()
+
+                }
+
+                if let legacyHintText {
+                    Text(legacyHintText)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
+        }
+        .padding(.leading, 18)
+        .padding(.trailing, 12)
+        .padding(.vertical, 20)
+        .frame(maxWidth: .infinity, minHeight: 92, alignment: .leading)
+        .background(
+            LinearGradient(
+                colors: [Color.orange.opacity(0.14), Color.orange.opacity(0.04)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: RoundedRectangle(cornerRadius: 20)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.orange.opacity(isUnlocked ? 0.24 : 0.14), lineWidth: 1)
+        }
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 3)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -467,4 +592,6 @@ struct SupportPageView: View {
 
 #Preview {
     SettingsView()
+        .environmentObject(AppEnvironment())
+        .environmentObject(ProAccessService())
 }

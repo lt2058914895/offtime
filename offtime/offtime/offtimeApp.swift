@@ -4,6 +4,7 @@ import SwiftData
 @main
 struct offtimeApp: App {
     @StateObject private var appEnvironment = AppEnvironment()
+    @StateObject private var proAccessService = ProAccessService()
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
@@ -26,10 +27,15 @@ struct offtimeApp: App {
                 }
             }
             .environmentObject(appEnvironment)
+            .environmentObject(proAccessService)
             .modelContainer(appEnvironment.modelContainer)
             .preferredColorScheme(appEnvironment.colorScheme)
-            .onAppear {
+            .task {
+                proAccessService.migrateLegacyIfNeeded(
+                    hasExistingUserData: appEnvironment.hasLegacyProEvidence()
+                )
                 appEnvironment.setup()
+                await proAccessService.load()
             }
             .onChange(of: scenePhase) { _, phase in
                 // 进入后台前补一次发布：改城市时那次刷新请求若被系统合并/丢弃，
@@ -93,5 +99,6 @@ struct SidebarAdaptableTabStyle: ViewModifier {
 #Preview {
     MainTabView()
         .environmentObject(AppEnvironment())
+        .environmentObject(ProAccessService())
         .modelContainer(for: CityModel.self, inMemory: true)
 }
