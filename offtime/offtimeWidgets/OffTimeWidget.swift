@@ -72,6 +72,8 @@ struct OffTimeProvider: AppIntentTimelineProvider {
             cities: cities,
             localTimezoneId: base.localTimezoneId,
             use24Hour: base.use24Hour,
+            themeMode: base.themeMode,
+            widgetTheme: base.widgetTheme,
             updatedAt: base.updatedAt
         )
     }
@@ -162,6 +164,9 @@ struct OffTimeWidgetView: View {
 
     private var snapshot: WidgetSnapshot { entry.snapshot }
     private var cities: [WidgetCitySnapshot] { snapshot.cities }
+    private var customTheme: ThemeStyleConfiguration? {
+        snapshot.widgetTheme
+    }
     private var preferredColorScheme: ColorScheme? {
         switch snapshot.themeMode {
         case .light: return .light
@@ -189,9 +194,11 @@ struct OffTimeWidgetView: View {
                 systemSmall
             }
         }
+        .foregroundStyle(customTheme?.resolvedAccentColor ?? Color.primary)
         .containerBackground(for: .widget) {
             widgetBackground
         }
+        .tint(customTheme?.resolvedAccentColor ?? Color.accentColor)
         .preferredColorScheme(preferredColorScheme)
     }
 
@@ -400,7 +407,7 @@ struct OffTimeWidgetView: View {
                 Text("·")
                     .foregroundStyle(.tertiary)
                 Text(relation.text)
-                    .foregroundStyle(relation.color)
+                    .foregroundStyle(.secondary)
             }
         }
         .font(.caption2)
@@ -509,13 +516,9 @@ struct OffTimeWidgetView: View {
         case .accessoryCircular, .accessoryRectangular:
             AccessoryWidgetBackground()
         default:
-            LinearGradient(
-                colors: [
-                    Color.accentColor.opacity(0.22),
-                    Color(.secondarySystemBackground)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
+            ThemeWidgetBackground(
+                color: customTheme?.backgroundColor,
+                photo: customTheme?.backgroundPhoto
             )
         }
     }

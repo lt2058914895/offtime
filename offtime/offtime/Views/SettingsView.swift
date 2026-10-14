@@ -79,6 +79,7 @@ struct SettingsView: View {
             meetingSection
             generalSection
             displaySection
+            dataManagementSection
             aboutSection
         }
         .listStyle(.insetGrouped)
@@ -168,7 +169,23 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
 
-            themePicker
+            HStack(spacing: 12) {
+                Image(systemName: "clock.fill")
+                    .foregroundColor(.blue)
+                    .font(.title3)
+
+                Text(String(localized: "settings.24hour"))
+
+                Spacer()
+
+                Toggle(String(localized: "settings.24hour"), isOn: $viewModel.use24Hour)
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+            }
+            .onChange(of: viewModel.use24Hour) {
+                viewModel.toggle24Hour()
+                appEnvironment.settings.use24Hour = viewModel.use24Hour
+            }
         }
     }
 
@@ -181,20 +198,14 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
 
-            Toggle(isOn: $viewModel.use24Hour) {
-                HStack(spacing: 12) {
-                    Image(systemName: "clock.fill")
-                        .foregroundColor(.blue)
-                        .font(.title3)
+            customThemeRow
 
-                    Text(String(localized: "settings.24hour"))
-                }
-            }
-            .onChange(of: viewModel.use24Hour) {
-                viewModel.toggle24Hour()
-                appEnvironment.settings.use24Hour = viewModel.use24Hour
-            }
+            themePicker
+        }
+    }
 
+    private var dataManagementSection: some View {
+        Section(String(localized: "settings.data.section")) {
             Button {
                 prepareExportFile()
                 isPresentingFileExporter = true
@@ -277,7 +288,6 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-
             Spacer()
 
             settingsChevron
@@ -323,6 +333,25 @@ struct SettingsView: View {
                     .foregroundColor(Color(uiColor: .tertiaryLabel))
             }
         }
+    }
+
+    private var customThemeRow: some View {
+        Button {
+            path.append(AppRoute.customTheme)
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "paintbrush.fill")
+                    .foregroundColor(.blue)
+                    .font(.title3)
+
+                Text(String(localized: "settings.custom.theme"))
+
+                Spacer()
+
+                settingsChevron
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     private var aboutSection: some View {
@@ -442,6 +471,8 @@ struct SettingsView: View {
             SupportPageView()
         case .meetingRecommendation:
             MeetingView(embedsNavigationStack: false)
+        case .customTheme:
+            CustomThemeSettingsView()
         default:
             EmptyView()
         }

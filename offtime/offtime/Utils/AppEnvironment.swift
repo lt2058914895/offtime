@@ -197,14 +197,30 @@ final class AppEnvironment: ObservableObject {
     func loadSettings() {
         let use24Hour = UserDefaults.standard.object(forKey: "settings_use24Hour") as? Bool
             ?? Locale.systemUses24Hour
-        let themeRaw = UserDefaults.standard.integer(forKey: "settings_themeMode")
-        let themeMode = ThemeMode(rawValue: themeRaw) ?? .system
+        let themeMode = ThemeMode(
+            rawValue: UserDefaults.standard.integer(forKey: "settings_themeMode")
+        ) ?? .system
+        let widgetCustomTheme = ThemeStyleConfiguration(
+            accentColor: Self.loadAccentColor(forKey: "settings_custom_widget_accent"),
+            customAccentColor: Self.loadColor(forKey: "settings_custom_widget_custom_accent"),
+            backgroundColor: Self.loadColor(forKey: "settings_custom_widget_background"),
+            backgroundPhoto: Self.loadBackgroundPhoto(
+                forKey: "settings_custom_widget_background_photo"
+            )
+        )
         let currentCityTimezoneId = UserDefaults.standard.string(forKey: "settings_currentCityTimezoneId")
             ?? TimeZone.current.identifier
         let currentCityName = UserDefaults.standard.string(forKey: "settings_currentCityName")
         let currentCityEn = UserDefaults.standard.string(forKey: "settings_currentCityEn")
-        settings = AppSettings(use24Hour: use24Hour, themeMode: themeMode, currentCityTimezoneId: currentCityTimezoneId, currentCityName: currentCityName, currentCityEn: currentCityEn)
-        
+        settings = AppSettings(
+            use24Hour: use24Hour,
+            themeMode: themeMode,
+            widgetCustomTheme: widgetCustomTheme,
+            currentCityTimezoneId: currentCityTimezoneId,
+            currentCityName: currentCityName,
+            currentCityEn: currentCityEn
+        )
+
         // 首次启动时，如果 currentCityName 为空，尝试从内置城市库匹配名称
         if settings.currentCityName == nil, let tzId = settings.currentCityTimezoneId {
             let (name, en) = CityService.matchCity(for: tzId)
@@ -218,6 +234,13 @@ final class AppEnvironment: ObservableObject {
     func updateSettings(_ newSettings: AppSettings) {
         UserDefaults.standard.set(newSettings.use24Hour, forKey: "settings_use24Hour")
         UserDefaults.standard.set(newSettings.themeMode.rawValue, forKey: "settings_themeMode")
+        Self.saveAccentColor(newSettings.widgetCustomTheme.accentColor, forKey: "settings_custom_widget_accent")
+        Self.saveColor(newSettings.widgetCustomTheme.customAccentColor, forKey: "settings_custom_widget_custom_accent")
+        Self.saveColor(newSettings.widgetCustomTheme.backgroundColor, forKey: "settings_custom_widget_background")
+        Self.saveBackgroundPhoto(
+            newSettings.widgetCustomTheme.backgroundPhoto,
+            forKey: "settings_custom_widget_background_photo"
+        )
         UserDefaults.standard.set(newSettings.currentCityTimezoneId, forKey: "settings_currentCityTimezoneId")
         if let name = newSettings.currentCityName {
             UserDefaults.standard.set(name, forKey: "settings_currentCityName")
@@ -251,6 +274,57 @@ final class AppEnvironment: ObservableObject {
         case .dark:
             return .dark
         }
+    }
+
+    private static func loadColor(forKey key: String) -> ThemeColor? {
+        guard let components = UserDefaults.standard.string(forKey: key) else { return nil }
+        let values = components.split(separator: ",").compactMap { Double($0) }
+        guard values.count == 4 else { return nil }
+        return ThemeColor(red: values[0], green: values[1], blue: values[2], opacity: values[3])
+    }
+
+    private static func saveColor(_ color: ThemeColor?, forKey key: String) {
+        guard let color else {
+            UserDefaults.standard.removeObject(forKey: key)
+            return
+        }
+
+        let components = [
+            String(color.red),
+            String(color.green),
+            String(color.blue),
+            String(color.opacity)
+        ].joined(separator: ",")
+        UserDefaults.standard.set(components, forKey: key)
+    }
+
+    private static func loadBackgroundPhoto(forKey key: String) -> ThemeBackgroundPhoto? {
+        guard let rawValue = UserDefaults.standard.object(forKey: key) as? Int else {
+            return nil
+        }
+        return ThemeBackgroundPhoto(rawValue: rawValue)
+    }
+
+    private static func saveBackgroundPhoto(_ photo: ThemeBackgroundPhoto?, forKey key: String) {
+        if let photo {
+            UserDefaults.standard.set(photo.rawValue, forKey: key)
+        } else {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+    }
+
+    private static func loadAccentColor(forKey key: String) -> ThemeAccentColor? {
+        guard let rawValue = UserDefaults.standard.object(forKey: key) as? Int else { return nil }
+        return ThemeAccentColor(rawValue: rawValue)
+    }
+
+    private static func saveAccentColor(_ accentColor: ThemeAccentColor?, forKey key: String) {
+        guard let accentColor else {
+            UserDefaults.standard.removeObject(forKey: key)
+            return
+        }
+
+        UserDefaults.standard.set(accentColor.rawValue, forKey: key)
     }
 
     deinit {

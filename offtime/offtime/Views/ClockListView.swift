@@ -115,6 +115,8 @@ struct ClockListView: View {
                     EmptyView()
                 case .meetingRecommendation:
                     EmptyView()
+                case .customTheme:
+                    EmptyView()
                 }
             }
             .toast(message: $viewModel.errorMessage)

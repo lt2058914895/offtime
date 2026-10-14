@@ -206,6 +206,7 @@ enum ViewState: Equatable {
 struct AppSettings: Equatable, Codable {
     var use24Hour: Bool
     var themeMode: ThemeMode
+    var widgetCustomTheme: ThemeStyleConfiguration
     var currentCityTimezoneId: String?
     var currentCityName: String?
     var currentCityEn: String?
@@ -215,6 +216,7 @@ extension AppSettings {
     static let defaults = AppSettings(
         use24Hour: Locale.systemUses24Hour,
         themeMode: .system,
+        widgetCustomTheme: .default,
         currentCityTimezoneId: TimeZone.current.identifier,
         currentCityName: nil,
         currentCityEn: nil
@@ -226,7 +228,7 @@ enum ThemeMode: Int, Equatable, CaseIterable, Codable, Identifiable {
     case system = 0
     case light = 1
     case dark = 2
-    
+
     var displayName: String {
         switch self {
         case .system: return String(localized: "theme.system")
@@ -248,6 +250,7 @@ enum AppRoute: Hashable {
     case addWidgetGuide
     case supportPage
     case meetingRecommendation
+    case customTheme
     case cityDetail(UUID)
     case reminderList
 }

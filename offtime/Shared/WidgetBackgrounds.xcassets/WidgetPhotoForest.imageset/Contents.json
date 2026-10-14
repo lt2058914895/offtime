@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "WidgetPhotoForest.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

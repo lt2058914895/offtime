@@ -30,6 +30,7 @@ enum WidgetSnapshotService {
                 localTimezoneId: localTimezoneId,
                 use24Hour: settings.use24Hour,
                 themeMode: WidgetThemeMode(rawValue: settings.themeMode.rawValue),
+                widgetTheme: settings.widgetCustomTheme,
                 updatedAt: Date()
             )
 

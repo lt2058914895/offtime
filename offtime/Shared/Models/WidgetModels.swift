@@ -23,6 +23,7 @@ struct WidgetSnapshot: Codable, Hashable {
     let localTimezoneId: String
     let use24Hour: Bool
     var themeMode: WidgetThemeMode?
+    var widgetTheme: ThemeStyleConfiguration?
     let updatedAt: Date
 }
 
@@ -35,6 +36,7 @@ extension WidgetSnapshot {
             && localTimezoneId == other.localTimezoneId
             && use24Hour == other.use24Hour
             && themeMode == other.themeMode
+            && widgetTheme == other.widgetTheme
     }
 
     static func fallback(date: Date = Date()) -> WidgetSnapshot {
@@ -57,6 +59,7 @@ extension WidgetSnapshot {
             localTimezoneId: timezone.identifier,
             use24Hour: true,
             themeMode: nil,
+            widgetTheme: nil,
             updatedAt: date
         )
     }
@@ -74,6 +77,7 @@ extension WidgetSnapshot {
             localTimezoneId: localTimezoneId,
             use24Hour: use24Hour,
             themeMode: nil,
+            widgetTheme: nil,
             updatedAt: date
         )
     }
@@ -121,6 +125,7 @@ extension WidgetSnapshot {
             localTimezoneId: localTimezoneId,
             use24Hour: true,
             themeMode: nil,
+            widgetTheme: nil,
             updatedAt: date
         )
     }
