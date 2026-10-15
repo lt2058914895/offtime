@@ -107,7 +107,7 @@ struct OnboardingView: View {
                 .fontWeight(.bold)
 
             VStack(alignment: .leading, spacing: 18) {
-                featureRow(icon: "arrow.up.arrow.down",
+                featureRow(icon: "building.2",
                            title: "onboarding.features.manage",
                            desc: "onboarding.features.manage.desc")
                 featureRow(icon: "person.2",
@@ -122,6 +122,9 @@ struct OnboardingView: View {
                 featureRow(icon: "moon",
                            title: "onboarding.features.theme",
                            desc: "onboarding.features.theme.desc")
+                featureRow(icon: "square.grid.2x2",
+                           title: "onboarding.features.widget",
+                           desc: "onboarding.features.widget.desc")
             }
             .padding(.horizontal, 28)
 

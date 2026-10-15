@@ -331,33 +331,55 @@ struct CustomThemeSettingsView: View {
 
     private var lockedContent: some View {
         ScrollView {
-            VStack(spacing: 14) {
-                Image(systemName: "crown.fill")
-                    .font(.system(size: 34))
-                    .foregroundStyle(.orange)
-
-                Text(String(localized: "custom.theme.pro.title"))
-                    .font(.headline)
-
-                Text(String(localized: "custom.theme.pro.detail"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-
-                Button {
-                    showProPaywall = true
-                } label: {
-                    Text(String(localized: "custom.theme.unlock"))
-                        .frame(maxWidth: .infinity)
+            VStack(spacing: 16) {
+                WidgetStylePreviewView(
+                    cities: previewCities,
+                    localTimezoneId: settings.currentCityTimezoneId ?? TimeZone.current.identifier,
+                    use24Hour: settings.use24Hour,
+                    date: appEnvironment.currentDate,
+                    theme: .default
+                )
+                .overlay {
+                    LinearGradient(
+                        colors: [Color.black.opacity(0.04), Color.black.opacity(0.32)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
                 }
-                .buttonStyle(.borderedProminent)
+                .overlay(alignment: .topTrailing) {
+                    ProBadge()
+                        .padding(12)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+
+                VStack(spacing: 12) {
+                    Image(systemName: "crown.fill")
+                        .font(.system(size: 30))
+                        .foregroundStyle(.orange)
+
+                    Text(String(localized: "custom.theme.pro.title"))
+                        .font(.headline)
+
+                    Text(String(localized: "custom.theme.pro.detail"))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    Button {
+                        showProPaywall = true
+                    } label: {
+                        Text(String(localized: "custom.theme.unlock"))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding(20)
+                .background(Color(.secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
             }
-            .padding(22)
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemGroupedBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
             .padding(16)
         }
+        .preferredColorScheme(previewColorScheme ?? systemColorScheme)
     }
 
     private var settings: AppSettings { appEnvironment.settings }

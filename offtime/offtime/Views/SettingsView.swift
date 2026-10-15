@@ -348,6 +348,10 @@ struct SettingsView: View {
 
                 Spacer()
 
+                if !proAccessService.isUnlocked {
+                    ProBadge()
+                }
+
                 settingsChevron
             }
         }

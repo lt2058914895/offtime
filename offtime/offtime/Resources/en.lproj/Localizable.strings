@@ -303,12 +303,12 @@
 
 // MARK: - Onboarding
 "onboarding.welcome.title" = "Welcome to %@";
-"onboarding.welcome.subtitle" = "Cross-border communication and international travel — time zones at a glance";
+"onboarding.welcome.subtitle" = "Cross-border communication and international travel — time at a glance";
 "onboarding.cities.title" = "Add cities you track";
 "onboarding.cities.subtitle" = "Your local city is already added. Add a few more you check often.";
 "onboarding.features.title" = "More features";
-"onboarding.features.manage" = "Manage Clocks";
-"onboarding.features.manage.desc" = "Tap Manage to select, delete, or drag to reorder";
+"onboarding.features.manage" = "Manage Cities";
+"onboarding.features.manage.desc" = "Manage your city list with multi-select delete and drag-to-reorder";
 "onboarding.features.meeting" = "Cross-Timezone Meeting Slots";
 "onboarding.features.meeting.desc" = "Auto-suggest the best meeting slots for everyone";
 "onboarding.features.converter" = "Time Converter";
@@ -317,6 +317,8 @@
 "onboarding.features.format.desc" = "Switch the time format in Settings";
 "onboarding.features.theme" = "Dark Mode";
 "onboarding.features.theme.desc" = "Follow the system or pick manually";
+"onboarding.features.widget" = "Widgets";
+"onboarding.features.widget.desc" = "Keep your cities visible on the Home or Lock Screen";
 "onboarding.next" = "Next";
 "onboarding.start" = "Get Started";
 "onboarding.skip" = "Skip";

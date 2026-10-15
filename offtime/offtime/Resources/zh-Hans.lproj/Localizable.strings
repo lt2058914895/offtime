@@ -303,12 +303,12 @@
 
 // MARK: - Onboarding
 "onboarding.welcome.title" = "欢迎使用%@";
-"onboarding.welcome.subtitle" = "跨境沟通、国际行程，时区一目了然";
+"onboarding.welcome.subtitle" = "跨境沟通、国际行程，时间一目了然";
 "onboarding.cities.title" = "添加你关心的城市";
 "onboarding.cities.subtitle" = "已为你加入本地城市，再添加几个常关注的城市吧";
 "onboarding.features.title" = "更多功能";
-"onboarding.features.manage" = "时钟管理";
-"onboarding.features.manage.desc" = "点击「管理」可多选删除、拖动排序";
+"onboarding.features.manage" = "城市管理";
+"onboarding.features.manage.desc" = "多选删除、拖动排序，管理常用城市";
 "onboarding.features.meeting" = "跨时区会议档期";
 "onboarding.features.meeting.desc" = "自动推荐全员都合适的最优开会时段";
 "onboarding.features.converter" = "时区转换";
@@ -317,6 +317,8 @@
 "onboarding.features.format.desc" = "在设置中切换时间显示格式";
 "onboarding.features.theme" = "深色模式";
 "onboarding.features.theme.desc" = "跟随系统或手动切换外观";
+"onboarding.features.widget" = "小组件";
+"onboarding.features.widget.desc" = "把常用城市放到主屏幕/锁定屏幕，随时查看时间";
 "onboarding.next" = "下一步";
 "onboarding.start" = "开始使用";
 "onboarding.skip" = "跳过";
