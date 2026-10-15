@@ -117,17 +117,26 @@ struct ToastView: View {
 }
 
 struct ProBadge: View {
+    var showsText = true
+
     var body: some View {
-        HStack(spacing: 4) {
+        if showsText {
+            HStack(spacing: 4) {
+                Image(systemName: "crown.fill")
+                Text("PRO")
+            }
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Color.orange, in: Capsule())
+            .shadow(color: .black.opacity(0.08), radius: 4, y: 1)
+            .accessibilityLabel(Text("Pro"))
+        } else {
             Image(systemName: "crown.fill")
-            Text("PRO")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(Color.orange)
+                .accessibilityLabel(Text("Pro"))
         }
-        .font(.caption2.weight(.bold))
-        .foregroundStyle(.white)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Color.orange, in: Capsule())
-        .shadow(color: .black.opacity(0.08), radius: 4, y: 1)
-        .accessibilityLabel(Text("Pro"))
     }
 }
