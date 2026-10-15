@@ -10,6 +10,7 @@ struct CustomThemeSettingsView: View {
     @State private var showProPaywall = false
     @State private var draftTheme: ThemeStyleConfiguration?
     @State private var customBackgroundColor: Color?
+    @State private var successMessage: String?
 
     var body: some View {
         Group {
@@ -39,6 +40,7 @@ struct CustomThemeSettingsView: View {
         .sheet(isPresented: $showProPaywall) {
             ProPaywallView()
         }
+        .toast(message: $successMessage)
     }
 
     private var editorContent: some View {
@@ -306,6 +308,12 @@ struct CustomThemeSettingsView: View {
         Button {
             update { settings in
                 settings.widgetCustomTheme = editingTheme
+            }
+
+            successMessage = String(localized: "custom.theme.saved.success")
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 900_000_000)
+                dismiss()
             }
         } label: {
             Text(String(localized: "custom.theme.confirm"))

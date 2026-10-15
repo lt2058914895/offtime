@@ -299,6 +299,7 @@
 "custom.theme.pro.title" = "Pro Feature";
 "custom.theme.pro.detail" = "Unlock Pro to customize widget theme styles.";
 "custom.theme.unlock" = "Unlock Pro";
+"custom.theme.saved.success" = "Changes saved";
 
 // MARK: - Onboarding
 "onboarding.welcome.title" = "Welcome to %@";

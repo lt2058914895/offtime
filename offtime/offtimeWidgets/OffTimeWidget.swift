@@ -167,6 +167,21 @@ struct OffTimeWidgetView: View {
     private var customTheme: ThemeStyleConfiguration? {
         snapshot.widgetTheme
     }
+
+    private var isLockScreenWidget: Bool {
+        switch family {
+        case .accessoryCircular, .accessoryRectangular:
+            true
+        default:
+            false
+        }
+    }
+
+    private var resolvedAccentColor: Color? {
+        guard !isLockScreenWidget else { return nil }
+
+        return customTheme?.resolvedAccentColor
+    }
     private var preferredColorScheme: ColorScheme? {
         switch snapshot.themeMode {
         case .light: return .light
@@ -194,11 +209,11 @@ struct OffTimeWidgetView: View {
                 systemSmall
             }
         }
-        .foregroundStyle(customTheme?.resolvedAccentColor ?? Color.primary)
+        .foregroundStyle(resolvedAccentColor ?? Color.primary)
         .containerBackground(for: .widget) {
             widgetBackground
         }
-        .tint(customTheme?.resolvedAccentColor ?? Color.accentColor)
+        .tint(resolvedAccentColor ?? Color.accentColor)
         .preferredColorScheme(preferredColorScheme)
     }
 
