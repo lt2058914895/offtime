@@ -234,10 +234,7 @@
 "pro.legacy.purchase.prompt" = "Pro access remains available without purchasing. A purchase is appreciated if you'd like to support us.";
 "pro.restore" = "Restore Purchases";
 "pro.paywall.headline" = "Unlock %@ Pro";
-"pro.feature.cities.title" = "Unlimited Cities";
-"pro.feature.cities.detail" = "Add 4 cities free. Unlock Pro for unlimited cities.";
-"pro.feature.themes.title" = "Customize Theme Styles";
-"pro.feature.themes.detail" = "Customize app and widget theme styles.";
+"pro.feature.themes.title" = "Custom Widget Theme";
 "pro.purchase" = "Purchase";
 "pro.purchase.note" = "One-time purchase • Lifetime access • Family Sharing enabled";
 "pro.purchase.note.legacy.label" = "Note:";
@@ -249,7 +246,6 @@
 "pro.restore.success" = "Purchases restored";
 "pro.restore.empty" = "No eligible purchases found";
 "pro.restore.failed" = "Restore could not be completed";
-"pro.city.limit" = "Free version supports up to 4 cities";
 "widget.guide.size.large" = "Large";
 "widget.guide.size.caption.small" = "Shows 1 city";
 "widget.guide.size.caption.medium" = "Shows 2 cities";

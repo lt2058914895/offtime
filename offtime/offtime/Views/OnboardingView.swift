@@ -4,10 +4,8 @@ import Combine
 /// 首次启动引导：3 步（欢迎 → 添加城市 → 功能介绍）
 struct OnboardingView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
-    @EnvironmentObject private var proAccessService: ProAccessService
     @StateObject private var viewModel = OnboardingViewModel()
     @State private var page = 0
-    @State private var limitMessage: String?
 
     var body: some View {
         TabView(selection: $page) {
@@ -15,7 +13,6 @@ struct OnboardingView: View {
             addCitiesStep.tag(1)
             featuresStep.tag(2)
         }
-        .toast(message: $limitMessage)
         .tabViewStyle(.page(indexDisplayMode: .always))
         .background(Color(.systemBackground))
         .overlay(alignment: .topTrailing) {
@@ -149,15 +146,6 @@ struct OnboardingView: View {
     }
 
     private func toggleCity(_ city: OnboardingViewModel.QuickCity) {
-        if !viewModel.isAdded(city) {
-            guard ProAccessPolicy.canAddCity(
-                currentCount: viewModel.addedCityNames.count,
-                isUnlocked: proAccessService.isUnlocked
-            ) else {
-                limitMessage = String(localized: "pro.city.limit")
-                return
-            }
-        }
         viewModel.toggle(city)
     }
 
@@ -247,5 +235,4 @@ private final class OnboardingViewModel: ObservableObject {
 #Preview {
     OnboardingView()
         .environmentObject(AppEnvironment())
-        .environmentObject(ProAccessService())
 }

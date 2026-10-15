@@ -56,12 +56,7 @@ struct ProPaywallView: View {
     private var featureList: some View {
         VStack(spacing: 12) {
             featureRow(
-                title: String(localized: "pro.feature.cities.title"),
-                detail: String(localized: "pro.feature.cities.detail")
-            )
-            featureRow(
-                title: String(localized: "pro.feature.themes.title"),
-                detail: String(localized: "pro.feature.themes.detail")
+                title: String(localized: "pro.feature.themes.title")
             )
         }
         .padding(18)

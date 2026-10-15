@@ -10,12 +10,12 @@
       "internalID" : "6F7A4E4C481B44C282F8F7A19E5F8B67",
       "localizations" : [
         {
-          "description" : "Unlock unlimited cities and app/widget themes.",
+          "description" : "Unlock widget theme customization.",
           "displayName" : "OffTime Pro",
           "locale" : "en_US"
         },
         {
-          "description" : "一次购买，解锁无限城市以及 App 与小组件主题外观。",
+          "description" : "一次购买，解锁小组件主题外观。",
           "displayName" : "世界时钟 Pro",
           "locale" : "zh_CN"
         }

@@ -10,12 +10,7 @@ enum ProAccessSource: String {
 }
 
 enum ProAccessPolicy {
-    static let cityLimit = 4
     static let productID = "offtime.pro.lifetime"
-
-    static func canAddCity(currentCount: Int, isUnlocked: Bool) -> Bool {
-        isUnlocked || currentCount < cityLimit
-    }
 
     static func isThemeUnlocked(_ mode: ThemeMode, isUnlocked: Bool) -> Bool {
         isUnlocked || mode == .system

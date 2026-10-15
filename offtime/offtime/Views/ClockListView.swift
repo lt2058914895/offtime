@@ -4,7 +4,6 @@ import SwiftData
 struct ClockListView: View {
     @StateObject private var viewModel = ClockListViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
-    @EnvironmentObject private var proAccessService: ProAccessService
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.scenePhase) private var scenePhase
     /// 当前选中的 Tab（由 MainTabView 传入），用于「仅时钟 Tab 才运行 Timer」
@@ -18,7 +17,6 @@ struct ClockListView: View {
     @State private var isShowingBatchDeleteConfirm = false
     /// 长按城市「分享时间」要分享的文案（非空时弹出 ShareSheet）
     @State private var shareItem: ShareTextItem?
-    @State private var showProPaywall = false
     /// 上次见到的城市数据版本号，用于切回 Tab 时判断是否需要静默刷新
     @State private var lastSeenCitiesRevision: Int = 0
 
@@ -78,13 +76,6 @@ struct ClockListView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        guard ProAccessPolicy.canAddCity(
-                            currentCount: viewModel.cities.count,
-                            isUnlocked: proAccessService.isUnlocked
-                        ) else {
-                            showProPaywall = true
-                            return
-                        }
                         path.append(AppRoute.cityPicker)
                     }) {
                         Image(systemName: "plus")
@@ -120,9 +111,6 @@ struct ClockListView: View {
                 }
             }
             .toast(message: $viewModel.errorMessage)
-            .sheet(isPresented: $showProPaywall) {
-                ProPaywallView()
-            }
             .onReceive(appEnvironment.$currentDate) { newValue in
                 viewModel.currentDate = newValue
             }
