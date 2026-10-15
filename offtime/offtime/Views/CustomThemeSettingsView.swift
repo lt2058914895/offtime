@@ -11,15 +11,10 @@ struct CustomThemeSettingsView: View {
     @State private var draftTheme: ThemeStyleConfiguration?
     @State private var customBackgroundColor: Color?
     @State private var successMessage: String?
+    @State private var shouldApplyThemeAfterUnlock = false
 
     var body: some View {
-        Group {
-            if proAccessService.isUnlocked {
-                editorContent
-            } else {
-                lockedContent
-            }
-        }
+        editorContent
         .background(Color(.systemGroupedBackground))
         .navigationTitle(String(localized: "custom.theme.title"))
         .navigationBarTitleDisplayMode(.inline)
@@ -39,6 +34,12 @@ struct CustomThemeSettingsView: View {
         .toolbar(.hidden, for: .tabBar)
         .sheet(isPresented: $showProPaywall) {
             ProPaywallView()
+        }
+        .onChange(of: proAccessService.isUnlocked) { _, isUnlocked in
+            guard isUnlocked, shouldApplyThemeAfterUnlock else { return }
+
+            shouldApplyThemeAfterUnlock = false
+            applyTheme()
         }
         .toast(message: $successMessage)
     }
@@ -304,21 +305,21 @@ struct CustomThemeSettingsView: View {
         .accessibilityLabel(photo.displayName)
     }
 
+    @ViewBuilder
     private var confirmButton: some View {
-        Button {
-            update { settings in
-                settings.widgetCustomTheme = editingTheme
-            }
+        if proAccessService.isUnlocked {
+            applyThemeButton
+        } else {
+            proUnlockPrompt
+        }
+    }
 
-            successMessage = String(localized: "custom.theme.saved.success")
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 900_000_000)
-                dismiss()
-            }
+    private var applyThemeButton: some View {
+        Button {
+            applyTheme()
         } label: {
             Text(String(localized: "custom.theme.confirm"))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .frame(maxWidth: .infinity, minHeight: 46)
                 .foregroundStyle(.white)
                 .background(
                     hasUnconfirmedChanges ? Color.accentColor : Color.accentColor.opacity(0.4),
@@ -329,57 +330,38 @@ struct CustomThemeSettingsView: View {
         .disabled(!hasUnconfirmedChanges)
     }
 
-    private var lockedContent: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                WidgetStylePreviewView(
-                    cities: previewCities,
-                    localTimezoneId: settings.currentCityTimezoneId ?? TimeZone.current.identifier,
-                    use24Hour: settings.use24Hour,
-                    date: appEnvironment.currentDate,
-                    theme: .default
-                )
-                .overlay {
-                    LinearGradient(
-                        colors: [Color.black.opacity(0.04), Color.black.opacity(0.32)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                }
-                .overlay(alignment: .topTrailing) {
-                    ProBadge()
-                        .padding(12)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-
-                VStack(spacing: 12) {
+    private var proUnlockPrompt: some View {
+        VStack(spacing: 10) {
+            Button {
+                shouldApplyThemeAfterUnlock = true
+                showProPaywall = true
+            } label: {
+                HStack(spacing: 6) {
                     Image(systemName: "crown.fill")
-                        .font(.system(size: 30))
-                        .foregroundStyle(.orange)
-
-                    Text(String(localized: "custom.theme.pro.title"))
-                        .font(.headline)
-
-                    Text(String(localized: "custom.theme.pro.detail"))
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    Button {
-                        showProPaywall = true
-                    } label: {
-                        Text(String(localized: "custom.theme.unlock"))
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
+                    Text(String(localized: "custom.theme.unlock"))
                 }
-                .padding(20)
-                .background(Color(.secondarySystemGroupedBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .font(.subheadline.weight(.semibold))
+                .frame(maxWidth: .infinity, minHeight: 46)
+                .foregroundStyle(Color.orange)
+                .background(
+                    Color.orange.opacity(0.12),
+                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                )
             }
-            .padding(16)
+            .buttonStyle(.plain)
         }
-        .preferredColorScheme(previewColorScheme ?? systemColorScheme)
+    }
+
+    private func applyTheme() {
+        update { settings in
+            settings.widgetCustomTheme = editingTheme
+        }
+
+        successMessage = String(localized: "custom.theme.saved.success")
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 900_000_000)
+            dismiss()
+        }
     }
 
     private var settings: AppSettings { appEnvironment.settings }
@@ -453,11 +435,6 @@ struct CustomThemeSettingsView: View {
     }
 
     private func updateTheme(_ transform: (inout ThemeStyleConfiguration) -> Void) {
-        guard proAccessService.isUnlocked else {
-            showProPaywall = true
-            return
-        }
-
         var theme = editingTheme
         transform(&theme)
         draftTheme = theme
