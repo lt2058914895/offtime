@@ -9,6 +9,7 @@ struct CustomThemeSettingsView: View {
     @Query(sort: \CityModel.sortIndex) private var cityModels: [CityModel] = []
     @State private var showProPaywall = false
     @State private var draftTheme: ThemeStyleConfiguration?
+    @State private var customBackgroundColor: Color?
 
     var body: some View {
         Group {
@@ -52,6 +53,9 @@ struct CustomThemeSettingsView: View {
             .padding(.vertical, 12)
             .onAppear {
                 draftTheme = settings.widgetCustomTheme
+                if isCustomBackgroundSelected {
+                    customBackgroundColor = editingTheme.backgroundColor?.color
+                }
             }
         }
         .animation(.easeInOut(duration: 0.18), value: editingTheme)
@@ -66,6 +70,7 @@ struct CustomThemeSettingsView: View {
                 Spacer()
 
                 Button(role: .destructive) {
+                    customBackgroundColor = nil
                     updateTheme { $0 = .default }
                 } label: {
                     Label(String(localized: "custom.theme.reset"), systemImage: "arrow.counterclockwise")
@@ -212,12 +217,13 @@ struct CustomThemeSettingsView: View {
 
     private var defaultBackgroundChip: some View {
         Button {
+            customBackgroundColor = nil
             updateTheme {
                 $0.backgroundColor = nil
                 $0.backgroundPhoto = nil
             }
         } label: {
-            ThemeColorChip(color: nil, isSelected: editingTheme.backgroundColor == nil)
+            ThemeColorChip(color: nil, isSelected: isDefaultBackgroundSelected)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "custom.theme.background.default"))
@@ -225,6 +231,7 @@ struct CustomThemeSettingsView: View {
 
     private func backgroundChip(for option: ThemeBackgroundOption) -> some View {
         Button {
+            customBackgroundColor = nil
             updateTheme {
                 $0.backgroundColor = ThemeColor(color: option.color)
                 $0.backgroundPhoto = nil
@@ -241,16 +248,17 @@ struct CustomThemeSettingsView: View {
 
     private var customBackgroundPicker: some View {
         ThemeColorChip(
-            color: editingTheme.backgroundColor?.color,
-            isSelected: editingTheme.backgroundColor != nil && editingTheme.backgroundPhoto == nil,
+            color: customBackgroundColor,
+            isSelected: isCustomBackgroundSelected,
             showsCheckmark: false
         )
             .overlay {
                 ColorPicker(
                     String(localized: "custom.theme.background.custom"),
                     selection: Binding(
-                        get: { editingTheme.backgroundColor?.color ?? .white },
+                        get: { customBackgroundColor ?? .white },
                         set: { color in
+                            customBackgroundColor = color
                             updateTheme {
                                 $0.backgroundColor = ThemeColor(color: color)
                                 $0.backgroundPhoto = nil
@@ -260,10 +268,10 @@ struct CustomThemeSettingsView: View {
                     supportsOpacity: false
                 )
                 .labelsHidden()
-                    }
+            }
             .overlay {
-                if editingTheme.backgroundColor != nil && editingTheme.backgroundPhoto == nil {
-                    ThemeColorCheckmark(color: editingTheme.backgroundColor?.color)
+                if isCustomBackgroundSelected {
+                    ThemeColorCheckmark(color: customBackgroundColor)
                 }
             }
         .accessibilityLabel(String(localized: "custom.theme.background.custom"))
@@ -271,6 +279,7 @@ struct CustomThemeSettingsView: View {
 
     private func backgroundPhotoChip(for photo: ThemeBackgroundPhoto) -> some View {
         Button {
+            customBackgroundColor = nil
             updateTheme {
                 $0.backgroundColor = nil
                 $0.backgroundPhoto = photo
@@ -401,6 +410,18 @@ struct CustomThemeSettingsView: View {
         return selectedColor == ThemeColor(color: color)
     }
 
+    private var isDefaultBackgroundSelected: Bool {
+        editingTheme.backgroundColor == nil && editingTheme.backgroundPhoto == nil
+    }
+
+    private var isCustomBackgroundSelected: Bool {
+        guard editingTheme.backgroundColor != nil, editingTheme.backgroundPhoto == nil else {
+            return false
+        }
+
+        return !ThemeBackgroundOption.allCases.contains { isSelected($0.color) }
+    }
+
     private func updateTheme(_ transform: (inout ThemeStyleConfiguration) -> Void) {
         guard proAccessService.isUnlocked else {
             showProPaywall = true
@@ -480,6 +501,9 @@ private struct ThemeColorChip: View {
                 if isSelected {
                     Circle()
                         .strokeBorder(Color.accentColor, lineWidth: 2)
+                } else {
+                    Circle()
+                        .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
                 }
             }
     }
