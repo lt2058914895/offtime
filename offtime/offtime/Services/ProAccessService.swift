@@ -26,17 +26,20 @@ final class ProAccessService: ObservableObject {
 
     var isUnlocked: Bool { source != .free }
     var isLegacyUnlocked: Bool { source == .legacy }
-    var priceText: String { product?.displayPrice ?? String(localized: "pro.price.placeholder") }
+    var priceText: String? { product?.displayPrice }
     var displayTitle: String {
         product?.displayName ?? "\(AppDisplay.name) Pro"
     }
     private let logger = Logger(subsystem: "lt.offtime", category: "ProAccess")
     private var transactionListener: Task<Void, Never>?
+    private let defaults: UserDefaults
     private let sourceKey = "pro_access_source"
     private let migrationKey = "pro_legacy_migration_completed"
 
-    init() {
-        if let rawValue = UserDefaults.standard.string(forKey: sourceKey),
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+
+        if let rawValue = defaults.string(forKey: sourceKey),
            let storedSource = ProAccessSource(rawValue: rawValue) {
             source = storedSource
         }
@@ -47,13 +50,13 @@ final class ProAccessService: ObservableObject {
     }
 
     func migrateLegacyIfNeeded(hasExistingUserData: Bool) {
-        guard !UserDefaults.standard.bool(forKey: migrationKey) else { return }
+        guard !defaults.bool(forKey: migrationKey) else { return }
 
         if LegacyProMigration.shouldUnlock(hasExistingUserData: hasExistingUserData) {
             source = .legacy
-            UserDefaults.standard.set(source.rawValue, forKey: sourceKey)
+            defaults.set(source.rawValue, forKey: sourceKey)
         }
-        UserDefaults.standard.set(true, forKey: migrationKey)
+        defaults.set(true, forKey: migrationKey)
     }
 
     func load() async {
@@ -127,7 +130,7 @@ final class ProAccessService: ObservableObject {
         }
     }
 
-    private func refreshEntitlements() async {
+    func refreshEntitlements() async {
         var hasPurchase = false
 
         for await verification in Transaction.currentEntitlements {
@@ -141,10 +144,10 @@ final class ProAccessService: ObservableObject {
 
         if hasPurchase {
             source = .purchase
-            UserDefaults.standard.set(source.rawValue, forKey: sourceKey)
+            defaults.set(source.rawValue, forKey: sourceKey)
         } else if source == .purchase {
             source = .free
-            UserDefaults.standard.set(source.rawValue, forKey: sourceKey)
+            defaults.set(source.rawValue, forKey: sourceKey)
         }
     }
 

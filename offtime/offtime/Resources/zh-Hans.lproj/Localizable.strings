@@ -227,7 +227,6 @@
 "widget.guide.size.medium3" = "中 · 3城";
 
 // MARK: - Pro
-"pro.price.placeholder" = "$6.99";
 "pro.entry.action" = "去解锁";
 "pro.status.unlocked" = "已解锁";
 "pro.status.legacy.hint" = "老用户已自动解锁，感谢一路支持。";

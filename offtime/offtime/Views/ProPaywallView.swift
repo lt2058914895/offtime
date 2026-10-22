@@ -144,8 +144,10 @@ struct ProPaywallView: View {
                         .font(.headline)
                 }
 
-                Text(proAccessService.priceText)
-                    .font(.headline)
+                if let priceText = proAccessService.priceText {
+                    Text(priceText)
+                        .font(.headline)
+                }
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)

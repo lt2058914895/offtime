@@ -227,7 +227,6 @@
 "widget.guide.size.medium3" = "Medium · 3 Cities";
 
 // MARK: - Pro
-"pro.price.placeholder" = "$6.99";
 "pro.entry.action" = "Unlock";
 "pro.status.unlocked" = "Unlocked";
 "pro.status.legacy.hint" = "Automatically unlocked for existing users. Thank you!";
