@@ -147,6 +147,24 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
 
+            HStack(spacing: 12) {
+                Image(systemName: "clock.fill")
+                    .foregroundColor(.blue)
+                    .font(.title3)
+
+                Text(String(localized: "settings.24hour"))
+
+                Spacer()
+
+                Toggle(String(localized: "settings.24hour"), isOn: $viewModel.use24Hour)
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+            }
+            .onChange(of: viewModel.use24Hour) {
+                viewModel.toggle24Hour()
+                appEnvironment.settings.use24Hour = viewModel.use24Hour
+            }
+
             Button {
                 path.append(AppRoute.reminderList)
             } label: {
@@ -165,29 +183,13 @@ struct SettingsView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-
-            HStack(spacing: 12) {
-                Image(systemName: "clock.fill")
-                    .foregroundColor(.blue)
-                    .font(.title3)
-
-                Text(String(localized: "settings.24hour"))
-
-                Spacer()
-
-                Toggle(String(localized: "settings.24hour"), isOn: $viewModel.use24Hour)
-                    .labelsHidden()
-                    .toggleStyle(.switch)
-            }
-            .onChange(of: viewModel.use24Hour) {
-                viewModel.toggle24Hour()
-                appEnvironment.settings.use24Hour = viewModel.use24Hour
-            }
         }
     }
 
     private var displaySection: some View {
         Section(String(localized: "settings.accessibility.section")) {
+            themePicker
+
             Button {
                 path.append(AppRoute.addWidgetGuide)
             } label: {
@@ -196,8 +198,6 @@ struct SettingsView: View {
             .buttonStyle(.plain)
 
             customThemeRow
-
-            themePicker
         }
     }
 
