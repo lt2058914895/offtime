@@ -6,9 +6,11 @@ import SwiftData
 final class SettingsViewModel: ObservableObject {
     @Published var use24Hour: Bool = AppSettings.defaults.use24Hour
     @Published var themeMode: ThemeMode = AppSettings.defaults.themeMode
+    @Published var reminderCount = 0
     @Published var errorMessage: String?
     
     private let cityService = CityService.shared
+    private var reminderCountTask: Task<Void, Never>?
     
     init() {
         loadSettings()
@@ -28,6 +30,26 @@ final class SettingsViewModel: ObservableObject {
     
     func toggle24Hour() {
         saveSettings()
+    }
+
+    func refreshReminderCount() {
+        reminderCountTask?.cancel()
+        guard let modelContainer = cityService.modelContainer else {
+            reminderCount = 0
+            return
+        }
+        reminderCountTask = Task { [weak self] in
+            let count = await Self.fetchReminderCount(in: modelContainer)
+            guard !Task.isCancelled else { return }
+            self?.reminderCount = count
+        }
+    }
+
+    nonisolated private static func fetchReminderCount(in modelContainer: ModelContainer) async -> Int {
+        await Task.detached(priority: .utility) {
+            let context = ModelContext(modelContainer)
+            return (try? context.fetchCount(FetchDescriptor<ReminderModel>())) ?? 0
+        }.value
     }
     
     func updateTheme(_ mode: ThemeMode) {

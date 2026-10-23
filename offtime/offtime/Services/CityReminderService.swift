@@ -2,6 +2,10 @@ import Foundation
 import UserNotifications
 import SwiftData
 
+extension Notification.Name {
+    static let reminderStoreDidChange = Notification.Name("lt.offtime.reminderStoreDidChange")
+}
+
 protocol UserNotificationCenterProtocol {
     func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
     func add(_ request: UNNotificationRequest) async throws
@@ -176,6 +180,7 @@ final class CityReminderService {
 
         try await schedule(group)
         upsert(group)
+        NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
         return group
     }
 
@@ -204,6 +209,7 @@ final class CityReminderService {
             deleteModel(id: reminderID)
         }
         await cancelScheduledNotifications(for: id)
+        NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
     }
 
     func deleteReminders(cityID: UUID) async {
@@ -217,6 +223,9 @@ final class CityReminderService {
         }
         for reminder in reminders {
             await cancelScheduledNotifications(for: reminder.id.uuidString)
+        }
+        if !reminders.isEmpty {
+            NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
         }
     }
 

@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 import UIKit
 import UniformTypeIdentifiers
 
@@ -85,6 +86,12 @@ struct SettingsView: View {
         .navigationDestination(for: AppRoute.self, destination: handleAppRoute)
         .toast(message: $viewModel.errorMessage)
         .toast(message: proStatusMessageBinding)
+        .task {
+            viewModel.refreshReminderCount()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .reminderStoreDidChange)) { _ in
+            viewModel.refreshReminderCount()
+        }
         .sheet(isPresented: $showProPaywall) {
             ProPaywallView()
         }
@@ -177,6 +184,12 @@ struct SettingsView: View {
                         .foregroundColor(.primary)
 
                     Spacer()
+
+                    if viewModel.reminderCount > 0 {
+                        Text(reminderCountText)
+                            .foregroundColor(.secondary)
+                            .monospacedDigit()
+                    }
 
                     settingsChevron
                 }
@@ -296,6 +309,16 @@ struct SettingsView: View {
         Image(systemName: "chevron.right")
             .font(.footnote.weight(.semibold))
             .foregroundColor(Color(uiColor: .tertiaryLabel))
+    }
+
+    private var reminderCountText: String {
+        if viewModel.reminderCount == 1 {
+            return String(localized: "reminder.list.count.one")
+        }
+        return String(
+            format: String(localized: "reminder.list.count"),
+            viewModel.reminderCount
+        )
     }
 
     private var themePicker: some View {

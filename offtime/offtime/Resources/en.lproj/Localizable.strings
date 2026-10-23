@@ -140,7 +140,7 @@
 "meeting.list.filter.finished" = "Finished";
 "meeting.list.filter.empty" = "No meeting slots in this category";
 "meeting.list.ongoing" = "Ongoing";
-"meeting.list.swipe.hint" = "Swipe left to delete a meeting slot";
+"meeting.list.swipe.hint" = "Swipe left to delete";
 
 // MARK: - Converter
 "converter.source.city" = "Source City";
@@ -180,7 +180,10 @@
 "reminder.list.title" = "Reminders";
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
-"reminder.list.swipe.hint" = "Swipe left to delete a reminder";
+"reminder.list.swipe.hint" = "Swipe left to delete";
+"reminder.list.delete.confirm.title" = "Delete Reminder?";
+"reminder.list.count.one" = "1 reminder";
+"reminder.list.count" = "%d reminders";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";
 "settings.about" = "About";

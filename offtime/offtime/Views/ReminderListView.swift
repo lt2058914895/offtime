@@ -5,6 +5,7 @@ struct ReminderListView: View {
     @StateObject private var viewModel = ReminderListViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
+    @State private var reminderToDelete: CityReminderGroup?
 
     private var use24Hour: Bool {
         appEnvironment.settings.use24Hour
@@ -43,9 +44,7 @@ struct ReminderListView: View {
                                 reminderRow(reminder)
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                         Button(role: .destructive) {
-                                            Task {
-                                                await viewModel.deleteReminder(reminder)
-                                            }
+                                            reminderToDelete = reminder
                                         } label: {
                                             Label(String(localized: "city.reminder.remove"), systemImage: "trash")
                                         }
@@ -76,6 +75,37 @@ struct ReminderListView: View {
         .task {
             await viewModel.loadReminders()
         }
+        .confirmationDialog(
+            String(localized: "reminder.list.delete.confirm.title"),
+            isPresented: Binding(
+                get: { reminderToDelete != nil },
+                set: { if !$0 { reminderToDelete = nil } }
+            ),
+            titleVisibility: .visible,
+            presenting: reminderToDelete
+        ) { reminder in
+            Button(String(localized: "common.delete"), role: .destructive) {
+                reminderToDelete = nil
+                Task {
+                    await viewModel.deleteReminder(reminder)
+                }
+            }
+            Button(String(localized: "common.cancel"), role: .cancel) {
+                reminderToDelete = nil
+            }
+        } message: { reminder in
+            Text(deleteConfirmationMessage(for: reminder))
+        }
+    }
+
+    private func deleteConfirmationMessage(for reminder: CityReminderGroup) -> String {
+        let city = viewModel.city(for: reminder.cityID)
+        let cityName = city.map {
+            CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn)
+        } ?? reminder.cityName
+        let triggerTime = formatTime(reminder.hour, reminder.minute)
+        let targetTime = formatTime(reminder.targetHour, reminder.targetMinute)
+        return "\(triggerTime) (\(cityName) \(targetTime))"
     }
 
     private func reminderRow(_ reminder: CityReminderGroup) -> some View {
