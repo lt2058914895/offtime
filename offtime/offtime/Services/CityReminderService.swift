@@ -198,7 +198,7 @@ final class CityReminderService {
     /// 获取所有城市的提醒列表
     func allReminders() async -> [CityReminderGroup] {
         let fetch = FetchDescriptor<ReminderModel>(
-            sortBy: [SortDescriptor(\.cityName), SortDescriptor(\.hour), SortDescriptor(\.minute), SortDescriptor(\.id)]
+            sortBy: [SortDescriptor(\.hour), SortDescriptor(\.minute), SortDescriptor(\.cityName), SortDescriptor(\.id)]
         )
         guard let models = try? fetchModels(fetch) else { return [] }
         return models.map { $0.toGroup() }

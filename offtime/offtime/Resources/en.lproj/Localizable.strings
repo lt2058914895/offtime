@@ -182,6 +182,11 @@
 "reminder.list.empty" = "Reminders added in city details will appear here";
 "reminder.list.swipe.hint" = "Swipe left to delete";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";
+"reminder.list.next" = "Next reminder";
+"reminder.status.pending" = "Upcoming";
+"reminder.status.dueSoon" = "Due soon";
+"reminder.status.reminded" = "Reminded today";
+"reminder.status.notToday" = "Not today";
 "reminder.list.count.one" = "1 reminder";
 "reminder.list.count" = "%d reminders";
 "settings.export.cities" = "Export City List";

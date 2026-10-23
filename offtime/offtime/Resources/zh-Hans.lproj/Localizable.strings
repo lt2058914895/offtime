@@ -182,6 +182,11 @@
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
 "reminder.list.swipe.hint" = "往左滑动可删除";
 "reminder.list.delete.confirm.title" = "删除提醒？";
+"reminder.list.next" = "下次提醒";
+"reminder.status.pending" = "待提醒";
+"reminder.status.dueSoon" = "即将提醒";
+"reminder.status.reminded" = "今日已提醒";
+"reminder.status.notToday" = "今日不提醒";
 "reminder.list.count.one" = "1 条";
 "reminder.list.count" = "%d 条";
 "settings.export.cities" = "导出城市列表";
