@@ -65,7 +65,7 @@ struct SettingsView: View {
 
             Spacer()
             Text(versionText)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color(uiColor: .label).opacity(0.35))
         }
         .accessibilityElement(children: .combine)
     }
@@ -394,8 +394,6 @@ struct SettingsView: View {
                     .foregroundColor(.primary)
 
                 Spacer()
-                Text("★★★★★")
-                    .foregroundColor(.orange)
 
                 settingsChevron
             }
