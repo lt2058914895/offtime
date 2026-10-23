@@ -483,15 +483,6 @@ struct SettingsView: View {
     }
 
     private func handleThemeChange(_ newMode: ThemeMode) {
-        guard ProAccessPolicy.isThemeUnlocked(
-            newMode,
-            isUnlocked: proAccessService.isUnlocked
-        ) else {
-            showProPaywall = true
-            viewModel.themeMode = appEnvironment.settings.themeMode
-            return
-        }
-
         viewModel.updateTheme(newMode)
         var settings = appEnvironment.settings
         settings.themeMode = newMode

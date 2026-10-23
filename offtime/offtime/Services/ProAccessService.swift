@@ -11,10 +11,6 @@ enum ProAccessSource: String {
 
 enum ProAccessPolicy {
     static let productID = "offtime.pro.lifetime"
-
-    static func isThemeUnlocked(_ mode: ThemeMode, isUnlocked: Bool) -> Bool {
-        isUnlocked || mode == .system
-    }
 }
 
 @MainActor
