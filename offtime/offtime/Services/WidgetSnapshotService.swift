@@ -5,12 +5,36 @@ import os
 
 @MainActor
 enum WidgetSnapshotService {
-    private static let logger = Logger(subsystem: "lt.offtime", category: "WidgetSnapshotService")
+    nonisolated private static let logger = Logger(subsystem: "lt.offtime", category: "WidgetSnapshotService")
+
     static func publish(modelContainer: ModelContainer, settings: AppSettings) {
+        let localTimezoneId = settings.currentCityTimezoneId ?? TimeZone.current.identifier
+        let use24Hour = settings.use24Hour
+        let themeMode = WidgetThemeMode(rawValue: settings.themeMode.rawValue)
+        let widgetTheme = settings.widgetCustomTheme
+
+        Task.detached(priority: .utility) {
+            publishSnapshot(
+                modelContainer: modelContainer,
+                localTimezoneId: localTimezoneId,
+                use24Hour: use24Hour,
+                themeMode: themeMode,
+                widgetTheme: widgetTheme
+            )
+        }
+    }
+
+    nonisolated private static func publishSnapshot(
+        modelContainer: ModelContainer,
+        localTimezoneId: String,
+        use24Hour: Bool,
+        themeMode: WidgetThemeMode?,
+        widgetTheme: ThemeStyleConfiguration
+    ) {
         do {
             let descriptor = FetchDescriptor<CityModel>(sortBy: [SortDescriptor(\.sortIndex)])
-            let cities = try modelContainer.mainContext.fetch(descriptor)
-            let localTimezoneId = settings.currentCityTimezoneId ?? TimeZone.current.identifier
+            let context = ModelContext(modelContainer)
+            let cities = try context.fetch(descriptor)
 
             let snapshots = cities.map { city in
                 WidgetCitySnapshot(
@@ -28,9 +52,9 @@ enum WidgetSnapshotService {
             let snapshot = WidgetSnapshot(
                 cities: snapshots,
                 localTimezoneId: localTimezoneId,
-                use24Hour: settings.use24Hour,
-                themeMode: WidgetThemeMode(rawValue: settings.themeMode.rawValue),
-                widgetTheme: settings.widgetCustomTheme,
+                use24Hour: use24Hour,
+                themeMode: themeMode,
+                widgetTheme: widgetTheme,
                 updatedAt: Date()
             )
 
