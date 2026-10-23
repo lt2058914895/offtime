@@ -5,7 +5,6 @@ import os
 
 enum ProAccessSource: String {
     case free
-    case legacy
     case purchase
 }
 
@@ -25,7 +24,6 @@ final class ProAccessService: ObservableObject {
 
     var isUnlocked: Bool { source != .free }
     var isProcessing: Bool { isPurchasing || isRestoring }
-    var isLegacyUnlocked: Bool { source == .legacy }
     var priceText: String? { product?.displayPrice }
     var displayTitle: String {
         product?.displayName ?? "\(AppDisplay.name) Pro"
@@ -34,14 +32,16 @@ final class ProAccessService: ObservableObject {
     private var transactionListener: Task<Void, Never>?
     private let defaults: UserDefaults
     private let sourceKey = "pro_access_source"
-    private let migrationKey = "pro_legacy_migration_completed"
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
 
-        if let rawValue = defaults.string(forKey: sourceKey),
-           let storedSource = ProAccessSource(rawValue: rawValue) {
-            source = storedSource
+        if let rawValue = defaults.string(forKey: sourceKey) {
+            if let storedSource = ProAccessSource(rawValue: rawValue) {
+                source = storedSource
+            } else {
+                defaults.removeObject(forKey: sourceKey)
+            }
         }
     }
 
@@ -49,20 +49,21 @@ final class ProAccessService: ObservableObject {
         transactionListener?.cancel()
     }
 
-    func migrateLegacyIfNeeded(hasExistingUserData: Bool) {
-        guard !defaults.bool(forKey: migrationKey) else { return }
-
-        if LegacyProMigration.shouldUnlock(hasExistingUserData: hasExistingUserData) {
-            source = .legacy
-            defaults.set(source.rawValue, forKey: sourceKey)
-        }
-        defaults.set(true, forKey: migrationKey)
-    }
-
     func load() async {
         startTransactionListener()
-        await refreshEntitlements()
-        await loadProducts()
+        async let entitlements: Void = refreshEntitlementsWithRetry()
+        async let products: Void = loadProducts()
+        _ = await (entitlements, products)
+    }
+
+    private func refreshEntitlementsWithRetry() async {
+        if await refreshEntitlements() { return }
+
+        for delay in [Duration.milliseconds(500), .seconds(1), .seconds(2), .seconds(4)] {
+            try? await Task.sleep(for: delay)
+            guard !Task.isCancelled else { return }
+            if await refreshEntitlements() { return }
+        }
     }
 
     func refreshProductsIfNeeded() async {
@@ -212,11 +213,5 @@ final class ProAccessService: ObservableObject {
 
         await transaction.finish()
         await refreshEntitlements()
-    }
-}
-
-enum LegacyProMigration {
-    static func shouldUnlock(hasExistingUserData: Bool) -> Bool {
-        hasExistingUserData
     }
 }

@@ -10,7 +10,7 @@ final class AppEnvironment: ObservableObject {
     /// SwiftData ModelContainer，App 启动时创建一次，全生命周期复用
     let modelContainer: ModelContainer
     
-    /// 是否已完成首启引导（新用户为 false，老用户/已完成用户为 true）
+    /// 是否已完成首启引导（新用户为 false，已完成引导的用户为 true）
     @Published var onboardingCompleted: Bool = false
     /// 城市数据版本号：导入/批量删除等改变城市列表的操作后递增，监听方据此刷新本地缓存
     @Published var citiesRevision: Int = 0
@@ -77,20 +77,6 @@ final class AppEnvironment: ObservableObject {
         observeCityStoreChanges()
         // 首帧渲染前同步读取引导状态，避免非新用户进入 App 时引导页一闪而过
         loadOnboardingState()
-    }
-
-    /// 判断 v1.5 内购迁移时是否应视为老用户。
-    /// 任一业务数据存在，或升级前已经完成首启/引导，都应保留原有可用能力。
-    func hasLegacyProEvidence() -> Bool {
-        if UserDefaults.standard.bool(forKey: "first_launch_seeded")
-            || UserDefaults.standard.bool(forKey: "onboarding_completed") {
-            return true
-        }
-
-        let context = modelContainer.mainContext
-        return ((try? context.fetchCount(FetchDescriptor<CityModel>())) ?? 0) > 0
-            || ((try? context.fetchCount(FetchDescriptor<ReminderModel>())) ?? 0) > 0
-            || ((try? context.fetchCount(FetchDescriptor<MeetingModel>())) ?? 0) > 0
     }
 
     /// App 启动后调用：首启种子城市、加载引导状态与设置

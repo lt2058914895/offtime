@@ -103,17 +103,4 @@ final class ProAccessServiceStoreKitTests: XCTestCase {
         XCTAssertTrue(service.isUnlocked)
     }
 
-    func testLegacyMigrationUnlocksExistingUsersOnlyOnce() {
-        service.migrateLegacyIfNeeded(hasExistingUserData: true)
-        XCTAssertTrue(service.isLegacyUnlocked)
-        XCTAssertTrue(service.isUnlocked)
-
-        service.migrateLegacyIfNeeded(hasExistingUserData: false)
-        XCTAssertTrue(service.isLegacyUnlocked)
-    }
-
-    func testFreshInstallDoesNotReceiveLegacyUnlock() {
-        service.migrateLegacyIfNeeded(hasExistingUserData: false)
-        XCTAssertFalse(service.isUnlocked)
-    }
 }

@@ -229,16 +229,12 @@
 // MARK: - Pro
 "pro.entry.action" = "Unlock";
 "pro.status.unlocked" = "Unlocked";
-"pro.status.legacy.hint" = "Automatically unlocked for existing users. Thank you!";
-"pro.legacy.purchase.prompt" = "Pro access remains available without purchasing. A purchase is appreciated if you'd like to support us.";
 "pro.restore" = "Restore Purchases";
 "pro.paywall.headline" = "Unlock %@ Pro";
 "pro.feature.themes.title" = "Custom Widget Theme";
 "pro.purchase" = "Purchase";
 "pro.purchase.processing" = "Processing…";
 "pro.purchase.note" = "One-time purchase • Lifetime access • Family Sharing enabled";
-"pro.purchase.note.legacy.label" = "Note:";
-"pro.purchase.note.legacy.detail" = "Legacy unlock is not a real App Store purchase. Reinstalling the app or switching devices will remove Pro access.";
 "pro.product.unavailable" = "Pro is not available right now";
 "pro.product.retry" = "Reload";
 "pro.purchase.success" = "Thank you for upgrading";

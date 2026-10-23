@@ -41,11 +41,15 @@ struct ProPaywallView: View {
                 set: { _ in proAccessService.statusMessage = nil }
             ))
             .task {
+                await proAccessService.refreshEntitlements()
                 await proAccessService.refreshProductsIfNeeded()
             }
             .onChange(of: scenePhase) { _, phase in
                 guard phase == .active else { return }
-                Task { await proAccessService.refreshProductsIfNeeded() }
+                Task {
+                    await proAccessService.refreshEntitlements()
+                    await proAccessService.refreshProductsIfNeeded()
+                }
             }
         }
     }
@@ -79,30 +83,16 @@ struct ProPaywallView: View {
                 restoringRow
             } else {
                 if proAccessService.isUnlocked {
-                    if proAccessService.isLegacyUnlocked {
-                        Text(String(localized: "pro.status.legacy.hint"))
-                            .font(.headline)
-                            .foregroundColor(.orange)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                    } else {
-                        Text(String(localized: "pro.status.unlocked"))
-                            .font(.headline)
-                            .foregroundColor(.orange)
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.vertical, 15)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.orange.opacity(0.12))
-                            .cornerRadius(14)
-                    }
+                    Text(String(localized: "pro.status.unlocked"))
+                        .font(.headline)
+                        .foregroundColor(.orange)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.vertical, 15)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.orange.opacity(0.12))
+                        .cornerRadius(14)
                 } else {
-                    purchaseButton
-                }
-
-                if proAccessService.isLegacyUnlocked {
-                    legacyPurchaseNote
-
                     purchaseButton
                 }
 
@@ -138,7 +128,7 @@ struct ProPaywallView: View {
         proAccessService.product == nil
             && proAccessService.hasAttemptedProductLoad
             && !proAccessService.isLoadingProducts
-            && (!proAccessService.isUnlocked || proAccessService.isLegacyUnlocked)
+            && !proAccessService.isUnlocked
     }
 
     private var productRetryHint: some View {
@@ -155,31 +145,6 @@ struct ProPaywallView: View {
             }
         }
         .frame(maxWidth: .infinity)
-    }
-
-    private var legacyPurchaseNote: some View {
-        HStack(alignment: .top, spacing: 6) {
-            Text(String(localized: "pro.purchase.note.legacy.label"))
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Color.orange)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(String(localized: "pro.purchase.note.legacy.detail"))
-
-                Text(String(localized: "pro.legacy.purchase.prompt"))
-                    .foregroundStyle(Color.orange)
-            }
-            .font(.caption)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-        }
-        .foregroundStyle(.secondary)
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Color.orange.opacity(0.08),
-            in: RoundedRectangle(cornerRadius: 12)
-        )
     }
 
     private var purchaseButton: some View {

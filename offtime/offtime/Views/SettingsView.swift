@@ -45,10 +45,7 @@ struct SettingsView: View {
                 title: proAccessService.displayTitle,
                 actionText: String(localized: "pro.entry.action"),
                 statusText: String(localized: "pro.status.unlocked"),
-                isUnlocked: proAccessService.isUnlocked,
-                legacyHintText: proAccessService.isLegacyUnlocked
-                    ? String(localized: "pro.status.legacy.hint")
-                    : nil
+                isUnlocked: proAccessService.isUnlocked
             )
         }
         .buttonStyle(.plain)
@@ -348,9 +345,7 @@ struct SettingsView: View {
 
                 Spacer()
 
-                if !proAccessService.isUnlocked {
-                    ProBadge(showsText: false)
-                }
+                ProBadge(showsText: false)
 
                 settingsChevron
             }
@@ -608,7 +603,6 @@ private struct ProEntryCard: View {
     let actionText: String
     let statusText: String
     let isUnlocked: Bool
-    let legacyHintText: String?
 
     var body: some View {
         HStack(spacing: 16) {
@@ -650,18 +644,8 @@ private struct ProEntryCard: View {
                     .padding(.vertical, 5)
                     .background(Color.orange.opacity(0.12), in: Capsule())
                     .fixedSize()
-
-                }
-
-                if let legacyHintText {
-                    Text(legacyHintText)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
-
         }
         .padding(.leading, 18)
         .padding(.trailing, 12)

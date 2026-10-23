@@ -31,18 +31,20 @@ struct offtimeApp: App {
             .modelContainer(appEnvironment.modelContainer)
             .preferredColorScheme(appEnvironment.colorScheme)
             .task {
-                proAccessService.migrateLegacyIfNeeded(
-                    hasExistingUserData: appEnvironment.hasLegacyProEvidence()
-                )
                 appEnvironment.setup()
                 await proAccessService.load()
             }
             .onChange(of: scenePhase) { _, phase in
-                // 进入后台前补一次发布：改城市时那次刷新请求若被系统合并/丢弃，
-                // 用户回到桌面就看不到新城市；这里在有变化时再要一次刷新。
-                // 内容没变化时 publish 内部会直接跳过，不会白耗刷新配额。
-                if phase == .background {
+                switch phase {
+                case .active:
+                    Task { await proAccessService.refreshEntitlements() }
+                case .background:
+                    // 进入后台前补一次发布：改城市时那次刷新请求若被系统合并/丢弃，
+                    // 用户回到桌面就看不到新城市；这里在有变化时再要一次刷新。
+                    // 内容没变化时 publish 内部会直接跳过，不会白耗刷新配额。
                     appEnvironment.publishWidgetSnapshot()
+                default:
+                    break
                 }
             }
         }

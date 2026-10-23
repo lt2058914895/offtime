@@ -229,16 +229,12 @@
 // MARK: - Pro
 "pro.entry.action" = "去解锁";
 "pro.status.unlocked" = "已解锁";
-"pro.status.legacy.hint" = "老用户已自动解锁，感谢一路支持。";
-"pro.legacy.purchase.prompt" = "不购买也可以继续享受 Pro 权益；如果愿意，购买是对我们的支持。";
 "pro.restore" = "恢复购买";
 "pro.paywall.headline" = "解锁%@ Pro";
 "pro.feature.themes.title" = "自定义小组件主题";
 "pro.purchase" = "购买";
 "pro.purchase.processing" = "处理中…";
 "pro.purchase.note" = "一次购买 • 永久使用 • 支持家庭共享";
-"pro.purchase.note.legacy.label" = "注意:";
-"pro.purchase.note.legacy.detail" = "老用户解锁不是真实 App Store 内购，删除 App 后重装或换设备,将失去Pro权益。";
 "pro.product.unavailable" = "暂时无法加载 Pro 商品";
 "pro.product.retry" = "重新加载";
 "pro.purchase.success" = "感谢升级 Pro";
