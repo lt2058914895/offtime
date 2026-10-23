@@ -10,8 +10,25 @@ struct ReminderListView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var reminderToDelete: CityReminderGroup?
     @State private var now = Date()
+    @AppStorage("settings_reminderSortMode") private var sortMode: ReminderSortMode = .time
 
     private let refreshTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+
+    private enum ReminderSortMode: String, CaseIterable, Identifiable {
+        case time
+        case city
+
+        var id: Self { self }
+
+        var title: String {
+            switch self {
+            case .time:
+                return String(localized: "reminder.sort.time")
+            case .city:
+                return String(localized: "reminder.sort.city")
+            }
+        }
+    }
 
     private enum ReminderDisplayStatus {
         case pending
@@ -80,18 +97,40 @@ struct ReminderListView: View {
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
 
-                    ForEach(viewModel.reminders) { reminder in
-                        reminderRow(reminder)
-                            .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    reminderToDelete = reminder
-                                } label: {
-                                    Label(String(localized: "city.reminder.remove"), systemImage: "trash")
+                    if sortMode == .time {
+                        ForEach(timeSortedReminders) { reminder in
+                            reminderListRow(reminder)
+                        }
+                    } else {
+                        ForEach(citySections) { section in
+                            Section {
+                                ForEach(section.reminders) { reminder in
+                                    reminderListRow(reminder)
                                 }
+                            } header: {
+                                HStack(spacing: 8) {
+                                    Text(flagEmoji(for: section.countryCode))
+                                        .font(.title3)
+
+                                    HStack(spacing: 4) {
+                                        Text(section.title)
+                                            .font(.body)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.primary)
+
+                                        if let secondaryTitle = section.secondaryTitle {
+                                            Text(secondaryTitle)
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    }
+
+                                    Spacer()
+                                }
+                                .padding(.top, 4)
+                                .textCase(nil)
                             }
+                        }
                     }
                 }
                 .listStyle(.plain)
@@ -110,6 +149,9 @@ struct ReminderListView: View {
                     Image(systemName: "chevron.left")
                         .fontWeight(.semibold)
                 }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                sortMenu
             }
         }
         .toolbar(.hidden, for: .tabBar)
@@ -154,6 +196,115 @@ struct ReminderListView: View {
         let triggerTime = formatTime(reminder.hour, reminder.minute)
         let targetTime = formatTime(reminder.targetHour, reminder.targetMinute)
         return "\(triggerTime) (\(cityName) \(targetTime))"
+    }
+
+    private func reminderListRow(_ reminder: CityReminderGroup) -> some View {
+        reminderRow(reminder)
+            .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive) {
+                    reminderToDelete = reminder
+                } label: {
+                    Label(String(localized: "city.reminder.remove"), systemImage: "trash")
+                }
+            }
+    }
+
+    private var timeSortedReminders: [CityReminderGroup] {
+        viewModel.reminders.sorted(by: timeSort)
+    }
+
+    private var citySections: [ReminderCitySection] {
+        Dictionary(grouping: viewModel.reminders, by: \.cityID)
+            .map { cityID, reminders in
+                let sorted = reminders.sorted(by: timeSort)
+                let names = cityDisplayNames(for: sorted[0])
+                let countryCode = viewModel.city(for: cityID).map {
+                    viewModel.countryCode(for: $0)
+                } ?? ""
+                return ReminderCitySection(
+                    id: cityID,
+                    countryCode: countryCode,
+                    title: names.primary,
+                    secondaryTitle: names.secondary,
+                    reminders: sorted
+                )
+            }
+            .sorted { lhs, rhs in
+                let comparison = lhs.title.localizedStandardCompare(rhs.title)
+                if comparison != .orderedSame {
+                    return comparison == .orderedAscending
+                }
+                return lhs.id.uuidString < rhs.id.uuidString
+            }
+    }
+
+    private struct ReminderCitySection: Identifiable {
+        let id: UUID
+        let countryCode: String
+        let title: String
+        let secondaryTitle: String?
+        let reminders: [CityReminderGroup]
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            ForEach(ReminderSortMode.allCases) { mode in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.18)) {
+                        sortMode = mode
+                    }
+                } label: {
+                    if sortMode == mode {
+                        Label(mode.title, systemImage: "checkmark")
+                    } else {
+                        Text(mode.title)
+                    }
+                }
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Text(sortMode.title)
+                    .font(.subheadline)
+                    .foregroundColor(.blue)
+
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundColor(.blue)
+            }
+        }
+        .accessibilityLabel(String(localized: "reminder.sort.label"))
+    }
+
+    private func timeSort(_ lhs: CityReminderGroup, _ rhs: CityReminderGroup) -> Bool {
+        if lhs.hour != rhs.hour {
+            return lhs.hour < rhs.hour
+        }
+        if lhs.minute != rhs.minute {
+            return lhs.minute < rhs.minute
+        }
+        let lhsCity = cityDisplayName(for: lhs)
+        let rhsCity = cityDisplayName(for: rhs)
+        if lhsCity != rhsCity {
+            return lhsCity.localizedStandardCompare(rhsCity) == .orderedAscending
+        }
+        return lhs.id < rhs.id
+    }
+
+    private func cityDisplayName(for reminder: CityReminderGroup) -> String {
+        cityDisplayNames(for: reminder).primary
+    }
+
+    private func cityDisplayNames(for reminder: CityReminderGroup) -> (primary: String, secondary: String?) {
+        guard let city = viewModel.city(for: reminder.cityID) else {
+            return (reminder.cityName, nil)
+        }
+        return (
+            CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn),
+            CityDisplay.secondaryName(cityName: city.cityName, cityEn: city.cityEn)
+        )
     }
 
     private func reminderRow(_ reminder: CityReminderGroup) -> some View {

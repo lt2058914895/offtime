@@ -183,6 +183,9 @@
 "reminder.list.swipe.hint" = "Swipe left to delete";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";
 "reminder.list.next" = "Next reminder";
+"reminder.sort.label" = "Sort order";
+"reminder.sort.time" = "By time";
+"reminder.sort.city" = "By city";
 "reminder.status.pending" = "Upcoming";
 "reminder.status.dueSoon" = "Due soon";
 "reminder.status.reminded" = "Reminded today";
