@@ -3,6 +3,7 @@ import SwiftUI
 struct ProPaywallView: View {
     @EnvironmentObject private var proAccessService: ProAccessService
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationStack {
@@ -32,12 +33,20 @@ struct ProPaywallView: View {
                     } label: {
                         Text(String(localized: "pro.restore"))
                     }
+                    .disabled(proAccessService.isProcessing)
                 }
             }
             .toast(message: Binding(
                 get: { proAccessService.statusMessage },
                 set: { _ in proAccessService.statusMessage = nil }
             ))
+            .task {
+                await proAccessService.refreshProductsIfNeeded()
+            }
+            .onChange(of: scenePhase) { _, phase in
+                guard phase == .active else { return }
+                Task { await proAccessService.refreshProductsIfNeeded() }
+            }
         }
     }
 
@@ -66,32 +75,40 @@ struct ProPaywallView: View {
 
     private var purchaseSection: some View {
         VStack(spacing: 12) {
-            if proAccessService.isUnlocked {
-                if proAccessService.isLegacyUnlocked {
-                    Text(String(localized: "pro.status.legacy.hint"))
-                        .font(.headline)
-                        .foregroundColor(.orange)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                } else {
-                    Text(String(localized: "pro.status.unlocked"))
-                        .font(.headline)
-                        .foregroundColor(.orange)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical, 15)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.orange.opacity(0.12))
-                        .cornerRadius(14)
-                }
+            if proAccessService.isRestoring {
+                restoringRow
             } else {
-                purchaseButton
-            }
+                if proAccessService.isUnlocked {
+                    if proAccessService.isLegacyUnlocked {
+                        Text(String(localized: "pro.status.legacy.hint"))
+                            .font(.headline)
+                            .foregroundColor(.orange)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else {
+                        Text(String(localized: "pro.status.unlocked"))
+                            .font(.headline)
+                            .foregroundColor(.orange)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.vertical, 15)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.orange.opacity(0.12))
+                            .cornerRadius(14)
+                    }
+                } else {
+                    purchaseButton
+                }
 
-            if proAccessService.isLegacyUnlocked {
-                legacyPurchaseNote
+                if proAccessService.isLegacyUnlocked {
+                    legacyPurchaseNote
 
-                purchaseButton
+                    purchaseButton
+                }
+
+                if shouldShowProductRetry {
+                    productRetryHint
+                }
             }
 
             Text(String(localized: "pro.purchase.note"))
@@ -100,6 +117,44 @@ struct ProPaywallView: View {
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
+    }
+
+    private var restoringRow: some View {
+        HStack(spacing: 8) {
+            ProgressView()
+                .tint(.white)
+            Text(String(localized: "pro.restore.processing"))
+                .font(.headline)
+        }
+        .foregroundColor(.white)
+        .frame(maxWidth: .infinity)
+        .frame(height: 52)
+        .background(Color.accentColor)
+        .cornerRadius(14)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var shouldShowProductRetry: Bool {
+        proAccessService.product == nil
+            && proAccessService.hasAttemptedProductLoad
+            && !proAccessService.isLoadingProducts
+            && (!proAccessService.isUnlocked || proAccessService.isLegacyUnlocked)
+    }
+
+    private var productRetryHint: some View {
+        VStack(spacing: 6) {
+            Text(String(localized: "pro.product.unavailable"))
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Button {
+                Task { await proAccessService.reloadProducts() }
+            } label: {
+                Text(String(localized: "pro.product.retry"))
+                    .font(.footnote.weight(.semibold))
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 
     private var legacyPurchaseNote: some View {
@@ -136,17 +191,23 @@ struct ProPaywallView: View {
                 }
             }
         } label: {
-            HStack {
-                if proAccessService.isLoadingProducts {
+            HStack(spacing: 8) {
+                if proAccessService.isPurchasing {
                     ProgressView()
+                        .tint(.white)
+                    Text(String(localized: "pro.purchase.processing"))
+                        .font(.headline)
+                } else if proAccessService.isLoadingProducts {
+                    ProgressView()
+                        .tint(.white)
                 } else {
                     Text(String(localized: "pro.purchase"))
                         .font(.headline)
-                }
 
-                if let priceText = proAccessService.priceText {
-                    Text(priceText)
-                        .font(.headline)
+                    if let priceText = proAccessService.priceText {
+                        Text(priceText)
+                            .font(.headline)
+                    }
                 }
             }
             .foregroundColor(.white)
