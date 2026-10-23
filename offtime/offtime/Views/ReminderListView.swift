@@ -258,7 +258,9 @@ struct ReminderListView: View {
                     }
                 } label: {
                     if sortMode == mode {
-                        Label(mode.title, systemImage: "checkmark")
+                        Text(mode.title)
+                            + Text(verbatim: "  ")
+                            + Text(Image(systemName: "checkmark"))
                     } else {
                         Text(mode.title)
                     }

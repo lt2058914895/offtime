@@ -328,7 +328,9 @@ struct SettingsView: View {
                     handleThemeChange(mode)
                 } label: {
                     if viewModel.themeMode == mode {
-                        Label(mode.displayName, systemImage: "checkmark")
+                        Text(mode.displayName)
+                            + Text(verbatim: "  ")
+                            + Text(Image(systemName: "checkmark"))
                     } else {
                         Text(mode.displayName)
                     }
@@ -561,9 +563,9 @@ struct SettingsView: View {
 
 private struct MeetingRecommendationCard: View {
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 12) {
             ZStack {
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [Color.accentColor, Color.accentColor.opacity(0.68)],
@@ -572,14 +574,14 @@ private struct MeetingRecommendationCard: View {
                         )
                     )
                 Image(systemName: "calendar.badge.clock")
-                    .font(.title3.weight(.semibold))
+                    .font(.headline.weight(.semibold))
                     .foregroundColor(.white)
             }
-            .frame(width: 52, height: 52)
+            .frame(width: 44, height: 44)
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(String(localized: "settings.meeting.recommendation.title"))
-                    .font(.title3.weight(.semibold))
+                    .font(.headline.weight(.semibold))
                     .foregroundColor(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.85)
@@ -594,28 +596,28 @@ private struct MeetingRecommendationCard: View {
             Image(systemName: "chevron.right")
                 .font(.footnote.weight(.semibold))
                 .foregroundColor(.accentColor)
-                .frame(width: 28, height: 28)
+                .frame(width: 26, height: 26)
                 .background(Color.accentColor.opacity(0.12))
                 .clipShape(Circle())
 
         }
-        .padding(.leading, 18)
+        .padding(.leading, 14)
         .padding(.trailing, 12)
-        .padding(.vertical, 20)
-        .frame(maxWidth: .infinity, minHeight: 96, alignment: .leading)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color.accentColor.opacity(0.12), Color.accentColor.opacity(0.04)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             ),
-            in: RoundedRectangle(cornerRadius: 20)
+            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
         )
         .overlay {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
         }
-        .shadow(color: .black.opacity(0.06), radius: 8, y: 3)
+        .shadow(color: .black.opacity(0.04), radius: 5, y: 2)
     }
 }
 
@@ -626,9 +628,9 @@ private struct ProEntryCard: View {
     let isUnlocked: Bool
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 10) {
             ZStack {
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [.orange, .orange.opacity(0.68)],
@@ -638,53 +640,48 @@ private struct ProEntryCard: View {
                     )
 
                 Image(systemName: "crown.fill")
-                    .font(.title3.weight(.semibold))
+                    .font(.headline.weight(.semibold))
                     .foregroundColor(.white)
             }
-            .frame(width: 52, height: 52)
+            .frame(width: 36, height: 36)
 
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    Text(title)
-                        .font(.title3.weight(.semibold))
-                        .foregroundColor(.primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
+            Text(title)
+                .font(.headline.weight(.semibold))
+                .foregroundColor(.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
 
-                    Spacer(minLength: 8)
+            Spacer(minLength: 8)
 
-                    HStack(spacing: 4) {
-                        Text(isUnlocked ? statusText : actionText)
-                            .font(.subheadline.weight(.semibold))
+            HStack(spacing: 4) {
+                Text(isUnlocked ? statusText : actionText)
+                    .font(.footnote.weight(.semibold))
 
-                        Image(systemName: isUnlocked ? "checkmark.circle.fill" : "chevron.right")
-                            .font(.subheadline.weight(.semibold))
-                    }
-                    .foregroundColor(.orange)
-                    .padding(.horizontal, 9)
-                    .padding(.vertical, 5)
-                    .background(Color.orange.opacity(0.12), in: Capsule())
-                    .fixedSize()
-                }
+                Image(systemName: isUnlocked ? "checkmark.circle.fill" : "chevron.right")
+                    .font(.footnote.weight(.semibold))
             }
+            .foregroundColor(.orange)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .background(Color.orange.opacity(0.12), in: Capsule())
+            .fixedSize()
         }
-        .padding(.leading, 18)
-        .padding(.trailing, 12)
-        .padding(.vertical, 20)
-        .frame(maxWidth: .infinity, minHeight: 92, alignment: .leading)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color.orange.opacity(0.14), Color.orange.opacity(0.04)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             ),
-            in: RoundedRectangle(cornerRadius: 20)
+            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
         )
         .overlay {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(Color.orange.opacity(isUnlocked ? 0.24 : 0.14), lineWidth: 1)
         }
-        .shadow(color: .black.opacity(0.06), radius: 8, y: 3)
+        .shadow(color: .black.opacity(0.04), radius: 5, y: 2)
         .accessibilityElement(children: .combine)
     }
 }
