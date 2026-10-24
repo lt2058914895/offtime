@@ -114,11 +114,22 @@ struct CityDetailView: View {
             ),
             titleVisibility: .visible
         ) {
-            Button(String(localized: "city.reminder.weekdays.only")) {
-                addPendingReminder(weekdaysOnly: true)
+            Button(String(localized: "city.reminder.weekdays.both")) {
+                addPendingReminder(weekdayPolicy: .bothCities)
+            }
+            Button(String(format: String(localized: "city.reminder.weekdays.single"), viewModel.localCityName)) {
+                addPendingReminder(weekdayPolicy: .currentCity)
+            }
+            Button(
+                String(
+                    format: String(localized: "city.reminder.weekdays.single"),
+                    CityDisplay.primaryName(cityName: viewModel.city.cityName, cityEn: viewModel.city.cityEn)
+                )
+            ) {
+                addPendingReminder(weekdayPolicy: .targetCity)
             }
             Button(String(localized: "city.reminder.everyday")) {
-                addPendingReminder(weekdaysOnly: false)
+                addPendingReminder(weekdayPolicy: .everyDay)
             }
             Button(String(localized: "common.cancel"), role: .cancel) {
                 pendingReminder = nil
@@ -392,7 +403,7 @@ struct CityDetailView: View {
         }
     }
 
-    private func addPendingReminder(weekdaysOnly: Bool) {
+    private func addPendingReminder(weekdayPolicy: CityReminderWeekdayPolicy) {
         guard let pendingReminder else { return }
         self.pendingReminder = nil
         Task {
@@ -401,7 +412,7 @@ struct CityDetailView: View {
             let isAdded = await viewModel.addContactableReminder(
                 localHour: pendingReminder.localHour,
                 targetHour: pendingReminder.targetHour,
-                weekdaysOnly: weekdaysOnly
+                weekdayPolicy: weekdayPolicy
             )
             if isAdded {
                 reminderToastMessage = String(localized: "city.reminder.added.success")

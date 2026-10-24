@@ -314,12 +314,12 @@ final class CityDetailViewModel: ObservableObject {
         reminders = await reminderService.reminders(for: city.id)
     }
 
-    /// 为可联系时段添加提醒：按当前城市时间触发，通知中告知目标城市对应时刻
+    /// 为可联系时段添加提醒：按当前城市时间触发，工作日范围由 weekdayPolicy 决定
     @discardableResult
     func addContactableReminder(
         localHour: Int,
         targetHour: Int,
-        weekdaysOnly: Bool
+        weekdayPolicy: CityReminderWeekdayPolicy
     ) async -> Bool {
         reminderStatus = nil
         guard !hasReminder(atHour: localHour, minute: 0) else {
@@ -335,7 +335,7 @@ final class CityDetailViewModel: ObservableObject {
                 timezoneId: localTimezoneId,
                 hour: localHour,
                 minute: 0,
-                weekdaysOnly: weekdaysOnly,
+                weekdayPolicy: weekdayPolicy,
                 targetTimezoneId: city.timezoneId,
                 targetHour: targetHour,
                 targetMinute: 0

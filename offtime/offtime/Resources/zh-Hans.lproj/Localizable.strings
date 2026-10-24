@@ -62,10 +62,12 @@
 "city.reminder.add" = "添加提醒";
 "city.reminder.cancel" = "取消提醒";
 "city.reminder.remove" = "移除提醒";
-"city.reminder.contactable.body" = "当前时间 %@，可联系了";
-"city.reminder.weekdays.only" = "仅工作日";
+"city.reminder.contactable.body" = "目标城市时间 %@，可联系了";
+"city.reminder.weekdays.both" = "双方工作日";
+"city.reminder.weekdays.single" = "仅%@工作日";
+"city.reminder.weekdays.badge.both" = "双方工作日";
 "city.reminder.everyday" = "每天";
-"city.reminder.weekdays.prompt" = "是否仅在工作日重复提醒？";
+"city.reminder.weekdays.prompt" = "选择提醒重复方式";
 "city.reminder.added.success" = "提醒添加成功，可在设置-提醒页面查看";
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
@@ -185,6 +187,8 @@
 "reminder.list.notifications.disabled.message" = "提醒仍会保留，但系统不会发送通知。请在系统设置中开启通知。";
 "reminder.list.delete.confirm.title" = "删除提醒？";
 "reminder.list.next" = "下次提醒";
+"reminder.list.yourTime" = "你的时间";
+"reminder.list.targetTime" = "对方时间";
 "reminder.sort.label" = "排序方式";
 "reminder.sort.time" = "按时间";
 "reminder.sort.city" = "按城市";
@@ -192,6 +196,7 @@
 "reminder.status.dueSoon" = "即将提醒";
 "reminder.status.reminded" = "今日已提醒";
 "reminder.status.notToday" = "今日不提醒";
+"reminder.status.weekendSkip" = "周末跳过：%@";
 "reminder.status.notificationsOff" = "通知已关闭";
 "reminder.list.count.one" = "1 条";
 "reminder.list.count" = "%d 条";

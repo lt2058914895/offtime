@@ -10,7 +10,8 @@ final class CityReminderSchedulerTests: XCTestCase {
                 timezoneId: "America/Los_Angeles",
                 hour: 9,
                 minute: 0,
-                weekdaysOnly: true
+                targetTimezoneId: "America/Los_Angeles",
+                weekdayPolicy: .bothCities
             )
         )
 
@@ -28,7 +29,8 @@ final class CityReminderSchedulerTests: XCTestCase {
                 timezoneId: "America/Los_Angeles",
                 hour: 9,
                 minute: 0,
-                weekdaysOnly: true
+                targetTimezoneId: "America/Los_Angeles",
+                weekdayPolicy: .bothCities
             )
         )
 
@@ -46,7 +48,8 @@ final class CityReminderSchedulerTests: XCTestCase {
                 timezoneId: "America/Los_Angeles",
                 hour: 9,
                 minute: 0,
-                weekdaysOnly: false
+                targetTimezoneId: "America/Los_Angeles",
+                weekdayPolicy: .everyDay
             )
         )
 
@@ -54,6 +57,203 @@ final class CityReminderSchedulerTests: XCTestCase {
             occurrence,
             try date(year: 2026, month: 8, day: 23, hour: 9, minute: 0)
         )
+    }
+
+    func testWeekdayOnlySkipsWhenTargetCityIsWeekend() throws {
+        let after = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 23,
+            hour: 10,
+            minute: 0
+        )
+        let occurrence = try XCTUnwrap(
+            CityReminderScheduler.nextOccurrence(
+                after: after,
+                timezoneId: "Asia/Shanghai",
+                hour: 9,
+                minute: 0,
+                targetTimezoneId: "America/Los_Angeles",
+                weekdayPolicy: .bothCities
+            )
+        )
+
+        XCTAssertEqual(
+            occurrence,
+            try date(
+                timezoneId: "Asia/Shanghai",
+                year: 2026,
+                month: 8,
+                day: 25,
+                hour: 9,
+                minute: 0
+            )
+        )
+    }
+
+    func testCurrentCityPolicyAllowsTargetCityWeekend() throws {
+        let after = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 23,
+            hour: 10,
+            minute: 0
+        )
+        let occurrence = try XCTUnwrap(
+            CityReminderScheduler.nextOccurrence(
+                after: after,
+                timezoneId: "Asia/Shanghai",
+                hour: 9,
+                minute: 0,
+                targetTimezoneId: "America/Los_Angeles",
+                weekdayPolicy: .currentCity
+            )
+        )
+
+        XCTAssertEqual(
+            occurrence,
+            try date(
+                timezoneId: "Asia/Shanghai",
+                year: 2026,
+                month: 8,
+                day: 24,
+                hour: 9,
+                minute: 0
+            )
+        )
+    }
+
+    func testTargetCityPolicyAllowsLocalWeekend() throws {
+        let after = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 28,
+            hour: 10,
+            minute: 0
+        )
+        let occurrence = try XCTUnwrap(
+            CityReminderScheduler.nextOccurrence(
+                after: after,
+                timezoneId: "Asia/Shanghai",
+                hour: 9,
+                minute: 0,
+                targetTimezoneId: "America/Los_Angeles",
+                weekdayPolicy: .targetCity
+            )
+        )
+
+        XCTAssertEqual(
+            occurrence,
+            try date(
+                timezoneId: "Asia/Shanghai",
+                year: 2026,
+                month: 8,
+                day: 29,
+                hour: 9,
+                minute: 0
+            )
+        )
+    }
+
+    func testIsWeekendIdentifiesEachCity() throws {
+        let targetWeekend = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 24,
+            hour: 9,
+            minute: 0
+        )
+        XCTAssertEqual(
+            CityReminderScheduler.isWeekend(at: targetWeekend, timezoneId: "Asia/Shanghai"),
+            false
+        )
+        XCTAssertEqual(
+            CityReminderScheduler.isWeekend(at: targetWeekend, timezoneId: "America/Los_Angeles"),
+            true
+        )
+
+        let currentWeekend = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 22,
+            hour: 9,
+            minute: 0
+        )
+        XCTAssertEqual(
+            CityReminderScheduler.isWeekend(at: currentWeekend, timezoneId: "Asia/Shanghai"),
+            true
+        )
+    }
+
+    func testRepeatWeekdaysKeepsOnlyDaysThatAreWorkdaysInBothCities() throws {
+        let reference = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 23,
+            hour: 10,
+            minute: 0
+        )
+
+        let weekdays = CityReminderScheduler.repeatWeekdays(
+            after: reference,
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            targetTimezoneId: "America/Los_Angeles",
+            weekdayPolicy: .bothCities
+        )
+
+        XCTAssertEqual(weekdays, [3, 4, 5, 6])
+    }
+
+    func testRepeatWeekdaysForCurrentCityPolicy() throws {
+        let reference = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 23,
+            hour: 10,
+            minute: 0
+        )
+
+        let weekdays = CityReminderScheduler.repeatWeekdays(
+            after: reference,
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            targetTimezoneId: "America/Los_Angeles",
+            weekdayPolicy: .currentCity
+        )
+
+        XCTAssertEqual(weekdays, [2, 3, 4, 5, 6])
+    }
+
+    func testRepeatWeekdaysForTargetCityPolicyCanIncludeLocalWeekend() throws {
+        let reference = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 23,
+            hour: 10,
+            minute: 0
+        )
+
+        let weekdays = CityReminderScheduler.repeatWeekdays(
+            after: reference,
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            targetTimezoneId: "America/Los_Angeles",
+            weekdayPolicy: .targetCity
+        )
+
+        XCTAssertEqual(weekdays, [3, 4, 5, 6, 7])
     }
 
     func testTriggerComponentsUseTargetTimezoneAndWeekday() throws {
@@ -74,13 +274,14 @@ final class CityReminderSchedulerTests: XCTestCase {
     }
 
     private func date(
+        timezoneId: String = "America/Los_Angeles",
         year: Int,
         month: Int,
         day: Int,
         hour: Int,
         minute: Int
     ) throws -> Date {
-        let timezone = try XCTUnwrap(TimeZone(identifier: "America/Los_Angeles"))
+        let timezone = try XCTUnwrap(TimeZone(identifier: timezoneId))
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timezone
         return try XCTUnwrap(

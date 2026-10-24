@@ -83,6 +83,36 @@ final class MeetingModel {
 
 // MARK: - 城市提醒
 
+/// 提醒在哪些城市的“工作日”触发。这里的工作日固定为周一至周五。
+enum CityReminderWeekdayPolicy: String, CaseIterable, Codable, Identifiable {
+    case everyDay
+    case bothCities
+    case currentCity
+    case targetCity
+
+    var id: String { rawValue }
+
+    var requiresWeekdayFiltering: Bool {
+        self != .everyDay
+    }
+
+    var includesCurrentCity: Bool {
+        self == .bothCities || self == .currentCity
+    }
+
+    var includesTargetCity: Bool {
+        self == .bothCities || self == .targetCity
+    }
+
+    var legacyWeekdaysOnly: Bool {
+        requiresWeekdayFiltering
+    }
+
+    init(legacyWeekdaysOnly: Bool) {
+        self = legacyWeekdaysOnly ? .bothCities : .everyDay
+    }
+}
+
 /// SwiftData 持久化模型：城市可联系时段提醒。
 /// 通知中心是调度通道，这里才是提醒列表和启动补偿的事实来源。
 @Model
@@ -93,7 +123,9 @@ final class ReminderModel {
     var timezoneId: String
     var hour: Int
     var minute: Int
+    /// 兼容旧版本数据；新版本使用 weekdayPolicyRaw 区分四种重复规则。
     var weekdaysOnly: Bool
+    var weekdayPolicyRaw: String?
     var targetTimezoneId: String
     var targetHour: Int
     var targetMinute: Int
@@ -106,7 +138,7 @@ final class ReminderModel {
         timezoneId: String,
         hour: Int,
         minute: Int,
-        weekdaysOnly: Bool,
+        weekdayPolicy: CityReminderWeekdayPolicy,
         targetTimezoneId: String,
         targetHour: Int,
         targetMinute: Int,
@@ -118,7 +150,8 @@ final class ReminderModel {
         self.timezoneId = timezoneId
         self.hour = hour
         self.minute = minute
-        self.weekdaysOnly = weekdaysOnly
+        self.weekdaysOnly = weekdayPolicy.legacyWeekdaysOnly
+        self.weekdayPolicyRaw = weekdayPolicy.rawValue
         self.targetTimezoneId = targetTimezoneId
         self.targetHour = targetHour
         self.targetMinute = targetMinute
@@ -127,6 +160,12 @@ final class ReminderModel {
 }
 
 extension ReminderModel {
+    /// 旧数据没有 weekdayPolicyRaw 时，根据原来的 Bool 安全回退。
+    var weekdayPolicy: CityReminderWeekdayPolicy {
+        weekdayPolicyRaw.flatMap(CityReminderWeekdayPolicy.init(rawValue:))
+            ?? CityReminderWeekdayPolicy(legacyWeekdaysOnly: weekdaysOnly)
+    }
+
     func toGroup() -> CityReminderGroup {
         CityReminderGroup(
             id: id.uuidString,
@@ -135,7 +174,7 @@ extension ReminderModel {
             timezoneId: timezoneId,
             hour: hour,
             minute: minute,
-            weekdaysOnly: weekdaysOnly,
+            weekdayPolicy: weekdayPolicy,
             targetTimezoneId: targetTimezoneId,
             targetHour: targetHour,
             targetMinute: targetMinute

@@ -62,10 +62,12 @@
 "city.reminder.add" = "Add Reminder";
 "city.reminder.cancel" = "Cancel Reminder";
 "city.reminder.remove" = "Remove reminder";
-"city.reminder.contactable.body" = "Current time %@, contactable now";
-"city.reminder.weekdays.only" = "Weekdays only";
+"city.reminder.contactable.body" = "%@ in the target city — contactable now";
+"city.reminder.weekdays.both" = "Both cities’ weekdays";
+"city.reminder.weekdays.single" = "Only %@ weekdays";
+"city.reminder.weekdays.badge.both" = "Both cities’ weekdays";
 "city.reminder.everyday" = "Every day";
-"city.reminder.weekdays.prompt" = "Should this reminder repeat only on weekdays?";
+"city.reminder.weekdays.prompt" = "Choose how often";
 "city.reminder.added.success" = "Reminder added. See it in Settings > Reminders.";
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
@@ -185,6 +187,8 @@
 "reminder.list.notifications.disabled.message" = "Reminders are kept, but iOS won’t deliver notifications. Enable notifications in Settings.";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";
 "reminder.list.next" = "Next reminder";
+"reminder.list.yourTime" = "Your time";
+"reminder.list.targetTime" = "Their time";
 "reminder.sort.label" = "Sort order";
 "reminder.sort.time" = "By time";
 "reminder.sort.city" = "By city";
@@ -192,6 +196,7 @@
 "reminder.status.dueSoon" = "Due soon";
 "reminder.status.reminded" = "Reminded today";
 "reminder.status.notToday" = "Not today";
+"reminder.status.weekendSkip" = "Weekend skip: %@";
 "reminder.status.notificationsOff" = "Notifications off";
 "reminder.list.count.one" = "1 reminder";
 "reminder.list.count" = "%d reminders";

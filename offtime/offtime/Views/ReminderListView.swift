@@ -10,7 +10,6 @@ struct ReminderListView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var reminderToDelete: CityReminderGroup?
     @AppStorage("settings_reminderSortMode") private var sortMode: ReminderSortMode = .time
-
     private enum ReminderSortMode: String, CaseIterable, Identifiable {
         case time
         case city
@@ -27,7 +26,7 @@ struct ReminderListView: View {
         }
     }
 
-    private enum ReminderDisplayStatus {
+    private enum ReminderDisplayStatus: Equatable {
         case pending
         case dueSoon
         case remindedToday
@@ -360,65 +359,88 @@ struct ReminderListView: View {
     }
 
     private func reminderRow(_ reminder: CityReminderGroup) -> some View {
-        let city = viewModel.city(for: reminder.cityID)
-        let displayName = city.map { CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn) } ?? reminder.cityName
+        let cityNames = cityDisplayNames(for: reminder)
         let timeDiff = timeDifference(for: reminder)
         let status = displayStatus(for: reminder, now: now)
-        let targetDateTime = targetDateTimeText(for: reminder, now: now)
-        return ZStack(alignment: .topLeading) {
-            if reminder.weekdaysOnly {
-                weekdayOnlyBadge
-            }
-
-            HStack(alignment: .top, spacing: 14) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(formatTime(reminder.hour, reminder.minute))
-                        .font(.title3.weight(.semibold))
-                        .foregroundColor(.primary)
-                        .monospacedDigit()
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(displayName)
-                            .font(.subheadline.weight(.bold))
-                            .foregroundColor(.secondary)
-                        Text("·")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                        Text(targetDateTime.time)
-                            .font(.subheadline.weight(.bold))
-                            .foregroundColor(.secondary)
-                            .monospacedDigit()
-                        Text("·")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text(String(localized: "clock.time.difference"))
-                            .font(.caption2.weight(.medium))
-                            .foregroundColor(.secondary)
-                        Text(timeDiff)
-                            .font(.footnote.weight(.bold))
-                            .foregroundColor(timeDifferenceColor(timeDiff))
-                            .monospacedDigit()
-                    }
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.85)
-                    HStack(alignment: .firstTextBaseline, spacing: 5) {
-                        Text(String(localized: "reminder.list.next") + ":")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        Text(targetDateTime.date)
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                .padding(.top, reminder.weekdaysOnly ? 14 : 0)
+        let timing = scheduleText(for: reminder, now: now)
+        let weekendDetail = status == .notToday
+            ? weekendSkipDetail(for: reminder, now: now)
+            : nil
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .center, spacing: 10) {
+                repeatPolicyChip(for: reminder)
 
                 Spacer(minLength: 8)
 
                 statusBadge(status)
             }
-            .padding(.horizontal, 14)
-            .padding(.top, 12)
-            .padding(.bottom, 12)
+
+            HStack(alignment: .center, spacing: 8) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(formatTime(reminder.hour, reminder.minute))
+                        .font(.title2.weight(.bold))
+                        .fontDesign(.rounded)
+                        .foregroundColor(.primary)
+                        .monospacedDigit()
+                        .lineLimit(1)
+
+                    Text(currentCityDisplayName(for: reminder))
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                timeBridge(timeDifference: timeDiff)
+                    .frame(width: 54)
+
+                VStack(alignment: .trailing, spacing: 3) {
+                    cityTitle(primary: cityNames.primary, secondary: nil)
+
+                    Text(timing.targetTime)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundColor(.secondary)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .multilineTextAlignment(.trailing)
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+
+            Divider()
+                .opacity(0.6)
+
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .font(.caption2.weight(.semibold))
+
+                Text(String(localized: "reminder.list.next"))
+                    .font(.caption2.weight(.semibold))
+
+                Text(timing.triggerDate)
+                    .font(.caption2)
+                    .monospacedDigit()
+            }
+            .foregroundColor(.secondary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            if let weekendDetail {
+                HStack(alignment: .center, spacing: 6) {
+                    Image(systemName: "moon.zzz.fill")
+                        .font(.caption2)
+
+                    Text(weekendDetail)
+                        .font(.caption2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .foregroundColor(.secondary)
+            }
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(uiColor: .secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: reminderCardCornerRadius, style: .continuous))
         .shadow(color: Color.black.opacity(0.04), radius: 4, y: 2)
@@ -430,18 +452,74 @@ struct ReminderListView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private var weekdayOnlyBadge: some View {
-        Text(String(localized: "city.reminder.weekdays.only"))
+    private func cityTitle(primary: String, secondary: String?) -> some View {
+        HStack(alignment: .center, spacing: 4) {
+            Text(primary)
+                .font(.title2.weight(.bold))
+                .fontDesign(.rounded)
+                .foregroundColor(.primary)
+                .lineLimit(1)
+                .layoutPriority(1)
+
+            if let secondary {
+                Text(secondary)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+            }
+        }
+    }
+
+    private func repeatPolicyChip(for reminder: CityReminderGroup) -> some View {
+        Text(weekdayPolicyText(for: reminder))
             .font(.caption2.weight(.semibold))
-            .foregroundColor(.white)
-            .padding(.leading, 14)
-            .padding(.trailing, 11)
-            .padding(.vertical, 4)
-            .background(
-                ReminderWeekdayBadgeShape()
-                    .fill(Color.orange)
-            )
+            .foregroundColor(.accentColor)
+            .lineLimit(1)
+            .minimumScaleFactor(0.85)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(Capsule().fill(Color.accentColor.opacity(0.11)))
             .fixedSize(horizontal: true, vertical: false)
+    }
+
+    private func timeBridge(timeDifference: String) -> some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 2) {
+                Rectangle()
+                    .fill(Color(uiColor: .separator).opacity(0.55))
+                    .frame(width: 15, height: 1)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 7, weight: .bold))
+                    .foregroundStyle(.tertiary)
+            }
+            Text(timeDifference)
+                .font(.caption2.weight(.bold))
+                .foregroundColor(timeDifferenceColor(timeDifference))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func weekdayPolicyText(for reminder: CityReminderGroup) -> String {
+        switch reminder.weekdayPolicy {
+        case .everyDay:
+            return String(localized: "city.reminder.everyday")
+        case .bothCities:
+            return String(localized: "city.reminder.weekdays.badge.both")
+        case .currentCity:
+            return String(
+                format: String(localized: "city.reminder.weekdays.single"),
+                currentCityDisplayName(for: reminder)
+            )
+        case .targetCity:
+            return String(
+                format: String(localized: "city.reminder.weekdays.single"),
+                cityDisplayName(for: reminder)
+            )
+        }
     }
 
     private func statusBadge(_ status: ReminderDisplayStatus) -> some View {
@@ -471,13 +549,6 @@ struct ReminderListView: View {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timezone
 
-        if reminder.weekdaysOnly {
-            let weekday = calendar.component(.weekday, from: now)
-            if weekday == 1 || weekday == 7 {
-                return .notToday
-            }
-        }
-
         var components = calendar.dateComponents([.year, .month, .day], from: now)
         components.hour = reminder.hour
         components.minute = reminder.minute
@@ -485,6 +556,15 @@ struct ReminderListView: View {
 
         guard let todayOccurrence = calendar.date(from: components) else {
             return .pending
+        }
+
+        if !CityReminderScheduler.isAllowedOccurrence(
+               at: todayOccurrence,
+               timezoneId: reminder.timezoneId,
+               targetTimezoneId: reminder.targetTimezoneId,
+               weekdayPolicy: reminder.weekdayPolicy
+           ) {
+            return .notToday
         }
 
         if now >= todayOccurrence {
@@ -496,27 +576,103 @@ struct ReminderListView: View {
         return .pending
     }
 
-    private func targetDateTimeText(
+    private func weekendSkipDetail(for reminder: CityReminderGroup, now: Date) -> String? {
+        guard reminder.weekdayPolicy.requiresWeekdayFiltering,
+              let timezone = TimeZone(identifier: reminder.timezoneId) else {
+            return nil
+        }
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+        var components = calendar.dateComponents([.year, .month, .day], from: now)
+        components.hour = reminder.hour
+        components.minute = reminder.minute
+        components.second = 0
+
+        guard let todayOccurrence = calendar.date(from: components),
+              !CityReminderScheduler.isAllowedOccurrence(
+                  at: todayOccurrence,
+                  timezoneId: reminder.timezoneId,
+                  targetTimezoneId: reminder.targetTimezoneId,
+                  weekdayPolicy: reminder.weekdayPolicy
+              ) else {
+            return nil
+        }
+
+        var skippedCities: [String] = []
+        if reminder.weekdayPolicy.includesCurrentCity,
+           CityReminderScheduler.isWeekend(at: todayOccurrence, timezoneId: reminder.timezoneId) == true {
+            let weekday = TimezoneService.shared.getLocalWeekday(
+                timezoneId: reminder.timezoneId,
+                date: todayOccurrence
+            ) ?? ""
+            skippedCities.append("\(currentCityDisplayName(for: reminder)) \(weekday)")
+        }
+        if reminder.weekdayPolicy.includesTargetCity,
+           CityReminderScheduler.isWeekend(at: todayOccurrence, timezoneId: reminder.targetTimezoneId) == true {
+            let weekday = TimezoneService.shared.getLocalWeekday(
+                timezoneId: reminder.targetTimezoneId,
+                date: todayOccurrence
+            ) ?? ""
+            skippedCities.append("\(cityDisplayName(for: reminder)) \(weekday)")
+        }
+        guard !skippedCities.isEmpty else { return nil }
+
+        return String(
+            format: String(localized: "reminder.status.weekendSkip"),
+            skippedCities.joined(separator: " / ")
+        )
+    }
+
+    private func currentCityDisplayName(for reminder: CityReminderGroup) -> String {
+        let fallback = CityService.matchCity(for: reminder.timezoneId)
+        if appEnvironment.settings.currentCityTimezoneId == reminder.timezoneId,
+           let name = appEnvironment.settings.currentCityName {
+            return CityDisplay.primaryName(
+                cityName: name,
+                cityEn: appEnvironment.settings.currentCityEn ?? name
+            )
+        }
+        return CityDisplay.primaryName(cityName: fallback.name, cityEn: fallback.en)
+    }
+
+    private func scheduleText(
         for reminder: CityReminderGroup,
         now: Date
-    ) -> (date: String, time: String) {
-        let nextDate = CityReminderScheduler.nextOccurrence(
+    ) -> (triggerDate: String, targetTime: String, crossDay: String?) {
+        guard let nextDate = CityReminderScheduler.nextOccurrence(
             after: now,
             timezoneId: reminder.timezoneId,
             hour: reminder.hour,
             minute: reminder.minute,
-            weekdaysOnly: reminder.weekdaysOnly
-        ) ?? Date()
+            targetTimezoneId: reminder.targetTimezoneId,
+            weekdayPolicy: reminder.weekdayPolicy
+        ) else {
+            return (
+                "--",
+                formatTime(reminder.targetHour, reminder.targetMinute),
+                nil
+            )
+        }
 
         let timezoneService = TimezoneService.shared
-        let date = timezoneService.getLocalDateWithWeekday(
-            timezoneId: reminder.targetTimezoneId,
+        let triggerDate = timezoneService.getLocalDateWithWeekday(
+            timezoneId: reminder.timezoneId,
             date: nextDate
         ) ?? ""
-        let time = use24Hour
+        let targetTime = use24Hour
             ? timezoneService.getLocalTime24(timezoneId: reminder.targetTimezoneId, date: nextDate)
             : timezoneService.getLocalTime12(timezoneId: reminder.targetTimezoneId, date: nextDate)
-        return (date, time ?? formatTime(reminder.targetHour, reminder.targetMinute))
+        let crossDay = timezoneService.getTimeDifferenceBetween(
+            sourceTimezoneId: reminder.timezoneId,
+            targetTimezoneId: reminder.targetTimezoneId,
+            date: nextDate
+        ).crossDay
+        return (
+            triggerDate,
+            targetTime ?? formatTime(reminder.targetHour, reminder.targetMinute),
+            crossDay
+        )
     }
 
     private func formatTime(_ hour: Int, _ minute: Int) -> String {
@@ -543,21 +699,4 @@ struct ReminderListView: View {
         return offset.hasPrefix("+") ? .green : .red
     }
 
-}
-
-private struct ReminderWeekdayBadgeShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        let cornerRadius = reminderCardCornerRadius
-        var path = Path()
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - cornerRadius))
-        path.addQuadCurve(
-            to: CGPoint(x: rect.maxX - cornerRadius, y: rect.maxY),
-            control: CGPoint(x: rect.maxX, y: rect.maxY)
-        )
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-        path.closeSubpath()
-        return path
-    }
 }

@@ -73,7 +73,7 @@ struct CityReminderGroup: Identifiable, Equatable {
     let timezoneId: String
     let hour: Int
     let minute: Int
-    let weekdaysOnly: Bool
+    let weekdayPolicy: CityReminderWeekdayPolicy
     /// 目标城市时区与对应时刻（用于展示与通知正文）
     let targetTimezoneId: String
     let targetHour: Int
@@ -81,14 +81,22 @@ struct CityReminderGroup: Identifiable, Equatable {
 }
 
 enum CityReminderScheduler {
+    private static let weekdayRange = 1...7
+    private static let maxSearchDays = 21
+
     static func nextOccurrence(
         after date: Date,
         timezoneId: String,
         hour: Int,
         minute: Int,
-        weekdaysOnly: Bool
+        targetTimezoneId: String,
+        weekdayPolicy: CityReminderWeekdayPolicy
     ) -> Date? {
         guard let timezone = TimeZone(identifier: timezoneId) else {
+            return nil
+        }
+        if weekdayPolicy.includesTargetCity,
+           TimeZone(identifier: targetTimezoneId) == nil {
             return nil
         }
 
@@ -108,14 +116,114 @@ enum CityReminderScheduler {
             occurrence = calendar.date(byAdding: .day, value: 1, to: occurrence) ?? occurrence
         }
 
-        if weekdaysOnly {
-            while calendar.component(.weekday, from: occurrence) == 1
-                || calendar.component(.weekday, from: occurrence) == 7 {
-                occurrence = calendar.date(byAdding: .day, value: 1, to: occurrence) ?? occurrence
-            }
+        guard weekdayPolicy.requiresWeekdayFiltering else {
+            return occurrence
         }
 
-        return occurrence
+        for _ in 0..<maxSearchDays {
+            if isAllowedOccurrence(
+                at: occurrence,
+                timezoneId: timezoneId,
+                targetTimezoneId: targetTimezoneId,
+                weekdayPolicy: weekdayPolicy
+            ) {
+                return occurrence
+            }
+            guard let nextDay = calendar.date(byAdding: .day, value: 1, to: occurrence) else {
+                return nil
+            }
+            occurrence = nextDay
+        }
+
+        return nil
+    }
+
+    /// 按重复规则判断某个具体触发时刻是否应发送提醒。
+    static func isAllowedOccurrence(
+        at date: Date,
+        timezoneId: String,
+        targetTimezoneId: String,
+        weekdayPolicy: CityReminderWeekdayPolicy
+    ) -> Bool {
+        switch weekdayPolicy {
+        case .everyDay:
+            return true
+        case .bothCities:
+            guard let currentCityIsWeekend = isWeekend(at: date, timezoneId: timezoneId),
+                  let targetCityIsWeekend = isWeekend(at: date, timezoneId: targetTimezoneId) else {
+                return false
+            }
+            return !currentCityIsWeekend && !targetCityIsWeekend
+        case .currentCity:
+            guard let currentCityIsWeekend = isWeekend(at: date, timezoneId: timezoneId) else {
+                return false
+            }
+            return !currentCityIsWeekend
+        case .targetCity:
+            guard let targetCityIsWeekend = isWeekend(at: date, timezoneId: targetTimezoneId) else {
+                return false
+            }
+            return !targetCityIsWeekend
+        }
+    }
+
+    static func isWeekend(at date: Date, timezoneId: String) -> Bool? {
+        guard let timezone = TimeZone(identifier: timezoneId) else {
+            return nil
+        }
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+        let weekday = calendar.component(.weekday, from: date)
+        return weekday == 1 || weekday == 7
+    }
+
+    /// 计算可以注册为每周重复通知的本地星期。
+    /// 目标城市的星期由本地触发时刻换算得出，因此单城市规则也可能映射到下一天。
+    static func repeatWeekdays(
+        after date: Date,
+        timezoneId: String,
+        hour: Int,
+        minute: Int,
+        targetTimezoneId: String,
+        weekdayPolicy: CityReminderWeekdayPolicy
+    ) -> [Int] {
+        guard weekdayPolicy.requiresWeekdayFiltering,
+              let timezone = TimeZone(identifier: timezoneId) else {
+            return []
+        }
+        if weekdayPolicy.includesTargetCity,
+           TimeZone(identifier: targetTimezoneId) == nil {
+            return []
+        }
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+
+        return weekdayRange.compactMap { weekday in
+            var components = DateComponents()
+            components.weekday = weekday
+            components.hour = hour
+            components.minute = minute
+            components.second = 0
+
+            guard let occurrence = calendar.nextDate(
+                after: date,
+                matching: components,
+                matchingPolicy: .nextTime,
+                repeatedTimePolicy: .first,
+                direction: .forward
+            ) else {
+                return nil
+            }
+
+            return isAllowedOccurrence(
+                at: occurrence,
+                timezoneId: timezoneId,
+                targetTimezoneId: targetTimezoneId,
+                weekdayPolicy: weekdayPolicy
+            ) ? weekday : nil
+        }
     }
 
     static func triggerComponents(
@@ -141,15 +249,20 @@ enum CityReminderScheduler {
 
 @MainActor
 final class CityReminderService {
+    private static let scheduleVersion = 3
+
     private let notificationCenter: UserNotificationCenterProtocol
     private let modelContainer: ModelContainer?
+    private let now: () -> Date
 
     init(
         notificationCenter: UserNotificationCenterProtocol = UserNotificationCenterAdapter(),
-        modelContainer: ModelContainer? = nil
+        modelContainer: ModelContainer? = nil,
+        now: @escaping () -> Date = { Date() }
     ) {
         self.notificationCenter = notificationCenter
         self.modelContainer = modelContainer
+        self.now = now
     }
 
     func isNotificationDeliveryAvailable() async -> Bool {
@@ -175,7 +288,7 @@ final class CityReminderService {
         timezoneId: String,
         hour: Int,
         minute: Int,
-        weekdaysOnly: Bool,
+        weekdayPolicy: CityReminderWeekdayPolicy,
         targetTimezoneId: String,
         targetHour: Int,
         targetMinute: Int
@@ -188,7 +301,7 @@ final class CityReminderService {
             timezoneId: timezoneId,
             hour: hour,
             minute: minute,
-            weekdaysOnly: weekdaysOnly,
+            weekdayPolicy: weekdayPolicy,
             targetTimezoneId: targetTimezoneId,
             targetHour: targetHour,
             targetMinute: targetMinute
@@ -225,7 +338,7 @@ final class CityReminderService {
         if let existing {
             deleteModels(withIDs: [existing.id])
         }
-        await cancelScheduledNotifications(for: id, weekdaysOnly: existing?.weekdaysOnly)
+        await cancelScheduledNotifications(for: id)
         NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
     }
 
@@ -250,10 +363,7 @@ final class CityReminderService {
 
         deleteModels(withIDs: Set(reminders.map(\.id)))
         for reminder in reminders {
-            await cancelScheduledNotifications(
-                for: reminder.id.uuidString,
-                weekdaysOnly: reminder.weekdaysOnly
-            )
+            await cancelScheduledNotifications(for: reminder.id.uuidString)
         }
         NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
     }
@@ -275,10 +385,19 @@ final class CityReminderService {
             return
         }
 
-        let pendingIDs = Set(requests.map(\.identifier))
+        let referenceDate = now()
         for reminder in await allReminders() {
-            let identifiers = Set(notificationIdentifiers(for: reminder.id, weekdaysOnly: reminder.weekdaysOnly))
-            if !identifiers.isSubset(of: pendingIDs) {
+            let expectedIdentifiers = Set(
+                scheduledNotificationIdentifiers(for: reminder, after: referenceDate)
+            )
+            let reminderRequests = requests.filter {
+                $0.identifier.hasPrefix("\(reminder.id)-")
+            }
+            let scheduledIdentifiers = Set(reminderRequests.map(\.identifier))
+            let needsContentRefresh = reminderRequests.contains {
+                ($0.content.userInfo["scheduleVersion"] as? Int) != Self.scheduleVersion
+            }
+            if expectedIdentifiers != scheduledIdentifiers || needsContentRefresh {
                 try? await schedule(reminder, requestAuthorization: false)
             }
         }
@@ -292,11 +411,11 @@ final class CityReminderService {
         _ reminder: CityReminderGroup,
         requestAuthorization: Bool = true
     ) async throws {
-        guard CityReminderScheduler.triggerComponents(
+        guard let triggerComponents = CityReminderScheduler.triggerComponents(
             hour: reminder.hour,
             minute: reminder.minute,
             timezoneId: reminder.timezoneId
-        ) != nil else {
+        ) else {
             throw CityReminderError.invalidTimezone
         }
 
@@ -307,16 +426,8 @@ final class CityReminderService {
             }
         }
 
-        let identifiers = notificationIdentifiers(for: reminder.id, weekdaysOnly: reminder.weekdaysOnly)
-        await notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
-
-        guard let triggerComponents = CityReminderScheduler.triggerComponents(
-            hour: reminder.hour,
-            minute: reminder.minute,
-            timezoneId: reminder.timezoneId
-        ) else {
-            throw CityReminderError.invalidTimezone
-        }
+        let allIdentifiers = allNotificationIdentifiers(for: reminder.id)
+        await notificationCenter.removePendingNotificationRequests(withIdentifiers: allIdentifiers)
 
         let content = UNMutableNotificationContent()
         content.title = reminder.cityName
@@ -328,7 +439,24 @@ final class CityReminderService {
         content.sound = .default
         content.userInfo = userInfo(for: reminder)
 
-        let weekdays = reminder.weekdaysOnly ? [2, 3, 4, 5, 6] : [nil]
+        let weekdays: [Int?]
+        if reminder.weekdayPolicy.requiresWeekdayFiltering {
+            let repeatDays = CityReminderScheduler.repeatWeekdays(
+                after: now(),
+                timezoneId: reminder.timezoneId,
+                hour: reminder.hour,
+                minute: reminder.minute,
+                targetTimezoneId: reminder.targetTimezoneId,
+                weekdayPolicy: reminder.weekdayPolicy
+            )
+            guard !repeatDays.isEmpty else {
+                throw CityReminderError.invalidTimezone
+            }
+            weekdays = repeatDays.map(Optional.some)
+        } else {
+            weekdays = [nil]
+        }
+
         var addedIdentifiers: [String] = []
         do {
             for weekday in weekdays {
@@ -347,29 +475,32 @@ final class CityReminderService {
         }
     }
 
-    private func cancelScheduledNotifications(
-        for reminderID: String,
-        weekdaysOnly: Bool?
-    ) async {
-        let identifiers: [String]
-        if let weekdaysOnly {
-            identifiers = notificationIdentifiers(
-                for: reminderID,
-                weekdaysOnly: weekdaysOnly
-            )
-        } else {
-            // 兼容旧通知：调用方没有持久化模型时，覆盖每日和仅工作日两种标识。
-            identifiers = ["\(reminderID)-daily"]
-                + [2, 3, 4, 5, 6].map { "\(reminderID)-\($0)" }
-        }
+    private func cancelScheduledNotifications(for reminderID: String) async {
+        let identifiers = allNotificationIdentifiers(for: reminderID)
         await notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
         await notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
 
-    private func notificationIdentifiers(for reminderID: String, weekdaysOnly: Bool) -> [String] {
-        weekdaysOnly
-            ? [2, 3, 4, 5, 6].map { "\(reminderID)-\($0)" }
-            : ["\(reminderID)-daily"]
+    private func allNotificationIdentifiers(for reminderID: String) -> [String] {
+        ["\(reminderID)-daily"] + (1...7).map { "\(reminderID)-\($0)" }
+    }
+
+    private func scheduledNotificationIdentifiers(
+        for reminder: CityReminderGroup,
+        after date: Date
+    ) -> [String] {
+        guard reminder.weekdayPolicy.requiresWeekdayFiltering else {
+            return ["\(reminder.id)-daily"]
+        }
+
+        return CityReminderScheduler.repeatWeekdays(
+            after: date,
+            timezoneId: reminder.timezoneId,
+            hour: reminder.hour,
+            minute: reminder.minute,
+            targetTimezoneId: reminder.targetTimezoneId,
+            weekdayPolicy: reminder.weekdayPolicy
+        ).map { "\(reminder.id)-\($0)" }
     }
 
     private func userInfo(for reminder: CityReminderGroup) -> [String: Any] {
@@ -380,10 +511,12 @@ final class CityReminderService {
             "timezoneId": reminder.timezoneId,
             "hour": reminder.hour,
             "minute": reminder.minute,
-            "weekdaysOnly": reminder.weekdaysOnly,
+            "weekdayPolicy": reminder.weekdayPolicy.rawValue,
+            "weekdaysOnly": reminder.weekdayPolicy.legacyWeekdaysOnly,
             "targetTimezoneId": reminder.targetTimezoneId,
             "targetHour": reminder.targetHour,
-            "targetMinute": reminder.targetMinute
+            "targetMinute": reminder.targetMinute,
+            "scheduleVersion": Self.scheduleVersion
         ]
     }
 
@@ -396,12 +529,14 @@ final class CityReminderService {
               let timezoneId = userInfo["timezoneId"] as? String,
               let hour = userInfo["hour"] as? Int,
               let minute = userInfo["minute"] as? Int,
-              let weekdaysOnly = userInfo["weekdaysOnly"] as? Bool,
               let targetTimezoneId = userInfo["targetTimezoneId"] as? String,
               let targetHour = userInfo["targetHour"] as? Int,
               let targetMinute = userInfo["targetMinute"] as? Int else {
             return nil
         }
+        let weekdayPolicy = (userInfo["weekdayPolicy"] as? String)
+            .flatMap(CityReminderWeekdayPolicy.init(rawValue:))
+            ?? CityReminderWeekdayPolicy(legacyWeekdaysOnly: userInfo["weekdaysOnly"] as? Bool ?? false)
 
         return CityReminderGroup(
             id: reminderID,
@@ -410,7 +545,7 @@ final class CityReminderService {
             timezoneId: timezoneId,
             hour: hour,
             minute: minute,
-            weekdaysOnly: weekdaysOnly,
+            weekdayPolicy: weekdayPolicy,
             targetTimezoneId: targetTimezoneId,
             targetHour: targetHour,
             targetMinute: targetMinute
@@ -436,14 +571,15 @@ final class CityReminderService {
         guard let modelContainer else { return }
         let context = modelContainer.mainContext
         let existing = reminderModel(withID: reminder.id)
-        let model = existing ?? ReminderModel(id: reminderID, cityID: reminder.cityID, cityName: reminder.cityName, timezoneId: reminder.timezoneId, hour: reminder.hour, minute: reminder.minute, weekdaysOnly: reminder.weekdaysOnly, targetTimezoneId: reminder.targetTimezoneId, targetHour: reminder.targetHour, targetMinute: reminder.targetMinute)
+        let model = existing ?? ReminderModel(id: reminderID, cityID: reminder.cityID, cityName: reminder.cityName, timezoneId: reminder.timezoneId, hour: reminder.hour, minute: reminder.minute, weekdayPolicy: reminder.weekdayPolicy, targetTimezoneId: reminder.targetTimezoneId, targetHour: reminder.targetHour, targetMinute: reminder.targetMinute)
 
         model.cityID = reminder.cityID
         model.cityName = reminder.cityName
         model.timezoneId = reminder.timezoneId
         model.hour = reminder.hour
         model.minute = reminder.minute
-        model.weekdaysOnly = reminder.weekdaysOnly
+        model.weekdaysOnly = reminder.weekdayPolicy.legacyWeekdaysOnly
+        model.weekdayPolicyRaw = reminder.weekdayPolicy.rawValue
         model.targetTimezoneId = reminder.targetTimezoneId
         model.targetHour = reminder.targetHour
         model.targetMinute = reminder.targetMinute
@@ -480,10 +616,7 @@ final class CityReminderService {
         try? context.save()
 
         for reminder in orphaned {
-            await cancelScheduledNotifications(
-                for: reminder.id.uuidString,
-                weekdaysOnly: reminder.weekdaysOnly
-            )
+            await cancelScheduledNotifications(for: reminder.id.uuidString)
         }
     }
 
@@ -495,7 +628,7 @@ final class CityReminderService {
         let timezone = TimeZone(identifier: targetTimezoneId) ?? .current
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timezone
-        var components = calendar.dateComponents([.year, .month, .day], from: Date())
+        var components = calendar.dateComponents([.year, .month, .day], from: now())
         components.hour = targetHour
         components.minute = targetMinute
         guard let date = calendar.date(from: components) else {
@@ -504,7 +637,8 @@ final class CityReminderService {
 
         let formatter = DateFormatter()
         formatter.locale = Locale.current
-        formatter.dateFormat = "yyyy/MM/dd EEE HH:mm"
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
         formatter.timeZone = timezone
 
         return String(
