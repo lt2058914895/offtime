@@ -2,6 +2,14 @@ import XCTest
 @testable import offtime
 
 final class MeetingPlannerServiceTests: XCTestCase {
+    private struct SlotGroupExpectation: Equatable {
+        let start: Int
+        let end: Int
+        let tier: Int
+        let awake: Int
+        let sleeping: Int
+    }
+
     private let shanghai = MeetingParticipant(
         id: "sh",
         cityName: "Shanghai",
@@ -189,7 +197,8 @@ final class MeetingPlannerServiceTests: XCTestCase {
 
         XCTAssertFalse(slots.isEmpty)
         XCTAssertEqual(slots.first?.tier, 1)
-        XCTAssertEqual(slots.first?.awakeCount, 2)
+        // awakeCount 只统计「非工作且清醒」的城市，工作中城市不计入该数量。
+        XCTAssertEqual(slots.first?.awakeCount, 1)
         XCTAssertEqual(slots.first?.sleepingCount, 0)
         XCTAssertTrue(slots.contains { $0.tier == 2 })
     }
@@ -298,7 +307,7 @@ final class MeetingPlannerServiceTests: XCTestCase {
         let groups = MeetingPlannerService.slotGroups(from: slots)
         let ordered = groups.map { group in
             let endHour = shanghaiCalendar().component(.hour, from: group.endDate)
-            return (
+            return SlotGroupExpectation(
                 start: shanghaiCalendar().component(.hour, from: group.startDate),
                 end: endHour == 0 ? 24 : endHour,
                 tier: group.tier,
@@ -308,13 +317,13 @@ final class MeetingPlannerServiceTests: XCTestCase {
         }
 
         XCTAssertEqual(ordered.count, 7)
-        XCTAssertEqual(ordered[0], (start: 9, end: 10, tier: 0, awake: 0, sleeping: 0))
-        XCTAssertEqual(ordered[1], (start: 7, end: 9, tier: 1, awake: 1, sleeping: 0))
-        XCTAssertEqual(ordered[2], (start: 10, end: 13, tier: 1, awake: 1, sleeping: 0))
-        XCTAssertEqual(ordered[3], (start: 21, end: 23, tier: 1, awake: 2, sleeping: 0))
-        XCTAssertEqual(ordered[4], (start: 0, end: 7, tier: 2, awake: 0, sleeping: 1))
-        XCTAssertEqual(ordered[5], (start: 13, end: 21, tier: 2, awake: 0, sleeping: 1))
-        XCTAssertEqual(ordered[6], (start: 23, end: 24, tier: 2, awake: 0, sleeping: 1))
+        XCTAssertEqual(ordered[0], SlotGroupExpectation(start: 9, end: 10, tier: 0, awake: 0, sleeping: 0))
+        XCTAssertEqual(ordered[1], SlotGroupExpectation(start: 7, end: 9, tier: 1, awake: 1, sleeping: 0))
+        XCTAssertEqual(ordered[2], SlotGroupExpectation(start: 10, end: 13, tier: 1, awake: 1, sleeping: 0))
+        XCTAssertEqual(ordered[3], SlotGroupExpectation(start: 21, end: 23, tier: 1, awake: 2, sleeping: 0))
+        XCTAssertEqual(ordered[4], SlotGroupExpectation(start: 0, end: 7, tier: 2, awake: 0, sleeping: 1))
+        XCTAssertEqual(ordered[5], SlotGroupExpectation(start: 13, end: 21, tier: 2, awake: 0, sleeping: 1))
+        XCTAssertEqual(ordered[6], SlotGroupExpectation(start: 23, end: 24, tier: 2, awake: 0, sleeping: 1))
     }
 
     func testSleepingUsesFixedLocalQuietHours() {
@@ -691,6 +700,7 @@ final class MeetingPlannerServiceTests: XCTestCase {
         viewModel.localTimezoneId = "Asia/Shanghai"
 
         let start = date(hour: 16, minute: 30, timezoneId: "Asia/Shanghai")
+        viewModel.meetingDate = start
         let detail = viewModel.slotDetail(startDate: start, durationMinutes: 60, use24Hour: true)
 
         // 北京 16:30 时：卡尔加里同日 02:30、首尔同日 17:30，均不应出现「昨日/次日」前缀

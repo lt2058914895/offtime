@@ -121,6 +121,28 @@ final class CityReminderServiceTests: XCTestCase {
         XCTAssertEqual(mock.removedPendingIdentifiers.last, ["\(group.id)-daily"])
     }
 
+    func testRemoveReminderAlsoClearsAlreadyDeliveredNotification() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+        let group = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "北京",
+            timezoneId: "Asia/Shanghai",
+            hour: 10,
+            minute: 0,
+            weekdaysOnly: false,
+            targetTimezoneId: "Europe/London",
+            targetHour: 3,
+            targetMinute: 0
+        )
+
+        // 已送达的通知不再出现在 pending 列表中，删除提醒时仍应清理通知中心里的记录。
+        mock.requests = []
+        await service.removeReminder(id: group.id)
+
+        XCTAssertEqual(mock.removedDeliveredIdentifiers.last, ["\(group.id)-daily"])
+    }
+
     func testSynchronizeImportsLegacyNotificationReminder() async throws {
         let cityID = UUID()
         let city = CityModel(cityName: "上海", cityEn: "Shanghai", timezoneId: "Asia/Shanghai", sortIndex: 0)
@@ -179,6 +201,31 @@ final class CityReminderServiceTests: XCTestCase {
 
         XCTAssertEqual(try context.fetch(FetchDescriptor<ReminderModel>()).count, 1)
         XCTAssertEqual(mock.requests.map(\.identifier), ["\(reminder.id.uuidString)-daily"])
+    }
+
+    func testNotificationDeliveryAvailabilityReflectsAuthorizationStatus() async {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock)
+
+        mock.authorizationStatus = .authorized
+        var isAvailable = await service.isNotificationDeliveryAvailable()
+        XCTAssertTrue(isAvailable)
+
+        mock.authorizationStatus = .provisional
+        isAvailable = await service.isNotificationDeliveryAvailable()
+        XCTAssertTrue(isAvailable)
+
+        mock.authorizationStatus = .ephemeral
+        isAvailable = await service.isNotificationDeliveryAvailable()
+        XCTAssertTrue(isAvailable)
+
+        mock.authorizationStatus = .denied
+        isAvailable = await service.isNotificationDeliveryAvailable()
+        XCTAssertFalse(isAvailable)
+
+        mock.authorizationStatus = .notDetermined
+        isAvailable = await service.isNotificationDeliveryAvailable()
+        XCTAssertFalse(isAvailable)
     }
 
     private func legacyNotificationRequest(for group: CityReminderGroup) -> UNNotificationRequest {

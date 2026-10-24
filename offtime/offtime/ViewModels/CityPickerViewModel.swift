@@ -53,33 +53,10 @@ final class CityPickerViewModel: ObservableObject {
     
     // MARK: - Load Cities from JSON
     
-    /// 城市数据静态缓存：首次加载后复用，避免 CityPickerView/CitySelectorView 重复 IO 与解码
-    private enum CityDataCache {
-        private static var cached: [CitySuggestion]?
-        private static let lock = NSLock()
-
-        static func load() -> [CitySuggestion]? {
-            lock.lock()
-            defer { lock.unlock() }
-            if let cached = cached { return cached }
-            guard let url = Bundle.main.url(forResource: "cities", withExtension: "json") else {
-                return nil
-            }
-            do {
-                let data = try Data(contentsOf: url)
-                let cities = try JSONDecoder().decode([CitySuggestion].self, from: data)
-                cached = cities
-                return cities
-            } catch {
-                return nil
-            }
-        }
-    }
-
     private func loadCities() {
         viewState = .loading
 
-        guard let cities = CityDataCache.load() else {
+        guard let cities = CityService.allCities() else {
             viewState = .failure(String(localized: "city.data.not.found"))
             errorMessage = String(localized: "city.data.not.found")
             return

@@ -25,6 +25,8 @@ struct StoreBackupManifest: Codable {
 }
 
 struct PersistentStoreBackupService {
+    static let defaultBackupInterval: TimeInterval = 24 * 60 * 60
+
     let fileManager: FileManager
 
     init(fileManager: FileManager = .default) {
@@ -85,6 +87,38 @@ struct PersistentStoreBackupService {
 
         cleanupOldBackups(keepCount: keepCount, for: storeURL)
         return backupURL
+    }
+
+    /// 在打开 SwiftData 前同步复制数据库，避免复制已打开的 SQLite 文件。
+    /// 通过限制备份频率，避免每次启动都在主线程复制整个数据库。
+    func createBackupIfNeeded(
+        for storeURL: URL,
+        date: Date = Date(),
+        minimumInterval: TimeInterval = Self.defaultBackupInterval,
+        keepCount: Int = 5
+    ) throws -> URL? {
+        guard shouldCreateBackup(for: storeURL, date: date, minimumInterval: minimumInterval) else {
+            return nil
+        }
+        return try createBackup(for: storeURL, date: date, keepCount: keepCount)
+    }
+
+    func shouldCreateBackup(
+        for storeURL: URL,
+        date: Date = Date(),
+        minimumInterval: TimeInterval = Self.defaultBackupInterval
+    ) -> Bool {
+        guard fileManager.fileExists(atPath: storeURL.path) else {
+            return false
+        }
+        guard minimumInterval > 0 else {
+            return true
+        }
+        guard let latestBackup = latestBackup(for: storeURL),
+              let manifest = manifest(for: latestBackup) else {
+            return true
+        }
+        return date.timeIntervalSince(manifest.createdAt) >= minimumInterval
     }
 
     func latestBackup(for storeURL: URL) -> URL? {
@@ -182,6 +216,16 @@ struct PersistentStoreBackupService {
                 (try? url.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
             }
             .sorted { $0.lastPathComponent > $1.lastPathComponent }
+    }
+
+    private func manifest(for backupURL: URL) -> StoreBackupManifest? {
+        let manifestURL = backupURL.appendingPathComponent("manifest.json")
+        guard let data = try? Data(contentsOf: manifestURL) else {
+            return nil
+        }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try? decoder.decode(StoreBackupManifest.self, from: data)
     }
 
     private static let storeFileSuffixes = ["", "-wal", "-shm"]

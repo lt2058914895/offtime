@@ -5,6 +5,7 @@ import Combine
 final class ReminderListViewModel: ObservableObject {
     @Published var reminders: [CityReminderGroup] = []
     @Published var isLoading = false
+    @Published private(set) var isNotificationDeliveryAvailable = true
 
     private let reminderService: CityReminderService
     private let cityService = CityService.shared
@@ -12,18 +13,6 @@ final class ReminderListViewModel: ObservableObject {
 
     /// 城市 ID → CityModel 缓存，用于 section header 展示国旗、国家、UTC、时差、DST
     private var cityCache: [UUID: CityModel] = [:]
-
-    /// 内置城市目录缓存：英文名+时区 → 国家码
-    private static let countryCatalog: [String: String] = {
-        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
-            return [:]
-        }
-        return cities.reduce(into: [String: String]()) {
-            $0["\($1.cityEn)|\($1.timezoneId)"] = $1.country
-        }
-    }()
 
     init(reminderService: CityReminderService? = nil) {
         self.reminderService = reminderService ?? CityReminderService(
@@ -34,8 +23,13 @@ final class ReminderListViewModel: ObservableObject {
     func loadReminders() async {
         isLoading = true
         reminders = await reminderService.allReminders()
+        isNotificationDeliveryAvailable = await reminderService.isNotificationDeliveryAvailable()
         loadCityCache()
         isLoading = false
+    }
+
+    func refreshNotificationAvailability() async {
+        isNotificationDeliveryAvailable = await reminderService.isNotificationDeliveryAvailable()
     }
 
     func deleteReminder(_ reminder: CityReminderGroup) async {
@@ -62,7 +56,7 @@ final class ReminderListViewModel: ObservableObject {
     /// 城市国家码：优先取模型字段，旧数据为空时从内置城市目录补全
     func countryCode(for city: CityModel) -> String {
         if !city.country.isEmpty { return city.country }
-        return Self.countryCatalog["\(city.cityEn)|\(city.timezoneId)"] ?? ""
+        return CityService.countryCode(cityEn: city.cityEn, timezoneId: city.timezoneId)
     }
 
     /// 时差文案

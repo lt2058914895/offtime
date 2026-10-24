@@ -373,29 +373,15 @@ final class CityDetailViewModel: ObservableObject {
         localCityEnOverride ?? CityService.matchCity(for: localTimezoneId).en
     }
 
-    /// 内置城市目录缓存：英文名+时区 → 国家码，用于补全旧数据缺失的 country 字段
-    private static let countryCatalog: [String: String] = {
-        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
-            return [:]
-        }
-        var catalog: [String: String] = [:]
-        for city in cities {
-            catalog["\(city.cityEn)|\(city.timezoneId)"] = city.country
-        }
-        return catalog
-    }()
-
     /// 当前城市国家码
     var localCountryCode: String {
-        Self.countryCatalog["\(localCityEn)|\(localTimezoneId)"] ?? ""
+        CityService.countryCode(cityEn: localCityEn, timezoneId: localTimezoneId)
     }
 
     /// 目标城市国家码：优先取模型字段，旧数据为空时从内置城市目录按 英文名+时区 补全
     var targetCountryCode: String {
         if !city.country.isEmpty { return city.country }
-        return Self.countryCatalog["\(city.cityEn)|\(city.timezoneId)"] ?? ""
+        return CityService.countryCode(cityEn: city.cityEn, timezoneId: city.timezoneId)
     }
 
     /// 当前城市夏令时/冬令时状态

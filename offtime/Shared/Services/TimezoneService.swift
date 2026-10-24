@@ -70,6 +70,32 @@ final class TimezoneService {
         guard let timezone = timezone(for: timezoneId) else { return nil }
         return makeFormatter(timezone: timezone, dateFormat: "yyyy/MM/dd").string(from: date)
     }
+
+    /// 日期 + 星期，供提醒、会议等列表复用同一套缓存格式化器。
+    func getLocalDateWithWeekday(timezoneId: String, date: Date = Date()) -> String? {
+        guard let timezone = timezone(for: timezoneId) else { return nil }
+        return makeFormatter(timezone: timezone, dateFormat: "yyyy/MM/dd EEE").string(from: date)
+    }
+
+    /// 格式化「时:分」文本，避免列表每一行都新建 DateFormatter。
+    func getTime(hour: Int, minute: Int, use24Hour: Bool) -> String {
+        if use24Hour {
+            return String(format: "%02d:%02d", hour, minute)
+        }
+
+        let now = Date()
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day], from: now)
+        components.hour = hour
+        components.minute = minute
+        guard let date = calendar.date(from: components) else {
+            return String(format: "%02d:%02d", hour, minute)
+        }
+        return makeFormatter(
+            timezone: TimeZone.current,
+            dateFormat: "h:mm a"
+        ).string(from: date)
+    }
     
     func getLocalWeekday(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }

@@ -59,22 +59,10 @@ final class ClockListViewModel: ObservableObject {
 
     // MARK: - 国家码解析
 
-    /// 内置城市目录缓存：英文名+时区 → 国家码，用于补全旧数据缺失的 country 字段
-    private static let countryCatalog: [String: String] = {
-        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
-            return [:]
-        }
-        return cities.reduce(into: [String: String]()) {
-            $0["\($1.cityEn)|\($1.timezoneId)"] = $1.country
-        }
-    }()
-
     /// 城市国家码：优先取模型字段，旧数据为空时从内置城市目录按 英文名+时区 补全
     func countryCode(for city: CityModel) -> String {
         if !city.country.isEmpty { return city.country }
-        return Self.countryCatalog["\(city.cityEn)|\(city.timezoneId)"] ?? ""
+        return CityService.countryCode(cityEn: city.cityEn, timezoneId: city.timezoneId)
     }
     
     func deleteCity(id: UUID) {

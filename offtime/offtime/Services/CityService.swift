@@ -96,9 +96,7 @@ final class CityService {
         // 清理关联的提醒持久化数据与通知
         Task {
             let reminderService = CityReminderService(modelContainer: modelContainer)
-            for id in ids {
-                await reminderService.deleteReminders(cityID: id)
-            }
+            await reminderService.deleteReminders(cityIDs: ids)
         }
     }
     
@@ -163,6 +161,7 @@ final class CityService {
         let ctx = context ?? mainContext
         let decoder = JSONDecoder()
         let importedCities: [CityItem]
+        var removedCityIDs: [UUID] = []
         
         if let envelope = try? decoder.decode(CitiesExportEnvelope.self, from: data) {
             guard envelope.schemaVersion == CitiesExportEnvelope.currentSchemaVersion else {
@@ -177,6 +176,7 @@ final class CityService {
         case .replace:
             // 清空现有城市
             let existing = try ctx.fetch(FetchDescriptor<CityModel>())
+            removedCityIDs = existing.map(\.id)
             for city in existing {
                 ctx.delete(city)
             }
@@ -198,46 +198,94 @@ final class CityService {
             }
         case .merge:
             let existing = try getAllCities(context: ctx)
-            let existingKeys = Set(existing.map { "\($0.cityName)|\($0.timezoneId)" })
+            var knownKeys = Set(existing.map {
+                CityIdentity.key(cityEn: $0.cityEn, timezoneId: $0.timezoneId)
+            })
+            var usedIDs = Set(existing.map(\.id))
             var maxIndex = existing.map(\.sortIndex).max() ?? -1
             
             for item in importedCities {
-                let key = "\(item.cityName)|\(item.timezoneId)"
-                if !existingKeys.contains(key) {
-                    maxIndex += 1
-                    let model = CityModel(
-                        id: item.id,
-                        cityName: item.cityName,
-                        cityEn: item.cityEn,
-                        timezoneId: item.timezoneId,
-                        country: item.country,
-                        sortIndex: maxIndex,
-                        workStartHour: item.workStartHour,
-                        workEndHour: item.workEndHour,
-                        localWorkStart: item.localWorkStart,
-                        localWorkEnd: item.localWorkEnd
-                    )
-                    ctx.insert(model)
-                }
+                let key = CityIdentity.key(cityEn: item.cityEn, timezoneId: item.timezoneId)
+                guard knownKeys.insert(key).inserted else { continue }
+
+                maxIndex += 1
+                let id = usedIDs.insert(item.id).inserted ? item.id : UUID()
+                let model = CityModel(
+                    id: id,
+                    cityName: item.cityName,
+                    cityEn: item.cityEn,
+                    timezoneId: item.timezoneId,
+                    country: item.country,
+                    sortIndex: maxIndex,
+                    workStartHour: item.workStartHour,
+                    workEndHour: item.workEndHour,
+                    localWorkStart: item.localWorkStart,
+                    localWorkEnd: item.localWorkEnd
+                )
+                ctx.insert(model)
             }
         }
         try ctx.save()
         notifyCityStoreDidChange()
+
+        if !removedCityIDs.isEmpty {
+            let retainedIDs = Set(importedCities.map(\.id))
+            let orphanedCityIDs = removedCityIDs.filter { !retainedIDs.contains($0) }
+            if !orphanedCityIDs.isEmpty {
+                Task {
+                    let reminderService = CityReminderService(modelContainer: modelContainer)
+                    await reminderService.deleteReminders(cityIDs: orphanedCityIDs)
+                }
+            }
+        }
     }
     
     // MARK: - City Name Matching（静态方法，供 AppEnvironment 等外部调用）
     
+    /// 内置城市目录在进程内只读取、解码一次。
+    private static let catalog: [CitySuggestion] = {
+        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data) else {
+            return []
+        }
+        return cities
+    }()
+
+    private static let countryCodesByIdentity: [String: String] = {
+        var result: [String: String] = [:]
+        for city in catalog where !city.country.isEmpty {
+            result[CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)] = city.country
+        }
+        return result
+    }()
+
+    private static let cityByTimezone: [String: CitySuggestion] = {
+        var result: [String: CitySuggestion] = [:]
+        for city in catalog where result[city.timezoneId] == nil {
+            result[city.timezoneId] = city
+        }
+        return result
+    }()
+
+    /// 全量城市目录（已做进程级缓存），供城市选择页等需要完整列表的场景复用。
+    static func allCities() -> [CitySuggestion]? {
+        catalog.isEmpty ? nil : catalog
+    }
+
     /// 在内置城市列表中查找与指定时区匹配的城市；找不到则用时区标识符派生名称。
     static func matchCity(for timezoneId: String) -> (name: String, en: String) {
-        if let url = Bundle.main.url(forResource: "cities", withExtension: "json"),
-           let data = try? Data(contentsOf: url),
-           let cities = try? JSONDecoder().decode([CitySuggestion].self, from: data),
-           let match = cities.first(where: { $0.timezoneId == timezoneId }) {
+        if let match = cityByTimezone[timezoneId] {
             return (match.cityName, match.cityEn)
         }
         let raw = timezoneId.split(separator: "/").last.map(String.init) ?? timezoneId
         let derived = raw.replacingOccurrences(of: "_", with: " ")
         return (derived, derived)
+    }
+
+    /// 内置城市目录补全国家码（用于兼容旧数据缺失 country 字段）。
+    static func countryCode(cityEn: String, timezoneId: String) -> String {
+        countryCodesByIdentity[CityIdentity.key(cityEn: cityEn, timezoneId: timezoneId)] ?? ""
     }
 }
 

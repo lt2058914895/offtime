@@ -1,16 +1,16 @@
 import SwiftUI
 import SwiftData
-import Combine
 
 /// 已添加会议列表：展示从推荐档期加入的会议，支持滑动删除。
 struct MeetingListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Query(sort: \MeetingModel.startDate, order: .reverse) private var meetings: [MeetingModel]
     @State private var meetingToDelete: MeetingModel?
     @State private var statusFilter: MeetingStatus = .upcoming
-    @State private var now = Date()
+    @State private var isAppeared = false
     let highlightMeetingID: UUID?
 
     init(highlightMeetingID: UUID? = nil) {
@@ -18,7 +18,6 @@ struct MeetingListView: View {
     }
 
     private let timezoneService = TimezoneService.shared
-    private let refreshTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
 
     private enum MeetingStatus: String, CaseIterable, Identifiable {
         case upcoming, finished
@@ -34,6 +33,14 @@ struct MeetingListView: View {
 
     private var use24Hour: Bool {
         appEnvironment.settings.use24Hour
+    }
+
+    private var now: Date {
+        appEnvironment.currentDate
+    }
+
+    private var shouldRunMinuteClock: Bool {
+        scenePhase == .active && isAppeared
     }
 
     var body: some View {
@@ -104,15 +111,20 @@ struct MeetingListView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
-            now = Date()
+            isAppeared = true
+            updateMinuteClock()
             if let highlightMeetingID,
                let meeting = meetings.first(where: { $0.id == highlightMeetingID }) {
                 let end = meeting.startDate.addingTimeInterval(Double(meeting.durationMinutes) * 60)
-                statusFilter = end > now ? .upcoming : .finished
+                statusFilter = end > appEnvironment.currentDate ? .upcoming : .finished
             }
         }
-        .onReceive(refreshTimer) { _ in
-            now = Date()
+        .onDisappear {
+            isAppeared = false
+            updateMinuteClock()
+        }
+        .onChange(of: scenePhase) { _, _ in
+            updateMinuteClock()
         }
         .confirmationDialog(
             String(localized: "meeting.list.delete.confirm.title"),
@@ -231,6 +243,14 @@ struct MeetingListView: View {
         var style = Date.FormatStyle.dateTime.month(.defaultDigits).day().weekday(.abbreviated)
         style.timeZone = TimeZone(identifier: timezoneId) ?? .current
         return date.formatted(style)
+    }
+
+    private func updateMinuteClock() {
+        if shouldRunMinuteClock {
+            appEnvironment.startMinuteClock()
+        } else {
+            appEnvironment.stopMinuteClock()
+        }
     }
 
 }

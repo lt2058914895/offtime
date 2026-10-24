@@ -152,6 +152,22 @@ final class CityReminderService {
         self.modelContainer = modelContainer
     }
 
+    func isNotificationDeliveryAvailable() async -> Bool {
+        let status = await notificationCenter.notificationAuthorizationStatus()
+        return Self.canDeliverNotifications(for: status)
+    }
+
+    static func canDeliverNotifications(for status: UNAuthorizationStatus) -> Bool {
+        switch status {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .notDetermined, .denied:
+            return false
+        @unknown default:
+            return false
+        }
+    }
+
     @discardableResult
     func addReminder(
         cityID: UUID,
@@ -205,28 +221,41 @@ final class CityReminderService {
     }
 
     func removeReminder(id: String) async {
-        if let reminderID = UUID(uuidString: id) {
-            deleteModel(id: reminderID)
+        let existing = reminderModel(withID: id)
+        if let existing {
+            deleteModels(withIDs: [existing.id])
         }
-        await cancelScheduledNotifications(for: id)
+        await cancelScheduledNotifications(for: id, weekdaysOnly: existing?.weekdaysOnly)
         NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
     }
 
     func deleteReminders(cityID: UUID) async {
-        let cityIDToFind = cityID
-        let fetch = FetchDescriptor<ReminderModel>(
-            predicate: #Predicate { $0.cityID == cityIDToFind }
-        )
-        let reminders = (try? fetchModels(fetch)) ?? []
+        await deleteReminders(cityIDs: [cityID])
+    }
+
+    /// 批量删除多个城市的提醒，统一保存并只发一次变更通知。
+    func deleteReminders(cityIDs: [UUID]) async {
+        let uniqueCityIDs = Set(cityIDs)
+        guard !uniqueCityIDs.isEmpty else { return }
+
+        var reminders: [ReminderModel] = []
+        for cityID in uniqueCityIDs {
+            let idToFind = cityID
+            let fetch = FetchDescriptor<ReminderModel>(
+                predicate: #Predicate { $0.cityID == idToFind }
+            )
+            reminders.append(contentsOf: (try? fetchModels(fetch)) ?? [])
+        }
+        guard !reminders.isEmpty else { return }
+
+        deleteModels(withIDs: Set(reminders.map(\.id)))
         for reminder in reminders {
-            deleteModel(id: reminder.id)
+            await cancelScheduledNotifications(
+                for: reminder.id.uuidString,
+                weekdaysOnly: reminder.weekdaysOnly
+            )
         }
-        for reminder in reminders {
-            await cancelScheduledNotifications(for: reminder.id.uuidString)
-        }
-        if !reminders.isEmpty {
-            NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
-        }
+        NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
     }
 
     /// 启动时同步两套存储：
@@ -241,24 +270,20 @@ final class CityReminderService {
         }
 
         let authorizationStatus = await notificationCenter.notificationAuthorizationStatus()
-        guard authorizationStatus == .authorized
-                || authorizationStatus == .provisional
-                || authorizationStatus == .ephemeral else {
-            cleanupOrphanedReminders()
+        guard Self.canDeliverNotifications(for: authorizationStatus) else {
+            await cleanupOrphanedReminders()
             return
         }
 
         let pendingIDs = Set(requests.map(\.identifier))
         for reminder in await allReminders() {
             let identifiers = Set(notificationIdentifiers(for: reminder.id, weekdaysOnly: reminder.weekdaysOnly))
-            guard identifiers.isDisjoint(with: pendingIDs)
-                    || !identifiers.isSubset(of: pendingIDs) else {
-                continue
+            if !identifiers.isSubset(of: pendingIDs) {
+                try? await schedule(reminder, requestAuthorization: false)
             }
-            try? await schedule(reminder, requestAuthorization: false)
         }
 
-        cleanupOrphanedReminders()
+        await cleanupOrphanedReminders()
     }
 
     // MARK: - Scheduling
@@ -322,13 +347,21 @@ final class CityReminderService {
         }
     }
 
-    private func cancelScheduledNotifications(for reminderID: String) async {
-        let requests = await notificationCenter.pendingNotificationRequests()
-        let identifiers = requests
-            .filter { $0.content.userInfo["reminderID"] as? String == reminderID }
-            .map(\.identifier)
-
-        guard !identifiers.isEmpty else { return }
+    private func cancelScheduledNotifications(
+        for reminderID: String,
+        weekdaysOnly: Bool?
+    ) async {
+        let identifiers: [String]
+        if let weekdaysOnly {
+            identifiers = notificationIdentifiers(
+                for: reminderID,
+                weekdaysOnly: weekdaysOnly
+            )
+        } else {
+            // 兼容旧通知：调用方没有持久化模型时，覆盖每日和仅工作日两种标识。
+            identifiers = ["\(reminderID)-daily"]
+                + [2, 3, 4, 5, 6].map { "\(reminderID)-\($0)" }
+        }
         await notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
         await notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
@@ -420,31 +453,38 @@ final class CityReminderService {
         try? context.save()
     }
 
-    private func deleteModel(id: UUID) {
+    private func deleteModels(withIDs ids: Set<UUID>) {
+        guard !ids.isEmpty else { return }
         guard let modelContainer else { return }
         let context = modelContainer.mainContext
-        let fetch = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == id })
-        for reminder in (try? context.fetch(fetch)) ?? [] {
+        let reminders = (try? context.fetch(FetchDescriptor<ReminderModel>())) ?? []
+        for reminder in reminders where ids.contains(reminder.id) {
             context.delete(reminder)
         }
         try? context.save()
     }
 
-    private func cleanupOrphanedReminders() {
+    private func cleanupOrphanedReminders() async {
         guard let modelContainer else { return }
         let context = modelContainer.mainContext
         let cities = (try? context.fetch(FetchDescriptor<CityModel>())) ?? []
         let validCityIDs = Set(cities.map(\.id))
         let reminders = (try? context.fetch(FetchDescriptor<ReminderModel>())) ?? []
 
-        for reminder in reminders where !validCityIDs.contains(reminder.cityID) {
+        let orphaned = reminders.filter { !validCityIDs.contains($0.cityID) }
+        guard !orphaned.isEmpty else { return }
+
+        for reminder in orphaned {
             context.delete(reminder)
-            let reminderID = reminder.id.uuidString
-            Task {
-                await cancelScheduledNotifications(for: reminderID)
-            }
         }
         try? context.save()
+
+        for reminder in orphaned {
+            await cancelScheduledNotifications(
+                for: reminder.id.uuidString,
+                weekdaysOnly: reminder.weekdaysOnly
+            )
+        }
     }
 
     private func notificationBody(

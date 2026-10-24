@@ -40,8 +40,9 @@ final class CityCatalogTests: XCTestCase {
     }
 
     func testValidTimezones() {
-        let valid = Set(TimeZone.knownTimeZoneIdentifiers)
-        let bad = cities.filter { !valid.contains($0.timezoneId) }.map(\.cityName)
+        // knownTimeZoneIdentifiers 只包含 canonical ID，会漏掉 Asia/Kolkata 这类
+        // 仍被 TimeZone(identifier:) 正常解析的合法别名。
+        let bad = cities.filter { TimeZone(identifier: $0.timezoneId) == nil }.map(\.cityName)
         XCTAssertTrue(bad.isEmpty, "非法时区: \(bad)")
     }
 

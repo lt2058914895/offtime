@@ -99,7 +99,8 @@ final class TimezoneServiceTests: XCTestCase {
             targetWorkEnd: 17
         )
 
-        XCTAssertEqual(overlap.hourlyOverlap.filter { $0 }.count, 8)
+        // 本地 9–18 点与目标 UTC+2 的 8–17 点（即 UTC 6–15 点）相交 9–15 点，共 6 小时。
+        XCTAssertEqual(overlap.hourlyOverlap.filter { $0 }.count, 6)
         XCTAssertTrue(overlap.isCurrentlyOverlapping)
     }
 

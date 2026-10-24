@@ -44,6 +44,54 @@ final class PersistentStoreBackupServiceTests: XCTestCase {
         ))
     }
 
+    func testCreateBackupIfNeededCreatesFirstBackup() throws {
+        try "database".write(to: storeURL, atomically: true, encoding: .utf8)
+
+        let backup = try service.createBackupIfNeeded(
+            for: storeURL,
+            date: date(year: 2026, month: 9, day: 5)
+        )
+
+        XCTAssertNotNil(backup)
+        XCTAssertEqual(service.backupURLs(for: storeURL).count, 1)
+    }
+
+    func testCreateBackupIfNeededSkipsBackupWithinMinimumInterval() throws {
+        try "database".write(to: storeURL, atomically: true, encoding: .utf8)
+        _ = try service.createBackupIfNeeded(
+            for: storeURL,
+            date: date(year: 2026, month: 9, day: 5),
+            minimumInterval: 24 * 60 * 60
+        )
+
+        let backup = try service.createBackupIfNeeded(
+            for: storeURL,
+            date: date(year: 2026, month: 9, day: 5, hour: 23),
+            minimumInterval: 24 * 60 * 60
+        )
+
+        XCTAssertNil(backup)
+        XCTAssertEqual(service.backupURLs(for: storeURL).count, 1)
+    }
+
+    func testCreateBackupIfNeededCreatesBackupAfterMinimumInterval() throws {
+        try "database".write(to: storeURL, atomically: true, encoding: .utf8)
+        _ = try service.createBackupIfNeeded(
+            for: storeURL,
+            date: date(year: 2026, month: 9, day: 5),
+            minimumInterval: 24 * 60 * 60
+        )
+
+        let backup = try service.createBackupIfNeeded(
+            for: storeURL,
+            date: date(year: 2026, month: 9, day: 6),
+            minimumInterval: 24 * 60 * 60
+        )
+
+        XCTAssertNotNil(backup)
+        XCTAssertEqual(service.backupURLs(for: storeURL).count, 2)
+    }
+
     func testLatestBackupReturnsNewestBackup() throws {
         try "database".write(to: storeURL, atomically: true, encoding: .utf8)
 
@@ -127,11 +175,12 @@ final class PersistentStoreBackupServiceTests: XCTestCase {
         service.backupURLs(for: storeURL)
     }
 
-    private func date(year: Int, month: Int, day: Int) -> Date {
+    private func date(year: Int, month: Int, day: Int, hour: Int = 0) -> Date {
         var components = DateComponents()
         components.year = year
         components.month = month
         components.day = day
+        components.hour = hour
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "UTC") ?? .current
         return calendar.date(from: components) ?? Date()

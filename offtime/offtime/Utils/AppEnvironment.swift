@@ -26,7 +26,7 @@ final class AppEnvironment: ObservableObject {
         let schema = Schema(versionedSchema: AppStoreSchemaV1.self)
         let storeURL = backupService.storeURL
         do {
-            _ = try backupService.createBackup(for: storeURL)
+            _ = try backupService.createBackupIfNeeded(for: storeURL)
         } catch {
             logger.error("SwiftData 存储备份失败: \(error.localizedDescription)")
         }

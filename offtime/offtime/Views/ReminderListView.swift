@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 
 private let reminderCardCornerRadius: CGFloat = 18
 
@@ -8,11 +7,9 @@ struct ReminderListView: View {
     @StateObject private var viewModel = ReminderListViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @State private var reminderToDelete: CityReminderGroup?
-    @State private var now = Date()
     @AppStorage("settings_reminderSortMode") private var sortMode: ReminderSortMode = .time
-
-    private let refreshTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
 
     private enum ReminderSortMode: String, CaseIterable, Identifiable {
         case time
@@ -35,6 +32,7 @@ struct ReminderListView: View {
         case dueSoon
         case remindedToday
         case notToday
+        case notificationsOff
 
         var title: String {
             switch self {
@@ -46,6 +44,8 @@ struct ReminderListView: View {
                 return String(localized: "reminder.status.reminded")
             case .notToday:
                 return String(localized: "reminder.status.notToday")
+            case .notificationsOff:
+                return String(localized: "reminder.status.notificationsOff")
             }
         }
 
@@ -59,6 +59,8 @@ struct ReminderListView: View {
                 return "checkmark.circle.fill"
             case .notToday:
                 return "calendar"
+            case .notificationsOff:
+                return "bell.slash.fill"
             }
         }
 
@@ -70,12 +72,18 @@ struct ReminderListView: View {
                 return .orange
             case .remindedToday, .notToday:
                 return .secondary
+            case .notificationsOff:
+                return .orange
             }
         }
     }
 
     private var use24Hour: Bool {
         appEnvironment.settings.use24Hour
+    }
+
+    private var now: Date {
+        appEnvironment.currentDate
     }
 
     var body: some View {
@@ -88,6 +96,13 @@ struct ReminderListView: View {
                 )
             } else {
                 List {
+                    if !viewModel.isNotificationDeliveryAvailable {
+                        notificationDisabledBanner
+                            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 2, trailing: 16))
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                    }
+
                     Text(String(localized: "reminder.list.swipe.hint"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
@@ -109,7 +124,7 @@ struct ReminderListView: View {
                                 }
                             } header: {
                                 HStack(spacing: 8) {
-                                    Text(flagEmoji(for: section.countryCode))
+                                    Text(CountryDisplay.flagEmoji(for: section.countryCode))
                                         .font(.title3)
 
                                     HStack(spacing: 4) {
@@ -156,13 +171,20 @@ struct ReminderListView: View {
         }
         .toolbar(.hidden, for: .tabBar)
         .onAppear {
-            now = Date()
+            updateMinuteClock()
         }
-        .onReceive(refreshTimer) { _ in
-            now = Date()
+        .onDisappear {
+            appEnvironment.stopMinuteClock()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            updateMinuteClock()
+            if phase == .active {
+                Task {
+                    await viewModel.refreshNotificationAvailability()
+                }
+            }
         }
         .task {
-            now = Date()
             await viewModel.loadReminders()
         }
         .confirmationDialog(
@@ -210,6 +232,34 @@ struct ReminderListView: View {
                     Label(String(localized: "city.reminder.remove"), systemImage: "trash")
                 }
             }
+    }
+
+    private var notificationDisabledBanner: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "bell.slash.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(.orange)
+                .padding(.top, 2)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(String(localized: "reminder.list.notifications.disabled.title"))
+                    .font(.footnote.weight(.semibold))
+                    .foregroundColor(.primary)
+
+                Text(String(localized: "reminder.list.notifications.disabled.message"))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.orange.opacity(0.12))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .accessibilityElement(children: .combine)
     }
 
     private var timeSortedReminders: [CityReminderGroup] {
@@ -411,6 +461,9 @@ struct ReminderListView: View {
     }
 
     private func displayStatus(for reminder: CityReminderGroup, now: Date) -> ReminderDisplayStatus {
+        guard viewModel.isNotificationDeliveryAvailable else {
+            return .notificationsOff
+        }
         guard let timezone = TimeZone(identifier: reminder.timezoneId) else {
             return .pending
         }
@@ -447,7 +500,6 @@ struct ReminderListView: View {
         for reminder: CityReminderGroup,
         now: Date
     ) -> (date: String, time: String) {
-        let targetTimezone = TimeZone(identifier: reminder.targetTimezoneId) ?? .current
         let nextDate = CityReminderScheduler.nextOccurrence(
             after: now,
             timezoneId: reminder.timezoneId,
@@ -456,31 +508,27 @@ struct ReminderListView: View {
             weekdaysOnly: reminder.weekdaysOnly
         ) ?? Date()
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = .current
-        dateFormatter.timeZone = targetTimezone
-        dateFormatter.dateFormat = "yyyy/MM/dd EEE"
-
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = targetTimezone
-        let hour = calendar.component(.hour, from: nextDate)
-        let minute = calendar.component(.minute, from: nextDate)
-
-        return (dateFormatter.string(from: nextDate), formatTime(hour, minute))
+        let timezoneService = TimezoneService.shared
+        let date = timezoneService.getLocalDateWithWeekday(
+            timezoneId: reminder.targetTimezoneId,
+            date: nextDate
+        ) ?? ""
+        let time = use24Hour
+            ? timezoneService.getLocalTime24(timezoneId: reminder.targetTimezoneId, date: nextDate)
+            : timezoneService.getLocalTime12(timezoneId: reminder.targetTimezoneId, date: nextDate)
+        return (date, time ?? formatTime(reminder.targetHour, reminder.targetMinute))
     }
 
     private func formatTime(_ hour: Int, _ minute: Int) -> String {
-        if use24Hour {
-            return String(format: "%02d:%02d", hour, minute)
+        TimezoneService.shared.getTime(hour: hour, minute: minute, use24Hour: use24Hour)
+    }
+
+    private func updateMinuteClock() {
+        if scenePhase == .active {
+            appEnvironment.startMinuteClock()
+        } else {
+            appEnvironment.stopMinuteClock()
         }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        formatter.locale = Locale.current
-        var components = DateComponents()
-        components.hour = hour
-        components.minute = minute
-        let date = Calendar.current.date(from: components) ?? Date()
-        return formatter.string(from: date)
     }
 
     private func timeDifference(for reminder: CityReminderGroup) -> String {
@@ -512,44 +560,4 @@ private struct ReminderWeekdayBadgeShape: Shape {
         path.closeSubpath()
         return path
     }
-}
-
-// MARK: - 城市元信息辅助
-
-/// 国家码 → 国旗 Emoji；非法/空返回 🌐 占位
-private func flagEmoji(for countryCode: String) -> String {
-    let upper = countryCode.uppercased()
-    guard upper.count == 2, upper.allSatisfy({ $0.isASCII && $0.isLetter }) else {
-        return "🌐"
-    }
-    let base: UInt32 = 127397
-    return upper.unicodeScalars
-        .compactMap { UnicodeScalar(base + $0.value) }
-        .reduce(into: "") { result, scalar in
-            result.unicodeScalars.append(scalar)
-        }
-}
-
-/// 当前 App 语言下的国家名
-private func appCountryName(for countryCode: String) -> String {
-    guard countryCode.count == 2 else { return "" }
-    let language = Bundle.main.preferredLocalizations.first ?? "zh-Hans"
-    let locale: Locale
-    switch language {
-    case "en": locale = Locale(identifier: "en_US")
-    default: locale = Locale(identifier: "zh_CN")
-    }
-    return locale.localizedString(forRegionCode: countryCode) ?? ""
-}
-
-/// 时区 ID → UTC 偏移文案，如 UTC+8
-private func utcText(for timezoneId: String) -> String {
-    guard let timeZone = TimeZone(identifier: timezoneId) else { return "" }
-    let seconds = timeZone.secondsFromGMT()
-    let hours = seconds / 3600
-    let minutes = abs(seconds % 3600) / 60
-    if minutes == 0 {
-        return String(format: "UTC%+d", hours)
-    }
-    return String(format: "UTC%+d:%02d", hours, minutes)
 }

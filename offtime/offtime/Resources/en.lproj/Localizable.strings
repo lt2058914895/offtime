@@ -181,6 +181,8 @@
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
 "reminder.list.swipe.hint" = "Swipe left to delete";
+"reminder.list.notifications.disabled.title" = "Reminder notifications are off";
+"reminder.list.notifications.disabled.message" = "Reminders are kept, but iOS won’t deliver notifications. Enable notifications in Settings.";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";
 "reminder.list.next" = "Next reminder";
 "reminder.sort.label" = "Sort order";
@@ -190,6 +192,7 @@
 "reminder.status.dueSoon" = "Due soon";
 "reminder.status.reminded" = "Reminded today";
 "reminder.status.notToday" = "Not today";
+"reminder.status.notificationsOff" = "Notifications off";
 "reminder.list.count.one" = "1 reminder";
 "reminder.list.count" = "%d reminders";
 "settings.export.cities" = "Export City List";
