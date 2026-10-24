@@ -562,6 +562,22 @@ struct SettingsView: View {
 }
 
 private struct MeetingRecommendationCard: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var cardBaseColor: Color {
+        colorScheme == .dark ? Color(.secondarySystemBackground) : .clear
+    }
+
+    private var cardGradientColors: [Color] {
+        colorScheme == .dark
+            ? [Color.accentColor.opacity(0.28), Color.accentColor.opacity(0.10)]
+            : [Color.accentColor.opacity(0.12), Color.accentColor.opacity(0.04)]
+    }
+
+    private var cardBorderColor: Color {
+        Color.accentColor.opacity(colorScheme == .dark ? 0.30 : 0.18)
+    }
+
     var body: some View {
         HStack(spacing: 12) {
             ZStack {
@@ -597,7 +613,7 @@ private struct MeetingRecommendationCard: View {
                 .font(.footnote.weight(.semibold))
                 .foregroundColor(.accentColor)
                 .frame(width: 26, height: 26)
-                .background(Color.accentColor.opacity(0.12))
+                .background(Color.accentColor.opacity(colorScheme == .dark ? 0.18 : 0.12))
                 .clipShape(Circle())
 
         }
@@ -605,19 +621,29 @@ private struct MeetingRecommendationCard: View {
         .padding(.trailing, 12)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [Color.accentColor.opacity(0.12), Color.accentColor.opacity(0.04)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-        )
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(cardBaseColor)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: cardGradientColors,
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+        }
         .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
+                .stroke(cardBorderColor, lineWidth: 1)
         }
-        .shadow(color: .black.opacity(0.04), radius: 5, y: 2)
+        .shadow(
+            color: .black.opacity(colorScheme == .dark ? 0.18 : 0.04),
+            radius: colorScheme == .dark ? 8 : 5,
+            y: colorScheme == .dark ? 3 : 2
+        )
     }
 }
 
@@ -626,6 +652,28 @@ private struct ProEntryCard: View {
     let actionText: String
     let statusText: String
     let isUnlocked: Bool
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var cardBaseColor: Color {
+        colorScheme == .dark ? Color(.secondarySystemBackground) : .clear
+    }
+
+    private var cardGradientColors: [Color] {
+        colorScheme == .dark
+            ? [Color.orange.opacity(0.24), Color.orange.opacity(0.08)]
+            : [Color.orange.opacity(0.14), Color.orange.opacity(0.04)]
+    }
+
+    private var cardBorderColor: Color {
+        let opacity: Double
+        switch (colorScheme, isUnlocked) {
+        case (.dark, true): opacity = 0.38
+        case (.dark, false): opacity = 0.26
+        case (_, true): opacity = 0.24
+        case (_, false): opacity = 0.14
+        }
+        return Color.orange.opacity(opacity)
+    }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -663,25 +711,38 @@ private struct ProEntryCard: View {
             .foregroundColor(.orange)
             .padding(.horizontal, 9)
             .padding(.vertical, 5)
-            .background(Color.orange.opacity(0.12), in: Capsule())
+            .background(
+                Color.orange.opacity(colorScheme == .dark ? 0.20 : 0.12),
+                in: Capsule()
+            )
             .fixedSize()
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [Color.orange.opacity(0.14), Color.orange.opacity(0.04)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-        )
+        .background {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(cardBaseColor)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: cardGradientColors,
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+        }
         .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.orange.opacity(isUnlocked ? 0.24 : 0.14), lineWidth: 1)
+                .stroke(cardBorderColor, lineWidth: 1)
         }
-        .shadow(color: .black.opacity(0.04), radius: 5, y: 2)
+        .shadow(
+            color: .black.opacity(colorScheme == .dark ? 0.18 : 0.04),
+            radius: colorScheme == .dark ? 8 : 5,
+            y: colorScheme == .dark ? 3 : 2
+        )
         .accessibilityElement(children: .combine)
     }
 }
