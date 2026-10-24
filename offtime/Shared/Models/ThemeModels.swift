@@ -159,7 +159,7 @@ struct ThemeWidgetBackground: View {
             } else if let color {
                 color.color
             } else {
-                Color(.secondarySystemBackground)
+                Color.accentColor.opacity(0.22)
             }
         }
         .clipped()

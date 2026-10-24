@@ -36,46 +36,54 @@ struct WidgetStylePreviewView: View {
     }
 
     private func widgetCityColumn(_ city: WidgetCitySnapshot) -> some View {
-        VStack(spacing: 0) {
+        let difference = timeDifference(for: city)
+        return VStack(spacing: 0) {
             widgetTitleRow(for: city)
 
             Spacer(minLength: 4)
 
-            Text(timeText(for: city))
-                .font(.system(size: 34, weight: .semibold, design: .rounded))
-                .monospacedDigit()
-                .lineLimit(1)
+            widgetTimeBlock(for: city, difference: difference)
 
             Spacer(minLength: 4)
 
-            widgetDateRow(for: city)
+            widgetDateRow(for: city, difference: difference)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
     }
 
     private func widgetTitleRow(for city: WidgetCitySnapshot) -> some View {
-        HStack(alignment: .top, spacing: 6) {
-            daypartIcon(for: city)
+        Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
+            .font(.title3)
+            .fontWeight(.semibold)
+            .lineLimit(2)
+            .multilineTextAlignment(.leading)
+            .minimumScaleFactor(0.6)
+    }
 
-            Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
-                .font(.title3)
-                .fontWeight(.semibold)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-                .minimumScaleFactor(0.6)
+    private func widgetTimeBlock(
+        for city: WidgetCitySnapshot,
+        difference: (offset: String, crossDay: String?)
+    ) -> some View {
+        VStack(spacing: 3) {
+            Text(timeText(for: city))
+                .font(.system(size: 34, weight: .semibold, design: .rounded))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+
+            if let crossDay = difference.crossDay {
+                crossDayBadge(crossDay)
+            }
         }
     }
 
-    private func widgetDateRow(for city: WidgetCitySnapshot) -> some View {
-        let difference = timeDifference(for: city)
-
-        return HStack(spacing: 4) {
-            if let crossDay = difference.crossDay {
-                badge(crossDay, color: Color.orange)
-            }
-
-            Text(weekdayAndDateText(for: city))
+    private func widgetDateRow(
+        for city: WidgetCitySnapshot,
+        difference: (offset: String, crossDay: String?)
+    ) -> some View {
+        HStack(spacing: 4) {
+            Text(dateAndWeekdayText(for: city))
                 .fontWeight(.medium)
                 .monospacedDigit()
                 .foregroundStyle(.secondary)
@@ -124,10 +132,10 @@ struct WidgetStylePreviewView: View {
         ) ?? "--:--"
     }
 
-    private func weekdayAndDateText(for city: WidgetCitySnapshot) -> String {
+    private func dateAndWeekdayText(for city: WidgetCitySnapshot) -> String {
         let weekday = TimezoneService.shared.getLocalWeekday(timezoneId: city.timezoneId, date: date) ?? ""
         let dateText = TimezoneService.shared.getMonthDayOnly(timezoneId: city.timezoneId, date: date) ?? ""
-        return [weekday, dateText].filter { !$0.isEmpty }.joined(separator: " ")
+        return [dateText, weekday].filter { !$0.isEmpty }.joined(separator: " ")
     }
 
     private func timeDifference(for city: WidgetCitySnapshot) -> (offset: String, crossDay: String?) {
@@ -138,12 +146,8 @@ struct WidgetStylePreviewView: View {
         )
     }
 
-    private func daypartIcon(for city: WidgetCitySnapshot) -> some View {
-        let isDaytime = TimezoneService.shared.isDaytime(timezoneId: city.timezoneId, date: date)
-
-        return Image(systemName: isDaytime ? "sun.max.fill" : "moon.stars.fill")
-            .font(.system(size: 10))
-            .foregroundStyle(isDaytime ? Color.orange : Color.indigo)
+    private func crossDayBadge(_ text: String) -> some View {
+        badge(text, color: theme?.resolvedAccentColor ?? .secondary)
     }
 
     private func badge(_ text: String, color: Color) -> some View {
@@ -151,7 +155,7 @@ struct WidgetStylePreviewView: View {
             .font(.system(size: 9, weight: .semibold))
             .padding(.horizontal, 5)
             .padding(.vertical, 2)
-            .background(color.opacity(0.16), in: Capsule())
+            .background(color.opacity(0.12), in: Capsule())
             .foregroundStyle(color)
     }
 }

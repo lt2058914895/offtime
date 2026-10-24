@@ -219,26 +219,24 @@ struct OffTimeWidgetView: View {
 
     // MARK: - 小尺寸
     //
-    // 城市行（昼夜图标 + 城市名）
-    //        大号时间
+    // 城市名
+    // 昨日/明日 + 大号时间
     //   星期 + 日期 · 与本地城市的关系
 
     private var systemSmall: some View {
         Group {
             if let city = cities.first {
+                let difference = timeDifference(for: city)
                 VStack(spacing: 0) {
                     titleRow(for: city)
 
                     Spacer(minLength: 4)
 
-                    Text(timeText(for: city))
-                        .font(.system(size: 38, weight: .semibold, design: .rounded))
-                        .monospacedDigit()
-                        .lineLimit(1)
+                    timeBlock(for: city, fontSize: 38, difference: difference)
 
                     Spacer(minLength: 4)
 
-                    dateRow(for: city, showsRelation: true)
+                    dateRow(for: city, showsRelation: true, difference: difference)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .accessibilityElement(children: .combine)
@@ -269,19 +267,17 @@ struct OffTimeWidgetView: View {
     }
 
     private func cityColumn(_ city: WidgetCitySnapshot) -> some View {
-        VStack(spacing: 0) {
+        let difference = timeDifference(for: city)
+        return VStack(spacing: 0) {
             titleRow(for: city)
 
             Spacer(minLength: 4)
 
-            Text(timeText(for: city))
-                .font(.system(size: 34, weight: .semibold, design: .rounded))
-                .monospacedDigit()
-                .lineLimit(1)
+            timeBlock(for: city, fontSize: 34, difference: difference)
 
             Spacer(minLength: 4)
 
-            dateRow(for: city, showsRelation: true)
+            dateRow(for: city, showsRelation: true, difference: difference)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
@@ -315,17 +311,15 @@ struct OffTimeWidgetView: View {
     }
 
     private func mediumThreeCitiesRow(for city: WidgetCitySnapshot) -> some View {
-        HStack(alignment: .center, spacing: 12) {
+        let difference = timeDifference(for: city)
+        return HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
                 titleRow(for: city, font: .headline)
-                dateRow(for: city, showsRelation: true)
+                dateRow(for: city, showsRelation: true, difference: difference)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text(timeText(for: city))
-                .font(.system(size: 20, weight: .semibold, design: .rounded))
-                .monospacedDigit()
-                .lineLimit(1)
+            timeRow(for: city, fontSize: 20, difference: difference)
                 .fixedSize(horizontal: true, vertical: false)
         }
         .padding(.horizontal, 12)
@@ -357,17 +351,15 @@ struct OffTimeWidgetView: View {
     }
 
     private func cityRow(_ city: WidgetCitySnapshot) -> some View {
-        HStack(alignment: .center, spacing: 12) {
+        let difference = timeDifference(for: city)
+        return HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 titleRow(for: city)
-                dateRow(for: city, showsRelation: true)
+                dateRow(for: city, showsRelation: true, difference: difference)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text(timeText(for: city))
-                .font(.system(size: 26, weight: .semibold, design: .rounded))
-                .monospacedDigit()
-                .lineLimit(1)
+            timeRow(for: city, fontSize: 26, difference: difference)
                 .fixedSize(horizontal: true, vertical: false)
         }
         .accessibilityElement(children: .combine)
@@ -375,19 +367,54 @@ struct OffTimeWidgetView: View {
 
     // MARK: - 行内组件
 
-    /// 城市行：昼夜图标 + 城市名。
+    /// 城市行只保留城市名。
     /// 「与本地城市的关系」统一由日期行承载，三个尺寸位置一致。
     private func titleRow(for city: WidgetCitySnapshot, font: Font = .title3) -> some View {
-        HStack(alignment: .top, spacing: 6) {
-            daypartIcon(for: city)
+        Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
+            .font(font)
+            .fontWeight(.semibold)
+            .lineLimit(2)
+            .multilineTextAlignment(.leading)
+            .minimumScaleFactor(0.6)
+    }
 
-            Text(CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn))
-                .font(font)
-                .fontWeight(.semibold)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-                .minimumScaleFactor(0.6)
+    /// 小/中尺寸中的时间块：大号时间保持居中，昨日/明日作为补充信息放在正下方。
+    private func timeBlock(
+        for city: WidgetCitySnapshot,
+        fontSize: CGFloat,
+        difference: (offset: String, crossDay: String?)?
+    ) -> some View {
+        VStack(spacing: 3) {
+            timeLabel(for: city, fontSize: fontSize)
+
+            if let crossDay = difference?.crossDay {
+                crossDayBadge(crossDay)
+            }
         }
+    }
+
+    /// 三城/大尺寸横向行：昨日/明日标签放在时间前面，与时钟列表保持一致。
+    private func timeRow(
+        for city: WidgetCitySnapshot,
+        fontSize: CGFloat,
+        difference: (offset: String, crossDay: String?)?
+    ) -> some View {
+        HStack(spacing: 6) {
+            if let crossDay = difference?.crossDay {
+                crossDayBadge(crossDay)
+            }
+
+            timeLabel(for: city, fontSize: fontSize)
+        }
+    }
+
+    /// 时间继续使用组件主题色，不额外铺底色，避免覆盖自定义主题。
+    private func timeLabel(for city: WidgetCitySnapshot, fontSize: CGFloat) -> some View {
+        Text(timeText(for: city))
+            .font(.system(size: fontSize, weight: .semibold, design: .rounded))
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.75)
     }
 
     /// 与本地城市的关系：始终展示时差；0h 也直接展示。
@@ -400,20 +427,17 @@ struct OffTimeWidgetView: View {
         return (difference.offset, .secondary)
     }
 
-    /// 星期 + 日期（+ 跨天标记）。
+    /// 日期 + 星期（+ 时差）。
     /// `showsRelation` 为真时在行尾接上「与本地城市的关系」——三个尺寸的时差/本地都放在这里，
     /// 紧跟在日期后面一起读，城市行则留给更大的城市名。
-    private func dateRow(for city: WidgetCitySnapshot, showsRelation: Bool = false) -> some View {
-        // 跨天标记和行尾的时差都来自同一次计算；大尺寸要渲染 6 行，重复计算会成倍放大开销。
-        let difference = timeDifference(for: city)
-
-        return HStack(spacing: 4) {
-            if let crossDay = difference?.crossDay {
-                crossDayBadge(crossDay)
-            }
-
+    private func dateRow(
+        for city: WidgetCitySnapshot,
+        showsRelation: Bool = false,
+        difference: (offset: String, crossDay: String?)?
+    ) -> some View {
+        HStack(spacing: 4) {
             // 星期日期与时差的字体样式互换：日期用中黑 + 等宽数字，时差回到普通字重
-            Text(weekdayAndDateText(for: city))
+            Text(dateAndWeekdayText(for: city))
                 .fontWeight(.medium)
                 .monospacedDigit()
                 .foregroundStyle(.secondary)
@@ -431,7 +455,7 @@ struct OffTimeWidgetView: View {
     }
 
     private func crossDayBadge(_ text: String) -> some View {
-        labelBadge(text, color: .orange)
+        labelBadge(text, color: resolvedAccentColor ?? .secondary)
     }
 
     private func labelBadge(_ text: String, color: Color) -> some View {
@@ -439,20 +463,8 @@ struct OffTimeWidgetView: View {
             .font(.system(size: 9, weight: .semibold))
             .padding(.horizontal, 5)
             .padding(.vertical, 2)
-            .background(color.opacity(0.16), in: Capsule())
+            .background(color.opacity(0.1), in: Capsule())
             .foregroundStyle(color)
-    }
-
-    /// 昼夜图标：白天太阳（橙），夜晚月亮（靛）。
-    private func daypartIcon(for city: WidgetCitySnapshot) -> some View {
-        let isDaytime = TimezoneService.shared.isDaytime(timezoneId: city.timezoneId, date: entry.date)
-
-        return Image(systemName: isDaytime ? "sun.max.fill" : "moon.stars.fill")
-            .font(.system(size: 10))
-            .foregroundStyle(isDaytime ? Color.orange : Color.indigo)
-            .accessibilityLabel(Text(isDaytime
-                ? String(localized: "widget.daytime", defaultValue: "Daytime")
-                : String(localized: "widget.nighttime", defaultValue: "Nighttime")))
     }
 
     // MARK: - Lock Screen Widgets
@@ -565,11 +577,11 @@ struct OffTimeWidgetView: View {
         TimezoneService.shared.getMonthDayOnly(timezoneId: city.timezoneId, date: entry.date) ?? ""
     }
 
-    /// 「周几 + 月日」：月日文本来自 `getMonthDayOnly`（不含星期），保证星期只出现一次。
-    private func weekdayAndDateText(for city: WidgetCitySnapshot) -> String {
+    /// 「月日 + 周几」：与时钟列表保持相同顺序，月日文本不含星期，保证星期只出现一次。
+    private func dateAndWeekdayText(for city: WidgetCitySnapshot) -> String {
         let weekday = TimezoneService.shared.getLocalWeekday(timezoneId: city.timezoneId, date: entry.date) ?? ""
         let date = dateText(for: city)
-        return [weekday, date].filter { !$0.isEmpty }.joined(separator: " ")
+        return [date, weekday].filter { !$0.isEmpty }.joined(separator: " ")
     }
 
     /// 与本地城市的时差和跨天提示；同一时区返回 0h。
