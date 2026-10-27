@@ -62,7 +62,7 @@
 "city.reminder.add" = "Add Reminder";
 "city.reminder.cancel" = "Cancel Reminder";
 "city.reminder.remove" = "Remove reminder";
-"city.reminder.contactable.body" = "%@ in the target city — contactable now";
+"city.reminder.contactable.body" = "It’s %@ — contactable now";
 "city.reminder.weekdays.both" = "Both cities’ weekdays";
 "city.reminder.weekdays.single" = "Only %@ weekdays";
 "city.reminder.weekdays.badge.both" = "Both cities’ weekdays";

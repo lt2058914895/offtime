@@ -249,7 +249,7 @@ enum CityReminderScheduler {
 
 @MainActor
 final class CityReminderService {
-    private static let scheduleVersion = 3
+    private static let scheduleVersion = 4
 
     private let notificationCenter: UserNotificationCenterProtocol
     private let modelContainer: ModelContainer?
@@ -430,7 +430,11 @@ final class CityReminderService {
         await notificationCenter.removePendingNotificationRequests(withIdentifiers: allIdentifiers)
 
         let content = UNMutableNotificationContent()
-        content.title = reminder.cityName
+        let city = cityModel(withID: reminder.cityID)
+        content.title = CityDisplay.primaryName(
+            cityName: reminder.cityName,
+            cityEn: city?.cityEn ?? reminder.cityName
+        )
         content.body = notificationBody(
             targetTimezoneId: reminder.targetTimezoneId,
             targetHour: reminder.targetHour,
@@ -563,6 +567,11 @@ final class CityReminderService {
     private func reminderModel(withID id: String) -> ReminderModel? {
         guard let reminderID = UUID(uuidString: id) else { return nil }
         let fetch = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == reminderID })
+        return try? fetchModels(fetch).first
+    }
+
+    private func cityModel(withID id: UUID) -> CityModel? {
+        let fetch = FetchDescriptor<CityModel>(predicate: #Predicate { $0.id == id })
         return try? fetchModels(fetch).first
     }
 

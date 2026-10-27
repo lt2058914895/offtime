@@ -62,7 +62,7 @@
 "city.reminder.add" = "添加提醒";
 "city.reminder.cancel" = "取消提醒";
 "city.reminder.remove" = "移除提醒";
-"city.reminder.contactable.body" = "目标城市时间 %@，可联系了";
+"city.reminder.contactable.body" = "现在是 %@，可以联系了";
 "city.reminder.weekdays.both" = "双方工作日";
 "city.reminder.weekdays.single" = "仅%@工作日";
 "city.reminder.weekdays.badge.both" = "双方工作日";
