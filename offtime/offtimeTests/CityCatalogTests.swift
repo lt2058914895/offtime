@@ -50,6 +50,15 @@ final class CityCatalogTests: XCTestCase {
         let bad = cities.filter { $0.cityName.isEmpty || $0.cityEn.isEmpty }.map(\.id)
         XCTAssertTrue(bad.isEmpty, "存在空名称: \(bad)")
     }
+
+    @MainActor
+    func testMatchCityByNameDisambiguatesSharedTimezone() {
+        let shanghai = CityService.matchCity(cityName: "上海", timezoneId: "Asia/Shanghai")
+        let beijing = CityService.matchCity(cityName: "北京", timezoneId: "Asia/Shanghai")
+
+        XCTAssertEqual(shanghai.en, "Shanghai")
+        XCTAssertEqual(beijing.en, "Beijing")
+    }
 }
 
 private extension Array where Element: Hashable {

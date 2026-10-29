@@ -50,6 +50,7 @@
 
 // MARK: - City Detail
 "detail.contactable.period" = "可联系时段";
+"detail.contactable.range" = "%02d:00–%02d:00（%d%@）";
 "detail.contactable.none" = "无可联系时段，调整工作时段试试";
 "detail.current.time" = "当前时间";
 "detail.work.start" = "开始";

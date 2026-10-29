@@ -120,10 +120,12 @@ final class MeetingViewModel: ObservableObject {
         self.localTimezoneId = localTimezoneId
         normalizeMeetingDateIfNeeded()
 
-        let localName = localCityName
-            ?? CityService.matchCity(for: localTimezoneId).name
-        let localEn = localCityEn
-            ?? CityService.matchCity(for: localTimezoneId).en
+        let matchedLocalCity = CityService.matchCity(
+            cityName: localCityName ?? "",
+            timezoneId: localTimezoneId
+        )
+        let localName = localCityName ?? matchedLocalCity.name
+        let localEn = localCityEn ?? matchedLocalCity.en
 
         var loaded: [MeetingParticipant] = [
             MeetingParticipant(

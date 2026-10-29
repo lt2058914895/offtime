@@ -141,7 +141,7 @@ final class CityDetailViewModel: ObservableObject {
         return ranges.map { range in
             let hours = range.1 - range.0
             return String(
-                format: "%02d:00–%02d:00（%d%@）",
+                format: String(localized: "detail.contactable.range"),
                 range.0,
                 range.1,
                 hours,
@@ -372,7 +372,8 @@ final class CityDetailViewModel: ObservableObject {
 
     /// 当前城市英文名——优先使用设置页选择的城市英文名
     var localCityEn: String {
-        localCityEnOverride ?? CityService.matchCity(for: localTimezoneId).en
+        localCityEnOverride
+            ?? CityService.matchCity(cityName: localCityName, timezoneId: localTimezoneId).en
     }
 
     /// 当前城市国家码

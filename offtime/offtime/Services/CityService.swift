@@ -283,6 +283,16 @@ final class CityService {
         return (derived, derived)
     }
 
+    /// 按中文名 + 时区匹配城市。用于旧数据缺少英文名时回填，避免同一时区下误取目录中的首个城市。
+    static func matchCity(cityName: String, timezoneId: String) -> (name: String, en: String) {
+        if let match = catalog.first(where: {
+            $0.cityName == cityName && $0.timezoneId == timezoneId
+        }) {
+            return (match.cityName, match.cityEn)
+        }
+        return matchCity(for: timezoneId)
+    }
+
     /// 内置城市目录补全国家码（用于兼容旧数据缺失 country 字段）。
     static func countryCode(cityEn: String, timezoneId: String) -> String {
         countryCodesByIdentity[CityIdentity.key(cityEn: cityEn, timezoneId: timezoneId)] ?? ""

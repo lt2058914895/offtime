@@ -177,7 +177,8 @@ final class ClockListViewModel: ObservableObject {
     func copyTimeText(city: CityModel) -> String {
         let time = getLocalTime(city: city)
         let date = getLocalDate(city: city)
-        return "\(city.cityName) \(date) \(time)"
+        let name = CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn)
+        return "\(name) \(date) \(time)"
     }
     
     func dismissError() {

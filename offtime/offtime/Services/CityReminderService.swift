@@ -252,7 +252,10 @@ enum CityReminderScheduler {
 
 @MainActor
 final class CityReminderService {
-    private static let scheduleVersion = 4
+    private static let scheduleVersion = 5
+    private static var localizationIdentifier: String {
+        Bundle.main.preferredLocalizations.first ?? "en"
+    }
 
     private let notificationCenter: UserNotificationCenterProtocol
     private let modelContainer: ModelContainer?
@@ -413,6 +416,7 @@ final class CityReminderService {
             let scheduledIdentifiers = Set(reminderRequests.map(\.identifier))
             let needsContentRefresh = reminderRequests.contains {
                 ($0.content.userInfo["scheduleVersion"] as? Int) != Self.scheduleVersion
+                    || ($0.content.userInfo["localization"] as? String) != Self.localizationIdentifier
             }
             if expectedIdentifiers != scheduledIdentifiers || needsContentRefresh {
                 try? await schedule(reminder, requestAuthorization: false)
@@ -487,9 +491,13 @@ final class CityReminderService {
 
         let content = UNMutableNotificationContent()
         let city = cityModel(withID: reminder.cityID)
+        let matchedCity = CityService.matchCity(
+            cityName: reminder.cityName,
+            timezoneId: reminder.targetTimezoneId
+        )
         content.title = CityDisplay.primaryName(
             cityName: reminder.cityName,
-            cityEn: city?.cityEn ?? reminder.cityName
+            cityEn: city?.cityEn ?? matchedCity.en
         )
         content.body = notificationBody(
             targetTimezoneId: reminder.targetTimezoneId,
@@ -582,7 +590,8 @@ final class CityReminderService {
             "targetTimezoneId": reminder.targetTimezoneId,
             "targetHour": reminder.targetHour,
             "targetMinute": reminder.targetMinute,
-            "scheduleVersion": Self.scheduleVersion
+            "scheduleVersion": Self.scheduleVersion,
+            "localization": Self.localizationIdentifier
         ]
         if let triggerCityName = reminder.triggerCityName {
             info["triggerCityName"] = triggerCityName

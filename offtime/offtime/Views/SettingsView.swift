@@ -330,19 +330,26 @@ struct SettingsView: View {
     }
 
     private var currentCityDisplayName: String? {
-        guard let name = appEnvironment.settings.currentCityName else { return nil }
+        guard let names = resolvedCurrentCityNames else { return nil }
         return CityDisplay.primaryName(
-            cityName: name,
-            cityEn: appEnvironment.settings.currentCityEn ?? name
+            cityName: names.name,
+            cityEn: names.en
         )
     }
 
     private var currentCitySecondaryDisplayName: String? {
-        guard let name = appEnvironment.settings.currentCityName else { return nil }
+        guard let names = resolvedCurrentCityNames else { return nil }
         return CityDisplay.secondaryName(
-            cityName: name,
-            cityEn: appEnvironment.settings.currentCityEn ?? name
+            cityName: names.name,
+            cityEn: names.en
         )
+    }
+
+    private var resolvedCurrentCityNames: (name: String, en: String)? {
+        guard let name = appEnvironment.settings.currentCityName else { return nil }
+        let timezoneId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
+        let matched = CityService.matchCity(cityName: name, timezoneId: timezoneId)
+        return (name, appEnvironment.settings.currentCityEn ?? matched.en)
     }
 
     private var widgetRow: some View {
@@ -786,7 +793,10 @@ struct WebView: UIViewRepresentable {
 // MARK: - Support Page
 
 struct SupportPageView: View {
-    private let supportURL = URL(string: "https://lt2058914895.github.io/offtime/support.html")!
+    private var supportURL: URL {
+        let filename = CityDisplay.isChineseLocale ? "support.html" : "support-en.html"
+        return URL(string: "https://lt2058914895.github.io/offtime/\(filename)")!
+    }
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

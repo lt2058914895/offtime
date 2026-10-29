@@ -207,12 +207,14 @@ final class AppEnvironment: ObservableObject {
             currentCityEn: currentCityEn
         )
 
-        // 首次启动时，如果 currentCityName 为空，尝试从内置城市库匹配名称
-        if settings.currentCityName == nil, let tzId = settings.currentCityTimezoneId {
-            let (name, en) = CityService.matchCity(for: tzId)
+        // 首次启动或旧数据缺少英文名时，从内置城市库补全中英文名称
+        if (settings.currentCityName == nil || settings.currentCityEn == nil),
+           let tzId = settings.currentCityTimezoneId {
+            let currentName = settings.currentCityName
+            let (name, en) = CityService.matchCity(cityName: currentName ?? "", timezoneId: tzId)
             var s = settings
-            s.currentCityName = name
-            s.currentCityEn = en
+            s.currentCityName = currentName ?? name
+            s.currentCityEn = settings.currentCityEn ?? en
             updateSettings(s)
         }
     }

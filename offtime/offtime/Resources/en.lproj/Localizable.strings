@@ -50,6 +50,7 @@
 
 // MARK: - City Detail
 "detail.contactable.period" = "Contactable Period";
+"detail.contactable.range" = "%02d:00–%02d:00 (%d%@)";
 "detail.contactable.none" = "No contactable hours. Try adjusting work hours.";
 "detail.current.time" = "Current Time";
 "detail.work.start" = "Start";

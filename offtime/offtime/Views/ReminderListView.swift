@@ -279,10 +279,7 @@ struct ReminderListView: View {
     }
 
     private func deleteConfirmationMessage(for reminder: CityReminderGroup) -> String {
-        let city = viewModel.city(for: reminder.cityID)
-        let cityName = city.map {
-            CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn)
-        } ?? reminder.cityName
+        let cityName = cityDisplayName(for: reminder)
         let triggerTime = formatTime(reminder.hour, reminder.minute)
         let targetTime = formatTime(reminder.targetHour, reminder.targetMinute)
         return "\(triggerTime) (\(cityName) \(targetTime))"
@@ -481,7 +478,14 @@ struct ReminderListView: View {
 
     private func cityDisplayNames(for reminder: CityReminderGroup) -> (primary: String, secondary: String?) {
         guard let city = viewModel.city(for: reminder.cityID) else {
-            return (reminder.cityName, nil)
+            let matched = CityService.matchCity(
+                cityName: reminder.cityName,
+                timezoneId: reminder.targetTimezoneId
+            )
+            return (
+                CityDisplay.primaryName(cityName: reminder.cityName, cityEn: matched.en),
+                CityDisplay.secondaryName(cityName: reminder.cityName, cityEn: matched.en)
+            )
         }
         return (
             CityDisplay.primaryName(cityName: city.cityName, cityEn: city.cityEn),
@@ -807,7 +811,10 @@ struct ReminderListView: View {
 
     private func triggerCityDisplayName(for reminder: CityReminderGroup) -> String {
         if let triggerCityName = reminder.triggerCityName {
-            let matched = CityService.matchCity(for: reminder.timezoneId)
+            let matched = CityService.matchCity(
+                cityName: triggerCityName,
+                timezoneId: reminder.timezoneId
+            )
             return CityDisplay.primaryName(
                 cityName: triggerCityName,
                 cityEn: reminder.triggerCityEn ?? matched.en
@@ -816,9 +823,13 @@ struct ReminderListView: View {
 
         if appEnvironment.settings.currentCityTimezoneId == reminder.timezoneId,
            let currentCityName = appEnvironment.settings.currentCityName {
+            let matched = CityService.matchCity(
+                cityName: currentCityName,
+                timezoneId: reminder.timezoneId
+            )
             return CityDisplay.primaryName(
                 cityName: currentCityName,
-                cityEn: appEnvironment.settings.currentCityEn ?? currentCityName
+                cityEn: appEnvironment.settings.currentCityEn ?? matched.en
             )
         }
 

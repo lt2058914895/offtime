@@ -29,20 +29,23 @@ struct ConverterView: View {
         guard let timezoneId = appEnvironment.settings.currentCityTimezoneId else {
             return nil
         }
-        let currentCityEn = appEnvironment.settings.currentCityEn
+        let names = CityService.matchCity(
+            cityName: appEnvironment.settings.currentCityName ?? "",
+            timezoneId: timezoneId
+        )
+        let currentCityName = appEnvironment.settings.currentCityName ?? names.name
+        let currentCityEn = appEnvironment.settings.currentCityEn ?? names.en
         let matchedCity = viewModel.availableCities.first { city in
             guard city.timezoneId == timezoneId else { return false }
-            guard let currentCityEn else { return true }
             return CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
                 == CityIdentity.key(cityEn: currentCityEn, timezoneId: timezoneId)
         }
         if let matchedCity {
             return matchedCity
         }
-        let names = CityService.matchCity(for: timezoneId)
         return CityModel(
-            cityName: appEnvironment.settings.currentCityName ?? names.name,
-            cityEn: appEnvironment.settings.currentCityEn ?? names.en,
+            cityName: currentCityName,
+            cityEn: currentCityEn,
             timezoneId: timezoneId
         )
     }
