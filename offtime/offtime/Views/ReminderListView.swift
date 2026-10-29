@@ -585,6 +585,7 @@ struct ReminderListView: View {
                 .foregroundColor(.secondary)
             }
         }
+        .opacity(reminder.isPaused ? 0.5 : 1)
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -593,10 +594,12 @@ struct ReminderListView: View {
         .shadow(color: Color.black.opacity(0.04), radius: 4, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: reminderCardCornerRadius, style: .continuous)
-                .strokeBorder(Color(uiColor: .separator).opacity(0.18), lineWidth: 0.5)
+                .strokeBorder(
+                    Color(uiColor: .separator).opacity(reminder.isPaused ? 0.3 : 0.18),
+                    lineWidth: 0.5
+                )
         )
         .contentShape(RoundedRectangle(cornerRadius: reminderCardCornerRadius, style: .continuous))
-        .opacity(reminder.isPaused ? 0.5 : 1)
         .accessibilityElement(children: .contain)
     }
 
