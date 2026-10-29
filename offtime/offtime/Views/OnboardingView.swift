@@ -110,18 +110,18 @@ struct OnboardingView: View {
                 featureRow(icon: "building.2",
                            title: "onboarding.features.manage",
                            desc: "onboarding.features.manage.desc")
-                featureRow(icon: "person.2",
-                           title: "onboarding.features.meeting",
-                           desc: "onboarding.features.meeting.desc")
                 featureRow(icon: "repeat",
                            title: "onboarding.features.converter",
                            desc: "onboarding.features.converter.desc")
+                featureRow(icon: "person.2",
+                           title: "onboarding.features.meeting",
+                           desc: "onboarding.features.meeting.desc")
+                featureRow(icon: "bell",
+                           title: "onboarding.features.reminder",
+                           desc: "onboarding.features.reminder.desc")
                 featureRow(icon: "clock",
                            title: "onboarding.features.format",
                            desc: "onboarding.features.format.desc")
-                featureRow(icon: "moon",
-                           title: "onboarding.features.theme",
-                           desc: "onboarding.features.theme.desc")
                 featureRow(icon: "square.grid.2x2",
                            title: "onboarding.features.widget",
                            desc: "onboarding.features.widget.desc")

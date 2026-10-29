@@ -24,28 +24,33 @@
 <body>
     <div class="container">
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: September 9, 2026</p>
+        <p class="updated">Last updated: October 29, 2026</p>
 
         <p>OffTime (referred to as “this app”) takes your privacy seriously. This Privacy Policy explains how the app handles your personal information.</p>
 
         <div class="highlight">
-            <p>This app is an offline world clock app. It does not collect, upload, or share any personal data.</p>
+            <p>This app does not collect, upload, or share your personal data. Pro purchases are processed by Apple through the App Store, and this app cannot access your payment information.</p>
         </div>
 
         <h2>1. Data Storage</h2>
-        <p>All city data and app settings are stored locally on your device in an SQLite database and are never uploaded to any server. Uninstalling the app permanently removes this data.</p>
+        <p>City lists, meeting slots, reminders, widget preferences, and app settings are stored locally on your device in a local database, preferences, and shared widget storage, and are never uploaded to a developer server. Uninstalling the app removes local data from the device; Pro purchase records are managed by Apple and can be restored with “Restore Purchases.”</p>
 
         <h2>2. Default City and Time Zone</h2>
         <p>When you first launch the app, a default city is added automatically based on your device’s system time zone. This process reads only the system time zone setting. It does not request location permission or access your GPS location.</p>
 
-        <h2>3. Network Requests</h2>
+        <h2>3. Reminders and Notifications</h2>
+        <p>City reminders use iOS local notifications. Reminder times, repeat rules, and related settings are stored on your device, and notifications are scheduled by the system without being sent to a developer server. The app requests notification permission when you first add a reminder. You can turn notifications off at any time in system settings.</p>
+
+        <h2>4. Network Requests</h2>
         <ul>
-            <li>Core features, including clock display, time zone conversion, and daylight saving time calculations, work completely offline.</li>
-            <li>The in-app “Privacy Policy” and “Support” pages load over the web. No other network requests are made.</li>
+            <li>Core features, including clock display, time zone conversion, meeting slots, reminders, and daylight saving time calculations, work entirely offline.</li>
+            <li>The in-app “Support” page loads over the web.</li>
+            <li>Loading, purchasing, and restoring Pro use Apple StoreKit and the App Store. Payment is processed by Apple and is subject to Apple’s privacy policy. The app receives only product information and transaction status, never your card or payment account details.</li>
+            <li>Sharing the app or opening the App Store to rate it uses the system share sheet or opens the App Store.</li>
             <li>This app contains no analytics, telemetry, or third-party SDK data collection.</li>
         </ul>
 
-        <h2>4. Data Import and Export</h2>
+        <h2>5. Data Import and Export</h2>
         <p>The app supports importing and exporting your city list:</p>
         <ul>
             <li>Exported JSON files contain only city names, English names, time zone identifiers, and sort order. They do not contain personal identity information.</li>
@@ -53,16 +58,16 @@
             <li>Import and export operations are handled entirely on your device and never involve network transmission.</li>
         </ul>
 
-        <h2>5. Data Security</h2>
-        <p>The app uses SQLite WAL mode to protect local reads and writes. All write operations support transaction rollback to maintain data consistency. The app does not use any third-party data storage service.</p>
+        <h2>6. Data Security</h2>
+        <p>The app uses transactional local database writes to maintain data consistency and supports local backup and restore. It does not use any third-party data storage service.</p>
 
-        <h2>6. Children’s Privacy</h2>
+        <h2>7. Children’s Privacy</h2>
         <p>This app is not directed to children under 14 and does not knowingly collect personal information from children.</p>
 
-        <h2>7. Updates to This Policy</h2>
-        <p>If this policy changes, we will notify you in the app. Continued use of the app after an update means you accept the updated policy.</p>
+        <h2>8. Updates to This Policy</h2>
+        <p>If this policy changes, we will update this page and revise the date above. Continued use of the app after an update means you accept the updated policy.</p>
 
-        <h2>8. Contact Us</h2>
+        <h2>9. Contact Us</h2>
         <p>If you have questions or suggestions about this Privacy Policy, please contact us:</p>
 
         <div class="contact">
