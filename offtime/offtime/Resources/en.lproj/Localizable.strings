@@ -256,6 +256,7 @@
 "pro.restore" = "Restore Purchases";
 "pro.paywall.headline" = "Unlock %@ Pro";
 "pro.feature.themes.title" = "Custom Widget Theme";
+"pro.feature.upcoming" = "More great features are coming soon";
 "pro.purchase" = "Purchase";
 "pro.purchase.processing" = "Processing…";
 "pro.purchase.note" = "One-time purchase • Lifetime access • Family Sharing enabled";

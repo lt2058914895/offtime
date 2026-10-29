@@ -11,6 +11,7 @@ struct ProPaywallView: View {
                 VStack(spacing: 24) {
                     header
                     featureList
+                    upcomingFeatureRow
                     purchaseSection
                 }
                 .padding(20)
@@ -75,6 +76,22 @@ struct ProPaywallView: View {
         .padding(18)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(18)
+    }
+
+    private var upcomingFeatureRow: some View {
+        HStack(spacing: 7) {
+            Image(systemName: "sparkles")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.orange)
+
+            Text(String(localized: "pro.feature.upcoming"))
+                .font(.footnote.weight(.medium))
+                .foregroundColor(.secondary)
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, 8)
+        .accessibilityElement(children: .combine)
     }
 
     private var purchaseSection: some View {

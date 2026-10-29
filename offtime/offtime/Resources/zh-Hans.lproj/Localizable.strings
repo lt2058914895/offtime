@@ -256,6 +256,7 @@
 "pro.restore" = "恢复购买";
 "pro.paywall.headline" = "解锁%@ Pro";
 "pro.feature.themes.title" = "自定义小组件主题";
+"pro.feature.upcoming" = "更多精彩功能，敬请期待";
 "pro.purchase" = "购买";
 "pro.purchase.processing" = "处理中…";
 "pro.purchase.note" = "一次购买 • 永久使用 • 支持家庭共享";
