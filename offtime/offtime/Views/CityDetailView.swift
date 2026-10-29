@@ -120,7 +120,12 @@ struct CityDetailView: View {
             Button(String(localized: "city.reminder.weekdays.both")) {
                 addPendingReminder(weekdayPolicy: .bothCities)
             }
-            Button(String(format: String(localized: "city.reminder.weekdays.single"), viewModel.localCityName)) {
+            Button(
+                String(
+                    format: String(localized: "city.reminder.weekdays.single"),
+                    CityDisplay.primaryName(cityName: viewModel.localCityName, cityEn: viewModel.localCityEn)
+                )
+            ) {
                 addPendingReminder(weekdayPolicy: .currentCity)
             }
             Button(
