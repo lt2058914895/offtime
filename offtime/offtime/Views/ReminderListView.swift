@@ -585,7 +585,7 @@ struct ReminderListView: View {
                 .foregroundColor(.secondary)
             }
         }
-        .opacity(reminder.isPaused ? 0.5 : 1)
+        .opacity(reminder.isPaused ? 0.3 : 1)
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -717,18 +717,14 @@ struct ReminderListView: View {
     }
 
     private func pauseResumeButton(for reminder: CityReminderGroup) -> some View {
-        let tint: Color = reminder.isPaused ? .green : .secondary
-        let iconTint: Color = reminder.isPaused
-            ? tint
-            : Color(uiColor: .tertiaryLabel)
+        let tint: Color = .secondary
+        let iconTint = Color(uiColor: .tertiaryLabel)
         let title = reminder.isPaused
             ? String(localized: "reminder.action.resume")
             : String(localized: "reminder.action.pause")
         let icon = reminder.isPaused ? "play.fill" : "pause.fill"
         let isUpdating = viewModel.isPauseUpdating(reminder)
-        let background: Color = reminder.isPaused
-            ? Color.green.opacity(0.10)
-            : Color.secondary.opacity(0.08)
+        let background = Color.secondary.opacity(0.08)
 
         return Button {
             togglePause(for: reminder)
