@@ -170,11 +170,11 @@
 "settings.title" = "Settings";
 "settings.current.city" = "Current City";
 "settings.current.city.none" = "Not Selected";
-"settings.display.section" = "Display";
-"settings.data.section" = "Data";
+"settings.reminder.subtitle" = "View, edit, pause, or resume reminders";
 "settings.24hour" = "24-Hour Format";
 "settings.theme.section" = "Theme Style";
 "settings.custom.theme" = "Customize Widget Theme";
+"settings.custom.theme.subtitle" = "Give your widget a fresh new look";
 "settings.version" = "Version";
 "settings.meeting.recommendation.title" = "Meeting Slot Recommendations";
 "settings.meeting.recommendation.subtitle" = "Find the best shared meeting time automatically";
@@ -207,7 +207,6 @@
 "reminder.list.count" = "%d reminders";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";
-"settings.about" = "About";
 "settings.support" = "Feedback";
 "settings.add.widget" = "Add Widget";
 "settings.add.widget.subtitle" = "Put %@ on your Home Screen or Lock Screen";

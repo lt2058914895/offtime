@@ -75,8 +75,7 @@ struct SettingsView: View {
         List {
             proSection
             primarySection
-            displaySection
-            dataManagementSection
+            preferencesDataSection
             aboutSection
         }
         .listStyle(.insetGrouped)
@@ -158,8 +157,8 @@ struct SettingsView: View {
         }
     }
 
-    private var displaySection: some View {
-        Section(String(localized: "settings.display.section")) {
+    private var preferencesDataSection: some View {
+        Section {
             Button {
                 path.append(AppRoute.addWidgetGuide)
             } label: {
@@ -186,11 +185,7 @@ struct SettingsView: View {
             }
 
             themePicker
-        }
-    }
 
-    private var dataManagementSection: some View {
-        Section(String(localized: "settings.data.section")) {
             Button {
                 prepareExportFile()
                 isPresentingFileExporter = true
@@ -228,6 +223,15 @@ struct SettingsView: View {
         }
     }
 
+    private var aboutSection: some View {
+        Section {
+            shareAppLink
+            rateAppButton
+            supportButton
+            versionRow
+        }
+    }
+
     private var currentCityRow: some View {
         HStack(spacing: 12) {
             Image(systemName: "building.2.fill")
@@ -260,8 +264,14 @@ struct SettingsView: View {
                 .foregroundColor(.blue)
                 .font(.title3)
 
-            Text(String(localized: "reminder.list.title"))
-                .foregroundColor(.primary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(localized: "reminder.list.title"))
+                    .foregroundColor(.primary)
+
+                Text(String(localized: "settings.reminder.subtitle"))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
             Spacer()
 
@@ -281,8 +291,14 @@ struct SettingsView: View {
                 .foregroundColor(.blue)
                 .font(.title3)
 
-            Text(String(localized: "settings.custom.theme"))
-                .foregroundColor(.primary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(localized: "settings.custom.theme"))
+                    .foregroundColor(.primary)
+
+                Text(String(localized: "settings.custom.theme.subtitle"))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
             Spacer()
 
@@ -399,15 +415,6 @@ struct SettingsView: View {
                     .font(.footnote.weight(.semibold))
                     .foregroundColor(Color(uiColor: .tertiaryLabel))
             }
-        }
-    }
-
-    private var aboutSection: some View {
-        Section(String(localized: "settings.about")) {
-            shareAppLink
-            rateAppButton
-            supportButton
-            versionRow
         }
     }
 

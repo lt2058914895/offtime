@@ -170,11 +170,11 @@
 "settings.title" = "设置";
 "settings.current.city" = "当前城市";
 "settings.current.city.none" = "未选择";
-"settings.display.section" = "显示";
-"settings.data.section" = "数据";
+"settings.reminder.subtitle" = "查看、修改、暂停/恢复提醒";
 "settings.24hour" = "24小时制";
 "settings.theme.section" = "主题样式";
 "settings.custom.theme" = "自定义小组件主题";
+"settings.custom.theme.subtitle" = "让小组件换个风格吧";
 "settings.version" = "版本号";
 "settings.meeting.recommendation.title" = "会议档期推荐";
 "settings.meeting.recommendation.subtitle" = "自动推荐全员都合适的开会时段";
@@ -207,7 +207,6 @@
 "reminder.list.count" = "%d 条";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";
-"settings.about" = "关于";
 "settings.support" = "问题反馈";
 "settings.add.widget" = "添加小组件";
 "settings.add.widget.subtitle" = "把%@放到主屏幕或锁定屏幕";
