@@ -129,6 +129,9 @@ final class ReminderModel {
     var targetTimezoneId: String
     var targetHour: Int
     var targetMinute: Int
+    var isPaused: Bool = false
+    var triggerCityName: String?
+    var triggerCityEn: String?
     var createdAt: Date
 
     init(
@@ -142,6 +145,9 @@ final class ReminderModel {
         targetTimezoneId: String,
         targetHour: Int,
         targetMinute: Int,
+        isPaused: Bool = false,
+        triggerCityName: String? = nil,
+        triggerCityEn: String? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -155,6 +161,9 @@ final class ReminderModel {
         self.targetTimezoneId = targetTimezoneId
         self.targetHour = targetHour
         self.targetMinute = targetMinute
+        self.isPaused = isPaused
+        self.triggerCityName = triggerCityName
+        self.triggerCityEn = triggerCityEn
         self.createdAt = createdAt
     }
 }
@@ -177,7 +186,10 @@ extension ReminderModel {
             weekdayPolicy: weekdayPolicy,
             targetTimezoneId: targetTimezoneId,
             targetHour: targetHour,
-            targetMinute: targetMinute
+            targetMinute: targetMinute,
+            isPaused: isPaused,
+            triggerCityName: triggerCityName,
+            triggerCityEn: triggerCityEn
         )
     }
 }

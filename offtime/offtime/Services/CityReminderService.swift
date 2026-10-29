@@ -69,15 +69,18 @@ struct CityReminderGroup: Identifiable, Equatable {
     let id: String
     let cityID: UUID
     let cityName: String
-    /// 触发时区（当前城市）
+    /// 固定触发时区（添加提醒时的当前城市）
     let timezoneId: String
     let hour: Int
     let minute: Int
-    let weekdayPolicy: CityReminderWeekdayPolicy
+    var weekdayPolicy: CityReminderWeekdayPolicy
     /// 目标城市时区与对应时刻（用于展示与通知正文）
     let targetTimezoneId: String
     let targetHour: Int
     let targetMinute: Int
+    var isPaused: Bool = false
+    var triggerCityName: String? = nil
+    var triggerCityEn: String? = nil
 }
 
 enum CityReminderScheduler {
@@ -291,7 +294,9 @@ final class CityReminderService {
         weekdayPolicy: CityReminderWeekdayPolicy,
         targetTimezoneId: String,
         targetHour: Int,
-        targetMinute: Int
+        targetMinute: Int,
+        triggerCityName: String? = nil,
+        triggerCityEn: String? = nil
     ) async throws -> CityReminderGroup {
         let reminderID = UUID().uuidString
         let group = CityReminderGroup(
@@ -304,7 +309,9 @@ final class CityReminderService {
             weekdayPolicy: weekdayPolicy,
             targetTimezoneId: targetTimezoneId,
             targetHour: targetHour,
-            targetMinute: targetMinute
+            targetMinute: targetMinute,
+            triggerCityName: triggerCityName,
+            triggerCityEn: triggerCityEn
         )
 
         try await schedule(group)
@@ -379,6 +386,16 @@ final class CityReminderService {
             upsert(group)
         }
 
+        let reminders = await allReminders()
+        for reminder in reminders where reminder.isPaused {
+            let hasPendingRequests = requests.contains {
+                $0.identifier.hasPrefix("\(reminder.id)-")
+            }
+            if hasPendingRequests {
+                await cancelPendingNotifications(for: reminder.id)
+            }
+        }
+
         let authorizationStatus = await notificationCenter.notificationAuthorizationStatus()
         guard Self.canDeliverNotifications(for: authorizationStatus) else {
             await cleanupOrphanedReminders()
@@ -386,7 +403,7 @@ final class CityReminderService {
         }
 
         let referenceDate = now()
-        for reminder in await allReminders() {
+        for reminder in reminders where !reminder.isPaused {
             let expectedIdentifiers = Set(
                 scheduledNotificationIdentifiers(for: reminder, after: referenceDate)
             )
@@ -405,12 +422,51 @@ final class CityReminderService {
         await cleanupOrphanedReminders()
     }
 
+    /// 更新提醒重复方式，并按新规则重建通知。
+    func updateReminderPolicy(id: String, weekdayPolicy: CityReminderWeekdayPolicy) async throws {
+        guard var reminder = await allReminders().first(where: { $0.id == id }),
+              reminder.weekdayPolicy != weekdayPolicy else {
+            return
+        }
+
+        reminder.weekdayPolicy = weekdayPolicy
+        if !reminder.isPaused {
+            try await schedule(reminder, requestAuthorization: false)
+        }
+        upsert(reminder)
+        NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
+    }
+
+    /// 暂停或恢复单条提醒。暂停时撤销待发通知，恢复时按原规则重新排程。
+    func setReminderPaused(id: String, isPaused: Bool) async throws {
+        guard var reminder = await allReminders().first(where: { $0.id == id }),
+              reminder.isPaused != isPaused else {
+            return
+        }
+
+        if isPaused {
+            reminder.isPaused = true
+            upsert(reminder)
+            await cancelPendingNotifications(for: id)
+        } else {
+            reminder.isPaused = false
+            try await schedule(reminder, requestAuthorization: false)
+            upsert(reminder)
+        }
+        NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
+    }
+
     // MARK: - Scheduling
 
     private func schedule(
         _ reminder: CityReminderGroup,
         requestAuthorization: Bool = true
     ) async throws {
+        guard !reminder.isPaused else {
+            await cancelPendingNotifications(for: reminder.id)
+            return
+        }
+
         guard let triggerComponents = CityReminderScheduler.triggerComponents(
             hour: reminder.hour,
             minute: reminder.minute,
@@ -480,9 +536,14 @@ final class CityReminderService {
     }
 
     private func cancelScheduledNotifications(for reminderID: String) async {
+        await cancelPendingNotifications(for: reminderID)
+        let identifiers = allNotificationIdentifiers(for: reminderID)
+        await notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
+    }
+
+    private func cancelPendingNotifications(for reminderID: String) async {
         let identifiers = allNotificationIdentifiers(for: reminderID)
         await notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers)
-        await notificationCenter.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
 
     private func allNotificationIdentifiers(for reminderID: String) -> [String] {
@@ -493,6 +554,7 @@ final class CityReminderService {
         for reminder: CityReminderGroup,
         after date: Date
     ) -> [String] {
+        guard !reminder.isPaused else { return [] }
         guard reminder.weekdayPolicy.requiresWeekdayFiltering else {
             return ["\(reminder.id)-daily"]
         }
@@ -508,7 +570,7 @@ final class CityReminderService {
     }
 
     private func userInfo(for reminder: CityReminderGroup) -> [String: Any] {
-        [
+        var info: [String: Any] = [
             "reminderID": reminder.id,
             "cityID": reminder.cityID.uuidString,
             "cityName": reminder.cityName,
@@ -522,6 +584,13 @@ final class CityReminderService {
             "targetMinute": reminder.targetMinute,
             "scheduleVersion": Self.scheduleVersion
         ]
+        if let triggerCityName = reminder.triggerCityName {
+            info["triggerCityName"] = triggerCityName
+        }
+        if let triggerCityEn = reminder.triggerCityEn {
+            info["triggerCityEn"] = triggerCityEn
+        }
+        return info
     }
 
     static func group(from request: UNNotificationRequest) -> CityReminderGroup? {
@@ -552,7 +621,9 @@ final class CityReminderService {
             weekdayPolicy: weekdayPolicy,
             targetTimezoneId: targetTimezoneId,
             targetHour: targetHour,
-            targetMinute: targetMinute
+            targetMinute: targetMinute,
+            triggerCityName: userInfo["triggerCityName"] as? String,
+            triggerCityEn: userInfo["triggerCityEn"] as? String
         )
     }
 
@@ -580,7 +651,20 @@ final class CityReminderService {
         guard let modelContainer else { return }
         let context = modelContainer.mainContext
         let existing = reminderModel(withID: reminder.id)
-        let model = existing ?? ReminderModel(id: reminderID, cityID: reminder.cityID, cityName: reminder.cityName, timezoneId: reminder.timezoneId, hour: reminder.hour, minute: reminder.minute, weekdayPolicy: reminder.weekdayPolicy, targetTimezoneId: reminder.targetTimezoneId, targetHour: reminder.targetHour, targetMinute: reminder.targetMinute)
+        let model = existing ?? ReminderModel(
+            id: reminderID,
+            cityID: reminder.cityID,
+            cityName: reminder.cityName,
+            timezoneId: reminder.timezoneId,
+            hour: reminder.hour,
+            minute: reminder.minute,
+            weekdayPolicy: reminder.weekdayPolicy,
+            targetTimezoneId: reminder.targetTimezoneId,
+            targetHour: reminder.targetHour,
+            targetMinute: reminder.targetMinute,
+            triggerCityName: reminder.triggerCityName,
+            triggerCityEn: reminder.triggerCityEn
+        )
 
         model.cityID = reminder.cityID
         model.cityName = reminder.cityName
@@ -592,6 +676,9 @@ final class CityReminderService {
         model.targetTimezoneId = reminder.targetTimezoneId
         model.targetHour = reminder.targetHour
         model.targetMinute = reminder.targetMinute
+        model.isPaused = reminder.isPaused
+        model.triggerCityName = reminder.triggerCityName
+        model.triggerCityEn = reminder.triggerCityEn
         if existing == nil {
             context.insert(model)
         }

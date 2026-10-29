@@ -5,9 +5,6 @@
 "widget.gallery.description" = "默认展示顺序与时钟列表一致，编辑小组件可修改要显示的城市";
 
 // MARK: - 城市行
-"widget.city.local" = "本地";
-"widget.daytime" = "白天";
-"widget.nighttime" = "夜晚";
 
 // MARK: - 空状态
 "widget.empty.title" = "打开世界时钟添加城市";

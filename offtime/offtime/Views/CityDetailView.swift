@@ -114,6 +114,9 @@ struct CityDetailView: View {
             ),
             titleVisibility: .visible
         ) {
+            Button(String(localized: "city.reminder.everyday")) {
+                addPendingReminder(weekdayPolicy: .everyDay)
+            }
             Button(String(localized: "city.reminder.weekdays.both")) {
                 addPendingReminder(weekdayPolicy: .bothCities)
             }
@@ -127,9 +130,6 @@ struct CityDetailView: View {
                 )
             ) {
                 addPendingReminder(weekdayPolicy: .targetCity)
-            }
-            Button(String(localized: "city.reminder.everyday")) {
-                addPendingReminder(weekdayPolicy: .everyDay)
             }
             Button(String(localized: "common.cancel"), role: .cancel) {
                 pendingReminder = nil

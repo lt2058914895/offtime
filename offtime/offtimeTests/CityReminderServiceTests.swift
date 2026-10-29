@@ -8,6 +8,7 @@ private final class MockNotificationCenter: UserNotificationCenterProtocol {
     var requestAuthorizationResult = true
     var authorizationStatus: UNAuthorizationStatus = .authorized
     var requests: [UNNotificationRequest] = []
+    var addError: Error?
     private(set) var removedPendingIdentifiers: [[String]] = []
     private(set) var removedDeliveredIdentifiers: [[String]] = []
 
@@ -16,6 +17,9 @@ private final class MockNotificationCenter: UserNotificationCenterProtocol {
     }
 
     func add(_ request: UNNotificationRequest) async throws {
+        if let addError {
+            throw addError
+        }
         requests.append(request)
     }
 
@@ -98,6 +102,35 @@ final class CityReminderServiceTests: XCTestCase {
         reminder.weekdaysOnly = true
 
         XCTAssertEqual(reminder.toGroup().weekdayPolicy, .bothCities)
+    }
+
+    func testAddReminderPersistsActualTriggerCityName() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+
+        let group = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "纽约",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            weekdayPolicy: .currentCity,
+            targetTimezoneId: "America/New_York",
+            targetHour: 21,
+            targetMinute: 0,
+            triggerCityName: "上海",
+            triggerCityEn: "Shanghai"
+        )
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.first?.triggerCityName, "上海")
+        XCTAssertEqual(models.first?.triggerCityEn, "Shanghai")
+
+        let request = try XCTUnwrap(mock.requests.first)
+        let scheduledGroup = try XCTUnwrap(CityReminderService.group(from: request))
+        XCTAssertEqual(scheduledGroup.triggerCityName, "上海")
+        XCTAssertEqual(scheduledGroup.triggerCityEn, "Shanghai")
+        XCTAssertEqual(scheduledGroup.id, group.id)
     }
 
     func testWeekdayReminderPersistsOneModelAndSchedulesFiveNotifications() async throws {
@@ -311,6 +344,197 @@ final class CityReminderServiceTests: XCTestCase {
         XCTAssertEqual(models.first?.toGroup(), legacyGroup)
         XCTAssertEqual(mock.requests.count, 1)
         XCTAssertNotNil(mock.requests.first?.content.userInfo["scheduleVersion"])
+    }
+
+    func testUpdateReminderPolicyPersistsAndReschedules() async throws {
+        let reminder = ReminderModel(
+            cityID: UUID(),
+            cityName: "北京",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "America/Los_Angeles",
+            targetHour: 18,
+            targetMinute: 0
+        )
+        context.insert(reminder)
+        try context.save()
+
+        let fixedNow = try date(
+            timezoneId: "Asia/Shanghai",
+            year: 2026,
+            month: 8,
+            day: 23,
+            hour: 10,
+            minute: 0
+        )
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(
+            notificationCenter: mock,
+            modelContainer: container,
+            now: { fixedNow }
+        )
+
+        try await service.updateReminderPolicy(
+            id: reminder.id.uuidString,
+            weekdayPolicy: .bothCities
+        )
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.first?.weekdayPolicy, .bothCities)
+        XCTAssertEqual(models.first?.weekdaysOnly, true)
+        XCTAssertEqual(
+            mock.requests.map(\.identifier),
+            [3, 4, 5, 6].map { "\(reminder.id.uuidString)-\($0)" }
+        )
+        XCTAssertEqual(
+            mock.requests.first?.content.userInfo["weekdayPolicy"] as? String,
+            CityReminderWeekdayPolicy.bothCities.rawValue
+        )
+    }
+
+    func testPauseReminderPersistsStateAndCancelsPendingNotifications() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+        let group = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "上海",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 30,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Asia/Tokyo",
+            targetHour: 10,
+            targetMinute: 30
+        )
+        XCTAssertEqual(mock.requests.count, 1)
+
+        try await service.setReminderPaused(id: group.id, isPaused: true)
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.first?.isPaused, true)
+        XCTAssertEqual(models.first?.toGroup().isPaused, true)
+        XCTAssertTrue(mock.requests.isEmpty)
+    }
+
+    func testResumeReminderPersistsStateAndRestoresNotification() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+        let group = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "上海",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 30,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Asia/Tokyo",
+            targetHour: 10,
+            targetMinute: 30
+        )
+
+        try await service.setReminderPaused(id: group.id, isPaused: true)
+        try await service.setReminderPaused(id: group.id, isPaused: false)
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.first?.isPaused, false)
+        XCTAssertEqual(mock.requests.map(\.identifier), ["\(group.id)-daily"])
+    }
+
+    func testUpdatePausedReminderPolicyDoesNotScheduleNotifications() async throws {
+        let reminder = ReminderModel(
+            cityID: UUID(),
+            cityName: "北京",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "America/Los_Angeles",
+            targetHour: 18,
+            targetMinute: 0,
+            isPaused: true
+        )
+        context.insert(reminder)
+        try context.save()
+
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+
+        try await service.updateReminderPolicy(
+            id: reminder.id.uuidString,
+            weekdayPolicy: .bothCities
+        )
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.first?.weekdayPolicy, .bothCities)
+        XCTAssertEqual(models.first?.isPaused, true)
+        XCTAssertTrue(mock.requests.isEmpty)
+    }
+
+    func testResumeFailureKeepsReminderPaused() async throws {
+        struct NotificationError: Error {}
+
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+        let group = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "上海",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 30,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Asia/Tokyo",
+            targetHour: 10,
+            targetMinute: 30
+        )
+
+        try await service.setReminderPaused(id: group.id, isPaused: true)
+        mock.addError = NotificationError()
+
+        do {
+            try await service.setReminderPaused(id: group.id, isPaused: false)
+            XCTFail("Expected scheduling to fail")
+        } catch {
+            XCTAssertTrue(error is NotificationError)
+        }
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.first?.isPaused, true)
+        XCTAssertTrue(mock.requests.isEmpty)
+    }
+
+    func testSynchronizeKeepsPausedReminderPausedAndRemovesStaleNotifications() async throws {
+        let cityID = UUID()
+        let city = CityModel(cityName: "北京", cityEn: "Beijing", timezoneId: "Asia/Shanghai", sortIndex: 0)
+        city.id = cityID
+        context.insert(city)
+
+        let reminder = ReminderModel(
+            cityID: cityID,
+            cityName: "北京",
+            timezoneId: "Asia/Shanghai",
+            hour: 10,
+            minute: 0,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Europe/London",
+            targetHour: 3,
+            targetMinute: 0,
+            isPaused: true
+        )
+        context.insert(reminder)
+        try context.save()
+
+        let group = reminder.toGroup()
+        let mock = MockNotificationCenter()
+        mock.requests = [legacyNotificationRequest(for: group)]
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+
+        await service.synchronize()
+
+        let models = try context.fetch(FetchDescriptor<ReminderModel>())
+        XCTAssertEqual(models.count, 1)
+        XCTAssertEqual(models.first?.isPaused, true)
+        XCTAssertTrue(mock.requests.isEmpty)
     }
 
     func testSynchronizeReschedulesMissingNotification() async throws {

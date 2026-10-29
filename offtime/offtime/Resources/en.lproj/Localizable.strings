@@ -12,6 +12,7 @@
 "common.clear" = "Clear";
 "common.delete" = "Delete";
 "common.back" = "Back";
+"common.ok" = "OK";
 
 // MARK: - Database Error
 "db.read.failed" = "Failed to read database";
@@ -63,9 +64,9 @@
 "city.reminder.cancel" = "Cancel Reminder";
 "city.reminder.remove" = "Remove reminder";
 "city.reminder.contactable.body" = "It’s %@ — contactable now";
-"city.reminder.weekdays.both" = "Both cities’ weekdays";
-"city.reminder.weekdays.single" = "Only %@ weekdays";
-"city.reminder.weekdays.badge.both" = "Both cities’ weekdays";
+"city.reminder.weekdays.both" = "Weekdays";
+"city.reminder.weekdays.single" = "%@ weekdays";
+"city.reminder.weekdays.badge.both" = "Weekdays";
 "city.reminder.everyday" = "Every day";
 "city.reminder.weekdays.prompt" = "Choose how often";
 "city.reminder.added.success" = "Reminder added. See it in Settings > Reminders.";
@@ -182,13 +183,11 @@
 "reminder.list.title" = "Reminders";
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
-"reminder.list.swipe.hint" = "Swipe left to delete";
+"reminder.list.hint" = "Swipe left to delete, long press to change repeat";
 "reminder.list.notifications.disabled.title" = "Reminder notifications are off";
 "reminder.list.notifications.disabled.message" = "Reminders are kept, but iOS won’t deliver notifications. Enable notifications in Settings.";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";
 "reminder.list.next" = "Next reminder";
-"reminder.list.yourTime" = "Your time";
-"reminder.list.targetTime" = "Their time";
 "reminder.sort.label" = "Sort order";
 "reminder.sort.time" = "By time";
 "reminder.sort.city" = "By city";
@@ -198,6 +197,13 @@
 "reminder.status.notToday" = "Not today";
 "reminder.status.weekendSkip" = "Weekend skip: %@";
 "reminder.status.notificationsOff" = "Notifications off";
+"reminder.status.paused" = "Paused";
+"reminder.status.paused.detail" = "Resume to keep the original schedule";
+"reminder.section.paused" = "Paused";
+"reminder.action.pause" = "Pause reminder";
+"reminder.action.resume" = "Resume reminder";
+"reminder.action.hint" = "Pause or resume notifications for this reminder";
+"reminder.action.updateFailed.title" = "Couldn’t Update Reminder";
 "reminder.list.count.one" = "1 reminder";
 "reminder.list.count" = "%d reminders";
 "settings.export.cities" = "Export City List";
@@ -313,7 +319,6 @@
 "theme.background.photo.aurora" = "Aurora";
 "custom.theme.reset" = "Reset to Default";
 "custom.theme.confirm" = "Apply Theme";
-"custom.theme.pro.title" = "Pro Feature";
 "custom.theme.unlock" = "Unlock Pro to Apply Now";
 "custom.theme.saved.success" = "Changes saved";
 

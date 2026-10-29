@@ -5,9 +5,6 @@
 "widget.gallery.description" = "Shows the default order from your clock list; edit the widget to choose which cities to display";
 
 // MARK: - City row
-"widget.city.local" = "Local";
-"widget.daytime" = "Daytime";
-"widget.nighttime" = "Nighttime";
 
 // MARK: - Empty state
 "widget.empty.title" = "Open OffTime to add a city";

@@ -9,6 +9,7 @@ struct ReminderListView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @State private var reminderToDelete: CityReminderGroup?
+    @State private var reminderToEdit: CityReminderGroup?
     @AppStorage("settings_reminderSortMode") private var sortMode: ReminderSortMode = .time
     private enum ReminderSortMode: String, CaseIterable, Identifiable {
         case time
@@ -27,6 +28,7 @@ struct ReminderListView: View {
     }
 
     private enum ReminderDisplayStatus: Equatable {
+        case paused
         case pending
         case dueSoon
         case remindedToday
@@ -35,6 +37,8 @@ struct ReminderListView: View {
 
         var title: String {
             switch self {
+            case .paused:
+                return String(localized: "reminder.status.paused")
             case .pending:
                 return String(localized: "reminder.status.pending")
             case .dueSoon:
@@ -50,6 +54,8 @@ struct ReminderListView: View {
 
         var icon: String {
             switch self {
+            case .paused:
+                return "pause.circle.fill"
             case .pending:
                 return "clock.fill"
             case .dueSoon:
@@ -65,6 +71,8 @@ struct ReminderListView: View {
 
         var tint: Color {
             switch self {
+            case .paused:
+                return .secondary
             case .pending:
                 return .green
             case .dueSoon:
@@ -102,7 +110,7 @@ struct ReminderListView: View {
                             .listRowBackground(Color.clear)
                     }
 
-                    Text(String(localized: "reminder.list.swipe.hint"))
+                    Text(String(localized: "reminder.list.hint"))
                         .font(.caption2)
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity)
@@ -112,8 +120,18 @@ struct ReminderListView: View {
                         .listRowBackground(Color.clear)
 
                     if sortMode == .time {
-                        ForEach(timeSortedReminders) { reminder in
+                        ForEach(activeTimeSortedReminders) { reminder in
                             reminderListRow(reminder)
+                        }
+
+                        if !pausedReminders.isEmpty {
+                            Section {
+                                ForEach(pausedReminders) { reminder in
+                                    reminderListRow(reminder)
+                                }
+                            } header: {
+                                pausedSectionHeader
+                            }
                         }
                     } else {
                         ForEach(citySections) { section in
@@ -207,6 +225,57 @@ struct ReminderListView: View {
         } message: { reminder in
             Text(deleteConfirmationMessage(for: reminder))
         }
+        .alert(
+            String(localized: "reminder.action.updateFailed.title"),
+            isPresented: Binding(
+                get: { viewModel.errorMessage != nil },
+                set: { if !$0 { viewModel.clearError() } }
+            )
+        ) {
+            Button(String(localized: "common.ok")) {
+                viewModel.clearError()
+            }
+        } message: {
+            Text(viewModel.errorMessage ?? "")
+        }
+        .confirmationDialog(
+            String(localized: "city.reminder.weekdays.prompt"),
+            isPresented: Binding(
+                get: { reminderToEdit != nil },
+                set: { if !$0 { reminderToEdit = nil } }
+            ),
+            titleVisibility: .visible,
+            presenting: reminderToEdit
+        ) { reminder in
+            let activeReminder = viewModel.reminders.first { $0.id == reminder.id } ?? reminder
+            let isLocalReminder = activeReminder.timezoneId == activeReminder.targetTimezoneId
+
+            if isLocalReminder {
+                Button(String(localized: "city.reminder.everyday")) {
+                    reminderToEdit = nil
+                    updateReminderPolicy(activeReminder, to: .everyDay)
+                }
+
+                Button(String(localized: "city.reminder.weekdays.badge.both")) {
+                    reminderToEdit = nil
+                    let policy = activeReminder.weekdayPolicy == .everyDay
+                        ? .bothCities
+                        : activeReminder.weekdayPolicy
+                    updateReminderPolicy(activeReminder, to: policy)
+                }
+            } else {
+                ForEach(CityReminderWeekdayPolicy.allCases) { policy in
+                    Button(weekdayPolicyText(policy, for: activeReminder)) {
+                        reminderToEdit = nil
+                        updateReminderPolicy(activeReminder, to: policy)
+                    }
+                }
+            }
+
+            Button(String(localized: "common.cancel"), role: .cancel) {
+                reminderToEdit = nil
+            }
+        }
     }
 
     private func deleteConfirmationMessage(for reminder: CityReminderGroup) -> String {
@@ -231,6 +300,34 @@ struct ReminderListView: View {
                     Label(String(localized: "city.reminder.remove"), systemImage: "trash")
                 }
             }
+            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                Button {
+                    togglePause(for: reminder)
+                } label: {
+                    Label(
+                        reminder.isPaused
+                            ? String(localized: "reminder.action.resume")
+                            : String(localized: "reminder.action.pause"),
+                        systemImage: reminder.isPaused ? "play.fill" : "pause.fill"
+                    )
+                }
+                .tint(reminder.isPaused ? .green : .orange)
+            }
+            .onLongPressGesture {
+                reminderToEdit = reminder
+            }
+    }
+
+    private func togglePause(for reminder: CityReminderGroup) {
+        Task {
+            await viewModel.setPaused(!reminder.isPaused, for: reminder)
+        }
+    }
+
+    private func updateReminderPolicy(_ reminder: CityReminderGroup, to policy: CityReminderWeekdayPolicy) {
+        Task {
+            await viewModel.updateReminderPolicy(reminder, to: policy)
+        }
     }
 
     private var notificationDisabledBanner: some View {
@@ -265,6 +362,32 @@ struct ReminderListView: View {
         viewModel.reminders.sorted(by: timeSort)
     }
 
+    private var activeTimeSortedReminders: [CityReminderGroup] {
+        timeSortedReminders.filter { !$0.isPaused }
+    }
+
+    private var pausedReminders: [CityReminderGroup] {
+        timeSortedReminders.filter(\.isPaused)
+    }
+
+    private var pausedSectionHeader: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "pause.circle.fill")
+                .font(.caption.weight(.semibold))
+
+            Text(String(localized: "reminder.section.paused"))
+                .font(.footnote.weight(.semibold))
+
+            Spacer()
+
+            Text("\(pausedReminders.count)")
+                .font(.caption.monospacedDigit())
+        }
+        .foregroundColor(.secondary)
+        .padding(.top, 8)
+        .textCase(nil)
+    }
+
     private var citySections: [ReminderCitySection] {
         Dictionary(grouping: viewModel.reminders, by: \.cityID)
             .map { cityID, reminders in
@@ -282,6 +405,11 @@ struct ReminderListView: View {
                 )
             }
             .sorted { lhs, rhs in
+                let lhsHasActiveReminder = lhs.reminders.contains { !$0.isPaused }
+                let rhsHasActiveReminder = rhs.reminders.contains { !$0.isPaused }
+                if lhsHasActiveReminder != rhsHasActiveReminder {
+                    return lhsHasActiveReminder
+                }
                 let comparison = lhs.title.localizedStandardCompare(rhs.title)
                 if comparison != .orderedSame {
                     return comparison == .orderedAscending
@@ -330,6 +458,9 @@ struct ReminderListView: View {
     }
 
     private func timeSort(_ lhs: CityReminderGroup, _ rhs: CityReminderGroup) -> Bool {
+        if lhs.isPaused != rhs.isPaused {
+            return !lhs.isPaused
+        }
         if lhs.hour != rhs.hour {
             return lhs.hour < rhs.hour
         }
@@ -363,16 +494,26 @@ struct ReminderListView: View {
         let timeDiff = timeDifference(for: reminder)
         let status = displayStatus(for: reminder, now: now)
         let timing = scheduleText(for: reminder, now: now)
+        let isLocalReminder = reminder.timezoneId == reminder.targetTimezoneId
         let weekendDetail = status == .notToday
             ? weekendSkipDetail(for: reminder, now: now)
             : nil
         return VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .center, spacing: 10) {
-                repeatPolicyChip(for: reminder)
+            HStack(alignment: .top, spacing: 10) {
+                Text(weekdayPolicyText(for: reminder))
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+                    .allowsTightening(true)
+                    .minimumScaleFactor(0.4)
 
                 Spacer(minLength: 8)
 
-                statusBadge(status)
+                Text(status.title)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundColor(status.tint)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
 
             HStack(alignment: .center, spacing: 8) {
@@ -380,50 +521,56 @@ struct ReminderListView: View {
                     Text(formatTime(reminder.hour, reminder.minute))
                         .font(.title2.weight(.bold))
                         .fontDesign(.rounded)
-                        .foregroundColor(.primary)
                         .monospacedDigit()
                         .lineLimit(1)
-
-                    Text(currentCityDisplayName(for: reminder))
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                timeBridge(timeDifference: timeDiff)
-                    .frame(width: 54)
+                if isLocalReminder {
+                    Spacer(minLength: 8)
+                } else {
+                    timeBridge(timeDifference: timeDiff)
+                        .frame(width: 54)
 
-                VStack(alignment: .trailing, spacing: 3) {
-                    cityTitle(primary: cityNames.primary, secondary: nil)
+                    VStack(alignment: .trailing, spacing: 3) {
+                        cityTitle(primary: cityNames.primary, secondary: nil)
 
-                    Text(timing.targetTime)
-                        .font(.caption2.weight(.semibold))
-                        .foregroundColor(.secondary)
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .multilineTextAlignment(.trailing)
+                        Text(timing.targetTime)
+                            .font(.footnote.weight(.semibold))
+                            .foregroundColor(.secondary)
+                            .monospacedDigit()
+                            .lineLimit(1)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
             }
 
-            Divider()
-                .opacity(0.6)
+            HStack(spacing: 8) {
+                HStack(spacing: 6) {
+                    if reminder.isPaused {
+                        Image(systemName: "pause.circle.fill")
+                            .font(.caption2)
 
-            HStack(spacing: 6) {
-                Image(systemName: "calendar")
-                    .font(.caption2.weight(.semibold))
+                        Text(String(localized: "reminder.status.paused.detail"))
+                            .font(.caption2)
+                    } else {
+                        Text("\(String(localized: "reminder.list.next")):")
+                            .font(.caption2)
 
-                Text(String(localized: "reminder.list.next"))
-                    .font(.caption2.weight(.semibold))
+                        Text(timing.triggerDate)
+                            .font(.caption2)
+                            .monospacedDigit()
+                    }
+                }
+                .foregroundColor(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
 
-                Text(timing.triggerDate)
-                    .font(.caption2)
-                    .monospacedDigit()
+                Spacer(minLength: 10)
+
+                pauseResumeButton(for: reminder)
             }
-            .foregroundColor(.secondary)
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
             .frame(maxWidth: .infinity, alignment: .leading)
 
             if let weekendDetail {
@@ -449,7 +596,8 @@ struct ReminderListView: View {
                 .strokeBorder(Color(uiColor: .separator).opacity(0.18), lineWidth: 0.5)
         )
         .contentShape(RoundedRectangle(cornerRadius: reminderCardCornerRadius, style: .continuous))
-        .accessibilityElement(children: .combine)
+        .opacity(reminder.isPaused ? 0.5 : 1)
+        .accessibilityElement(children: .contain)
     }
 
     private func cityTitle(primary: String, secondary: String?) -> some View {
@@ -459,6 +607,8 @@ struct ReminderListView: View {
                 .fontDesign(.rounded)
                 .foregroundColor(.primary)
                 .lineLimit(1)
+                .allowsTightening(true)
+                .minimumScaleFactor(0.4)
                 .layoutPriority(1)
 
             if let secondary {
@@ -468,18 +618,6 @@ struct ReminderListView: View {
                     .lineLimit(1)
             }
         }
-    }
-
-    private func repeatPolicyChip(for reminder: CityReminderGroup) -> some View {
-        Text(weekdayPolicyText(for: reminder))
-            .font(.caption2.weight(.semibold))
-            .foregroundColor(.accentColor)
-            .lineLimit(1)
-            .minimumScaleFactor(0.85)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(Capsule().fill(Color.accentColor.opacity(0.11)))
-            .fixedSize(horizontal: true, vertical: false)
     }
 
     private func timeBridge(timeDifference: String) -> some View {
@@ -504,7 +642,19 @@ struct ReminderListView: View {
     }
 
     private func weekdayPolicyText(for reminder: CityReminderGroup) -> String {
-        switch reminder.weekdayPolicy {
+        weekdayPolicyText(reminder.weekdayPolicy, for: reminder)
+    }
+
+    private func weekdayPolicyText(
+        _ policy: CityReminderWeekdayPolicy,
+        for reminder: CityReminderGroup
+    ) -> String {
+        if reminder.timezoneId == reminder.targetTimezoneId,
+           policy != .everyDay {
+            return String(localized: "city.reminder.weekdays.badge.both")
+        }
+
+        switch policy {
         case .everyDay:
             return String(localized: "city.reminder.everyday")
         case .bothCities:
@@ -512,7 +662,7 @@ struct ReminderListView: View {
         case .currentCity:
             return String(
                 format: String(localized: "city.reminder.weekdays.single"),
-                currentCityDisplayName(for: reminder)
+                triggerCityDisplayName(for: reminder)
             )
         case .targetCity:
             return String(
@@ -522,23 +672,10 @@ struct ReminderListView: View {
         }
     }
 
-    private func statusBadge(_ status: ReminderDisplayStatus) -> some View {
-        HStack(spacing: 3) {
-            Image(systemName: status.icon)
-                .font(.caption2.weight(.semibold))
-
-            Text(status.title)
-                .font(.caption2.weight(.semibold))
-        }
-        .foregroundColor(status.tint)
-        .padding(.horizontal, 7)
-        .padding(.vertical, 3)
-        .background(Capsule().fill(status.tint.opacity(0.12)))
-        .lineLimit(1)
-        .fixedSize(horizontal: true, vertical: false)
-    }
-
     private func displayStatus(for reminder: CityReminderGroup, now: Date) -> ReminderDisplayStatus {
+        guard !reminder.isPaused else {
+            return .paused
+        }
         guard viewModel.isNotificationDeliveryAvailable else {
             return .notificationsOff
         }
@@ -576,6 +713,51 @@ struct ReminderListView: View {
         return .pending
     }
 
+    private func pauseResumeButton(for reminder: CityReminderGroup) -> some View {
+        let tint: Color = reminder.isPaused ? .green : .secondary
+        let iconTint: Color = reminder.isPaused
+            ? tint
+            : Color(uiColor: .tertiaryLabel)
+        let title = reminder.isPaused
+            ? String(localized: "reminder.action.resume")
+            : String(localized: "reminder.action.pause")
+        let icon = reminder.isPaused ? "play.fill" : "pause.fill"
+        let isUpdating = viewModel.isPauseUpdating(reminder)
+        let background: Color = reminder.isPaused
+            ? Color.green.opacity(0.10)
+            : Color.secondary.opacity(0.08)
+
+        return Button {
+            togglePause(for: reminder)
+        } label: {
+            HStack(spacing: 4) {
+                if isUpdating {
+                    ProgressView()
+                        .controlSize(.mini)
+                        .tint(iconTint)
+                } else {
+                    Image(systemName: icon)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(iconTint)
+                }
+
+                Text(title)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(tint)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(background))
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .fixedSize(horizontal: true, vertical: false)
+        .disabled(isUpdating)
+        .opacity(isUpdating ? 0.6 : 1)
+        .accessibilityLabel(title)
+        .accessibilityHint(String(localized: "reminder.action.hint"))
+    }
+
     private func weekendSkipDetail(for reminder: CityReminderGroup, now: Date) -> String? {
         guard reminder.weekdayPolicy.requiresWeekdayFiltering,
               let timezone = TimeZone(identifier: reminder.timezoneId) else {
@@ -606,7 +788,7 @@ struct ReminderListView: View {
                 timezoneId: reminder.timezoneId,
                 date: todayOccurrence
             ) ?? ""
-            skippedCities.append("\(currentCityDisplayName(for: reminder)) \(weekday)")
+            skippedCities.append("\(triggerCityDisplayName(for: reminder)) \(weekday)")
         }
         if reminder.weekdayPolicy.includesTargetCity,
            CityReminderScheduler.isWeekend(at: todayOccurrence, timezoneId: reminder.targetTimezoneId) == true {
@@ -624,16 +806,25 @@ struct ReminderListView: View {
         )
     }
 
-    private func currentCityDisplayName(for reminder: CityReminderGroup) -> String {
-        let fallback = CityService.matchCity(for: reminder.timezoneId)
-        if appEnvironment.settings.currentCityTimezoneId == reminder.timezoneId,
-           let name = appEnvironment.settings.currentCityName {
+    private func triggerCityDisplayName(for reminder: CityReminderGroup) -> String {
+        if let triggerCityName = reminder.triggerCityName {
+            let matched = CityService.matchCity(for: reminder.timezoneId)
             return CityDisplay.primaryName(
-                cityName: name,
-                cityEn: appEnvironment.settings.currentCityEn ?? name
+                cityName: triggerCityName,
+                cityEn: reminder.triggerCityEn ?? matched.en
             )
         }
-        return CityDisplay.primaryName(cityName: fallback.name, cityEn: fallback.en)
+
+        if appEnvironment.settings.currentCityTimezoneId == reminder.timezoneId,
+           let currentCityName = appEnvironment.settings.currentCityName {
+            return CityDisplay.primaryName(
+                cityName: currentCityName,
+                cityEn: appEnvironment.settings.currentCityEn ?? currentCityName
+            )
+        }
+
+        let city = CityService.matchCity(for: reminder.timezoneId)
+        return CityDisplay.primaryName(cityName: city.name, cityEn: city.en)
     }
 
     private func scheduleText(
@@ -688,10 +879,10 @@ struct ReminderListView: View {
     }
 
     private func timeDifference(for reminder: CityReminderGroup) -> String {
-        let city = viewModel.city(for: reminder.cityID)
-        let targetTimezoneId = city?.timezoneId ?? reminder.targetTimezoneId
-        let localTimezoneId = appEnvironment.settings.currentCityTimezoneId ?? TimeZone.current.identifier
-        return viewModel.timeDifference(for: targetTimezoneId, localTimezoneId: localTimezoneId)
+        viewModel.timeDifference(
+            for: reminder.targetTimezoneId,
+            localTimezoneId: reminder.timezoneId
+        )
     }
 
     private func timeDifferenceColor(_ offset: String) -> Color {
