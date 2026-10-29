@@ -13,6 +13,7 @@
 "common.delete" = "Delete";
 "common.back" = "Back";
 "common.ok" = "OK";
+"common.close" = "Close";
 
 // MARK: - Database Error
 "db.read.failed" = "Failed to read database";
