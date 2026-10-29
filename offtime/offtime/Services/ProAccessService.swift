@@ -26,7 +26,7 @@ final class ProAccessService: ObservableObject {
     var isProcessing: Bool { isPurchasing || isRestoring }
     var priceText: String? { product?.displayPrice }
     var displayTitle: String {
-        product?.displayName ?? "\(AppDisplay.name) Pro"
+        "\(AppDisplay.name) Pro"
     }
     private let logger = Logger(subsystem: "lt.offtime", category: "ProAccess")
     private var transactionListener: Task<Void, Never>?
