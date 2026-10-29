@@ -74,8 +74,7 @@ struct SettingsView: View {
     private var settingsList: some View {
         List {
             proSection
-            meetingSection
-            generalSection
+            primarySection
             displaySection
             dataManagementSection
             aboutSection
@@ -127,30 +126,44 @@ struct SettingsView: View {
         }
     }
 
-    private var meetingSection: some View {
+    private var primarySection: some View {
         Section {
-            meetingSectionContent
-        }
-    }
-
-    private var meetingSectionContent: some View {
-        Button {
-            path.append(AppRoute.meetingRecommendation)
-        } label: {
-            MeetingRecommendationCard()
-        }
-        .buttonStyle(.plain)
-        .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets())
-        .listRowSeparator(.hidden)
-    }
-
-    private var generalSection: some View {
-        Section(String(localized: "settings.general.section")) {
             Button {
                 path.append(AppRoute.citySelector)
             } label: {
                 currentCityRow
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                path.append(AppRoute.meetingRecommendation)
+            } label: {
+                meetingRecommendationRow
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                path.append(AppRoute.reminderList)
+            } label: {
+                reminderRow
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                path.append(AppRoute.customTheme)
+            } label: {
+                customThemeRow
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var displaySection: some View {
+        Section(String(localized: "settings.display.section")) {
+            Button {
+                path.append(AppRoute.addWidgetGuide)
+            } label: {
+                widgetRow
             }
             .buttonStyle(.plain)
 
@@ -172,45 +185,7 @@ struct SettingsView: View {
                 appEnvironment.settings.use24Hour = viewModel.use24Hour
             }
 
-            Button {
-                path.append(AppRoute.reminderList)
-            } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: "bell.fill")
-                        .foregroundColor(.blue)
-                        .font(.title3)
-
-                    Text(String(localized: "reminder.list.title"))
-                        .foregroundColor(.primary)
-
-                    Spacer()
-
-                    if viewModel.reminderCount > 0 {
-                        Text(reminderCountText)
-                            .foregroundColor(.secondary)
-                            .monospacedDigit()
-                    }
-
-                    settingsChevron
-                }
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
-    private var displaySection: some View {
-        Section(String(localized: "settings.accessibility.section")) {
             themePicker
-
-            Button {
-                path.append(AppRoute.addWidgetGuide)
-            } label: {
-                widgetRow
-            }
-            .buttonStyle(.plain)
-
-            customThemeRow
         }
     }
 
@@ -265,23 +240,93 @@ struct SettingsView: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 2) {
-                if let name = appEnvironment.settings.currentCityName {
-                    Text(CityDisplay.primaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name))
-                        .foregroundColor(.primary)
+                Text(currentCityDisplayName ?? String(localized: "settings.current.city.none"))
+                    .foregroundColor(currentCityDisplayName == nil ? .secondary : .primary)
 
-                    if let secondary = CityDisplay.secondaryName(cityName: name, cityEn: appEnvironment.settings.currentCityEn ?? name) {
-                        Text(secondary)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                } else {
-                    Text(String(localized: "settings.current.city.none"))
+                if let caption = currentCitySecondaryDisplayName {
+                    Text(caption)
+                        .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
+
             settingsChevron
-                .contentShape(Rectangle())
         }
+    }
+
+    private var reminderRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "bell.fill")
+                .foregroundColor(.blue)
+                .font(.title3)
+
+            Text(String(localized: "reminder.list.title"))
+                .foregroundColor(.primary)
+
+            Spacer()
+
+            if viewModel.reminderCount > 0 {
+                Text(reminderCountText)
+                    .foregroundColor(.secondary)
+                    .monospacedDigit()
+            }
+
+            settingsChevron
+        }
+    }
+
+    private var customThemeRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "paintbrush.fill")
+                .foregroundColor(.blue)
+                .font(.title3)
+
+            Text(String(localized: "settings.custom.theme"))
+                .foregroundColor(.primary)
+
+            Spacer()
+
+            ProBadge(showsText: false)
+
+            settingsChevron
+        }
+    }
+
+    private var meetingRecommendationRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "calendar.badge.clock")
+                .foregroundColor(.blue)
+                .font(.title3)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(localized: "settings.meeting.recommendation.title"))
+                    .foregroundColor(.primary)
+
+                Text(String(localized: "settings.meeting.recommendation.subtitle"))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+
+            settingsChevron
+        }
+    }
+
+    private var currentCityDisplayName: String? {
+        guard let name = appEnvironment.settings.currentCityName else { return nil }
+        return CityDisplay.primaryName(
+            cityName: name,
+            cityEn: appEnvironment.settings.currentCityEn ?? name
+        )
+    }
+
+    private var currentCitySecondaryDisplayName: String? {
+        guard let name = appEnvironment.settings.currentCityName else { return nil }
+        return CityDisplay.secondaryName(
+            cityName: name,
+            cityEn: appEnvironment.settings.currentCityEn ?? name
+        )
     }
 
     private var widgetRow: some View {
@@ -355,27 +400,6 @@ struct SettingsView: View {
                     .foregroundColor(Color(uiColor: .tertiaryLabel))
             }
         }
-    }
-
-    private var customThemeRow: some View {
-        Button {
-            path.append(AppRoute.customTheme)
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "paintbrush.fill")
-                    .foregroundColor(.blue)
-                    .font(.title3)
-
-                Text(String(localized: "settings.custom.theme"))
-
-                Spacer()
-
-                ProBadge(showsText: false)
-
-                settingsChevron
-            }
-        }
-        .buttonStyle(.plain)
     }
 
     private var aboutSection: some View {
@@ -558,92 +582,6 @@ struct SettingsView: View {
         } catch {
             viewModel.errorMessage = String(localized: "settings.export.failed")
         }
-    }
-}
-
-private struct MeetingRecommendationCard: View {
-    @Environment(\.colorScheme) private var colorScheme
-
-    private var cardBaseColor: Color {
-        colorScheme == .dark ? Color(.secondarySystemBackground) : .clear
-    }
-
-    private var cardGradientColors: [Color] {
-        colorScheme == .dark
-            ? [Color.accentColor.opacity(0.28), Color.accentColor.opacity(0.10)]
-            : [Color.accentColor.opacity(0.12), Color.accentColor.opacity(0.04)]
-    }
-
-    private var cardBorderColor: Color {
-        Color.accentColor.opacity(colorScheme == .dark ? 0.30 : 0.18)
-    }
-
-    var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.accentColor, Color.accentColor.opacity(0.68)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                Image(systemName: "calendar.badge.clock")
-                    .font(.headline.weight(.semibold))
-                    .foregroundColor(.white)
-            }
-            .frame(width: 44, height: 44)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(String(localized: "settings.meeting.recommendation.title"))
-                    .font(.headline.weight(.semibold))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.85)
-                Text(String(localized: "settings.meeting.recommendation.subtitle"))
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer(minLength: 8)
-
-            Image(systemName: "chevron.right")
-                .font(.footnote.weight(.semibold))
-                .foregroundColor(.accentColor)
-                .frame(width: 26, height: 26)
-                .background(Color.accentColor.opacity(colorScheme == .dark ? 0.18 : 0.12))
-                .clipShape(Circle())
-
-        }
-        .padding(.leading, 14)
-        .padding(.trailing, 12)
-        .padding(.vertical, 12)
-        .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
-        .background {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(cardBaseColor)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: cardGradientColors,
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                }
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(cardBorderColor, lineWidth: 1)
-        }
-        .shadow(
-            color: .black.opacity(colorScheme == .dark ? 0.18 : 0.04),
-            radius: colorScheme == .dark ? 8 : 5,
-            y: colorScheme == .dark ? 3 : 2
-        )
     }
 }
 

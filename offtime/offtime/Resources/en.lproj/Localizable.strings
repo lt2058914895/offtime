@@ -168,10 +168,9 @@
 
 // MARK: - Settings
 "settings.title" = "Settings";
-"settings.general.section" = "General";
 "settings.current.city" = "Current City";
 "settings.current.city.none" = "Not Selected";
-"settings.accessibility.section" = "Display";
+"settings.display.section" = "Display";
 "settings.data.section" = "Data";
 "settings.24hour" = "24-Hour Format";
 "settings.theme.section" = "Theme Style";

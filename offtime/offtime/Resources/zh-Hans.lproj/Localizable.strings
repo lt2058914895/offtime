@@ -168,10 +168,9 @@
 
 // MARK: - Settings
 "settings.title" = "设置";
-"settings.general.section" = "通用";
 "settings.current.city" = "当前城市";
 "settings.current.city.none" = "未选择";
-"settings.accessibility.section" = "显示";
+"settings.display.section" = "显示";
 "settings.data.section" = "数据";
 "settings.24hour" = "24小时制";
 "settings.theme.section" = "主题样式";
