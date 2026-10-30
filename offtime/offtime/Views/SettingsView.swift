@@ -227,7 +227,7 @@ struct SettingsView: View {
         Section {
             shareAppLink
             rateAppButton
-            supportButton
+            contactButton
             versionRow
         }
     }
@@ -464,15 +464,15 @@ struct SettingsView: View {
         .accessibilityLabel(String(localized: "settings.rate.app"))
     }
 
-    private var supportButton: some View {
+    private var contactButton: some View {
         Button {
-            path.append(AppRoute.supportPage)
+            path.append(AppRoute.contactPage)
         } label: {
             HStack {
                 Image(systemName: "envelope.fill")
                     .foregroundColor(.blue)
 
-                Text(String(localized: "settings.support"))
+                Text(String(localized: "settings.contact"))
                     .foregroundColor(.primary)
 
                 Spacer()
@@ -527,8 +527,8 @@ struct SettingsView: View {
             ReminderListView()
         case .addWidgetGuide:
             AddWidgetGuideView()
-        case .supportPage:
-            SupportPageView()
+        case .contactPage:
+            ContactView()
         case .meetingRecommendation:
             MeetingView(embedsNavigationStack: false)
         case .customTheme:
@@ -720,101 +720,139 @@ struct JSONFileDocument: FileDocument {
     }
 }
 
-// MARK: - WebView Wrapper
+// MARK: - Contact Page
 
-import WebKit
-
-struct WebView: UIViewRepresentable {
-    let url: URL
-
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        webView.navigationDelegate = context.coordinator
-        return webView
+struct ContactView: View {
+    private enum ContactField: Equatable {
+        case email
+        case wechat
     }
 
-    func updateUIView(_ webView: WKWebView, context: Context) {
-        if webView.url != url {
-            webView.load(URLRequest(url: url))
-        }
-    }
-
-    func makeCoordinator() -> WebViewCoordinator {
-        WebViewCoordinator()
-    }
-
-    class WebViewCoordinator: NSObject, WKNavigationDelegate {
-        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            if navigationAction.navigationType == .linkActivated, let url = navigationAction.request.url {
-                if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url)
-                    decisionHandler(.cancel)
-                    return
-                }
-            }
-            decisionHandler(.allow)
-        }
-
-        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-            showError(webView, error: error)
-        }
-
-        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            showError(webView, error: error)
-        }
-
-        private func showError(_ webView: WKWebView, error: Error) {
-            let nsError = error as NSError
-            guard nsError.domain == NSURLErrorDomain else { return }
-            DispatchQueue.main.async {
-                let html = """
-                <!DOCTYPE html>
-                <html lang="en">
-                <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-                <style>
-                    body{font-family:-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#f5f5f5;color:#333;}
-                    .box{text-align:center;padding:40px 24px;}
-                    .icon{font-size:48px;margin-bottom:16px;}
-                    h2{font-size:18px;font-weight:600;margin-bottom:8px;}
-                    p{font-size:14px;color:#999;line-height:1.6;}
-                </style></head>
-                <body><div class="box">
-                    <div class="icon">📡</div>
-                    <h2>\(String(localized: "web.load.failed"))</h2>
-                    <p>\(String(localized: "web.check.network"))</p>
-                </div></body></html>
-                """
-                webView.loadHTMLString(html, baseURL: nil)
-            }
-        }
-    }
-}
-
-// MARK: - Support Page
-
-struct SupportPageView: View {
-    private var supportURL: URL {
-        let filename = CityDisplay.isChineseLocale ? "support.html" : "support-en.html"
-        return URL(string: "https://lt2058914895.github.io/offtime/\(filename)")!
-    }
     @Environment(\.dismiss) private var dismiss
+    @State private var copiedField: ContactField?
+
+    private let email = "2058914895@qq.com"
+    private let wechatID = "SweetLili_91"
 
     var body: some View {
-        WebView(url: supportURL)
-            .navigationTitle(String(localized: "settings.support"))
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .fontWeight(.semibold)
-                    }
-                }
+        ScrollView {
+            VStack(spacing: 24) {
+                header
+                contactCard
             }
-            .toolbar(.hidden, for: .tabBar)
+            .padding(.horizontal, 20)
+            .padding(.top, 28)
+            .padding(.bottom, 40)
+        }
+        .background(Color(uiColor: .systemGroupedBackground))
+        .navigationTitle(String(localized: "settings.contact"))
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
+                }
+                .accessibilityLabel(String(localized: "common.back"))
+            }
+        }
+        .toolbar(.hidden, for: .tabBar)
+    }
+
+    private var header: some View {
+        VStack(spacing: 12) {
+            Text(String(localized: "contact.headline"))
+                .font(.title3.weight(.semibold))
+
+            Text(String(localized: "contact.subtitle"))
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var contactCard: some View {
+        VStack(spacing: 0) {
+            contactRow(
+                icon: "at.circle.fill",
+                iconColor: .blue,
+                label: String(localized: "contact.emailLabel"),
+                value: email,
+                field: .email,
+                copyLabel: String(localized: "contact.copyEmail")
+            )
+
+            Divider()
+                .padding(.leading, 52)
+
+            contactRow(
+                icon: "message.fill",
+                iconColor: .green,
+                label: String(localized: "contact.wechatLabel"),
+                value: wechatID,
+                field: .wechat,
+                copyLabel: String(localized: "contact.copyWechat")
+            )
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(uiColor: .secondarySystemGroupedBackground))
+        )
+    }
+
+    private func contactRow(
+        icon: String,
+        iconColor: Color,
+        label: String,
+        value: String,
+        field: ContactField,
+        copyLabel: String
+    ) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(iconColor)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(label)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text(value)
+                    .font(.body.weight(.medium))
+                    .textSelection(.enabled)
+            }
+
+            Spacer(minLength: 8)
+
+            Button {
+                copy(value, field: field)
+            } label: {
+                Image(systemName: copiedField == field ? "checkmark.circle.fill" : "doc.on.doc")
+                    .font(.title3)
+                    .foregroundColor(copiedField == field ? .green : .blue)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(copiedField == field ? String(localized: "contact.copied") : copyLabel)
+        }
+        .padding(16)
+    }
+
+    private func copy(_ value: String, field: ContactField) {
+        UIPasteboard.general.string = value
+        withAnimation(.easeInOut(duration: 0.2)) {
+            copiedField = field
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+            guard copiedField == field else { return }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                copiedField = nil
+            }
+        }
     }
 }
 

@@ -209,7 +209,14 @@
 "reminder.list.count" = "%d reminders";
 "settings.export.cities" = "Export City List";
 "settings.import.cities" = "Import City List";
-"settings.support" = "Feedback";
+"settings.contact" = "Contact Us";
+"contact.headline" = "How can I help?";
+"contact.subtitle" = "Questions, bug reports, or feature ideas? Reach me by email or WeChat. I usually reply within 1–2 business days.";
+"contact.emailLabel" = "Email";
+"contact.wechatLabel" = "WeChat";
+"contact.copyEmail" = "Copy Email";
+"contact.copyWechat" = "Copy WeChat ID";
+"contact.copied" = "Copied";
 "settings.add.widget" = "Add Widget";
 "settings.add.widget.subtitle" = "Put %@ on your Home Screen or Lock Screen";
 "settings.export.failed" = "Export failed";
@@ -346,8 +353,6 @@
 "onboarding.skip" = "Skip";
 
 // MARK: - Web Error
-"web.load.failed" = "Failed to load page";
-"web.check.network" = "Please check your network connection and try again";
 
 // MARK: - Accessibility & Sharing
 "accessibility.add.city" = "Add City";

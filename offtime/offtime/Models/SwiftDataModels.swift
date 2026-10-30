@@ -299,7 +299,7 @@ enum AppRoute: Hashable {
     case cityPicker
     case citySelector
     case addWidgetGuide
-    case supportPage
+    case contactPage
     case meetingRecommendation
     case customTheme
     case cityDetail(UUID)

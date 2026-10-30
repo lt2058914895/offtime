@@ -209,7 +209,14 @@
 "reminder.list.count" = "%d 条";
 "settings.export.cities" = "导出城市列表";
 "settings.import.cities" = "导入城市列表";
-"settings.support" = "问题反馈";
+"settings.contact" = "联系我们";
+"contact.headline" = "有什么可以帮你？";
+"contact.subtitle" = "遇到问题、发现 Bug，或有功能建议，欢迎通过邮件或微信联系我。通常会在 1–2 个工作日内回复。";
+"contact.emailLabel" = "联系邮箱";
+"contact.wechatLabel" = "微信";
+"contact.copyEmail" = "复制邮箱";
+"contact.copyWechat" = "复制微信号";
+"contact.copied" = "已复制";
 "settings.add.widget" = "添加小组件";
 "settings.add.widget.subtitle" = "把%@放到主屏幕或锁定屏幕";
 "settings.export.failed" = "导出失败";
@@ -346,8 +353,6 @@
 "onboarding.skip" = "跳过";
 
 // MARK: - Web Error
-"web.load.failed" = "无法加载页面";
-"web.check.network" = "请检查网络连接后重试";
 
 // MARK: - Accessibility & Sharing
 "accessibility.add.city" = "添加城市";
