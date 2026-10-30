@@ -469,7 +469,7 @@ struct SettingsView: View {
             path.append(AppRoute.contactPage)
         } label: {
             HStack {
-                Image(systemName: "envelope.fill")
+                Image(systemName: "bubble.left.and.bubble.right.fill")
                     .foregroundColor(.blue)
 
                 Text(String(localized: "settings.contact"))
@@ -480,7 +480,8 @@ struct SettingsView: View {
                 settingsChevron
             }
         }
-        }
+        .accessibilityLabel(String(localized: "settings.contact"))
+    }
 
     private var proStatusMessageBinding: Binding<String?> {
         Binding(
