@@ -4,6 +4,7 @@ struct ReminderSoundPickerView: View {
     let title: String
     let onSave: (ReminderSound) -> Void
 
+    private let savedSound: ReminderSound
     @State private var selection: ReminderSound
     @StateObject private var previewPlayer = ReminderSoundPreviewPlayer()
     @Environment(\.dismiss) private var dismiss
@@ -15,28 +16,40 @@ struct ReminderSoundPickerView: View {
     ) {
         self.title = title
         self.onSave = onSave
+        self.savedSound = selectedSound
         _selection = State(initialValue: selectedSound)
     }
 
+    private var hasChanges: Bool {
+        selection != savedSound
+    }
+
     var body: some View {
-        List {
-            Section {
-                soundRow(
-                    sound: .system,
-                    title: ReminderSound.system.displayName,
-                    subtitle: ReminderSound.system.subtitle,
-                    icon: ReminderSound.system.iconName
-                )
-                ForEach(ReminderSound.builtInCases) { sound in
+        VStack(spacing: 0) {
+            List {
+                Section {
                     soundRow(
-                        sound: sound,
-                        title: sound.displayName,
-                        subtitle: sound.subtitle,
-                        icon: sound.iconName
+                        sound: .system,
+                        title: ReminderSound.system.displayName,
+                        subtitle: ReminderSound.system.subtitle,
+                        icon: ReminderSound.system.iconName
                     )
+                    ForEach(ReminderSound.builtInCases) { sound in
+                        soundRow(
+                            sound: sound,
+                            title: sound.displayName,
+                            subtitle: sound.subtitle,
+                            icon: sound.iconName
+                        )
+                    }
                 }
             }
+
+            doneButton
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
         }
+        .background(Color(.systemGroupedBackground))
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -50,17 +63,28 @@ struct ReminderSoundPickerView: View {
                 }
                 .accessibilityLabel(String(localized: "common.back"))
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(String(localized: "common.done")) {
-                    onSave(selection)
-                    dismiss()
-                }
-            }
         }
         .toolbar(.hidden, for: .tabBar)
         .onDisappear {
             previewPlayer.stop()
         }
+    }
+
+    private var doneButton: some View {
+        Button {
+            onSave(selection)
+            dismiss()
+        } label: {
+            Text(String(localized: "reminder.sound.confirm"))
+                .frame(maxWidth: .infinity, minHeight: 46)
+                .foregroundStyle(.white)
+                .background(
+                    hasChanges ? Color.accentColor : Color.accentColor.opacity(0.4),
+                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                )
+        }
+        .buttonStyle(.plain)
+        .disabled(!hasChanges)
     }
 
     private func soundRow(

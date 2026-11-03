@@ -189,8 +189,11 @@
 "reminder.sound.system" = "系统默认";
 "reminder.sound.system.subtitle" = "使用系统提醒音";
 "reminder.sound.preview" = "试听";
+"reminder.sound.confirm" = "确认使用";
 "reminder.sound.gentleMarimba" = "木琴";
 "reminder.sound.gentleMarimba.subtitle" = "温暖木琴旋律";
+"reminder.sound.crystalChime" = "水晶铃";
+"reminder.sound.crystalChime.subtitle" = "清亮通透的铃声";
 "reminder.sound.alarm" = "闹铃";
 "reminder.sound.alarm.subtitle" = "快速脉冲振铃，节奏清晰";
 "settings.reminder.sound" = "提醒音效";

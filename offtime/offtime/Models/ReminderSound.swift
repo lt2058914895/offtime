@@ -6,10 +6,12 @@ import UserNotifications
 enum ReminderSound: String, CaseIterable, Codable, Identifiable {
     case system
     case gentleMarimba
+    case crystalChime
     case alarm
 
     static let builtInCases: [ReminderSound] = [
         .gentleMarimba,
+        .crystalChime,
         .alarm
     ]
 
@@ -21,6 +23,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return String(localized: "reminder.sound.system")
         case .gentleMarimba:
             return String(localized: "reminder.sound.gentleMarimba")
+        case .crystalChime:
+            return String(localized: "reminder.sound.crystalChime")
         case .alarm:
             return String(localized: "reminder.sound.alarm")
         }
@@ -32,6 +36,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return String(localized: "reminder.sound.system.subtitle")
         case .gentleMarimba:
             return String(localized: "reminder.sound.gentleMarimba.subtitle")
+        case .crystalChime:
+            return String(localized: "reminder.sound.crystalChime.subtitle")
         case .alarm:
             return String(localized: "reminder.sound.alarm.subtitle")
         }
@@ -43,6 +49,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return "speaker.wave.2.fill"
         case .gentleMarimba:
             return "music.note"
+        case .crystalChime:
+            return "sparkles"
         case .alarm:
             return "alarm.fill"
         }
@@ -54,6 +62,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return nil
         case .gentleMarimba:
             return "reminder-gentle-marimba.caf"
+        case .crystalChime:
+            return "reminder-crystal-chime.caf"
         case .alarm:
             return "reminder-alarm.caf"
         }
@@ -107,7 +117,7 @@ final class BuiltInReminderSoundProvider: ReminderSoundProviding {
         switch sound {
         case .system:
             return .default
-        case .gentleMarimba, .alarm:
+        case .gentleMarimba, .crystalChime, .alarm:
             guard let fileName = sound.fileName,
                   sound.resourceURL(in: bundle) != nil else {
                 return .default
@@ -130,7 +140,7 @@ final class BuiltInReminderSoundProvider: ReminderSoundProviding {
         switch sound {
         case .system:
             return "system"
-        case .gentleMarimba, .alarm:
+        case .gentleMarimba, .crystalChime, .alarm:
             guard let fileName = sound.fileName else { return sound.rawValue }
             guard let url = sound.resourceURL(in: bundle),
                   let data = try? Data(contentsOf: url) else {

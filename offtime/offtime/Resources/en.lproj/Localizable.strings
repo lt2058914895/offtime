@@ -189,8 +189,11 @@
 "reminder.sound.system" = "System Default";
 "reminder.sound.system.subtitle" = "Use the system reminder sound";
 "reminder.sound.preview" = "Preview";
+"reminder.sound.confirm" = "Use This Sound";
 "reminder.sound.gentleMarimba" = "Marimba";
 "reminder.sound.gentleMarimba.subtitle" = "Warm wooden melody";
+"reminder.sound.crystalChime" = "Crystal Chime";
+"reminder.sound.crystalChime.subtitle" = "Bright, airy bell tones";
 "reminder.sound.alarm" = "Alarm";
 "reminder.sound.alarm.subtitle" = "Fast pulsing ring with a clear rhythm";
 "settings.reminder.sound" = "Custom Reminder Sound";
