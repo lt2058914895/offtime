@@ -669,7 +669,7 @@ final class CityReminderServiceTests: XCTestCase {
         XCTAssertNotNil(request.content.userInfo["reminderSoundFingerprint"] as? String)
         XCTAssertEqual(
             request.content.userInfo["reminderSoundFingerprint"] as? String,
-            "builtin:reminder-alarm.caf"
+            BuiltInReminderSoundProvider().fingerprint(for: .alarm)
         )
         XCTAssertNotNil(request.content.sound)
     }
@@ -725,7 +725,7 @@ final class CityReminderServiceTests: XCTestCase {
         XCTAssertEqual(mock.requests.count, 2)
         XCTAssertTrue(mock.requests.allSatisfy { request in
             request.content.userInfo["reminderSoundFingerprint"] as? String
-                == "builtin:reminder-alarm.caf"
+                == BuiltInReminderSoundProvider().fingerprint(for: .alarm)
         })
     }
 
@@ -854,7 +854,7 @@ final class CityReminderServiceTests: XCTestCase {
         )
         XCTAssertEqual(
             refreshedRequest.content.userInfo["reminderSoundFingerprint"] as? String,
-            "builtin:reminder-alarm.caf"
+            BuiltInReminderSoundProvider().fingerprint(for: .alarm)
         )
         XCTAssertNotNil(refreshedRequest.content.sound)
     }

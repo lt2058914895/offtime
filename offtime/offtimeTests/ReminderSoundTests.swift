@@ -1,4 +1,5 @@
 import XCTest
+import CryptoKit
 @testable import offtime
 
 final class ReminderSoundTests: XCTestCase {
@@ -16,7 +17,7 @@ final class ReminderSoundTests: XCTestCase {
         XCTAssertFalse(ReminderSound.system.isBuiltIn)
     }
 
-    func testProviderMapsSystemAndBuiltInSounds() {
+    func testProviderMapsSystemAndBuiltInSounds() throws {
         let provider = BuiltInReminderSoundProvider()
 
         XCTAssertNotNil(provider.notificationSound(for: .system))
@@ -24,8 +25,30 @@ final class ReminderSoundTests: XCTestCase {
 
         for sound in ReminderSound.builtInCases {
             XCTAssertNotNil(provider.notificationSound(for: sound))
-            XCTAssertTrue(provider.fingerprint(for: sound).hasPrefix("builtin:"))
+            let expectedDigest = SHA256.hash(
+                data: try Data(contentsOf: XCTUnwrap(sound.resourceURL(in: .main)))
+            ).map { byte in
+                String(format: "%02x", byte)
+            }.joined()
+            XCTAssertEqual(
+                provider.fingerprint(for: sound),
+                "builtin:\(sound.fileName ?? ""):\(expectedDigest)"
+            )
         }
+    }
+
+    func testFingerprintChangesWhenContentChangesWithSameFileName() {
+        let first = BuiltInReminderSoundProvider.fingerprint(
+            fileName: "reminder-alarm.caf",
+            content: Data([1, 2, 3])
+        )
+        let second = BuiltInReminderSoundProvider.fingerprint(
+            fileName: "reminder-alarm.caf",
+            content: Data([1, 2, 4])
+        )
+
+        XCTAssertNotEqual(first, second)
+        XCTAssertTrue(first.hasPrefix("builtin:reminder-alarm.caf:"))
     }
 
     func testPreferencesFallsBackForUnknownValue() {

@@ -18,7 +18,7 @@ protocol UserNotificationCenterProtocol {
 final class UserNotificationCenterAdapter: UserNotificationCenterProtocol {
     private let center: UNUserNotificationCenter
 
-    init(center: UNUserNotificationCenter = .current()) {
+    nonisolated init(center: UNUserNotificationCenter = .current()) {
         self.center = center
     }
 

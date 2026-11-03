@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import UserNotifications
 
 /// 全局提醒音效。
@@ -80,7 +81,7 @@ enum ReminderSoundPreferences {
     static let defaultSoundKey = "settings_defaultReminderSound"
     static let fallbackSound: ReminderSound = .system
 
-    static func resolvedDefault(from defaults: UserDefaults = .standard) -> ReminderSound {
+    nonisolated static func resolvedDefault(from defaults: UserDefaults = .standard) -> ReminderSound {
         guard let rawValue = defaults.string(forKey: defaultSoundKey),
               let sound = ReminderSound(rawValue: rawValue) else {
             return fallbackSound
@@ -94,10 +95,11 @@ protocol ReminderSoundProviding {
     func fingerprint(for sound: ReminderSound) -> String
 }
 
-struct BuiltInReminderSoundProvider: ReminderSoundProviding {
+final class BuiltInReminderSoundProvider: ReminderSoundProviding {
     private let bundle: Bundle
+    private var cachedFingerprints: [ReminderSound: String] = [:]
 
-    init(bundle: Bundle = .main) {
+    nonisolated init(bundle: Bundle = .main) {
         self.bundle = bundle
     }
 
@@ -115,14 +117,38 @@ struct BuiltInReminderSoundProvider: ReminderSoundProviding {
     }
 
     func fingerprint(for sound: ReminderSound) -> String {
+        if let cachedFingerprint = cachedFingerprints[sound] {
+            return cachedFingerprint
+        }
+
+        let fingerprint = makeFingerprint(for: sound)
+        cachedFingerprints[sound] = fingerprint
+        return fingerprint
+    }
+
+    private func makeFingerprint(for sound: ReminderSound) -> String {
         switch sound {
         case .system:
             return "system"
         case .gentleMarimba, .alarm:
             guard let fileName = sound.fileName else { return sound.rawValue }
-            return sound.resourceURL(in: bundle) == nil
-                ? "missing:\(fileName)"
-                : "builtin:\(fileName)"
+            guard let url = sound.resourceURL(in: bundle),
+                  let data = try? Data(contentsOf: url) else {
+                return "missing:\(fileName)"
+            }
+
+            return Self.fingerprint(fileName: fileName, content: data)
         }
+    }
+
+    static func fingerprint(fileName: String, content: Data?) -> String {
+        guard let content else {
+            return "missing:\(fileName)"
+        }
+
+        let digest = SHA256.hash(data: content).map { byte in
+            String(format: "%02x", byte)
+        }.joined()
+        return "builtin:\(fileName):\(digest)"
     }
 }

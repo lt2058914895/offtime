@@ -175,7 +175,7 @@
 "settings.reminder.subtitle" = "查看、修改、暂停/恢复提醒";
 "settings.24hour" = "24小时制";
 "settings.theme.section" = "主题样式";
-"settings.custom.theme" = "自定义小组件主题";
+"settings.custom.theme" = "小组件主题";
 "settings.custom.theme.subtitle" = "让小组件换个风格吧";
 "settings.version" = "版本号";
 "settings.meeting.recommendation.title" = "会议档期推荐";
@@ -185,7 +185,7 @@
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
 "reminder.list.hint" = "左滑删除，长按修改重复方式";
-"reminder.sound.default" = "默认提醒音";
+"reminder.sound.default" = "提醒音效";
 "reminder.sound.system" = "系统默认";
 "reminder.sound.system.subtitle" = "使用系统提醒音";
 "reminder.sound.preview" = "试听";
@@ -193,7 +193,7 @@
 "reminder.sound.gentleMarimba.subtitle" = "温暖木琴旋律";
 "reminder.sound.alarm" = "闹铃";
 "reminder.sound.alarm.subtitle" = "快速脉冲振铃，节奏清晰";
-"settings.reminder.sound" = "自定义提醒音效";
+"settings.reminder.sound" = "提醒音效";
 "reminder.list.notifications.disabled.title" = "提醒通知已关闭";
 "reminder.list.notifications.disabled.message" = "提醒仍会保留，但系统不会发送通知。请在系统设置中开启通知。";
 "reminder.list.delete.confirm.title" = "删除提醒？";
@@ -312,7 +312,7 @@
 "theme.accent.red" = "红色";
 "theme.accent.teal" = "青色";
 "theme.accent.white" = "白色";
-"custom.theme.title" = "自定义小组件主题";
+"custom.theme.title" = "小组件主题";
 "custom.theme.accent" = "强调色";
 "custom.theme.accent.default" = "默认";
 "custom.theme.accent.custom" = "自定义";
