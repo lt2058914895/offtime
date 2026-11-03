@@ -18,8 +18,8 @@ protocol UserNotificationCenterProtocol {
 final class UserNotificationCenterAdapter: UserNotificationCenterProtocol {
     private let center: UNUserNotificationCenter
 
-    nonisolated init(center: UNUserNotificationCenter = .current()) {
-        self.center = center
+    init(center: UNUserNotificationCenter? = nil) {
+        self.center = center ?? .current()
     }
 
     func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
@@ -264,13 +264,13 @@ final class CityReminderService {
     private let defaultSound: () -> ReminderSound
 
     init(
-        notificationCenter: UserNotificationCenterProtocol = UserNotificationCenterAdapter(),
+        notificationCenter: UserNotificationCenterProtocol? = nil,
         modelContainer: ModelContainer? = nil,
         now: @escaping () -> Date = { Date() },
         soundProvider: ReminderSoundProviding = BuiltInReminderSoundProvider(),
         defaultSound: @escaping () -> ReminderSound = { ReminderSoundPreferences.resolvedDefault() }
     ) {
-        self.notificationCenter = notificationCenter
+        self.notificationCenter = notificationCenter ?? UserNotificationCenterAdapter()
         self.modelContainer = modelContainer
         self.now = now
         self.soundProvider = soundProvider

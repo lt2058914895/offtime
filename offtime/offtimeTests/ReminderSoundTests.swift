@@ -17,6 +17,24 @@ final class ReminderSoundTests: XCTestCase {
         XCTAssertFalse(ReminderSound.system.isBuiltIn)
     }
 
+    func testFreeAndProSoundTiers() {
+        XCTAssertEqual(
+            ReminderSound.freeBuiltInCases,
+            [.gentleMarimba, .crystalChime]
+        )
+        XCTAssertEqual(
+            ReminderSound.proBuiltInCases,
+            [.alarm, .classicBell, .digitalPulse, .waterDrop, .morningBirds, .rhythmTaps]
+        )
+        XCTAssertEqual(
+            ReminderSound.builtInCases,
+            ReminderSound.freeBuiltInCases + ReminderSound.proBuiltInCases
+        )
+        XCTAssertFalse(ReminderSound.system.requiresPro)
+        XCTAssertTrue(ReminderSound.freeBuiltInCases.allSatisfy { !$0.requiresPro })
+        XCTAssertTrue(ReminderSound.proBuiltInCases.allSatisfy(\.requiresPro))
+    }
+
     func testProviderMapsSystemAndBuiltInSounds() throws {
         let provider = BuiltInReminderSoundProvider()
 

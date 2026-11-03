@@ -7,6 +7,9 @@ struct ReminderSoundPickerView: View {
     private let savedSound: ReminderSound
     @State private var selection: ReminderSound
     @StateObject private var previewPlayer = ReminderSoundPreviewPlayer()
+    @State private var showProPaywall = false
+    @State private var shouldApplySoundAfterUnlock = false
+    @EnvironmentObject private var proAccessService: ProAccessService
     @Environment(\.dismiss) private var dismiss
 
     init(
@@ -24,6 +27,14 @@ struct ReminderSoundPickerView: View {
         selection != savedSound
     }
 
+    private var selectionRequiresUnlock: Bool {
+        selection.requiresPro && !proAccessService.isUnlocked
+    }
+
+    private var isUnlockAction: Bool {
+        hasChanges && selectionRequiresUnlock
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             List {
@@ -34,13 +45,36 @@ struct ReminderSoundPickerView: View {
                         subtitle: ReminderSound.system.subtitle,
                         icon: ReminderSound.system.iconName
                     )
-                    ForEach(ReminderSound.builtInCases) { sound in
+                    ForEach(ReminderSound.freeBuiltInCases) { sound in
                         soundRow(
                             sound: sound,
                             title: sound.displayName,
                             subtitle: sound.subtitle,
                             icon: sound.iconName
                         )
+                    }
+                }
+
+                Section {
+                    ForEach(ReminderSound.proBuiltInCases) { sound in
+                        soundRow(
+                            sound: sound,
+                            title: sound.displayName,
+                            subtitle: sound.subtitle,
+                            icon: sound.iconName
+                        )
+                    }
+                } header: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "crown.fill")
+                        Text(String(localized: "reminder.sound.pro.section"))
+                    }
+                    .fontWeight(.bold)
+                    .foregroundStyle(.orange)
+                    .textCase(nil)
+                } footer: {
+                    if !proAccessService.isUnlocked {
+                        Text(String(localized: "reminder.sound.pro.footer"))
                     }
                 }
             }
@@ -65,6 +99,19 @@ struct ReminderSoundPickerView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
+        .sheet(isPresented: $showProPaywall, onDismiss: {
+            if !proAccessService.isUnlocked {
+                shouldApplySoundAfterUnlock = false
+            }
+        }) {
+            ProPaywallView()
+        }
+        .onChange(of: proAccessService.isUnlocked) { _, isUnlocked in
+            guard isUnlocked, shouldApplySoundAfterUnlock else { return }
+
+            shouldApplySoundAfterUnlock = false
+            saveAndDismiss()
+        }
         .onDisappear {
             previewPlayer.stop()
         }
@@ -72,19 +119,39 @@ struct ReminderSoundPickerView: View {
 
     private var doneButton: some View {
         Button {
-            onSave(selection)
-            dismiss()
+            if selectionRequiresUnlock {
+                previewPlayer.stop()
+                shouldApplySoundAfterUnlock = true
+                showProPaywall = true
+            } else {
+                saveAndDismiss()
+            }
         } label: {
-            Text(String(localized: "reminder.sound.confirm"))
-                .frame(maxWidth: .infinity, minHeight: 46)
-                .foregroundStyle(.white)
-                .background(
-                    hasChanges ? Color.accentColor : Color.accentColor.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+            HStack(spacing: 6) {
+                if isUnlockAction {
+                    Image(systemName: "crown.fill")
+                }
+                Text(String(localized: isUnlockAction ? "reminder.sound.unlock" : "reminder.sound.confirm"))
+            }
+            .frame(maxWidth: .infinity, minHeight: 46)
+            .foregroundStyle(isUnlockAction ? Color.orange : Color.white)
+            .background(
+                doneButtonBackground,
+                in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+            )
         }
         .buttonStyle(.plain)
         .disabled(!hasChanges)
+    }
+
+    private var doneButtonBackground: Color {
+        guard hasChanges else { return Color.accentColor.opacity(0.4) }
+        return isUnlockAction ? Color.orange.opacity(0.12) : Color.accentColor
+    }
+
+    private func saveAndDismiss() {
+        onSave(selection)
+        dismiss()
     }
 
     private func soundRow(
@@ -115,6 +182,10 @@ struct ReminderSoundPickerView: View {
                     }
 
                     Spacer(minLength: 8)
+
+                    if sound.requiresPro && !proAccessService.isUnlocked {
+                        ProBadge(showsText: false)
+                    }
 
                     if selection == sound {
                         Image(systemName: "checkmark")

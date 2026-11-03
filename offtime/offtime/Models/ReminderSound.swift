@@ -8,14 +8,38 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
     case gentleMarimba
     case crystalChime
     case alarm
+    case classicBell
+    case digitalPulse
+    case waterDrop
+    case morningBirds
+    case rhythmTaps
 
-    static let builtInCases: [ReminderSound] = [
+    static let freeBuiltInCases: [ReminderSound] = [
         .gentleMarimba,
-        .crystalChime,
-        .alarm
+        .crystalChime
     ]
 
+    static let proBuiltInCases: [ReminderSound] = [
+        .alarm,
+        .classicBell,
+        .digitalPulse,
+        .waterDrop,
+        .morningBirds,
+        .rhythmTaps
+    ]
+
+    static let builtInCases = freeBuiltInCases + proBuiltInCases
+
     var id: String { rawValue }
+
+    var requiresPro: Bool {
+        switch self {
+        case .system, .gentleMarimba, .crystalChime:
+            return false
+        case .alarm, .classicBell, .digitalPulse, .waterDrop, .morningBirds, .rhythmTaps:
+            return true
+        }
+    }
 
     var displayName: String {
         switch self {
@@ -27,6 +51,16 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return String(localized: "reminder.sound.crystalChime")
         case .alarm:
             return String(localized: "reminder.sound.alarm")
+        case .classicBell:
+            return String(localized: "reminder.sound.classicBell")
+        case .digitalPulse:
+            return String(localized: "reminder.sound.digitalPulse")
+        case .waterDrop:
+            return String(localized: "reminder.sound.waterDrop")
+        case .morningBirds:
+            return String(localized: "reminder.sound.morningBirds")
+        case .rhythmTaps:
+            return String(localized: "reminder.sound.rhythmTaps")
         }
     }
 
@@ -40,6 +74,16 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return String(localized: "reminder.sound.crystalChime.subtitle")
         case .alarm:
             return String(localized: "reminder.sound.alarm.subtitle")
+        case .classicBell:
+            return String(localized: "reminder.sound.classicBell.subtitle")
+        case .digitalPulse:
+            return String(localized: "reminder.sound.digitalPulse.subtitle")
+        case .waterDrop:
+            return String(localized: "reminder.sound.waterDrop.subtitle")
+        case .morningBirds:
+            return String(localized: "reminder.sound.morningBirds.subtitle")
+        case .rhythmTaps:
+            return String(localized: "reminder.sound.rhythmTaps.subtitle")
         }
     }
 
@@ -53,6 +97,16 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return "sparkles"
         case .alarm:
             return "alarm.fill"
+        case .classicBell:
+            return "bell.fill"
+        case .digitalPulse:
+            return "waveform.path.ecg"
+        case .waterDrop:
+            return "drop.fill"
+        case .morningBirds:
+            return "sun.max.fill"
+        case .rhythmTaps:
+            return "hand.tap.fill"
         }
     }
 
@@ -66,6 +120,16 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return "reminder-crystal-chime.caf"
         case .alarm:
             return "reminder-alarm.caf"
+        case .classicBell:
+            return "reminder-classic-bell.caf"
+        case .digitalPulse:
+            return "reminder-digital-pulse.caf"
+        case .waterDrop:
+            return "reminder-water-drop.caf"
+        case .morningBirds:
+            return "reminder-morning-birds.caf"
+        case .rhythmTaps:
+            return "reminder-rhythm-taps.caf"
         }
     }
 
@@ -88,8 +152,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
 }
 
 enum ReminderSoundPreferences {
-    static let defaultSoundKey = "settings_defaultReminderSound"
-    static let fallbackSound: ReminderSound = .system
+    nonisolated static let defaultSoundKey = "settings_defaultReminderSound"
+    nonisolated static let fallbackSound: ReminderSound = .system
 
     nonisolated static func resolvedDefault(from defaults: UserDefaults = .standard) -> ReminderSound {
         guard let rawValue = defaults.string(forKey: defaultSoundKey),
@@ -117,7 +181,7 @@ final class BuiltInReminderSoundProvider: ReminderSoundProviding {
         switch sound {
         case .system:
             return .default
-        case .gentleMarimba, .crystalChime, .alarm:
+        default:
             guard let fileName = sound.fileName,
                   sound.resourceURL(in: bundle) != nil else {
                 return .default
@@ -140,7 +204,7 @@ final class BuiltInReminderSoundProvider: ReminderSoundProviding {
         switch sound {
         case .system:
             return "system"
-        case .gentleMarimba, .crystalChime, .alarm:
+        default:
             guard let fileName = sound.fileName else { return sound.rawValue }
             guard let url = sound.resourceURL(in: bundle),
                   let data = try? Data(contentsOf: url) else {

@@ -72,6 +72,10 @@ struct ProPaywallView: View {
             featureRow(
                 title: String(localized: "pro.feature.themes.title")
             )
+            featureRow(
+                title: String(localized: "pro.feature.sounds.title"),
+                detail: String(localized: "pro.feature.sounds.detail")
+            )
         }
         .padding(18)
         .background(Color(.secondarySystemGroupedBackground))
