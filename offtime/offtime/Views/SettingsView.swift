@@ -15,6 +15,8 @@ struct SettingsView: View {
     @State private var pendingImportData: Data?
     @State private var showImportConfirm = false
     @State private var showProPaywall = false
+    @AppStorage("settings_defaultReminderSound") private var defaultReminderSoundRaw =
+        ReminderSound.system.rawValue
     
     /// App Store 真实 ID（由用户提供），用于「分享 App」的分享链接与评分跳转
     private let appStoreID = "6794565774"
@@ -53,6 +55,10 @@ struct SettingsView: View {
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets())
         .listRowSeparator(.hidden)
+    }
+
+    private var defaultReminderSound: ReminderSound {
+        ReminderSound(rawValue: defaultReminderSoundRaw) ?? ReminderSoundPreferences.fallbackSound
     }
 
     /// 版本行：info 图标 + 版本号，纯只读展示
@@ -145,6 +151,13 @@ struct SettingsView: View {
                 path.append(AppRoute.reminderList)
             } label: {
                 reminderRow
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                path.append(AppRoute.reminderSound)
+            } label: {
+                reminderSoundSettingsRow
             }
             .buttonStyle(.plain)
 
@@ -280,6 +293,29 @@ struct SettingsView: View {
                     .foregroundColor(.secondary)
                     .monospacedDigit()
             }
+
+            settingsChevron
+        }
+    }
+
+    private var reminderSoundSettingsRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "music.note")
+                .foregroundColor(.blue)
+                .font(.title3)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(localized: "settings.reminder.sound"))
+                    .foregroundColor(.primary)
+
+                Text(defaultReminderSound.displayName)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+
+            ProBadge(showsText: false)
 
             settingsChevron
         }
@@ -534,6 +570,16 @@ struct SettingsView: View {
             MeetingView(embedsNavigationStack: false)
         case .customTheme:
             CustomThemeSettingsView()
+        case .reminderSound:
+            ReminderSoundPickerView(
+                title: String(localized: "reminder.sound.default"),
+                selectedSound: defaultReminderSound
+            ) { sound in
+                defaultReminderSoundRaw = sound.rawValue
+                Task {
+                    await viewModel.applyDefaultReminderSound(sound)
+                }
+            }
         default:
             EmptyView()
         }

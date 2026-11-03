@@ -302,6 +302,7 @@ enum AppRoute: Hashable {
     case contactPage
     case meetingRecommendation
     case customTheme
+    case reminderSound
     case cityDetail(UUID)
     case reminderList
 }

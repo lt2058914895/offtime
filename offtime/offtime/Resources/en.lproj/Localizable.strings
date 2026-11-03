@@ -185,6 +185,15 @@
 "reminder.list.empty.title" = "No Reminders";
 "reminder.list.empty" = "Reminders added in city details will appear here";
 "reminder.list.hint" = "Swipe left to delete, long press to change repeat";
+"reminder.sound.default" = "Default Reminder Sound";
+"reminder.sound.system" = "System Default";
+"reminder.sound.system.subtitle" = "Use the system reminder sound";
+"reminder.sound.preview" = "Preview";
+"reminder.sound.gentleMarimba" = "Marimba";
+"reminder.sound.gentleMarimba.subtitle" = "Warm wooden melody";
+"reminder.sound.alarm" = "Alarm";
+"reminder.sound.alarm.subtitle" = "Fast pulsing ring with a clear rhythm";
+"settings.reminder.sound" = "Custom Reminder Sound";
 "reminder.list.notifications.disabled.title" = "Reminder notifications are off";
 "reminder.list.notifications.disabled.message" = "Reminders are kept, but iOS won’t deliver notifications. Enable notifications in Settings.";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";

@@ -252,7 +252,7 @@ enum CityReminderScheduler {
 
 @MainActor
 final class CityReminderService {
-    private static let scheduleVersion = 5
+    private static let scheduleVersion = 7
     private static var localizationIdentifier: String {
         Bundle.main.preferredLocalizations.first ?? "en"
     }
@@ -260,15 +260,21 @@ final class CityReminderService {
     private let notificationCenter: UserNotificationCenterProtocol
     private let modelContainer: ModelContainer?
     private let now: () -> Date
+    private let soundProvider: ReminderSoundProviding
+    private let defaultSound: () -> ReminderSound
 
     init(
         notificationCenter: UserNotificationCenterProtocol = UserNotificationCenterAdapter(),
         modelContainer: ModelContainer? = nil,
-        now: @escaping () -> Date = { Date() }
+        now: @escaping () -> Date = { Date() },
+        soundProvider: ReminderSoundProviding = BuiltInReminderSoundProvider(),
+        defaultSound: @escaping () -> ReminderSound = { ReminderSoundPreferences.resolvedDefault() }
     ) {
         self.notificationCenter = notificationCenter
         self.modelContainer = modelContainer
         self.now = now
+        self.soundProvider = soundProvider
+        self.defaultSound = defaultSound
     }
 
     func isNotificationDeliveryAvailable() async -> Bool {
@@ -410,6 +416,8 @@ final class CityReminderService {
             let expectedIdentifiers = Set(
                 scheduledNotificationIdentifiers(for: reminder, after: referenceDate)
             )
+            let expectedSound = defaultSound()
+            let expectedSoundFingerprint = soundProvider.fingerprint(for: expectedSound)
             let reminderRequests = requests.filter {
                 $0.identifier.hasPrefix("\(reminder.id)-")
             }
@@ -417,6 +425,8 @@ final class CityReminderService {
             let needsContentRefresh = reminderRequests.contains {
                 ($0.content.userInfo["scheduleVersion"] as? Int) != Self.scheduleVersion
                     || ($0.content.userInfo["localization"] as? String) != Self.localizationIdentifier
+                    || ($0.content.userInfo["reminderSoundFingerprint"] as? String)
+                        != expectedSoundFingerprint
             }
             if expectedIdentifiers != scheduledIdentifiers || needsContentRefresh {
                 try? await schedule(reminder, requestAuthorization: false)
@@ -439,6 +449,16 @@ final class CityReminderService {
         }
         upsert(reminder)
         NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
+    }
+
+    /// 全局提醒音效改变后，重建所有启用中的提醒通知。
+    func rescheduleRemindersForSoundChange() async {
+        guard await isNotificationDeliveryAvailable() else { return }
+
+        let reminders = await allReminders()
+        for reminder in reminders where !reminder.isPaused {
+            try? await schedule(reminder, requestAuthorization: false)
+        }
     }
 
     /// 暂停或恢复单条提醒。暂停时撤销待发通知，恢复时按原规则重新排程。
@@ -504,8 +524,9 @@ final class CityReminderService {
             targetHour: reminder.targetHour,
             targetMinute: reminder.targetMinute
         )
-        content.sound = .default
-        content.userInfo = userInfo(for: reminder)
+        let sound = defaultSound()
+        content.sound = soundProvider.notificationSound(for: sound)
+        content.userInfo = userInfo(for: reminder, sound: sound)
 
         let weekdays: [Int?]
         if reminder.weekdayPolicy.requiresWeekdayFiltering {
@@ -577,7 +598,7 @@ final class CityReminderService {
         ).map { "\(reminder.id)-\($0)" }
     }
 
-    private func userInfo(for reminder: CityReminderGroup) -> [String: Any] {
+    private func userInfo(for reminder: CityReminderGroup, sound: ReminderSound) -> [String: Any] {
         var info: [String: Any] = [
             "reminderID": reminder.id,
             "cityID": reminder.cityID.uuidString,
@@ -591,7 +612,9 @@ final class CityReminderService {
             "targetHour": reminder.targetHour,
             "targetMinute": reminder.targetMinute,
             "scheduleVersion": Self.scheduleVersion,
-            "localization": Self.localizationIdentifier
+            "localization": Self.localizationIdentifier,
+            "reminderSoundID": sound.rawValue,
+            "reminderSoundFingerprint": soundProvider.fingerprint(for: sound)
         ]
         if let triggerCityName = reminder.triggerCityName {
             info["triggerCityName"] = triggerCityName

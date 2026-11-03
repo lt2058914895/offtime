@@ -10,6 +10,9 @@ final class SettingsViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private let cityService = CityService.shared
+    private let reminderService = CityReminderService(
+        modelContainer: CityService.shared.modelContainer
+    )
     private var reminderCountTask: Task<Void, Never>?
     
     init() {
@@ -30,6 +33,14 @@ final class SettingsViewModel: ObservableObject {
     
     func toggle24Hour() {
         saveSettings()
+    }
+
+    func applyDefaultReminderSound(_ sound: ReminderSound) async {
+        UserDefaults.standard.set(
+            sound.rawValue,
+            forKey: ReminderSoundPreferences.defaultSoundKey
+        )
+        await reminderService.rescheduleRemindersForSoundChange()
     }
 
     func refreshReminderCount() {

@@ -108,6 +108,8 @@ struct ClockListView: View {
                     EmptyView()
                 case .customTheme:
                     EmptyView()
+                case .reminderSound:
+                    EmptyView()
                 }
             }
             .toast(message: $viewModel.errorMessage)
