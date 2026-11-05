@@ -65,6 +65,15 @@ enum CityReminderError: LocalizedError {
     }
 }
 
+/// 一次提醒调度/同步的结果，用于把失败反馈到 UI。
+struct ReminderSchedulingReport {
+    var scheduledCount = 0
+    var failures: [String] = []
+    var skippedForAuthorization = false
+
+    var hasFailures: Bool { !failures.isEmpty }
+}
+
 struct CityReminderGroup: Identifiable, Equatable {
     let id: String
     let cityID: UUID
@@ -261,20 +270,28 @@ final class CityReminderService {
     private let modelContainer: ModelContainer?
     private let now: () -> Date
     private let soundProvider: ReminderSoundProviding
-    private let defaultSound: () -> ReminderSound
+    private let defaultSound: @MainActor () -> ReminderSound
+    private let isProUnlocked: @MainActor () -> Bool
 
     init(
         notificationCenter: UserNotificationCenterProtocol? = nil,
         modelContainer: ModelContainer? = nil,
         now: @escaping () -> Date = { Date() },
         soundProvider: ReminderSoundProviding = BuiltInReminderSoundProvider(),
-        defaultSound: @escaping () -> ReminderSound = { ReminderSoundPreferences.resolvedDefault() }
+        defaultSound: (@MainActor () -> ReminderSound)? = nil,
+        isProUnlocked: (@MainActor () -> Bool)? = nil
     ) {
         self.notificationCenter = notificationCenter ?? UserNotificationCenterAdapter()
         self.modelContainer = modelContainer
         self.now = now
         self.soundProvider = soundProvider
-        self.defaultSound = defaultSound
+        let resolvedProAccess = isProUnlocked ?? { ProAccessService.shared.isUnlocked }
+        self.isProUnlocked = resolvedProAccess
+        self.defaultSound = defaultSound ?? {
+            ReminderSoundPreferences.resolvedDefault(
+                isProUnlocked: resolvedProAccess()
+            )
+        }
     }
 
     func isNotificationDeliveryAvailable() async -> Bool {
@@ -388,7 +405,9 @@ final class CityReminderService {
     /// 1. 把旧版本仅存在于通知中心的提醒迁移到 SwiftData。
     /// 2. 恢复被用户或系统删除的待发通知。
     /// 3. 清理城市已经不存在后的孤立提醒。
-    func synchronize() async {
+    @discardableResult
+    func synchronize() async -> ReminderSchedulingReport {
+        var report = ReminderSchedulingReport()
         let requests = await notificationCenter.pendingNotificationRequests()
         let pendingGroups = requests.compactMap(Self.group(from:))
         for group in pendingGroups where reminderModel(withID: group.id) == nil {
@@ -408,7 +427,8 @@ final class CityReminderService {
         let authorizationStatus = await notificationCenter.notificationAuthorizationStatus()
         guard Self.canDeliverNotifications(for: authorizationStatus) else {
             await cleanupOrphanedReminders()
-            return
+            report.skippedForAuthorization = true
+            return report
         }
 
         let referenceDate = now()
@@ -416,7 +436,7 @@ final class CityReminderService {
             let expectedIdentifiers = Set(
                 scheduledNotificationIdentifiers(for: reminder, after: referenceDate)
             )
-            let expectedSound = defaultSound()
+            let expectedSound = resolvedSound()
             let expectedSoundFingerprint = soundProvider.fingerprint(for: expectedSound)
             let reminderRequests = requests.filter {
                 $0.identifier.hasPrefix("\(reminder.id)-")
@@ -429,11 +449,17 @@ final class CityReminderService {
                         != expectedSoundFingerprint
             }
             if expectedIdentifiers != scheduledIdentifiers || needsContentRefresh {
-                try? await schedule(reminder, requestAuthorization: false)
+                do {
+                    try await schedule(reminder, requestAuthorization: false)
+                    report.scheduledCount += 1
+                } catch {
+                    report.failures.append(error.localizedDescription)
+                }
             }
         }
 
         await cleanupOrphanedReminders()
+        return report
     }
 
     /// 更新提醒重复方式，并按新规则重建通知。
@@ -452,13 +478,24 @@ final class CityReminderService {
     }
 
     /// 全局提醒音效改变后，重建所有启用中的提醒通知。
-    func rescheduleRemindersForSoundChange() async {
-        guard await isNotificationDeliveryAvailable() else { return }
+    @discardableResult
+    func rescheduleRemindersForSoundChange() async -> ReminderSchedulingReport {
+        var report = ReminderSchedulingReport()
+        guard await isNotificationDeliveryAvailable() else {
+            report.skippedForAuthorization = true
+            return report
+        }
 
         let reminders = await allReminders()
         for reminder in reminders where !reminder.isPaused {
-            try? await schedule(reminder, requestAuthorization: false)
+            do {
+                try await schedule(reminder, requestAuthorization: false)
+                report.scheduledCount += 1
+            } catch {
+                report.failures.append(error.localizedDescription)
+            }
         }
+        return report
     }
 
     /// 暂停或恢复单条提醒。暂停时撤销待发通知，恢复时按原规则重新排程。
@@ -478,6 +515,15 @@ final class CityReminderService {
             upsert(reminder)
         }
         NotificationCenter.default.post(name: .reminderStoreDidChange, object: nil)
+    }
+
+    /// 服务层统一校验音效权限，避免调用方绕过设置页直接使用 Pro 音效。
+    private func resolvedSound() -> ReminderSound {
+        let sound = defaultSound()
+        return ReminderSoundPreferences.accessibleSound(
+            for: sound,
+            isProUnlocked: isProUnlocked()
+        )
     }
 
     // MARK: - Scheduling
@@ -524,7 +570,7 @@ final class CityReminderService {
             targetHour: reminder.targetHour,
             targetMinute: reminder.targetMinute
         )
-        let sound = defaultSound()
+        let sound = resolvedSound()
         content.sound = soundProvider.notificationSound(for: sound)
         content.userInfo = userInfo(for: reminder, sound: sound)
 

@@ -16,6 +16,8 @@ final class AppEnvironment: ObservableObject {
     @Published var citiesRevision: Int = 0
     /// 全局分钟时钟：列表与详情页共享，避免每个 ViewModel 重复注册 RunLoop Timer
     @Published private(set) var currentDate = Date()
+    /// 自动同步提醒失败时的全局提示
+    @Published var reminderSyncMessage: String?
 
     private let logger = Logger(subsystem: "lt.offtime", category: "AppEnvironment")
     private var minuteTimer: Timer?
@@ -84,8 +86,6 @@ final class AppEnvironment: ObservableObject {
         seedDefaultCityIfFirstLaunch()
         loadOnboardingState()
         loadSettings()
-        // 导入旧版通知提醒、补齐被系统删除的通知，并清理孤立提醒
-        synchronizeReminders()
         publishWidgetSnapshot()
     }
 
@@ -162,11 +162,25 @@ final class AppEnvironment: ObservableObject {
 
     // MARK: - 引导状态
 
-    private func synchronizeReminders() {
-        Task {
-            let reminderService = CityReminderService(modelContainer: modelContainer)
-            await reminderService.synchronize()
+    /// 启动、回到前台或 Pro 权益变化时调用。同步会同时补齐通知权限恢复后的提醒，
+    /// 并在 Pro 音效失效时自动回退到免费音效。
+    @discardableResult
+    func synchronizeReminders(isProUnlocked: Bool) async -> ReminderSchedulingReport {
+        // 即使通知权限关闭，也先把已失效的 Pro 音效落回免费音效，
+        // 保证设置页与后续重新开启通知时的状态一致。
+        ReminderSoundPreferences.resolvedDefault(isProUnlocked: isProUnlocked)
+        let reminderService = CityReminderService(
+            modelContainer: modelContainer,
+            isProUnlocked: { isProUnlocked }
+        )
+        let report = await reminderService.synchronize()
+        if report.hasFailures {
+            reminderSyncMessage = String(
+                format: String(localized: "reminder.sync.failed"),
+                report.failures.count
+            )
         }
+        return report
     }
 
     private func loadOnboardingState() {

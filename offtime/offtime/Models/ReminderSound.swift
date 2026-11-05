@@ -155,12 +155,51 @@ enum ReminderSoundPreferences {
     nonisolated static let defaultSoundKey = "settings_defaultReminderSound"
     nonisolated static let fallbackSound: ReminderSound = .system
 
-    nonisolated static func resolvedDefault(from defaults: UserDefaults = .standard) -> ReminderSound {
+    /// 把任意来源的音效收敛成当前用户实际可用的音效。
+    /// Pro 专属音效在权益失效后统一回退到系统默认音效。
+    nonisolated static func accessibleSound(
+        for sound: ReminderSound,
+        isProUnlocked: Bool
+    ) -> ReminderSound {
+        guard sound.requiresPro, !isProUnlocked else {
+            return sound
+        }
+        return fallbackSound
+    }
+
+    /// 只读取已保存值，不修改存储。未知值按系统默认音效处理。
+    nonisolated static func storedDefault(from defaults: UserDefaults = .standard) -> ReminderSound {
         guard let rawValue = defaults.string(forKey: defaultSoundKey),
               let sound = ReminderSound(rawValue: rawValue) else {
             return fallbackSound
         }
         return sound
+    }
+
+    /// 读取并校准全局音效；如果保存值已不可用，会同步写回回退值。
+    @discardableResult
+    nonisolated static func resolvedDefault(
+        from defaults: UserDefaults = .standard,
+        isProUnlocked: Bool
+    ) -> ReminderSound {
+        let stored = storedDefault(from: defaults)
+        let accessible = accessibleSound(for: stored, isProUnlocked: isProUnlocked)
+        if accessible != stored {
+            defaults.set(accessible.rawValue, forKey: defaultSoundKey)
+        }
+        return accessible
+    }
+
+    /// 保存前再次校验 Pro 权限，避免绕过 UI 写入不可用音效。
+    @discardableResult
+    nonisolated static func saveDefault(
+        _ sound: ReminderSound,
+        to defaults: UserDefaults = .standard,
+        isProUnlocked: Bool
+    ) -> ReminderSound {
+        let accessible = accessibleSound(for: sound, isProUnlocked: isProUnlocked)
+        defaults.set(accessible.rawValue, forKey: defaultSoundKey)
+        return accessible
     }
 }
 

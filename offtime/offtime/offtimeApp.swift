@@ -1,13 +1,15 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct offtimeApp: App {
     @StateObject private var appEnvironment = AppEnvironment()
-    @StateObject private var proAccessService = ProAccessService()
+    @StateObject private var proAccessService = ProAccessService.shared
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        UNUserNotificationCenter.current().delegate = ReminderNotificationDelegate.shared
         // iOS 17 起 SwiftUI 的 .tint 不再控制分段控件选中段填充色，
         // 改为通过外观代理统一设置为应用主题色（蓝色）。
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.accentColor)
@@ -30,14 +32,31 @@ struct offtimeApp: App {
             .environmentObject(proAccessService)
             .modelContainer(appEnvironment.modelContainer)
             .preferredColorScheme(appEnvironment.colorScheme)
+            .toast(message: Binding(
+                get: { appEnvironment.reminderSyncMessage },
+                set: { appEnvironment.reminderSyncMessage = $0 }
+            ))
             .task {
                 appEnvironment.setup()
                 await proAccessService.load()
+                await appEnvironment.synchronizeReminders(
+                    isProUnlocked: proAccessService.isUnlocked
+                )
+            }
+            .onChange(of: proAccessService.isUnlocked) { _, isUnlocked in
+                Task {
+                    await appEnvironment.synchronizeReminders(isProUnlocked: isUnlocked)
+                }
             }
             .onChange(of: scenePhase) { _, phase in
                 switch phase {
                 case .active:
-                    Task { await proAccessService.refreshEntitlements() }
+                    Task {
+                        await proAccessService.refreshEntitlements()
+                        await appEnvironment.synchronizeReminders(
+                            isProUnlocked: proAccessService.isUnlocked
+                        )
+                    }
                 case .background:
                     // 进入后台前补一次发布：改城市时那次刷新请求若被系统合并/丢弃，
                     // 用户回到桌面就看不到新城市；这里在有变化时再要一次刷新。

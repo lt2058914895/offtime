@@ -210,6 +210,9 @@
 "reminder.sound.rhythmTaps" = "Rhythm Taps";
 "reminder.sound.rhythmTaps.subtitle" = "Crisp wooden rhythmic taps";
 "settings.reminder.sound" = "Reminder Sound";
+"reminder.sound.reschedule.failed" = "%d reminder(s) couldn’t use the new sound. Please try again.";
+"reminder.sound.reschedule.notificationsOff" = "Sound saved. Notifications are off, so reminders will sync when you enable them.";
+"reminder.sync.failed" = "%d reminder(s) couldn’t be restored. Open Reminders and try again.";
 "reminder.list.notifications.disabled.title" = "Reminder notifications are off";
 "reminder.list.notifications.disabled.message" = "Reminders are kept, but iOS won’t deliver notifications. Enable notifications in Settings.";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";

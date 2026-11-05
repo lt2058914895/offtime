@@ -10,12 +10,18 @@ final class SettingsViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private let cityService = CityService.shared
-    private let reminderService = CityReminderService(
-        modelContainer: CityService.shared.modelContainer
-    )
+    private let reminderService: CityReminderService
+    private let proAccessService: ProAccessService
     private var reminderCountTask: Task<Void, Never>?
     
-    init() {
+    init(
+        reminderService: CityReminderService? = nil,
+        proAccessService: ProAccessService? = nil
+    ) {
+        self.reminderService = reminderService ?? CityReminderService(
+            modelContainer: CityService.shared.modelContainer
+        )
+        self.proAccessService = proAccessService ?? .shared
         loadSettings()
     }
     
@@ -35,12 +41,22 @@ final class SettingsViewModel: ObservableObject {
         saveSettings()
     }
 
-    func applyDefaultReminderSound(_ sound: ReminderSound) async {
-        UserDefaults.standard.set(
-            sound.rawValue,
-            forKey: ReminderSoundPreferences.defaultSoundKey
+    @discardableResult
+    func applyDefaultReminderSound(_ sound: ReminderSound) async -> ReminderSound {
+        let appliedSound = ReminderSoundPreferences.saveDefault(
+            sound,
+            isProUnlocked: proAccessService.isUnlocked
         )
-        await reminderService.rescheduleRemindersForSoundChange()
+        let report = await reminderService.rescheduleRemindersForSoundChange()
+        if report.skippedForAuthorization {
+            errorMessage = String(localized: "reminder.sound.reschedule.notificationsOff")
+        } else if report.hasFailures {
+            errorMessage = String(
+                format: String(localized: "reminder.sound.reschedule.failed"),
+                report.failures.count
+            )
+        }
+        return appliedSound
     }
 
     func refreshReminderCount() {

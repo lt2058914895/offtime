@@ -58,7 +58,12 @@ struct SettingsView: View {
     }
 
     private var defaultReminderSound: ReminderSound {
-        ReminderSound(rawValue: defaultReminderSoundRaw) ?? ReminderSoundPreferences.fallbackSound
+        let stored = ReminderSound(rawValue: defaultReminderSoundRaw)
+            ?? ReminderSoundPreferences.fallbackSound
+        return ReminderSoundPreferences.accessibleSound(
+            for: stored,
+            isProUnlocked: proAccessService.isUnlocked
+        )
     }
 
     /// 版本行：info 图标 + 版本号，纯只读展示
@@ -579,7 +584,8 @@ struct SettingsView: View {
             ) { sound in
                 defaultReminderSoundRaw = sound.rawValue
                 Task {
-                    await viewModel.applyDefaultReminderSound(sound)
+                    let appliedSound = await viewModel.applyDefaultReminderSound(sound)
+                    defaultReminderSoundRaw = appliedSound.rawValue
                 }
             }
         default:

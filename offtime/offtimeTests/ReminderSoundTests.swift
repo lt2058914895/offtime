@@ -1,5 +1,6 @@
 import XCTest
 import CryptoKit
+import UserNotifications
 @testable import offtime
 
 final class ReminderSoundTests: XCTestCase {
@@ -77,13 +78,13 @@ final class ReminderSoundTests: XCTestCase {
         }
 
         XCTAssertEqual(
-            ReminderSoundPreferences.resolvedDefault(from: defaults),
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: false),
             ReminderSoundPreferences.fallbackSound
         )
 
         defaults.set("unknown", forKey: ReminderSoundPreferences.defaultSoundKey)
         XCTAssertEqual(
-            ReminderSoundPreferences.resolvedDefault(from: defaults),
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: false),
             ReminderSoundPreferences.fallbackSound
         )
 
@@ -92,8 +93,54 @@ final class ReminderSoundTests: XCTestCase {
             forKey: ReminderSoundPreferences.defaultSoundKey
         )
         XCTAssertEqual(
-            ReminderSoundPreferences.resolvedDefault(from: defaults),
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: false),
+            ReminderSoundPreferences.fallbackSound
+        )
+        XCTAssertEqual(
+            defaults.string(forKey: ReminderSoundPreferences.defaultSoundKey),
+            ReminderSoundPreferences.fallbackSound.rawValue
+        )
+
+        defaults.set(
+            ReminderSound.alarm.rawValue,
+            forKey: ReminderSoundPreferences.defaultSoundKey
+        )
+        XCTAssertEqual(
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: true),
             .alarm
         )
+    }
+
+    func testSaveDefaultClampsProSoundWhenLocked() {
+        let suiteName = "ReminderSoundTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer {
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
+        XCTAssertEqual(
+            ReminderSoundPreferences.saveDefault(.alarm, to: defaults, isProUnlocked: false),
+            ReminderSoundPreferences.fallbackSound
+        )
+        XCTAssertEqual(
+            ReminderSoundPreferences.storedDefault(from: defaults),
+            ReminderSoundPreferences.fallbackSound
+        )
+
+        XCTAssertEqual(
+            ReminderSoundPreferences.saveDefault(.crystalChime, to: defaults, isProUnlocked: false),
+            .crystalChime
+        )
+        XCTAssertEqual(
+            ReminderSoundPreferences.storedDefault(from: defaults),
+            .crystalChime
+        )
+    }
+
+    func testForegroundNotificationPresentationIncludesBannerAndSound() {
+        let options = ReminderNotificationDelegate.foregroundPresentationOptions
+        XCTAssertTrue(options.contains(.banner))
+        XCTAssertTrue(options.contains(.list))
+        XCTAssertTrue(options.contains(.sound))
     }
 }

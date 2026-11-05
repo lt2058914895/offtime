@@ -14,6 +14,8 @@ enum ProAccessPolicy {
 
 @MainActor
 final class ProAccessService: ObservableObject {
+    static let shared = ProAccessService()
+
     @Published private(set) var source: ProAccessSource = .free
     @Published private(set) var product: Product?
     @Published private(set) var isLoadingProducts = false

@@ -646,7 +646,8 @@ final class CityReminderServiceTests: XCTestCase {
         let service = CityReminderService(
             notificationCenter: mock,
             modelContainer: container,
-            defaultSound: { .alarm }
+            defaultSound: { .alarm },
+            isProUnlocked: { true }
         )
 
         try await service.addReminder(
@@ -680,7 +681,8 @@ final class CityReminderServiceTests: XCTestCase {
         let service = CityReminderService(
             notificationCenter: mock,
             modelContainer: container,
-            defaultSound: { defaultSound }
+            defaultSound: { defaultSound },
+            isProUnlocked: { true }
         )
         let inherited = try await service.addReminder(
             cityID: UUID(),
@@ -727,6 +729,66 @@ final class CityReminderServiceTests: XCTestCase {
             request.content.userInfo["reminderSoundFingerprint"] as? String
                 == BuiltInReminderSoundProvider().fingerprint(for: .alarm)
         })
+    }
+
+    func testServiceFallsBackFromProSoundWhenLocked() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(
+            notificationCenter: mock,
+            modelContainer: container,
+            defaultSound: { .alarm },
+            isProUnlocked: { false }
+        )
+
+        try await service.addReminder(
+            cityID: UUID(),
+            cityName: "上海",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Asia/Tokyo",
+            targetHour: 10,
+            targetMinute: 0
+        )
+
+        let request = try XCTUnwrap(mock.requests.first)
+        XCTAssertEqual(
+            request.content.userInfo["reminderSoundID"] as? String,
+            ReminderSoundPreferences.fallbackSound.rawValue
+        )
+    }
+
+    func testSoundRescheduleReportsFailures() async throws {
+        let mock = MockNotificationCenter()
+        var defaultSound: ReminderSound = .system
+        let service = CityReminderService(
+            notificationCenter: mock,
+            modelContainer: container,
+            defaultSound: { defaultSound },
+            isProUnlocked: { true }
+        )
+
+        _ = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "上海",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 0,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Asia/Tokyo",
+            targetHour: 10,
+            targetMinute: 0
+        )
+
+        defaultSound = .alarm
+        mock.addError = CocoaError(.fileWriteUnknown)
+        let report = await service.rescheduleRemindersForSoundChange()
+
+        XCTAssertTrue(report.hasFailures)
+        XCTAssertEqual(report.failures.count, 1)
+        XCTAssertEqual(report.scheduledCount, 0)
+        XCTAssertTrue(mock.requests.isEmpty)
     }
 
     func testPausedReminderIsNotRescheduledForGlobalSoundChange() async throws {
@@ -818,7 +880,8 @@ final class CityReminderServiceTests: XCTestCase {
         let service = CityReminderService(
             notificationCenter: mock,
             modelContainer: container,
-            defaultSound: { .alarm }
+            defaultSound: { .alarm },
+            isProUnlocked: { true }
         )
         _ = try await service.addReminder(
             cityID: cityID,

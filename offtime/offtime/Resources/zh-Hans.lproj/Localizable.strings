@@ -210,6 +210,9 @@
 "reminder.sound.rhythmTaps" = "节奏敲击";
 "reminder.sound.rhythmTaps.subtitle" = "短促有力的木质节拍";
 "settings.reminder.sound" = "提醒音效";
+"reminder.sound.reschedule.failed" = "%d 条提醒未能应用新音效，请稍后重试。";
+"reminder.sound.reschedule.notificationsOff" = "音效已保存；通知权限已关闭，开启后会重新同步提醒。";
+"reminder.sync.failed" = "%d 条提醒恢复失败，请打开提醒列表重试。";
 "reminder.list.notifications.disabled.title" = "提醒通知已关闭";
 "reminder.list.notifications.disabled.message" = "提醒仍会保留，但系统不会发送通知。请在系统设置中开启通知。";
 "reminder.list.delete.confirm.title" = "删除提醒？";
