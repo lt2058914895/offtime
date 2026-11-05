@@ -194,7 +194,7 @@
 "reminder.sound.confirm" = "Use This Sound";
 "reminder.sound.unlock" = "Unlock Pro to Use";
 "reminder.sound.pro.section" = "Pro Sounds";
-"reminder.sound.pro.footer" = "Preview any sound, then unlock Pro to use it as your reminder sound.";
+"reminder.sound.pro.footer" = "Preview first, then unlock Pro to set it as your reminder sound.";
 "reminder.sound.gentleMarimba" = "Marimba";
 "reminder.sound.gentleMarimba.subtitle" = "Warm wooden melody";
 "reminder.sound.alarm" = "Alarm";

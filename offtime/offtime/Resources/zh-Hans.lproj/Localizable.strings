@@ -194,7 +194,7 @@
 "reminder.sound.confirm" = "确认使用";
 "reminder.sound.unlock" = "解锁 Pro 使用";
 "reminder.sound.pro.section" = "Pro专属";
-"reminder.sound.pro.footer" = "可先试听，解锁 Pro 后可设置为提醒音效";
+"reminder.sound.pro.footer" = "可先试听，解锁 Pro 后可设置为提醒音";
 "reminder.sound.gentleMarimba" = "木琴";
 "reminder.sound.gentleMarimba.subtitle" = "温暖木琴旋律";
 "reminder.sound.alarm" = "闹铃";
