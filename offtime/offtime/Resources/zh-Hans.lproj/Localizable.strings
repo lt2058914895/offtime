@@ -284,8 +284,9 @@
 "pro.restore" = "恢复购买";
 "pro.paywall.headline" = "解锁%@ Pro";
 "pro.feature.themes.title" = "自定义小组件主题";
-"pro.feature.sounds.title" = "全部提醒音效";
-"pro.feature.sounds.detail" = "解锁全部内置音效并应用到提醒";
+"pro.feature.themes.detail" = "让小组件换个风格";
+"pro.feature.sounds.title" = "解锁Pro专属提醒音效";
+"pro.feature.sounds.detail" = "清晰可辨，提醒不遗漏";
 "pro.feature.upcoming" = "更多精彩功能，敬请期待";
 "pro.purchase" = "购买";
 "pro.purchase.processing" = "处理中…";

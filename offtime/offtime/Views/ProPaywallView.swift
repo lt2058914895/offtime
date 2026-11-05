@@ -70,7 +70,8 @@ struct ProPaywallView: View {
     private var featureList: some View {
         VStack(spacing: 12) {
             featureRow(
-                title: String(localized: "pro.feature.themes.title")
+                title: String(localized: "pro.feature.themes.title"),
+                detail: String(localized: "pro.feature.themes.detail")
             )
             featureRow(
                 title: String(localized: "pro.feature.sounds.title"),

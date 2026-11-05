@@ -284,8 +284,9 @@
 "pro.restore" = "Restore Purchases";
 "pro.paywall.headline" = "Unlock %@ Pro";
 "pro.feature.themes.title" = "Custom Widget Theme";
-"pro.feature.sounds.title" = "All Reminder Sounds";
-"pro.feature.sounds.detail" = "Unlock every built-in sound for your reminders.";
+"pro.feature.themes.detail" = "Give your widgets a fresh look.";
+"pro.feature.sounds.title" = "Unlock Pro Reminder Sounds";
+"pro.feature.sounds.detail" = "Clear and distinct, so no reminder slips by.";
 "pro.feature.upcoming" = "More great features are coming soon";
 "pro.purchase" = "Purchase";
 "pro.purchase.processing" = "Processing…";
