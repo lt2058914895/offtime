@@ -21,11 +21,11 @@ final class ReminderSoundTests: XCTestCase {
     func testFreeAndProSoundTiers() {
         XCTAssertEqual(
             ReminderSound.freeBuiltInCases,
-            [.gentleMarimba, .crystalChime]
+            [.gentleMarimba]
         )
         XCTAssertEqual(
             ReminderSound.proBuiltInCases,
-            [.alarm, .classicBell, .digitalPulse, .waterDrop, .morningBirds, .rhythmTaps]
+            [.alarm, .doorKnock, .digitalPulse, .waterDrop, .rhythmTaps]
         )
         XCTAssertEqual(
             ReminderSound.builtInCases,
@@ -88,6 +88,38 @@ final class ReminderSoundTests: XCTestCase {
             ReminderSoundPreferences.fallbackSound
         )
 
+        // The removed Morning Birds option may still be stored on an existing device.
+        defaults.set("morningBirds", forKey: ReminderSoundPreferences.defaultSoundKey)
+        XCTAssertEqual(
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: true),
+            ReminderSoundPreferences.fallbackSound
+        )
+        XCTAssertEqual(
+            defaults.string(forKey: ReminderSoundPreferences.defaultSoundKey),
+            ReminderSoundPreferences.fallbackSound.rawValue
+        )
+
+        // The removed Crystal Chime option may also still be stored on an existing device.
+        defaults.set("crystalChime", forKey: ReminderSoundPreferences.defaultSoundKey)
+        XCTAssertEqual(
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: true),
+            ReminderSoundPreferences.fallbackSound
+        )
+        XCTAssertEqual(
+            defaults.string(forKey: ReminderSoundPreferences.defaultSoundKey),
+            ReminderSoundPreferences.fallbackSound.rawValue
+        )
+
+        defaults.set("classicBell", forKey: ReminderSoundPreferences.defaultSoundKey)
+        XCTAssertEqual(
+            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: true),
+            .doorKnock
+        )
+        XCTAssertEqual(
+            defaults.string(forKey: ReminderSoundPreferences.defaultSoundKey),
+            ReminderSound.doorKnock.rawValue
+        )
+
         defaults.set(
             ReminderSound.alarm.rawValue,
             forKey: ReminderSoundPreferences.defaultSoundKey
@@ -128,12 +160,12 @@ final class ReminderSoundTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            ReminderSoundPreferences.saveDefault(.crystalChime, to: defaults, isProUnlocked: false),
-            .crystalChime
+            ReminderSoundPreferences.saveDefault(.gentleMarimba, to: defaults, isProUnlocked: false),
+            .gentleMarimba
         )
         XCTAssertEqual(
             ReminderSoundPreferences.storedDefault(from: defaults),
-            .crystalChime
+            .gentleMarimba
         )
     }
 
