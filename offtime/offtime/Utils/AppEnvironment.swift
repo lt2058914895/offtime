@@ -7,8 +7,9 @@ import os
 final class AppEnvironment: ObservableObject {
     @Published var settings: AppSettings = AppSettings.defaults
     
-    /// SwiftData ModelContainer，App 启动时创建一次，全生命周期复用
-    let modelContainer: ModelContainer
+    /// SwiftData ModelContainer，App 启动时创建一次，全生命周期复用。
+    /// 持久化与内存兜底均失败时为 nil，由根视图展示不可用提示。
+    let modelContainer: ModelContainer?
     
     /// 是否已完成首启引导（新用户为 false，已完成引导的用户为 true）
     @Published var onboardingCompleted: Bool = false
@@ -33,9 +34,10 @@ final class AppEnvironment: ObservableObject {
             logger.error("SwiftData 存储备份失败: \(error.localizedDescription)")
         }
 
+        let resolvedContainer: ModelContainer?
         do {
             let config = ModelConfiguration(schema: schema, url: storeURL)
-            modelContainer = try ModelContainer(
+            resolvedContainer = try ModelContainer(
                 for: schema,
                 migrationPlan: AppStoreMigrationPlan.self,
                 configurations: [config]
@@ -49,7 +51,7 @@ final class AppEnvironment: ObservableObject {
                 }
                 try backupService.restore(backup, to: storeURL)
                 let config = ModelConfiguration(schema: schema, url: storeURL)
-                modelContainer = try ModelContainer(
+                resolvedContainer = try ModelContainer(
                     for: schema,
                     migrationPlan: AppStoreMigrationPlan.self,
                     configurations: [config]
@@ -60,22 +62,30 @@ final class AppEnvironment: ObservableObject {
 
                 do {
                     let config = ModelConfiguration(schema: schema, url: storeURL)
-                    modelContainer = try ModelContainer(
+                    resolvedContainer = try ModelContainer(
                         for: schema,
                         migrationPlan: AppStoreMigrationPlan.self,
                         configurations: [config]
                     )
                 } catch {
                     logger.error("SwiftData 新存储创建失败，回退内存模式: \(error.localizedDescription)")
-                    modelContainer = try! ModelContainer(
+                    if let fallbackContainer = try? ModelContainer(
                         for: schema,
                         configurations: [ModelConfiguration(isStoredInMemoryOnly: true)]
-                    )
+                    ) {
+                        resolvedContainer = fallbackContainer
+                    } else {
+                        logger.error("SwiftData 内存兜底也失败，应用进入存储不可用状态")
+                        resolvedContainer = nil
+                    }
                 }
             }
         }
+        modelContainer = resolvedContainer
         // 立即注入 CityService，确保任何后续调用都能访问 ModelContext
-        CityService.shared.modelContainer = modelContainer
+        if let resolvedContainer {
+            CityService.shared.configure(modelContainer: resolvedContainer)
+        }
         observeCityStoreChanges()
         // 首帧渲染前同步读取引导状态，避免非新用户进入 App 时引导页一闪而过
         loadOnboardingState()
@@ -131,6 +141,7 @@ final class AppEnvironment: ObservableObject {
     }
 
     func publishWidgetSnapshot() {
+        guard let modelContainer else { return }
         WidgetSnapshotService.publish(modelContainer: modelContainer, settings: settings)
     }
 
@@ -141,6 +152,7 @@ final class AppEnvironment: ObservableObject {
     private func seedDefaultCityIfFirstLaunch() {
         let seededKey = "first_launch_seeded"
         guard !UserDefaults.standard.bool(forKey: seededKey) else { return }
+        guard let modelContainer else { return }
 
         let context = modelContainer.mainContext
         var fetch = FetchDescriptor<CityModel>()
@@ -169,6 +181,9 @@ final class AppEnvironment: ObservableObject {
         // 即使通知权限关闭，也先把已失效的 Pro 音效落回免费音效，
         // 保证设置页与后续重新开启通知时的状态一致。
         ReminderSoundPreferences.resolvedDefault(isProUnlocked: isProUnlocked)
+        guard let modelContainer else {
+            return ReminderSchedulingReport()
+        }
         let reminderService = CityReminderService(
             modelContainer: modelContainer,
             isProUnlocked: { isProUnlocked }

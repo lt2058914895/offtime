@@ -292,7 +292,7 @@ final class CityDetailViewModel: ObservableObject {
         city.workEndHour = targetWorkHours.end
         city.localWorkStart = localWorkHours.start
         city.localWorkEnd = localWorkHours.end
-        try? CityService.shared.modelContainer.mainContext.save()
+        try? CityService.shared.modelContainer?.mainContext.save()
         NotificationCenter.default.post(name: .cityStoreDidChange, object: nil)
     }
 

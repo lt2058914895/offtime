@@ -100,7 +100,10 @@ final class ReminderListViewModel: ObservableObject {
     private func loadCityCache() {
         do {
             let cities = try cityService.getAllCities()
-            cityCache = Dictionary(uniqueKeysWithValues: cities.map { ($0.id, $0) })
+            cityCache = Dictionary(
+                cities.map { ($0.id, $0) },
+                uniquingKeysWith: { current, _ in current }
+            )
         } catch {
             cityCache = [:]
         }

@@ -22,15 +22,21 @@ struct offtimeApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if appEnvironment.onboardingCompleted {
-                    MainTabView()
+                if let modelContainer = appEnvironment.modelContainer {
+                    Group {
+                        if appEnvironment.onboardingCompleted {
+                            MainTabView()
+                        } else {
+                            OnboardingView()
+                        }
+                    }
+                    .modelContainer(modelContainer)
                 } else {
-                    OnboardingView()
+                    StorageUnavailableView()
                 }
             }
             .environmentObject(appEnvironment)
             .environmentObject(proAccessService)
-            .modelContainer(appEnvironment.modelContainer)
             .preferredColorScheme(appEnvironment.colorScheme)
             .toast(message: Binding(
                 get: { appEnvironment.reminderSyncMessage },
@@ -66,6 +72,19 @@ struct offtimeApp: App {
                     break
                 }
             }
+        }
+    }
+}
+
+private struct StorageUnavailableView: View {
+    var body: some View {
+        ContentUnavailableView {
+            Label(
+                String(localized: "storage.unavailable.title"),
+                systemImage: "exclamationmark.triangle.fill"
+            )
+        } description: {
+            Text(String(localized: "storage.unavailable.message"))
         }
     }
 }

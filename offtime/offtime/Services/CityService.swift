@@ -13,18 +13,31 @@ final class CityService {
     
     // MARK: - ModelContext 获取
     
-    /// 由 AppEnvironment 在启动时注入
-    var modelContainer: ModelContainer!
-    
-    /// 便捷获取主上下文
-    private var mainContext: ModelContext {
-        modelContainer.mainContext
+    /// 由 AppEnvironment 在启动时注入；容器创建失败时保持 nil。
+    private(set) var modelContainer: ModelContainer?
+
+    func configure(modelContainer: ModelContainer) {
+        self.modelContainer = modelContainer
+    }
+
+    private func requireMainContext() throws -> ModelContext {
+        guard let modelContainer else {
+            throw CityError.storeUnavailable
+        }
+        return modelContainer.mainContext
+    }
+
+    private func resolveContext(_ context: ModelContext?) throws -> ModelContext {
+        if let context {
+            return context
+        }
+        return try requireMainContext()
     }
     
     // MARK: - City CRUD
     
     func addCity(cityName: String, cityEn: String, timezoneId: String, country: String = "", context: ModelContext? = nil) throws {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
 
         // 判重：规范化英文名 + 时区 联合唯一（中文名不参与，避免同名不同城误判）
         if try findExisting(cityEn: cityEn, timezoneId: timezoneId, context: ctx) != nil {
@@ -57,7 +70,7 @@ final class CityService {
     }
     
     func deleteCity(id: UUID, context: ModelContext? = nil) throws {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         let idToFind = id
         var fetch = FetchDescriptor<CityModel>(
             predicate: #Predicate { $0.id == idToFind }
@@ -71,15 +84,17 @@ final class CityService {
         notifyCityStoreDidChange()
 
         // 清理该城市关联的提醒持久化数据与通知
-        Task {
-            let reminderService = CityReminderService(modelContainer: modelContainer)
-            await reminderService.deleteReminders(cityID: id)
+        if let modelContainer {
+            Task {
+                let reminderService = CityReminderService(modelContainer: modelContainer)
+                await reminderService.deleteReminders(cityID: id)
+            }
         }
     }
     
     func deleteCities(ids: [UUID], context: ModelContext? = nil) throws {
         guard !ids.isEmpty else { return }
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         for id in ids {
             let idToFind = id
             var fetch = FetchDescriptor<CityModel>(
@@ -94,20 +109,22 @@ final class CityService {
         notifyCityStoreDidChange()
 
         // 清理关联的提醒持久化数据与通知
-        Task {
-            let reminderService = CityReminderService(modelContainer: modelContainer)
-            await reminderService.deleteReminders(cityIDs: ids)
+        if let modelContainer {
+            Task {
+                let reminderService = CityReminderService(modelContainer: modelContainer)
+                await reminderService.deleteReminders(cityIDs: ids)
+            }
         }
     }
     
     func getAllCities(context: ModelContext? = nil) throws -> [CityModel] {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         let fetch = FetchDescriptor<CityModel>(sortBy: [SortDescriptor(\.sortIndex)])
         return try ctx.fetch(fetch)
     }
     
     func getMaxSortIndex(context: ModelContext? = nil) throws -> Int {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         var fetch = FetchDescriptor<CityModel>(sortBy: [SortDescriptor(\.sortIndex, order: .reverse)])
         fetch.fetchLimit = 1
         let result = try ctx.fetch(fetch)
@@ -115,7 +132,7 @@ final class CityService {
     }
     
     func updateCitySortIndex(id: UUID, sortIndex: Int, context: ModelContext? = nil) throws {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         let idToFind = id
         var fetch = FetchDescriptor<CityModel>(
             predicate: #Predicate { $0.id == idToFind }
@@ -130,7 +147,7 @@ final class CityService {
     }
     
     func reorderCities(_ cities: [CityModel], context: ModelContext? = nil) throws {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         for (index, city) in cities.enumerated() {
             city.sortIndex = index
         }
@@ -139,7 +156,7 @@ final class CityService {
     }
     
     func hasCity(cityEn: String, timezoneId: String, context: ModelContext? = nil) throws -> Bool {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         return try findExisting(cityEn: cityEn, timezoneId: timezoneId, context: ctx) != nil
     }
     
@@ -158,32 +175,39 @@ final class CityService {
     }
     
     func importCities(from data: Data, strategy: ImportStrategy, context: ModelContext? = nil) throws {
-        let ctx = context ?? mainContext
+        let ctx = try resolveContext(context)
         let decoder = JSONDecoder()
-        let importedCities: [CityItem]
-        var removedCityIDs: [UUID] = []
+        let decodedCities: [CityItem]
         
         if let envelope = try? decoder.decode(CitiesExportEnvelope.self, from: data) {
             guard envelope.schemaVersion == CitiesExportEnvelope.currentSchemaVersion else {
                 throw CityError.unsupportedSchemaVersion
             }
-            importedCities = envelope.cities
+            decodedCities = envelope.cities
         } else {
-            importedCities = try decoder.decode([CityItem].self, from: data)
+            decodedCities = try decoder.decode([CityItem].self, from: data)
         }
+
+        // 先完整校验和去重，再改动现有数据；避免替换到一半才发现非法条目。
+        let importedCities = try sanitizedImportItems(decodedCities)
+        var orphanedCityIDs: [UUID] = []
         
         switch strategy {
         case .replace:
             // 清空现有城市
             let existing = try ctx.fetch(FetchDescriptor<CityModel>())
-            removedCityIDs = existing.map(\.id)
+            let removedCityIDs = existing.map(\.id)
             for city in existing {
                 ctx.delete(city)
             }
-            // 插入导入的城市
+
+            // 插入导入的城市；重复 UUID 只保留第一个，后续条目重新分配 ID。
+            var usedIDs = Set<UUID>()
+            var retainedIDs = Set<UUID>()
             for (index, item) in importedCities.enumerated() {
+                let id = availableCityID(preferred: item.id, usedIDs: &usedIDs)
                 let model = CityModel(
-                    id: item.id,
+                    id: id,
                     cityName: item.cityName,
                     cityEn: item.cityEn,
                     timezoneId: item.timezoneId,
@@ -195,7 +219,9 @@ final class CityService {
                     localWorkEnd: item.localWorkEnd
                 )
                 ctx.insert(model)
+                retainedIDs.insert(id)
             }
+            orphanedCityIDs = removedCityIDs.filter { !retainedIDs.contains($0) }
         case .merge:
             let existing = try getAllCities(context: ctx)
             var knownKeys = Set(existing.map {
@@ -209,7 +235,7 @@ final class CityService {
                 guard knownKeys.insert(key).inserted else { continue }
 
                 maxIndex += 1
-                let id = usedIDs.insert(item.id).inserted ? item.id : UUID()
+                let id = availableCityID(preferred: item.id, usedIDs: &usedIDs)
                 let model = CityModel(
                     id: id,
                     cityName: item.cityName,
@@ -228,16 +254,64 @@ final class CityService {
         try ctx.save()
         notifyCityStoreDidChange()
 
-        if !removedCityIDs.isEmpty {
-            let retainedIDs = Set(importedCities.map(\.id))
-            let orphanedCityIDs = removedCityIDs.filter { !retainedIDs.contains($0) }
-            if !orphanedCityIDs.isEmpty {
-                Task {
-                    let reminderService = CityReminderService(modelContainer: modelContainer)
-                    await reminderService.deleteReminders(cityIDs: orphanedCityIDs)
-                }
+        if let modelContainer, !orphanedCityIDs.isEmpty {
+            Task {
+                let reminderService = CityReminderService(modelContainer: modelContainer)
+                await reminderService.deleteReminders(cityIDs: orphanedCityIDs)
             }
         }
+    }
+
+    private func sanitizedImportItems(_ items: [CityItem]) throws -> [CityItem] {
+        var seenKeys = Set<String>()
+        var result: [CityItem] = []
+        result.reserveCapacity(items.count)
+
+        for item in items {
+            let cityName = item.cityName.trimmingCharacters(in: .whitespacesAndNewlines)
+            let cityEn = item.cityEn.trimmingCharacters(in: .whitespacesAndNewlines)
+            let timezoneId = item.timezoneId.trimmingCharacters(in: .whitespacesAndNewlines)
+            let country = item.country.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            guard !cityName.isEmpty,
+                  !CityIdentity.normalizedEnglishName(cityEn).isEmpty,
+                  TimeZone(identifier: timezoneId) != nil,
+                  Self.isValidWorkHours(start: item.workStartHour, end: item.workEndHour),
+                  Self.isValidWorkHours(start: item.localWorkStart, end: item.localWorkEnd) else {
+                throw CityError.invalidImportData
+            }
+
+            let key = CityIdentity.key(cityEn: cityEn, timezoneId: timezoneId)
+            guard seenKeys.insert(key).inserted else { continue }
+
+            result.append(
+                CityItem(
+                    id: item.id,
+                    cityName: cityName,
+                    cityEn: cityEn,
+                    timezoneId: timezoneId,
+                    country: country,
+                    sortIndex: item.sortIndex,
+                    workStartHour: item.workStartHour,
+                    workEndHour: item.workEndHour,
+                    localWorkStart: item.localWorkStart,
+                    localWorkEnd: item.localWorkEnd
+                )
+            )
+        }
+        return result
+    }
+
+    private func availableCityID(preferred: UUID, usedIDs: inout Set<UUID>) -> UUID {
+        var candidate = preferred
+        while !usedIDs.insert(candidate).inserted {
+            candidate = UUID()
+        }
+        return candidate
+    }
+
+    private static func isValidWorkHours(start: Int, end: Int) -> Bool {
+        (0..<24).contains(start) && (1...24).contains(end) && start < end
     }
     
     // MARK: - City Name Matching（静态方法，供 AppEnvironment 等外部调用）
@@ -304,6 +378,8 @@ enum CityError: Error, Equatable {
     case notFound
     case databaseError(String)
     case unsupportedSchemaVersion
+    case invalidImportData
+    case storeUnavailable
 }
 
 private extension CityService {

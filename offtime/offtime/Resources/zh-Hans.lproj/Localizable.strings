@@ -18,6 +18,8 @@
 // MARK: - Database Error
 "db.read.failed" = "数据库读取失败";
 "db.read.failed.restart" = "数据库读取失败，请尝试重启App";
+"storage.unavailable.title" = "本地数据暂时无法打开";
+"storage.unavailable.message" = "请关闭并重新打开 App 重试。";
 
 // MARK: - Clock List
 "clock.title" = "世界时钟";

@@ -18,6 +18,8 @@
 // MARK: - Database Error
 "db.read.failed" = "Failed to read database";
 "db.read.failed.restart" = "Failed to read database, please try restarting the app";
+"storage.unavailable.title" = "Local Data Unavailable";
+"storage.unavailable.message" = "Please close and reopen the app to try again.";
 
 // MARK: - Clock List
 "clock.title" = "World Clock";
