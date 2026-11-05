@@ -183,14 +183,14 @@ struct ReminderSoundPickerView: View {
 
                     Spacer(minLength: 8)
 
-                    if sound.requiresPro && !proAccessService.isUnlocked {
-                        ProBadge(showsText: false)
-                    }
-
                     if selection == sound {
                         Image(systemName: "checkmark")
                             .font(.footnote.weight(.semibold))
                             .foregroundColor(.accentColor)
+                    }
+
+                    if sound.requiresPro {
+                        ProBadge(showsText: false)
                     }
                 }
                 .contentShape(Rectangle())

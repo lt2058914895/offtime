@@ -25,7 +25,7 @@ final class ReminderSoundTests: XCTestCase {
         )
         XCTAssertEqual(
             ReminderSound.proBuiltInCases,
-            [.alarm, .doorKnock, .digitalPulse, .waterDrop, .rhythmTaps]
+            [.alarm, .digitalPulse, .rhythmTaps]
         )
         XCTAssertEqual(
             ReminderSound.builtInCases,
@@ -110,15 +110,17 @@ final class ReminderSoundTests: XCTestCase {
             ReminderSoundPreferences.fallbackSound.rawValue
         )
 
-        defaults.set("classicBell", forKey: ReminderSoundPreferences.defaultSoundKey)
-        XCTAssertEqual(
-            ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: true),
-            .doorKnock
-        )
-        XCTAssertEqual(
-            defaults.string(forKey: ReminderSoundPreferences.defaultSoundKey),
-            ReminderSound.doorKnock.rawValue
-        )
+        for removedValue in ["doorKnock", "waterDrop", "classicBell"] {
+            defaults.set(removedValue, forKey: ReminderSoundPreferences.defaultSoundKey)
+            XCTAssertEqual(
+                ReminderSoundPreferences.resolvedDefault(from: defaults, isProUnlocked: true),
+                ReminderSoundPreferences.fallbackSound
+            )
+            XCTAssertEqual(
+                defaults.string(forKey: ReminderSoundPreferences.defaultSoundKey),
+                ReminderSoundPreferences.fallbackSound.rawValue
+            )
+        }
 
         defaults.set(
             ReminderSound.alarm.rawValue,

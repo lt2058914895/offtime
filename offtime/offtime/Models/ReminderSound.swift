@@ -7,9 +7,7 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
     case system
     case gentleMarimba
     case alarm
-    case doorKnock
     case digitalPulse
-    case waterDrop
     case rhythmTaps
 
     static let freeBuiltInCases: [ReminderSound] = [
@@ -18,9 +16,7 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
 
     static let proBuiltInCases: [ReminderSound] = [
         .alarm,
-        .doorKnock,
         .digitalPulse,
-        .waterDrop,
         .rhythmTaps
     ]
 
@@ -32,7 +28,7 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .system, .gentleMarimba:
             return false
-        case .alarm, .doorKnock, .digitalPulse, .waterDrop, .rhythmTaps:
+        case .alarm, .digitalPulse, .rhythmTaps:
             return true
         }
     }
@@ -45,12 +41,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return String(localized: "reminder.sound.gentleMarimba")
         case .alarm:
             return String(localized: "reminder.sound.alarm")
-        case .doorKnock:
-            return String(localized: "reminder.sound.doorKnock")
         case .digitalPulse:
             return String(localized: "reminder.sound.digitalPulse")
-        case .waterDrop:
-            return String(localized: "reminder.sound.waterDrop")
         case .rhythmTaps:
             return String(localized: "reminder.sound.rhythmTaps")
         }
@@ -64,12 +56,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return String(localized: "reminder.sound.gentleMarimba.subtitle")
         case .alarm:
             return String(localized: "reminder.sound.alarm.subtitle")
-        case .doorKnock:
-            return String(localized: "reminder.sound.doorKnock.subtitle")
         case .digitalPulse:
             return String(localized: "reminder.sound.digitalPulse.subtitle")
-        case .waterDrop:
-            return String(localized: "reminder.sound.waterDrop.subtitle")
         case .rhythmTaps:
             return String(localized: "reminder.sound.rhythmTaps.subtitle")
         }
@@ -83,12 +71,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return "music.note"
         case .alarm:
             return "alarm.fill"
-        case .doorKnock:
-            return "hand.raised.fill"
         case .digitalPulse:
             return "waveform.path.ecg"
-        case .waterDrop:
-            return "drop.fill"
         case .rhythmTaps:
             return "hand.tap.fill"
         }
@@ -102,12 +86,8 @@ enum ReminderSound: String, CaseIterable, Codable, Identifiable {
             return "reminder-gentle-marimba.caf"
         case .alarm:
             return "reminder-alarm.caf"
-        case .doorKnock:
-            return "reminder-door-knock.caf"
         case .digitalPulse:
             return "reminder-digital-pulse.caf"
-        case .waterDrop:
-            return "reminder-water-drop.caf"
         case .rhythmTaps:
             return "reminder-rhythm-taps.caf"
         }
@@ -154,9 +134,6 @@ enum ReminderSoundPreferences {
         }
         if let sound = ReminderSound(rawValue: rawValue) {
             return sound
-        }
-        if rawValue == "classicBell" {
-            return .doorKnock
         }
         return fallbackSound
     }

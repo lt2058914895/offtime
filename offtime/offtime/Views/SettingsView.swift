@@ -320,12 +320,11 @@ struct SettingsView: View {
 
             Spacer()
 
-            if !proAccessService.isUnlocked {
-                ProBadge(showsText: false)
-            }
+            ProBadge(showsText: false)
 
             settingsChevron
         }
+        .contentShape(Rectangle())
     }
 
     private var customThemeRow: some View {
@@ -349,6 +348,7 @@ struct SettingsView: View {
 
             settingsChevron
         }
+        .contentShape(Rectangle())
     }
 
     private var meetingRecommendationRow: some View {
