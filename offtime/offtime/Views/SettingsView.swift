@@ -370,6 +370,7 @@ struct SettingsView: View {
 
             settingsChevron
         }
+        .contentShape(Rectangle())
     }
 
     private var currentCityDisplayName: String? {

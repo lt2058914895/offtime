@@ -9,6 +9,7 @@ struct offtimeApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        MeetingCalendarExportService.cleanupExpiredTemporaryFiles()
         UNUserNotificationCenter.current().delegate = ReminderNotificationDelegate.shared
         // iOS 17 起 SwiftUI 的 .tint 不再控制分段控件选中段填充色，
         // 改为通过外观代理统一设置为应用主题色（蓝色）。

@@ -107,6 +107,13 @@ struct MeetingView: View {
                 meetingDate: viewModel.meetingDate,
                 use24Hour: use24Hour,
                 localTimezoneId: viewModel.localTimezoneId,
+                shareParticipants: viewModel.selectedParticipants.map {
+                    MeetingCalendarParticipant(
+                        cityName: $0.cityName,
+                        cityEn: $0.cityEn,
+                        timezoneId: $0.timezoneId
+                    )
+                },
                 makeDetail: { startDate in
                     viewModel.slotDetail(
                         startDate: startDate,
@@ -171,7 +178,8 @@ struct MeetingView: View {
             durationMinutes: durationMinutes,
             localTimezoneId: viewModel.localTimezoneId,
             participantNames: viewModel.participantNames,
-            participantEnNames: viewModel.participantEnNames
+            participantEnNames: viewModel.participantEnNames,
+            participantTimezoneIds: viewModel.selectedParticipants.map(\.timezoneId)
         )
         modelContext.insert(meeting)
         try? modelContext.save()
@@ -579,10 +587,13 @@ private struct SlotDetailSheet: View {
     let meetingDate: Date
     let use24Hour: Bool
     let localTimezoneId: String
+    let shareParticipants: [MeetingCalendarParticipant]
     let makeDetail: (Date) -> MeetingSlotDetail
     let onAdd: (Date) -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var selectedStartDate: Date
+    @State private var sharedFile: SharedCalendarFile?
+    @State private var showShareError = false
 
     init(
         rangeText: String,
@@ -590,6 +601,7 @@ private struct SlotDetailSheet: View {
         meetingDate: Date,
         use24Hour: Bool,
         localTimezoneId: String,
+        shareParticipants: [MeetingCalendarParticipant],
         makeDetail: @escaping (Date) -> MeetingSlotDetail,
         onAdd: @escaping (Date) -> Void
     ) {
@@ -598,6 +610,7 @@ private struct SlotDetailSheet: View {
         self.meetingDate = meetingDate
         self.use24Hour = use24Hour
         self.localTimezoneId = localTimezoneId
+        self.shareParticipants = shareParticipants
         self.makeDetail = makeDetail
         self.onAdd = onAdd
         _selectedStartDate = State(initialValue: group.optionStartDates.first ?? group.startDate)
@@ -617,7 +630,7 @@ private struct SlotDetailSheet: View {
             }
             .background(Color(.systemGroupedBackground))
             .safeAreaInset(edge: .bottom) {
-                addButton
+                bottomActionBar
             }
             .navigationTitle(String(localized: "meeting.detail.title"))
             .navigationBarTitleDisplayMode(.inline)
@@ -631,6 +644,38 @@ private struct SlotDetailSheet: View {
                     }
                 }
             }
+            .sheet(item: $sharedFile) { file in
+                ShareSheet(items: [file.url]) {
+                    MeetingCalendarExportService.removeTemporaryFile(at: file.url)
+                    sharedFile = nil
+                }
+            }
+            .alert(
+                String(localized: "meeting.share.failed.title"),
+                isPresented: $showShareError
+            ) {
+                Button(String(localized: "common.ok"), role: .cancel) {}
+            } message: {
+                Text(String(localized: "meeting.share.failed.message"))
+            }
+        }
+    }
+
+    private func shareSelectedSlot() {
+        let event = MeetingCalendarEvent(
+            uid: UUID().uuidString,
+            startDate: selectedStartDate,
+            durationMinutes: group.durationMinutes,
+            localTimezoneId: localTimezoneId,
+            participants: shareParticipants
+        )
+
+        do {
+            sharedFile = SharedCalendarFile(
+                url: try MeetingCalendarExportService.makeTemporaryFile(event: event)
+            )
+        } catch {
+            showShareError = true
         }
     }
 
@@ -807,20 +852,56 @@ private struct SlotDetailSheet: View {
             .clipShape(Capsule())
     }
 
-    private var addButton: some View {
-        Button {
-            onAdd(selectedStartDate)
-        } label: {
-            Text(String(localized: "meeting.detail.add"))
-                .font(.body.weight(.semibold))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 6)
+    private var bottomActionBar: some View {
+        HStack(spacing: 12) {
+            detailActionButton(
+                title: String(localized: "meeting.share.action"),
+                foreground: .blue,
+                background: .white,
+                border: .blue
+            ) {
+                shareSelectedSlot()
+            }
+
+            detailActionButton(
+                title: String(localized: "meeting.detail.add"),
+                foreground: .white,
+                background: .accentColor
+            ) {
+                onAdd(selectedStartDate)
+            }
         }
-        .buttonStyle(.borderedProminent)
         .padding(.horizontal, 16)
         .padding(.top, 10)
         .padding(.bottom, 12)
         .background(.bar)
+    }
+
+    private func detailActionButton(
+        title: String,
+        foreground: Color,
+        background: Color,
+        border: Color? = nil,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(foreground)
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(background, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay {
+                    if let border {
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .strokeBorder(border, lineWidth: 1)
+                    }
+                }
+                .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        }
+        .buttonStyle(.plain)
     }
 
     private func startTimeText(_ date: Date) -> String {

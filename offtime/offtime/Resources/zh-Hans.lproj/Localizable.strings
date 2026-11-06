@@ -134,6 +134,14 @@
 "meeting.detail.select.start" = "选择会议开始时间";
 "meeting.detail.add" = "添加到推荐记录";
 "meeting.detail.duration" = "%d 分钟";
+"meeting.share.action" = "分享日程";
+"meeting.share.failed.title" = "无法分享日程";
+"meeting.share.failed.message" = "生成日历文件失败，请稍后重试。";
+"meeting.ics.summary.empty" = "会议";
+"meeting.ics.duration" = "时长：%d 分钟";
+"meeting.ics.participant" = "%@（%@）：%@";
+"meeting.ics.participants" = "参与城市：%@";
+"meeting.ics.local_time" = "本地时间：%@";
 "meeting.add.success" = "添加成功，可在推荐记录查看";
 "meeting.add.conflict" = "该时间与已有会议档期冲突，请选择其他时间";
 "meeting.add.conflict.title" = "无法添加会议档期";
@@ -148,7 +156,7 @@
 "meeting.list.filter.finished" = "已结束";
 "meeting.list.filter.empty" = "该分类暂无会议档期";
 "meeting.list.ongoing" = "进行中";
-"meeting.list.swipe.hint" = "往左滑动可删除";
+"meeting.list.hint" = "左滑删除，长按分享日程";
 
 // MARK: - Converter
 "converter.source.city" = "起点城市";

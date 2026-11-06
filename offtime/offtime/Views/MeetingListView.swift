@@ -11,6 +11,8 @@ struct MeetingListView: View {
     @State private var meetingToDelete: MeetingModel?
     @State private var statusFilter: MeetingStatus = .upcoming
     @State private var isAppeared = false
+    @State private var sharedFile: SharedCalendarFile?
+    @State private var showShareError = false
     let highlightMeetingID: UUID?
 
     init(highlightMeetingID: UUID? = nil) {
@@ -70,7 +72,7 @@ struct MeetingListView: View {
                         List {
                             Section {
                             } header: {
-                                Text(String(localized: "meeting.list.swipe.hint"))
+                                Text(String(localized: "meeting.list.hint"))
                                     .font(.caption2)
                                     .frame(maxWidth: .infinity)
                                     .multilineTextAlignment(.center)
@@ -80,10 +82,6 @@ struct MeetingListView: View {
                                 Section {
                                     ForEach(section.meetings) { meeting in
                                         row(for: meeting)
-                                    }
-                                    .onDelete { offsets in
-                                        guard let first = offsets.first else { return }
-                                        meetingToDelete = section.meetings[first]
                                     }
                                 } header: {
                                     Text(section.title)
@@ -146,6 +144,20 @@ struct MeetingListView: View {
         } message: { meeting in
             Text(fullRangeText(for: meeting))
         }
+        .sheet(item: $sharedFile) { file in
+            ShareSheet(items: [file.url]) {
+                MeetingCalendarExportService.removeTemporaryFile(at: file.url)
+                sharedFile = nil
+            }
+        }
+        .alert(
+            String(localized: "meeting.share.failed.title"),
+            isPresented: $showShareError
+        ) {
+            Button(String(localized: "common.ok"), role: .cancel) {}
+        } message: {
+            Text(String(localized: "meeting.share.failed.message"))
+        }
     }
 
     private var sections: [MeetingDaySection] {
@@ -204,11 +216,97 @@ struct MeetingListView: View {
                     .font(.caption)
                     .foregroundColor(isFinished ? Color(.systemGray) : .secondary)
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
+        .contentShape(Rectangle())
         .padding(.vertical, 4)
         .opacity(isFinished ? 0.6 : 1)
         .listRowBackground(isHighlighted ? Color.orange.opacity(0.18) : nil)
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                meetingToDelete = meeting
+            } label: {
+                Label(String(localized: "meeting.list.delete"), systemImage: "trash")
+            }
+        }
+        .onLongPressGesture {
+            share(meeting)
+        }
+    }
+
+    private func share(_ meeting: MeetingModel) {
+        let event = MeetingCalendarEvent(
+            uid: meeting.id.uuidString,
+            startDate: meeting.startDate,
+            durationMinutes: meeting.durationMinutes,
+            localTimezoneId: meeting.localTimezoneId,
+            participants: participants(for: meeting)
+        )
+
+        do {
+            sharedFile = SharedCalendarFile(
+                url: try MeetingCalendarExportService.makeTemporaryFile(event: event)
+            )
+        } catch {
+            showShareError = true
+        }
+    }
+
+    private func participants(for meeting: MeetingModel) -> [MeetingCalendarParticipant] {
+        let storedTimezoneIds = meeting.participantTimezoneIds ?? []
+        let savedCities = (try? CityService.shared.getAllCities())?.map {
+            MeetingCityTimezoneCandidate(
+                cityName: $0.cityName,
+                cityEn: $0.cityEn,
+                timezoneId: $0.timezoneId
+            )
+        } ?? []
+        let catalogCities = (CityService.allCities() ?? []).map {
+            MeetingCityTimezoneCandidate(
+                cityName: $0.cityName,
+                cityEn: $0.cityEn,
+                timezoneId: $0.timezoneId
+            )
+        }
+        let localNames = CityService.matchCity(for: meeting.localTimezoneId)
+        let normalizedLocalEnglishName = CityIdentity.normalizedEnglishName(localNames.en)
+
+        return meeting.participantNames.enumerated().map { index, cityName in
+            let cityEn = index < meeting.participantEnNames.count
+                ? meeting.participantEnNames[index]
+                : cityName
+            let storedTimezoneId = index < storedTimezoneIds.count
+                ? storedTimezoneIds[index]
+                : nil
+            let validStoredTimezoneId = storedTimezoneId.flatMap {
+                TimeZone(identifier: $0) != nil ? $0 : nil
+            }
+            let normalizedEnglishName = CityIdentity.normalizedEnglishName(cityEn)
+            let isLocalParticipant = cityName == localNames.name ||
+                (!normalizedEnglishName.isEmpty &&
+                    normalizedEnglishName == normalizedLocalEnglishName)
+            let preferredTimezoneId = isLocalParticipant ? meeting.localTimezoneId : nil
+
+            let resolvedTimezoneId = validStoredTimezoneId
+                ?? MeetingCityTimezoneResolver.timezoneId(
+                    cityName: cityName,
+                    cityEn: cityEn,
+                    candidates: savedCities,
+                    preferredTimezoneId: preferredTimezoneId
+                )
+                ?? MeetingCityTimezoneResolver.timezoneId(
+                    cityName: cityName,
+                    cityEn: cityEn,
+                    candidates: catalogCities,
+                    preferredTimezoneId: preferredTimezoneId
+                )
+
+            return MeetingCalendarParticipant(
+                cityName: cityName,
+                cityEn: cityEn,
+                timezoneId: resolvedTimezoneId
+            )
+        }
     }
 
     private func timeRangeText(for meeting: MeetingModel) -> String {

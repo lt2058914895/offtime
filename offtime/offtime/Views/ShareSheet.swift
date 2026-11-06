@@ -6,18 +6,25 @@ import UIKit
 /// 比 SwiftUI `ShareLink(item: URL)` 更可控（后者会触发 App Store 通用 OG 模板 "Today - App Store"）。
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
+    let onComplete: (() -> Void)?
 
-    init(items: [Any]) {
+    init(items: [Any], onComplete: (() -> Void)? = nil) {
         self.items = items
+        self.onComplete = onComplete
     }
 
     /// 便捷初始化：分享纯文本
-    init(text: String) {
+    init(text: String, onComplete: (() -> Void)? = nil) {
         self.items = [text]
+        self.onComplete = onComplete
     }
 
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        controller.completionWithItemsHandler = { _, _, _, _ in
+            onComplete?()
+        }
+        return controller
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}

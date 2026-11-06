@@ -134,6 +134,14 @@
 "meeting.detail.select.start" = "Select meeting start time";
 "meeting.detail.add" = "Add to Recommended Records";
 "meeting.detail.duration" = "%d min";
+"meeting.share.action" = "Share Event";
+"meeting.share.failed.title" = "Unable to Share Event";
+"meeting.share.failed.message" = "Couldn’t create the calendar file. Please try again.";
+"meeting.ics.summary.empty" = "Meeting";
+"meeting.ics.duration" = "Duration: %d min";
+"meeting.ics.participant" = "%@ (%@): %@";
+"meeting.ics.participants" = "Participants: %@";
+"meeting.ics.local_time" = "Local time: %@";
 "meeting.add.success" = "Meeting slot added. See it in Recommended Records.";
 "meeting.add.conflict" = "This time conflicts with an existing meeting slot";
 "meeting.add.conflict.title" = "Cannot Add Meeting Slot";
@@ -148,7 +156,7 @@
 "meeting.list.filter.finished" = "Finished";
 "meeting.list.filter.empty" = "No meeting slots in this category";
 "meeting.list.ongoing" = "Ongoing";
-"meeting.list.swipe.hint" = "Swipe left to delete";
+"meeting.list.hint" = "Swipe left to delete, long press to share event";
 
 // MARK: - Converter
 "converter.source.city" = "Source City";

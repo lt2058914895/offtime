@@ -147,6 +147,7 @@ final class MeetingModel {
     var localTimezoneId: String
     var participantNames: [String]
     var participantEnNames: [String]
+    var participantTimezoneIds: [String]?
     var createdAt: Date
 
     init(
@@ -156,6 +157,7 @@ final class MeetingModel {
         localTimezoneId: String,
         participantNames: [String],
         participantEnNames: [String] = [],
+        participantTimezoneIds: [String]? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -164,6 +166,7 @@ final class MeetingModel {
         self.localTimezoneId = localTimezoneId
         self.participantNames = participantNames
         self.participantEnNames = participantEnNames
+        self.participantTimezoneIds = participantTimezoneIds
         self.createdAt = createdAt
     }
 }
