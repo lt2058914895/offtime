@@ -4,5 +4,7 @@
 <dict>
 	<key>NSDocumentPickerUsageDescription</key>
 	<string>Used to import/export city list files</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Used to save meeting schedule images to your photo library</string>
 </dict>
 </plist>

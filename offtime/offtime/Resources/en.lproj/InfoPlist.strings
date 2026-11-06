@@ -2,3 +2,4 @@
 
 "CFBundleDisplayName" = "OffTime";
 "NSDocumentPickerUsageDescription" = "Used to import/export city list files";
+"NSPhotoLibraryAddUsageDescription" = "Used to save meeting schedule images to your photo library";

@@ -13,8 +13,7 @@ struct MeetingListView: View {
     @State private var meetingToDelete: MeetingModel?
     @State private var statusFilter: MeetingStatus = .upcoming
     @State private var isAppeared = false
-    @State private var sharedFile: SharedCalendarFile?
-    @State private var showShareError = false
+    @State private var sharePayload: MeetingSharePayload?
     let highlightMeetingID: UUID?
 
     init(highlightMeetingID: UUID? = nil) {
@@ -150,19 +149,8 @@ struct MeetingListView: View {
         } message: { meeting in
             Text(fullRangeText(for: meeting))
         }
-        .sheet(item: $sharedFile) { file in
-            ShareSheet(items: [file.url]) {
-                MeetingCalendarExportService.removeTemporaryFile(at: file.url)
-                sharedFile = nil
-            }
-        }
-        .alert(
-            String(localized: "meeting.share.failed.title"),
-            isPresented: $showShareError
-        ) {
-            Button(String(localized: "common.ok"), role: .cancel) {}
-        } message: {
-            Text(String(localized: "meeting.share.failed.message"))
+        .sheet(item: $sharePayload) { payload in
+            MeetingShareSheet(payload: payload)
         }
     }
 
@@ -340,21 +328,16 @@ struct MeetingListView: View {
     }
 
     private func share(_ meeting: MeetingModel) {
-        let event = MeetingCalendarEvent(
-            uid: meeting.id.uuidString,
-            startDate: meeting.startDate,
-            durationMinutes: meeting.durationMinutes,
-            localTimezoneId: meeting.localTimezoneId,
-            participants: participants(for: meeting)
+        sharePayload = MeetingSharePayload(
+            event: MeetingCalendarEvent(
+                uid: meeting.id.uuidString,
+                startDate: meeting.startDate,
+                durationMinutes: meeting.durationMinutes,
+                localTimezoneId: meeting.localTimezoneId,
+                participants: participants(for: meeting)
+            ),
+            use24Hour: use24Hour
         )
-
-        do {
-            sharedFile = SharedCalendarFile(
-                url: try MeetingCalendarExportService.makeTemporaryFile(event: event)
-            )
-        } catch {
-            showShareError = true
-        }
     }
 
     private func participants(for meeting: MeetingModel) -> [MeetingCalendarParticipant] {

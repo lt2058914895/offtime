@@ -592,8 +592,7 @@ private struct SlotDetailSheet: View {
     let onAdd: (Date) -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var selectedStartDate: Date
-    @State private var sharedFile: SharedCalendarFile?
-    @State private var showShareError = false
+    @State private var sharePayload: MeetingSharePayload?
 
     init(
         rangeText: String,
@@ -644,39 +643,23 @@ private struct SlotDetailSheet: View {
                     }
                 }
             }
-            .sheet(item: $sharedFile) { file in
-                ShareSheet(items: [file.url]) {
-                    MeetingCalendarExportService.removeTemporaryFile(at: file.url)
-                    sharedFile = nil
-                }
-            }
-            .alert(
-                String(localized: "meeting.share.failed.title"),
-                isPresented: $showShareError
-            ) {
-                Button(String(localized: "common.ok"), role: .cancel) {}
-            } message: {
-                Text(String(localized: "meeting.share.failed.message"))
+            .sheet(item: $sharePayload) { payload in
+                MeetingShareSheet(payload: payload)
             }
         }
     }
 
     private func shareSelectedSlot() {
-        let event = MeetingCalendarEvent(
-            uid: UUID().uuidString,
-            startDate: selectedStartDate,
-            durationMinutes: group.durationMinutes,
-            localTimezoneId: localTimezoneId,
-            participants: shareParticipants
+        sharePayload = MeetingSharePayload(
+            event: MeetingCalendarEvent(
+                uid: UUID().uuidString,
+                startDate: selectedStartDate,
+                durationMinutes: group.durationMinutes,
+                localTimezoneId: localTimezoneId,
+                participants: shareParticipants
+            ),
+            use24Hour: use24Hour
         )
-
-        do {
-            sharedFile = SharedCalendarFile(
-                url: try MeetingCalendarExportService.makeTemporaryFile(event: event)
-            )
-        } catch {
-            showShareError = true
-        }
     }
 
     private var overviewCard: some View {

@@ -2,3 +2,4 @@
 
 "CFBundleDisplayName" = "世界时钟";
 "NSDocumentPickerUsageDescription" = "用于导入/导出城市列表文件";
+"NSPhotoLibraryAddUsageDescription" = "用于将会议日程图片保存到相册";

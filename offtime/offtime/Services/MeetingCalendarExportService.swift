@@ -57,11 +57,6 @@ struct MeetingCalendarEvent {
     let participants: [MeetingCalendarParticipant]
 }
 
-struct SharedCalendarFile: Identifiable {
-    let id = UUID()
-    let url: URL
-}
-
 enum MeetingCalendarExportService {
     static func makeICS(
         event: MeetingCalendarEvent,
