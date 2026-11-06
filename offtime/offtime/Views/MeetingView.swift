@@ -14,6 +14,7 @@ struct MeetingView: View {
     @State private var showConflictAlert = false
     @State private var conflictMeetingID: UUID?
     @State private var showMeetingRecords = false
+    @State private var openRecordsAfterSheetDismissal = false
     @State private var highlightedMeetingID: UUID?
     @State private var isAppeared = false
     var embedsNavigationStack: Bool = true
@@ -100,7 +101,12 @@ struct MeetingView: View {
         .onReceive(appEnvironment.$currentDate) { date in
             viewModel.updateCurrentDate(date)
         }
-        .sheet(item: $selectedGroup) { group in
+        .sheet(item: $selectedGroup, onDismiss: {
+            if openRecordsAfterSheetDismissal {
+                openRecordsAfterSheetDismissal = false
+                showMeetingRecords = true
+            }
+        }) { group in
             SlotDetailSheet(
                 rangeText: groupRangeText(group),
                 group: group,
@@ -134,9 +140,9 @@ struct MeetingView: View {
             ) {
                 Button(String(localized: "meeting.add.conflict.view")) {
                     guard let conflictMeetingID else { return }
-                    selectedGroup = nil
                     highlightedMeetingID = conflictMeetingID
-                    showMeetingRecords = true
+                    openRecordsAfterSheetDismissal = true
+                    selectedGroup = nil
                 }
                 Button(String(localized: "common.cancel"), role: .cancel) {}
             } message: {
@@ -144,10 +150,8 @@ struct MeetingView: View {
             }
         }
         .toast(message: $toastMessage)
-        .fullScreenCover(isPresented: $showMeetingRecords) {
-            NavigationStack {
-                MeetingListView(highlightMeetingID: highlightedMeetingID)
-            }
+        .navigationDestination(isPresented: $showMeetingRecords) {
+            MeetingListView(highlightMeetingID: highlightedMeetingID)
         }
     }
 
