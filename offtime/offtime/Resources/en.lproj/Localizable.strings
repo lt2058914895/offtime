@@ -110,10 +110,10 @@
 "meeting.settings.duration" = "Duration";
 "meeting.settings.duration.format" = "%d min";
 "meeting.settings.range" = "Meeting date (local)";
-"meeting.slots.title" = "Recommended Slots";
+"meeting.slots.title" = "Recommended Times";
 "meeting.slots.subtitle" = "Sorted by all working > fewer outside-work cities > fewer sleeping cities";
 "meeting.slots.start.meta" = "%d start times · %d min each";
-"meeting.slots.empty" = "No slots can be generated on this date";
+"meeting.slots.empty" = "No meeting times can be generated for this date";
 "meeting.slots.tier.all" = "Everyone can attend";
 "meeting.slots.tier.offwork" = "%d cities outside work";
 "meeting.slots.tier.sleeping" = "%d cities sleeping";
@@ -162,7 +162,7 @@
 "meeting.add.conflict.view" = "View";
 "meeting.list.title" = "Meeting Slot History";
 "meeting.list.empty.title" = "No Meeting Slots";
-"meeting.list.empty" = "Meeting slots added from recommended slots will appear here.";
+"meeting.list.empty" = "Meeting slots added from recommended times will appear here.";
 "meeting.list.delete.confirm.title" = "Delete Meeting Slot?";
 "meeting.list.delete" = "Delete";
 "meeting.list.filter.title" = "Slot Status";
@@ -203,7 +203,7 @@
 "settings.custom.theme" = "Widget Theme";
 "settings.custom.theme.subtitle" = "Give your widget a fresh new look";
 "settings.version" = "Version";
-"settings.meeting.recommendation.title" = "Meeting Slot Recommendations";
+"settings.meeting.recommendation.title" = "Recommended Meeting Times";
 "settings.meeting.recommendation.subtitle" = "Find the best shared meeting time automatically";
 "meeting.recommendation.records" = "Records";
 "reminder.list.title" = "Reminders";
@@ -386,8 +386,8 @@
 "onboarding.features.title" = "More features";
 "onboarding.features.manage" = "Manage Cities";
 "onboarding.features.manage.desc" = "Manage your city list with multi-select delete and drag-to-reorder";
-"onboarding.features.meeting" = "Meeting Slot Recommendations";
-"onboarding.features.meeting.desc" = "Auto-suggest the best meeting slots for everyone";
+"onboarding.features.meeting" = "Recommended Meeting Times";
+"onboarding.features.meeting.desc" = "Auto-suggest the best meeting times for everyone";
 "onboarding.features.converter" = "Time Converter";
 "onboarding.features.converter.desc" = "Quickly convert time between any cities";
 "onboarding.features.reminder" = "Reminder Management";
