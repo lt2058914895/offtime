@@ -77,7 +77,7 @@
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";
-"city.reminder.error.invalid-time" = "提醒时间必须为 30 分钟粒度";
+"city.reminder.error.invalid-time" = "提醒时间需以 30 分钟为单位";
 "city.reminder.outdated" = "以下提醒已超出工作时段";
 "city.reminder.remove.outdated" = "移除过期提醒";
 
