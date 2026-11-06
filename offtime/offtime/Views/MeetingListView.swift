@@ -1,6 +1,8 @@
 import SwiftUI
 import SwiftData
 
+private let meetingCardCornerRadius: CGFloat = 18
+
 /// 已添加会议列表：展示从推荐档期加入的会议，支持滑动删除。
 struct MeetingListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -70,14 +72,15 @@ struct MeetingListView: View {
                         )
                     } else {
                         List {
-                            Section {
-                            } header: {
-                                Text(String(localized: "meeting.list.hint"))
-                                    .font(.caption2)
-                                    .frame(maxWidth: .infinity)
-                                    .multilineTextAlignment(.center)
-                                    .textCase(nil)
-                            }
+                            Text(String(localized: "meeting.list.hint"))
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .frame(maxWidth: .infinity)
+                                .multilineTextAlignment(.center)
+                                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 6, trailing: 16))
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+
                             ForEach(sections) { section in
                                 Section {
                                     ForEach(section.meetings) { meeting in
@@ -90,6 +93,9 @@ struct MeetingListView: View {
                                 }
                             }
                         }
+                        .listStyle(.plain)
+                        .scrollContentBackground(.hidden)
+                        .background(Color(uiColor: .systemGroupedBackground))
                     }
                 }
             }
@@ -193,35 +199,76 @@ struct MeetingListView: View {
         let isOngoing = meeting.startDate <= now && end > now
         let isFinished = end <= now
         let isHighlighted = meeting.id == highlightMeetingID
+        let meetingDateTime = localDateTimeParts(
+            start: meeting.startDate,
+            end: end,
+            timezoneId: meeting.localTimezoneId
+        )
+        let resolvedParticipants = participants(for: meeting)
+        let duration = String(
+            format: String(localized: "meeting.settings.duration.format"),
+            meeting.durationMinutes
+        )
+        let cardBackground = isHighlighted
+            ? Color.orange.opacity(0.16)
+            : Color(uiColor: .secondarySystemGroupedBackground)
+        let cardBorder = isHighlighted
+            ? Color.orange.opacity(0.55)
+            : Color(uiColor: .separator).opacity(0.18)
 
-        return HStack(spacing: 12) {
-            Image(systemName: "calendar.badge.clock")
-                .font(.title3)
-                .foregroundColor(isFinished ? Color(.systemGray) : .accentColor)
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 6) {
-                    Text(timeRangeText(for: meeting))
-                        .font(.body.weight(.semibold))
-                    if isOngoing {
-                        Text(String(localized: "meeting.list.ongoing"))
-                            .font(.caption2.weight(.semibold))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.green)
-                            .clipShape(Capsule())
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .center, spacing: 8) {
+                Text(meetingDateTime.time)
+                    .font(.title3.weight(.bold))
+                    .monospacedDigit()
+                    .layoutPriority(1)
+
+                Text(duration)
+                    .font(.caption.weight(.semibold))
+                    .foregroundColor(isFinished ? .secondary : .accentColor)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background((isFinished ? Color.secondary : Color.accentColor).opacity(0.12))
+                    .clipShape(Capsule())
+
+                Spacer(minLength: 8)
+
+                if isOngoing {
+                    Text(String(localized: "meeting.list.ongoing"))
+                        .font(.caption2.weight(.semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.green)
+                        .clipShape(Capsule())
+                }
+            }
+
+            if !resolvedParticipants.isEmpty {
+                Divider()
+
+                VStack(spacing: 8) {
+                    ForEach(Array(resolvedParticipants.enumerated()), id: \.offset) { item in
+                        cityTimeRow(item.element, start: meeting.startDate, end: end)
                     }
                 }
-                Text(subtitle(for: meeting))
-                    .font(.caption)
-                    .foregroundColor(isFinished ? Color(.systemGray) : .secondary)
             }
-            Spacer(minLength: 0)
         }
-        .contentShape(Rectangle())
-        .padding(.vertical, 4)
         .opacity(isFinished ? 0.6 : 1)
-        .listRowBackground(isHighlighted ? Color.orange.opacity(0.18) : nil)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: meetingCardCornerRadius, style: .continuous))
+        .shadow(color: Color.black.opacity(0.04), radius: 4, y: 2)
+        .overlay(
+            RoundedRectangle(cornerRadius: meetingCardCornerRadius, style: .continuous)
+                .strokeBorder(cardBorder, lineWidth: isHighlighted ? 1 : 0.5)
+        )
+        .contentShape(RoundedRectangle(cornerRadius: meetingCardCornerRadius, style: .continuous))
+        .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive) {
                 meetingToDelete = meeting
@@ -231,6 +278,64 @@ struct MeetingListView: View {
         }
         .onLongPressGesture {
             share(meeting)
+        }
+    }
+
+    private func cityTimeRow(
+        _ participant: MeetingCalendarParticipant,
+        start: Date,
+        end: Date
+    ) -> some View {
+        let cityName = CityDisplay.primaryName(
+            cityName: participant.cityName,
+            cityEn: participant.cityEn
+        )
+        let dateTime = participant.timezoneId.flatMap { timezoneId -> (date: String, time: String)? in
+            guard TimeZone(identifier: timezoneId) != nil else { return nil }
+            return localDateTimeParts(start: start, end: end, timezoneId: timezoneId)
+        }
+
+        return HStack(alignment: .firstTextBaseline, spacing: 12) {
+            Text(cityName)
+                .font(.subheadline.weight(.medium))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .layoutPriority(1)
+
+            Spacer(minLength: 8)
+
+            if let dateTime {
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(dateTime.date)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+
+                        Text(dateTime.time)
+                            .font(.subheadline.weight(.semibold))
+                            .monospacedDigit()
+                            .lineLimit(1)
+                    }
+
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(dateTime.date)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.trailing)
+                            .lineLimit(2)
+
+                        Text(dateTime.time)
+                            .font(.subheadline.weight(.semibold))
+                            .monospacedDigit()
+                            .lineLimit(1)
+                    }
+                }
+            } else {
+                Text(verbatim: "—")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.secondary)
+            }
         }
     }
 
@@ -254,6 +359,19 @@ struct MeetingListView: View {
 
     private func participants(for meeting: MeetingModel) -> [MeetingCalendarParticipant] {
         let storedTimezoneIds = meeting.participantTimezoneIds ?? []
+        if storedTimezoneIds.count == meeting.participantNames.count,
+           storedTimezoneIds.allSatisfy({ TimeZone(identifier: $0) != nil }) {
+            return meeting.participantNames.enumerated().map { index, cityName in
+                MeetingCalendarParticipant(
+                    cityName: cityName,
+                    cityEn: index < meeting.participantEnNames.count
+                        ? meeting.participantEnNames[index]
+                        : cityName,
+                    timezoneId: storedTimezoneIds[index]
+                )
+            }
+        }
+
         let savedCities = (try? CityService.shared.getAllCities())?.map {
             MeetingCityTimezoneCandidate(
                 cityName: $0.cityName,
@@ -309,25 +427,32 @@ struct MeetingListView: View {
         }
     }
 
-    private func timeRangeText(for meeting: MeetingModel) -> String {
-        let start = meeting.startDate
-        let end = start.addingTimeInterval(Double(meeting.durationMinutes) * 60)
-        let startText = timeText(start, timezoneId: meeting.localTimezoneId)
-        let endText = timeText(end, timezoneId: meeting.localTimezoneId)
-        return "\(startText)–\(endText)"
-    }
-
     private func fullRangeText(for meeting: MeetingModel) -> String {
-        let date = dateText(meeting.startDate, timezoneId: meeting.localTimezoneId)
-        return "\(date) \(timeRangeText(for: meeting))"
+        let end = meeting.startDate.addingTimeInterval(Double(meeting.durationMinutes) * 60)
+        let dateTime = localDateTimeParts(
+            start: meeting.startDate,
+            end: end,
+            timezoneId: meeting.localTimezoneId
+        )
+        return "\(dateTime.date) \(dateTime.time)"
     }
 
-    private func subtitle(for meeting: MeetingModel) -> String {
-        let duration = String(format: String(localized: "meeting.settings.duration.format"), meeting.durationMinutes)
-        let cities = zip(meeting.participantNames, meeting.participantEnNames).map { name, en in
-            CityDisplay.primaryName(cityName: name, cityEn: en)
-        }.joined(separator: String(localized: "meeting.slots.constraints.join"))
-        return "\(duration) · \(cities)"
+    private func localDateTimeParts(
+        start: Date,
+        end: Date,
+        timezoneId: String
+    ) -> (date: String, time: String) {
+        let timeRange = "\(timeText(start, timezoneId: timezoneId))–\(timeText(end, timezoneId: timezoneId))"
+        let startDate = dateText(start, timezoneId: timezoneId)
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: timezoneId) ?? .current
+        guard !calendar.isDate(start, inSameDayAs: end) else {
+            return (startDate, timeRange)
+        }
+
+        let endDate = dateText(end, timezoneId: timezoneId)
+        return ("\(startDate) – \(endDate)", timeRange)
     }
 
     private func timeText(_ date: Date, timezoneId: String) -> String {
@@ -338,9 +463,11 @@ struct MeetingListView: View {
     }
 
     private func dateText(_ date: Date, timezoneId: String) -> String {
-        var style = Date.FormatStyle.dateTime.month(.defaultDigits).day().weekday(.abbreviated)
-        style.timeZone = TimeZone(identifier: timezoneId) ?? .current
-        return date.formatted(style)
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(identifier: timezoneId) ?? .current
+        formatter.dateFormat = "yyyy/MM/dd EEE"
+        return formatter.string(from: date)
     }
 
     private func updateMinuteClock() {

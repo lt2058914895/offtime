@@ -139,7 +139,7 @@
 "meeting.share.failed.message" = "生成日历文件失败，请稍后重试。";
 "meeting.ics.summary.empty" = "会议";
 "meeting.ics.duration" = "时长：%d 分钟";
-"meeting.ics.participant" = "%@（%@）：%@";
+"meeting.ics.participant" = "%@：%@";
 "meeting.ics.participants" = "参与城市：%@";
 "meeting.ics.local_time" = "本地时间：%@";
 "meeting.add.success" = "添加成功，可在推荐记录查看";

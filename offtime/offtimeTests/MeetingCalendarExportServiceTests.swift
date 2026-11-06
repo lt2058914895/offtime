@@ -118,16 +118,37 @@ final class MeetingCalendarExportServiceTests: XCTestCase {
     }
 
     func testDescriptionListsEveryCityDateAndTime() {
-        let ics = MeetingCalendarExportService.makeICS(event: event())
+        let ics = MeetingCalendarExportService.makeICS(
+            event: event(),
+            locale: Locale(identifier: "zh_CN")
+        )
         let description = unfolded(ics)
             .components(separatedBy: "\r\n")
             .first { $0.hasPrefix("DESCRIPTION:") } ?? ""
 
         XCTAssertTrue(description.contains("Shanghai"))
         XCTAssertTrue(description.contains("London"))
-        XCTAssertTrue(description.contains("UTC+08:00"))
-        XCTAssertTrue(description.contains("UTC+00:00"))
+        XCTAssertTrue(description.contains("2026年11月7日 星期六"))
+        XCTAssertTrue(description.contains("15:30–16:30"))
+        XCTAssertTrue(description.contains("07:30–08:30"))
+        XCTAssertFalse(description.contains("UTC+"))
+        XCTAssertFalse(description.contains("UTC-"))
         XCTAssertEqual(description.components(separatedBy: "–").count, 3)
+    }
+
+    func testDescriptionFollowsLocaleAndTwelveHourClock() {
+        let ics = MeetingCalendarExportService.makeICS(
+            event: event(),
+            locale: Locale(identifier: "en_US")
+        )
+        let description = unfolded(ics)
+            .components(separatedBy: "\r\n")
+            .first { $0.hasPrefix("DESCRIPTION:") } ?? ""
+
+        XCTAssertTrue(description.contains("Saturday, November 7, 2026"))
+        XCTAssertTrue(description.contains("3:30"))
+        XCTAssertTrue(description.contains("PM"))
+        XCTAssertFalse(description.contains("15:30"))
     }
 
     func testTimezoneResolverUsesUniqueSavedCityMatch() {
@@ -213,7 +234,7 @@ final class MeetingCalendarExportServiceTests: XCTestCase {
         XCTAssertTrue(ics.contains("\r\nDTSTART:20261107T073000Z\r\n"))
     }
 
-    func testFortyFiveMinuteOffsetIsDisplayed() {
+    func testDescriptionOmitsUTCOffsets() {
         let ics = MeetingCalendarExportService.makeICS(
             event: event(participants: [
                 MeetingCalendarParticipant(
@@ -224,7 +245,8 @@ final class MeetingCalendarExportServiceTests: XCTestCase {
             ])
         )
 
-        XCTAssertTrue(ics.contains("UTC+05:45"))
+        XCTAssertFalse(ics.contains("UTC+"))
+        XCTAssertFalse(ics.contains("UTC-"))
     }
 
     func testDSTTransitionKeepsAbsoluteDuration() {

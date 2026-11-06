@@ -139,7 +139,7 @@
 "meeting.share.failed.message" = "Couldn’t create the calendar file. Please try again.";
 "meeting.ics.summary.empty" = "Meeting";
 "meeting.ics.duration" = "Duration: %d min";
-"meeting.ics.participant" = "%@ (%@): %@";
+"meeting.ics.participant" = "%@: %@";
 "meeting.ics.participants" = "Participants: %@";
 "meeting.ics.local_time" = "Local time: %@";
 "meeting.add.success" = "Meeting slot added. See it in Recommended Records.";

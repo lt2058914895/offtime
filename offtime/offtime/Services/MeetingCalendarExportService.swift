@@ -63,7 +63,11 @@ struct SharedCalendarFile: Identifiable {
 }
 
 enum MeetingCalendarExportService {
-    static func makeICS(event: MeetingCalendarEvent, now: Date = Date()) -> String {
+    static func makeICS(
+        event: MeetingCalendarEvent,
+        now: Date = Date(),
+        locale: Locale = .current
+    ) -> String {
         let endDate = event.startDate.addingTimeInterval(Double(event.durationMinutes) * 60)
         let lines = [
             "BEGIN:VCALENDAR",
@@ -77,7 +81,7 @@ enum MeetingCalendarExportService {
             "DTSTART:\(utcTimestamp(event.startDate))",
             "DTEND:\(utcTimestamp(endDate))",
             "SUMMARY:\(escaped(summary(for: event)))",
-            "DESCRIPTION:\(escaped(description(for: event)))",
+            "DESCRIPTION:\(escaped(description(for: event, locale: locale)))",
             "STATUS:CONFIRMED",
             "TRANSP:OPAQUE",
             "SEQUENCE:0",
@@ -148,7 +152,7 @@ enum MeetingCalendarExportService {
         return names.joined(separator: String(localized: "meeting.slots.constraints.join"))
     }
 
-    private static func description(for event: MeetingCalendarEvent) -> String {
+    private static func description(for event: MeetingCalendarEvent, locale: Locale) -> String {
         let endDate = event.startDate.addingTimeInterval(Double(event.durationMinutes) * 60)
         var lines = [
             String(format: String(localized: "meeting.ics.duration"), event.durationMinutes)
@@ -166,17 +170,16 @@ enum MeetingCalendarExportService {
                 continue
             }
 
-            let offset = utcOffsetText(for: timezone, at: event.startDate)
             let range = localRangeText(
                 start: event.startDate,
                 end: endDate,
-                timezone: timezone
+                timezone: timezone,
+                locale: locale
             )
             lines.append(
                 String(
                     format: String(localized: "meeting.ics.participant"),
                     name,
-                    offset,
                     range
                 )
             )
@@ -194,7 +197,8 @@ enum MeetingCalendarExportService {
             let range = localRangeText(
                 start: event.startDate,
                 end: endDate,
-                timezone: timezone
+                timezone: timezone,
+                locale: locale
             )
             lines.append(
                 String(format: String(localized: "meeting.ics.local_time"), range)
@@ -204,11 +208,16 @@ enum MeetingCalendarExportService {
         return lines.joined(separator: "\n")
     }
 
-    private static func localRangeText(start: Date, end: Date, timezone: TimeZone) -> String {
-        let startDay = dayText(start, timezone: timezone)
-        let endDay = dayText(end, timezone: timezone)
-        let startTime = timeText(start, timezone: timezone)
-        let endTime = timeText(end, timezone: timezone)
+    private static func localRangeText(
+        start: Date,
+        end: Date,
+        timezone: TimeZone,
+        locale: Locale
+    ) -> String {
+        let startDay = dayText(start, timezone: timezone, locale: locale)
+        let endDay = dayText(end, timezone: timezone, locale: locale)
+        let startTime = timeText(start, timezone: timezone, locale: locale)
+        let endTime = timeText(end, timezone: timezone, locale: locale)
 
         if startDay == endDay {
             return "\(startDay) \(startTime)–\(endTime)"
@@ -216,29 +225,28 @@ enum MeetingCalendarExportService {
         return "\(startDay) \(startTime)–\(endDay) \(endTime)"
     }
 
-    private static func dayText(_ date: Date, timezone: TimeZone) -> String {
+    private static func dayText(_ date: Date, timezone: TimeZone, locale: Locale) -> String {
         let formatter = DateFormatter()
-        formatter.locale = .current
+        formatter.locale = locale
         formatter.timeZone = timezone
-        formatter.setLocalizedDateFormatFromTemplate("MMMd")
+        formatter.dateFormat = DateFormatter.dateFormat(
+            fromTemplate: "yMMMMdEEEE",
+            options: 0,
+            locale: locale
+        ) ?? "yyyy/MM/dd EEE"
         return formatter.string(from: date)
     }
 
-    private static func timeText(_ date: Date, timezone: TimeZone) -> String {
+    private static func timeText(_ date: Date, timezone: TimeZone, locale: Locale) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = locale
         formatter.timeZone = timezone
-        formatter.dateFormat = "HH:mm"
+        formatter.dateFormat = DateFormatter.dateFormat(
+            fromTemplate: "jmm",
+            options: 0,
+            locale: locale
+        ) ?? "HH:mm"
         return formatter.string(from: date)
-    }
-
-    private static func utcOffsetText(for timezone: TimeZone, at date: Date) -> String {
-        let seconds = timezone.secondsFromGMT(for: date)
-        let sign = seconds >= 0 ? "+" : "-"
-        let absoluteSeconds = abs(seconds)
-        let hours = absoluteSeconds / 3600
-        let minutes = (absoluteSeconds % 3600) / 60
-        return String(format: "UTC%@%02d:%02d", sign, hours, minutes)
     }
 
     private static func utcTimestamp(_ date: Date) -> String {
