@@ -170,7 +170,7 @@
 "meeting.list.filter.finished" = "已结束";
 "meeting.list.filter.empty" = "该分类暂无会议档期";
 "meeting.list.ongoing" = "进行中";
-"meeting.list.hint" = "左滑删除，长按分享日程";
+"meeting.list.hint" = "左滑删除，点击分享日程";
 
 // MARK: - Converter
 "converter.source.city" = "起点城市";
@@ -209,7 +209,7 @@
 "reminder.list.title" = "提醒";
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
-"reminder.list.hint" = "左滑删除，长按修改重复方式";
+"reminder.list.hint" = "左滑删除，点击修改重复方式";
 "reminder.sound.default" = "提醒音效";
 "reminder.sound.system" = "系统默认";
 "reminder.sound.system.subtitle" = "使用系统提醒音";

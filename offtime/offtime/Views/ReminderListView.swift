@@ -310,7 +310,7 @@ struct ReminderListView: View {
                 }
                 .tint(reminder.isPaused ? .green : .orange)
             }
-            .onLongPressGesture {
+            .onTapGesture {
                 reminderToEdit = reminder
             }
     }

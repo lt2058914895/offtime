@@ -264,7 +264,7 @@ struct MeetingListView: View {
                 Label(String(localized: "meeting.list.delete"), systemImage: "trash")
             }
         }
-        .onLongPressGesture {
+        .onTapGesture {
             share(meeting)
         }
     }
