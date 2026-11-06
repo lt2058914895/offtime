@@ -58,7 +58,7 @@
 "detail.work.start" = "Start";
 "detail.work.end" = "End";
 "detail.rules.title" = "Work Hours";
-"detail.rules.hint" = "Defaults to 9:00–18:00 and can be adjusted per city in 30-minute steps.";
+"detail.rules.hint" = "Defaults to 9:00–18:00 and can be adjusted per city.";
 "detail.rules.2" = "The contactable period is the overlap of both work hours.";
 "detail.hours" = "h";
 "city.reminder.title" = "Reminder Settings";

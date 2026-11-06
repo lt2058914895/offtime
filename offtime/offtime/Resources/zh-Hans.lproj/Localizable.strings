@@ -58,7 +58,7 @@
 "detail.work.start" = "开始";
 "detail.work.end" = "结束";
 "detail.rules.title" = "工作时段";
-"detail.rules.hint" = "默认 9:00–18:00，可按城市以 30 分钟为单位调整。";
+"detail.rules.hint" = "默认 9:00–18:00，可按城市调整。";
 "detail.rules.2" = "可联系时段为双方工作时段的交集。";
 "detail.hours" = "小时";
 "city.reminder.title" = "提醒设置";
