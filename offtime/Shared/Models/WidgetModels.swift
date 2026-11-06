@@ -7,15 +7,114 @@ enum WidgetThemeMode: Int, Codable, Hashable {
     case dark = 2
 }
 
-struct WidgetCitySnapshot: Codable, Hashable, Identifiable {
+struct WidgetCitySnapshot: Hashable, Identifiable {
     let id: String
     let cityName: String
     let cityEn: String
     let countryCode: String
     let timezoneId: String
-    let workStartHour: Int
-    let workEndHour: Int
+    let workStartMinutes: Int
+    let workEndMinutes: Int
     let isLocal: Bool
+
+    var workStartHour: Int { MinuteTime.hour(of: workStartMinutes) }
+    var workEndHour: Int { MinuteTime.hour(of: workEndMinutes) }
+
+    init(
+        id: String,
+        cityName: String,
+        cityEn: String,
+        countryCode: String,
+        timezoneId: String,
+        workStartMinutes: Int,
+        workEndMinutes: Int,
+        isLocal: Bool
+    ) {
+        let hours = MinuteTime.sanitizedWorkHours(
+            startMinutes: workStartMinutes,
+            endMinutes: workEndMinutes
+        )
+        self.id = id
+        self.cityName = cityName
+        self.cityEn = cityEn
+        self.countryCode = countryCode
+        self.timezoneId = timezoneId
+        self.workStartMinutes = hours.start
+        self.workEndMinutes = hours.end
+        self.isLocal = isLocal
+    }
+
+    /// 兼容旧调用：整点参数在构造时换算为分钟。
+    init(
+        id: String,
+        cityName: String,
+        cityEn: String,
+        countryCode: String,
+        timezoneId: String,
+        workStartHour: Int,
+        workEndHour: Int,
+        isLocal: Bool
+    ) {
+        self.init(
+            id: id,
+            cityName: cityName,
+            cityEn: cityEn,
+            countryCode: countryCode,
+            timezoneId: timezoneId,
+            workStartMinutes: workStartHour * MinuteTime.minutesPerHour,
+            workEndMinutes: workEndHour * MinuteTime.minutesPerHour,
+            isLocal: isLocal
+        )
+    }
+}
+
+extension WidgetCitySnapshot: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case id, cityName, cityEn, countryCode, timezoneId, isLocal
+        case workStartMinutes, workEndMinutes
+        case workStartHour, workEndHour
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        let id = try c.decode(String.self, forKey: .id)
+        let cityName = try c.decode(String.self, forKey: .cityName)
+        let cityEn = try c.decode(String.self, forKey: .cityEn)
+        let countryCode = try c.decode(String.self, forKey: .countryCode)
+        let timezoneId = try c.decode(String.self, forKey: .timezoneId)
+        let isLocal = try c.decode(Bool.self, forKey: .isLocal)
+        let legacyStartHour = try c.decodeIfPresent(Int.self, forKey: .workStartHour) ?? 9
+        let legacyEndHour = try c.decodeIfPresent(Int.self, forKey: .workEndHour) ?? 18
+        let startMinutes = try c.decodeIfPresent(Int.self, forKey: .workStartMinutes)
+            ?? legacyStartHour * MinuteTime.minutesPerHour
+        let endMinutes = try c.decodeIfPresent(Int.self, forKey: .workEndMinutes)
+            ?? legacyEndHour * MinuteTime.minutesPerHour
+
+        self.init(
+            id: id,
+            cityName: cityName,
+            cityEn: cityEn,
+            countryCode: countryCode,
+            timezoneId: timezoneId,
+            workStartMinutes: startMinutes,
+            workEndMinutes: endMinutes,
+            isLocal: isLocal
+        )
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(cityName, forKey: .cityName)
+        try c.encode(cityEn, forKey: .cityEn)
+        try c.encode(countryCode, forKey: .countryCode)
+        try c.encode(timezoneId, forKey: .timezoneId)
+        try c.encode(isLocal, forKey: .isLocal)
+        try c.encode(workStartMinutes, forKey: .workStartMinutes)
+        try c.encode(workEndMinutes, forKey: .workEndMinutes)
+        try c.encode(workStartHour, forKey: .workStartHour)
+        try c.encode(workEndHour, forKey: .workEndHour)
+    }
 }
 
 struct WidgetSnapshot: Codable, Hashable {

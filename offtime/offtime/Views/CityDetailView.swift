@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - TimelineBar（详情页 24 小时色条）
+// MARK: - TimelineBar（详情页 48 个半小时色条）
 
 struct TimelineBar: View {
     let hourlyHighlight: [Bool]
@@ -10,16 +10,17 @@ struct TimelineBar: View {
     var body: some View {
         VStack(spacing: 3) {
             Canvas { context, size in
-                let segW = size.width / 24
+                let segmentCount = max(hourlyHighlight.count, 1)
+                let segW = size.width / CGFloat(segmentCount)
                 let h = size.height
-                for hour in 0..<24 {
-                    let x = CGFloat(hour) * segW
+                for segment in 0..<segmentCount {
+                    let x = CGFloat(segment) * segW
                     let rect = CGRect(x: x, y: 0, width: max(segW - 1, 1), height: h)
-                    let color: Color = hourlyHighlight[hour] ? highlightColor : Color(.systemGray5)
+                    let color: Color = hourlyHighlight[segment] ? highlightColor : Color(.systemGray5)
                     context.fill(Path(roundedRect: rect, cornerRadius: 2), with: .color(color))
                 }
                 if let now = nowHour {
-                    let nowX = CGFloat(now) * segW
+                    let nowX = CGFloat(now) / 24 * size.width
                     let marker = CGRect(x: nowX - 1, y: -2, width: 2, height: h + 4)
                     context.fill(Path(roundedRect: marker, cornerRadius: 1), with: .color(.red))
                 }
@@ -45,15 +46,15 @@ struct TimelineBar: View {
 // MARK: - CityDetailView
 
 private struct PendingReminder {
-    let localHour: Int
-    let targetHour: Int
+    let localMinuteOfDay: Int
+    let targetMinuteOfDay: Int
 }
 
 struct CityDetailView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: CityDetailViewModel
-    @State private var processingReminderTargetHours: Set<Int> = []
+    @State private var processingReminderSlots: Set<Int> = []
     @State private var pendingReminder: PendingReminder?
     @State private var reminderToastMessage: String?
 
@@ -164,12 +165,12 @@ struct CityDetailView: View {
                     timeDifferenceColor: .secondary,
                     timeText: viewModel.localTime,
                     crossDay: nil,
-                    hourlyHighlight: viewModel.localHourlyWorking,
+                    hourlyHighlight: viewModel.localHalfHourlyWorking,
                     highlightColor: .accentColor,
                     cityIcon: "location.fill",
                     nowHour: viewModel.localNowHour,
-                    workStart: $viewModel.localWorkStart,
-                    workEnd: $viewModel.localWorkEnd,
+                    workStartMinutes: $viewModel.localWorkStartMinutes,
+                    workEndMinutes: $viewModel.localWorkEndMinutes,
                     showLocalBadge: true
                 )
 
@@ -183,12 +184,12 @@ struct CityDetailView: View {
                     timeDifferenceColor: timeDifferenceColor,
                     timeText: viewModel.cityTime,
                     crossDay: viewModel.targetCrossDay,
-                    hourlyHighlight: viewModel.targetHourlyWorking,
+                    hourlyHighlight: viewModel.targetHalfHourlyWorking,
                     highlightColor: .blue,
                     cityIcon: "building.2",
                     nowHour: viewModel.targetNowHour,
-                    workStart: $viewModel.targetWorkStart,
-                    workEnd: $viewModel.targetWorkEnd
+                    workStartMinutes: $viewModel.targetWorkStartMinutes,
+                    workEndMinutes: $viewModel.targetWorkEndMinutes
                 )
                 .padding(.top, 16)
             }
@@ -215,8 +216,8 @@ struct CityDetailView: View {
         highlightColor: Color,
         cityIcon: String,
         nowHour: Double?,
-        workStart: Binding<Int>,
-        workEnd: Binding<Int>,
+        workStartMinutes: Binding<Int>,
+        workEndMinutes: Binding<Int>,
         showLocalBadge: Bool = false
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -270,7 +271,7 @@ struct CityDetailView: View {
                 highlightColor: highlightColor,
                 nowHour: nowHour
             )
-            workHoursSteppers(start: workStart, end: workEnd)
+            workHoursSteppers(start: workStartMinutes, end: workEndMinutes)
         }
     }
 
@@ -293,7 +294,7 @@ struct CityDetailView: View {
                 }
                 dashedDivider()
                 TimelineBar(
-                    hourlyHighlight: viewModel.overlap.hourlyOverlap,
+                    hourlyHighlight: viewModel.overlap.halfHourlyOverlap,
                     highlightColor: .green,
                     nowHour: viewModel.localNowHour
                 )
@@ -323,23 +324,22 @@ struct CityDetailView: View {
                 )
                 dashedDivider()
 
-                let contactableHours = viewModel.contactableTargetHours
-                if !contactableHours.isEmpty {
-                    ForEach(contactableHours, id: \.self) { targetHour in
-                        let localHour = viewModel.localHour(forTargetHour: targetHour)
+                let contactableSlots = viewModel.contactableSlots
+                if !contactableSlots.isEmpty {
+                    ForEach(contactableSlots) { slot in
                         ReminderRow(
-                            targetHour: targetHour,
-                            localHour: localHour,
+                            targetMinuteOfDay: slot.targetMinuteOfDay,
+                            localMinuteOfDay: slot.localMinuteOfDay,
                             cityName: CityDisplay.primaryName(cityName: viewModel.city.cityName, cityEn: viewModel.city.cityEn),
-                            dayLabel: viewModel.targetDayLabel(forTargetHour: targetHour),
-                            existing: viewModel.reminder(atHour: localHour, minute: 0),
-                            isProcessing: processingReminderTargetHours.contains(targetHour),
+                            dayLabel: viewModel.targetDayLabel(for: slot.date),
+                            existing: viewModel.reminder(atLocalMinute: slot.localMinuteOfDay),
+                            isProcessing: processingReminderSlots.contains(slot.localMinuteOfDay),
                             onToggle: { existing in
                                 Task {
                                     await toggleReminder(
                                         existing,
-                                        localHour: localHour,
-                                        targetHour: targetHour
+                                        localMinuteOfDay: slot.localMinuteOfDay,
+                                        targetMinuteOfDay: slot.targetMinuteOfDay
                                     )
                                 }
                             }
@@ -370,11 +370,14 @@ struct CityDetailView: View {
                             OrphanedReminderRow(
                                 reminder: reminder,
                                 cityName: CityDisplay.primaryName(cityName: viewModel.city.cityName, cityEn: viewModel.city.cityEn),
-                                isProcessing: processingReminderTargetHours.contains(reminder.targetHour),
+                                isProcessing: processingReminderSlots.contains(
+                                    reminder.hour * MinuteTime.minutesPerHour + reminder.minute
+                                ),
                                 onRemove: {
                                     Task {
-                                        processingReminderTargetHours.insert(reminder.targetHour)
-                                        defer { processingReminderTargetHours.remove(reminder.targetHour) }
+                                        let slotID = reminder.hour * MinuteTime.minutesPerHour + reminder.minute
+                                        processingReminderSlots.insert(slotID)
+                                        defer { processingReminderSlots.remove(slotID) }
                                         await viewModel.removeReminder(reminder)
                                     }
                                 }
@@ -396,15 +399,18 @@ struct CityDetailView: View {
 
     private func toggleReminder(
         _ existing: CityReminderGroup?,
-        localHour: Int,
-        targetHour: Int
+        localMinuteOfDay: Int,
+        targetMinuteOfDay: Int
     ) async {
         if let existing {
-            processingReminderTargetHours.insert(targetHour)
-            defer { processingReminderTargetHours.remove(targetHour) }
+            processingReminderSlots.insert(localMinuteOfDay)
+            defer { processingReminderSlots.remove(localMinuteOfDay) }
             await viewModel.removeReminder(existing)
         } else {
-            pendingReminder = PendingReminder(localHour: localHour, targetHour: targetHour)
+            pendingReminder = PendingReminder(
+                localMinuteOfDay: localMinuteOfDay,
+                targetMinuteOfDay: targetMinuteOfDay
+            )
         }
     }
 
@@ -412,11 +418,11 @@ struct CityDetailView: View {
         guard let pendingReminder else { return }
         self.pendingReminder = nil
         Task {
-            processingReminderTargetHours.insert(pendingReminder.targetHour)
-            defer { processingReminderTargetHours.remove(pendingReminder.targetHour) }
+            processingReminderSlots.insert(pendingReminder.localMinuteOfDay)
+            defer { processingReminderSlots.remove(pendingReminder.localMinuteOfDay) }
             let isAdded = await viewModel.addContactableReminder(
-                localHour: pendingReminder.localHour,
-                targetHour: pendingReminder.targetHour,
+                localMinuteOfDay: pendingReminder.localMinuteOfDay,
+                targetMinuteOfDay: pendingReminder.targetMinuteOfDay,
                 weekdayPolicy: weekdayPolicy
             )
             if isAdded {
@@ -470,11 +476,6 @@ struct CityDetailView: View {
             )
         }
         .frame(height: 1)
-    }
-
-    /// 可联系时段钟点文案（24 小时制，与重叠摘要一致）
-    private func contactTimeText(_ hour: Int) -> String {
-        String(format: "%02d:00", hour)
     }
 
     /// 城市元信息行：国旗 国家名 · UTC · 时差（与时钟列表卡片一致）
@@ -532,7 +533,10 @@ struct CityDetailView: View {
             set: { newValue in
                 start.wrappedValue = newValue
                 if end.wrappedValue <= newValue {
-                    end.wrappedValue = min(24, newValue + 1)
+                    end.wrappedValue = min(
+                        MinuteTime.minutesPerDay,
+                        newValue + MinuteTime.stepMinutes
+                    )
                 }
             }
         )
@@ -540,7 +544,10 @@ struct CityDetailView: View {
             get: { end.wrappedValue },
             set: { newValue in
                 if newValue <= start.wrappedValue {
-                    end.wrappedValue = min(24, start.wrappedValue + 1)
+                    end.wrappedValue = min(
+                        MinuteTime.minutesPerDay,
+                        start.wrappedValue + MinuteTime.stepMinutes
+                    )
                 } else {
                     end.wrappedValue = newValue
                 }
@@ -552,8 +559,12 @@ struct CityDetailView: View {
                 Text(String(localized: "detail.work.start"))
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Stepper(value: validatedStart, in: 0...23) {
-                    Text(String(format: "%02d:00", validatedStart.wrappedValue))
+                Stepper(
+                    value: validatedStart,
+                    in: 0...(MinuteTime.minutesPerDay - MinuteTime.stepMinutes),
+                    step: MinuteTime.stepMinutes
+                ) {
+                    Text(MinuteTime.text(validatedStart.wrappedValue))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .monospacedDigit()
@@ -565,8 +576,12 @@ struct CityDetailView: View {
                 Text(String(localized: "detail.work.end"))
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Stepper(value: validatedEnd, in: 1...24) {
-                    Text(String(format: "%02d:00", validatedEnd.wrappedValue))
+                Stepper(
+                    value: validatedEnd,
+                    in: MinuteTime.stepMinutes...MinuteTime.minutesPerDay,
+                    step: MinuteTime.stepMinutes
+                ) {
+                    Text(MinuteTime.text(validatedEnd.wrappedValue))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .monospacedDigit()
@@ -587,8 +602,8 @@ struct CityDetailView: View {
 }
 
 private struct ReminderRow: View, Equatable {
-    let targetHour: Int
-    let localHour: Int
+    let targetMinuteOfDay: Int
+    let localMinuteOfDay: Int
     let cityName: String
     let dayLabel: String?
     let existing: CityReminderGroup?
@@ -596,8 +611,8 @@ private struct ReminderRow: View, Equatable {
     let onToggle: (CityReminderGroup?) -> Void
 
     static func == (lhs: ReminderRow, rhs: ReminderRow) -> Bool {
-        lhs.targetHour == rhs.targetHour
-            && lhs.localHour == rhs.localHour
+        lhs.targetMinuteOfDay == rhs.targetMinuteOfDay
+            && lhs.localMinuteOfDay == rhs.localMinuteOfDay
             && lhs.cityName == rhs.cityName
             && lhs.dayLabel == rhs.dayLabel
             && lhs.existing == rhs.existing
@@ -607,7 +622,7 @@ private struct ReminderRow: View, Equatable {
     var body: some View {
         HStack(spacing: 12) {
             HStack(spacing: 5) {
-                Text(String(format: "%02d:00", localHour))
+                Text(MinuteTime.text(localMinuteOfDay))
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                 HStack(spacing: 3) {
@@ -622,7 +637,7 @@ private struct ReminderRow: View, Equatable {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    Text(String(format: "%02d:00", targetHour))
+                    Text(MinuteTime.text(targetMinuteOfDay))
                         .font(.caption.weight(.medium))
                         .foregroundColor(.secondary)
                         .monospacedDigit()
@@ -682,7 +697,11 @@ private struct OrphanedReminderRow: View {
     var body: some View {
         HStack(spacing: 12) {
             HStack(spacing: 5) {
-                Text(String(format: "%02d:00", reminder.hour))
+                Text(
+                    MinuteTime.text(
+                        reminder.hour * MinuteTime.minutesPerHour + reminder.minute
+                    )
+                )
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                     .foregroundColor(.secondary)
@@ -693,7 +712,11 @@ private struct OrphanedReminderRow: View {
                     Text(cityName)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(String(format: "%02d:00", reminder.targetHour))
+                    Text(
+                        MinuteTime.text(
+                            reminder.targetHour * MinuteTime.minutesPerHour + reminder.targetMinute
+                        )
+                    )
                         .font(.caption.weight(.medium))
                         .foregroundColor(.secondary)
                         .monospacedDigit()

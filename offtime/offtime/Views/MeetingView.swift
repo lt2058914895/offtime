@@ -219,7 +219,7 @@ struct MeetingView: View {
                                 .foregroundColor(.secondary)
                         }
                         HoursBar(
-                            hours: viewModel.overlap.hourlyOverlap,
+                            hours: viewModel.overlap.halfHourlyOverlap,
                             color: .green,
                             markerHour: viewModel.overlap.currentLocalHour
                         )
@@ -311,7 +311,7 @@ struct MeetingView: View {
     }
 
     private func workingHoursText(for participant: MeetingParticipant) -> String {
-        String(format: "%02d:00–%02d:00", participant.workStartHour, participant.workEndHour)
+        "\(MinuteTime.text(participant.workStartMinutes))–\(MinuteTime.text(participant.workEndMinutes))"
     }
 
     private func currentTimeText(for participant: MeetingParticipant) -> String {
@@ -538,7 +538,7 @@ struct MeetingView: View {
 
 }
 
-// MARK: - 24 小时色条
+// MARK: - 48 个半小时色条
 
 private struct HoursBar: View {
     let hours: [Bool]
@@ -547,20 +547,21 @@ private struct HoursBar: View {
 
     var body: some View {
         Canvas { context, size in
-            let segW = size.width / 24
+            let segmentCount = max(hours.count, 1)
+            let segW = size.width / CGFloat(segmentCount)
             let height = size.height
-            for hour in 0..<24 {
+            for segment in 0..<segmentCount {
                 let rect = CGRect(
-                    x: CGFloat(hour) * segW,
+                    x: CGFloat(segment) * segW,
                     y: 0,
                     width: max(segW - 1, 1),
                     height: height
                 )
-                let segmentColor = hours[hour] ? color : Color(.systemGray5)
+                let segmentColor = hours[segment] ? color : Color(.systemGray5)
                 context.fill(Path(roundedRect: rect, cornerRadius: 2), with: .color(segmentColor))
             }
             if let markerHour {
-                let x = CGFloat(markerHour) * segW
+                let x = CGFloat(markerHour) / 24 * size.width
                 let marker = CGRect(x: x - 1, y: -2, width: 2, height: height + 4)
                 context.fill(Path(roundedRect: marker, cornerRadius: 1), with: .color(.red))
             }

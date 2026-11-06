@@ -5,13 +5,66 @@ struct MeetingParticipant: Identifiable, Hashable {
     let cityName: String
     let cityEn: String
     let timezoneId: String
-    let workStartHour: Int
-    let workEndHour: Int
+    let workStartMinutes: Int
+    let workEndMinutes: Int
     let isLocal: Bool
+
+    var workStartHour: Int { workStartMinutes / MinuteTime.minutesPerHour }
+    var workEndHour: Int { workEndMinutes / MinuteTime.minutesPerHour }
+
+    init(
+        id: String,
+        cityName: String,
+        cityEn: String,
+        timezoneId: String,
+        workStartMinutes: Int,
+        workEndMinutes: Int,
+        isLocal: Bool
+    ) {
+        let hours = MinuteTime.sanitizedWorkHours(
+            startMinutes: workStartMinutes,
+            endMinutes: workEndMinutes
+        )
+        self.id = id
+        self.cityName = cityName
+        self.cityEn = cityEn
+        self.timezoneId = timezoneId
+        self.workStartMinutes = hours.start
+        self.workEndMinutes = hours.end
+        self.isLocal = isLocal
+    }
+
+    /// 兼容旧调用：整点参数在构造时换算为分钟。
+    init(
+        id: String,
+        cityName: String,
+        cityEn: String,
+        timezoneId: String,
+        workStartHour: Int,
+        workEndHour: Int,
+        isLocal: Bool
+    ) {
+        self.init(
+            id: id,
+            cityName: cityName,
+            cityEn: cityEn,
+            timezoneId: timezoneId,
+            workStartMinutes: workStartHour * MinuteTime.minutesPerHour,
+            workEndMinutes: workEndHour * MinuteTime.minutesPerHour,
+            isLocal: isLocal
+        )
+    }
 }
 
 struct MeetingOverlap: Equatable {
-    let hourlyOverlap: [Bool]
+    /// 48 个本地半小时槽。
+    let halfHourlyOverlap: [Bool]
+    /// 兼容旧调用：任一半小时槽重叠即视为该小时有重叠。
+    var hourlyOverlap: [Bool] {
+        (0..<24).map { hour in
+            halfHourlyOverlap[hour * 2] || halfHourlyOverlap[hour * 2 + 1]
+        }
+    }
     let currentLocalHour: Double
     let isCurrentlyOverlapping: Bool
 }

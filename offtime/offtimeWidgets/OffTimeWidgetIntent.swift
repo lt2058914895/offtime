@@ -12,8 +12,8 @@ struct OffTimeCityEntity: AppEntity, Hashable {
     let cityEn: String
     let countryCode: String
     let timezoneId: String
-    let workStartHour: Int
-    let workEndHour: Int
+    let workStartMinutes: Int
+    let workEndMinutes: Int
     let isLocal: Bool
 
     var displayRepresentation: DisplayRepresentation {
@@ -29,8 +29,8 @@ struct OffTimeCityEntity: AppEntity, Hashable {
         cityEn = city.cityEn
         countryCode = city.countryCode
         timezoneId = city.timezoneId
-        workStartHour = city.workStartHour
-        workEndHour = city.workEndHour
+        workStartMinutes = city.workStartMinutes
+        workEndMinutes = city.workEndMinutes
         isLocal = city.isLocal
     }
 
@@ -41,8 +41,8 @@ struct OffTimeCityEntity: AppEntity, Hashable {
             cityEn: cityEn,
             countryCode: countryCode,
             timezoneId: timezoneId,
-            workStartHour: workStartHour,
-            workEndHour: workEndHour,
+            workStartMinutes: workStartMinutes,
+            workEndMinutes: workEndMinutes,
             isLocal: isLocal
         )
     }

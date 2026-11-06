@@ -10,22 +10,56 @@ final class CityModel {
     var timezoneId: String
     var country: String = ""
     var sortIndex: Int
+    /// 旧版整点字段：保留写入，供旧版本回退读取；新逻辑只读取分钟字段。
     var workStartHour: Int = 9
     var workEndHour: Int = 18
     var localWorkStart: Int = 9
     var localWorkEnd: Int = 18
+    /// 分钟制工作时段（距离当天 00:00 的分钟数）。为兼容旧库，缺失时回退到整点字段。
+    var workStartMinutes: Int?
+    var workEndMinutes: Int?
+    var localWorkStartMinutes: Int?
+    var localWorkEndMinutes: Int?
     
-    init(id: UUID = UUID(), cityName: String, cityEn: String, timezoneId: String, country: String = "", sortIndex: Int = 0, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
+    init(
+        id: UUID = UUID(),
+        cityName: String,
+        cityEn: String,
+        timezoneId: String,
+        country: String = "",
+        sortIndex: Int = 0,
+        workStartHour: Int = 9,
+        workEndHour: Int = 18,
+        localWorkStart: Int = 9,
+        localWorkEnd: Int = 18,
+        workStartMinutes: Int? = nil,
+        workEndMinutes: Int? = nil,
+        localWorkStartMinutes: Int? = nil,
+        localWorkEndMinutes: Int? = nil
+    ) {
+        let targetHours = MinuteTime.sanitizedWorkHours(
+            startMinutes: workStartMinutes ?? workStartHour * MinuteTime.minutesPerHour,
+            endMinutes: workEndMinutes ?? workEndHour * MinuteTime.minutesPerHour
+        )
+        let currentHours = MinuteTime.sanitizedWorkHours(
+            startMinutes: localWorkStartMinutes ?? localWorkStart * MinuteTime.minutesPerHour,
+            endMinutes: localWorkEndMinutes ?? localWorkEnd * MinuteTime.minutesPerHour
+        )
+
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
         self.timezoneId = timezoneId
         self.country = country
         self.sortIndex = sortIndex
-        self.workStartHour = workStartHour
-        self.workEndHour = workEndHour
-        self.localWorkStart = localWorkStart
-        self.localWorkEnd = localWorkEnd
+        self.workStartHour = MinuteTime.hour(of: targetHours.start)
+        self.workEndHour = MinuteTime.hour(of: targetHours.end)
+        self.localWorkStart = MinuteTime.hour(of: currentHours.start)
+        self.localWorkEnd = MinuteTime.hour(of: currentHours.end)
+        self.workStartMinutes = targetHours.start
+        self.workEndMinutes = targetHours.end
+        self.localWorkStartMinutes = currentHours.start
+        self.localWorkEndMinutes = currentHours.end
     }
 }
 
@@ -34,18 +68,71 @@ final class CityModel {
 extension CityModel {
     /// 转为轻量值类型，用于导出、分享等不需要 SwiftData 上下文的场景
     func toItem() -> CityItem {
-        CityItem(
+        let targetHours = workHours
+        let currentHours = localWorkHours
+        return CityItem(
             id: id,
             cityName: cityName,
             cityEn: cityEn,
             timezoneId: timezoneId,
             country: country,
             sortIndex: sortIndex,
-            workStartHour: workStartHour,
-            workEndHour: workEndHour,
-            localWorkStart: localWorkStart,
-            localWorkEnd: localWorkEnd
+            workHours: targetHours,
+            localWorkHours: currentHours
         )
+    }
+
+    /// 目标城市工作时段。分钟字段缺失时（旧版本数据）回退到整点字段。
+    var workHours: WorkHours {
+        let fallbackStart = workStartHour * MinuteTime.minutesPerHour
+        let fallbackEnd = workEndHour * MinuteTime.minutesPerHour
+        return WorkHours(
+            startMinutes: workStartMinutes ?? fallbackStart,
+            endMinutes: workEndMinutes ?? fallbackEnd
+        ).sanitized()
+    }
+
+    /// 当前城市工作时段。分钟字段缺失时（旧版本数据）回退到整点字段。
+    var localWorkHours: WorkHours {
+        let fallbackStart = localWorkStart * MinuteTime.minutesPerHour
+        let fallbackEnd = localWorkEnd * MinuteTime.minutesPerHour
+        return WorkHours(
+            startMinutes: localWorkStartMinutes ?? fallbackStart,
+            endMinutes: localWorkEndMinutes ?? fallbackEnd
+        ).sanitized()
+    }
+
+    func updateWorkHours(_ hours: WorkHours) {
+        let sanitized = hours.sanitized()
+        workStartMinutes = sanitized.startMinutes
+        workEndMinutes = sanitized.endMinutes
+        workStartHour = MinuteTime.hour(of: sanitized.startMinutes)
+        workEndHour = MinuteTime.hour(of: sanitized.endMinutes)
+    }
+
+    func updateLocalWorkHours(_ hours: WorkHours) {
+        let sanitized = hours.sanitized()
+        localWorkStartMinutes = sanitized.startMinutes
+        localWorkEndMinutes = sanitized.endMinutes
+        localWorkStart = MinuteTime.hour(of: sanitized.startMinutes)
+        localWorkEnd = MinuteTime.hour(of: sanitized.endMinutes)
+    }
+
+    /// 把旧数据中的整点字段补写成分钟字段。返回是否发生了修改。
+    @discardableResult
+    func migrateLegacyWorkHoursIfNeeded() -> Bool {
+        let targetHours = workHours
+        let currentHours = localWorkHours
+        guard workStartMinutes == nil
+            || workEndMinutes == nil
+            || localWorkStartMinutes == nil
+            || localWorkEndMinutes == nil else {
+            return false
+        }
+
+        updateWorkHours(targetHours)
+        updateLocalWorkHours(currentHours)
+        return true
     }
 }
 
@@ -204,22 +291,81 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
     let timezoneId: String
     let country: String
     var sortIndex: Int
-    var workStartHour: Int
-    var workEndHour: Int
-    var localWorkStart: Int
-    var localWorkEnd: Int
+    /// 分钟制工作时段（距离当天 00:00 的分钟数）。
+    var workStartMinutes: Int
+    var workEndMinutes: Int
+    var localWorkStartMinutes: Int
+    var localWorkEndMinutes: Int
 
-    init(id: UUID, cityName: String, cityEn: String, timezoneId: String, country: String = "", sortIndex: Int, workStartHour: Int = 9, workEndHour: Int = 18, localWorkStart: Int = 9, localWorkEnd: Int = 18) {
+    var workStartHour: Int { MinuteTime.hour(of: workStartMinutes) }
+    var workEndHour: Int { MinuteTime.hour(of: workEndMinutes) }
+    var localWorkStart: Int { MinuteTime.hour(of: localWorkStartMinutes) }
+    var localWorkEnd: Int { MinuteTime.hour(of: localWorkEndMinutes) }
+
+    var workHours: WorkHours {
+        WorkHours(startMinutes: workStartMinutes, endMinutes: workEndMinutes)
+    }
+
+    var localWorkHours: WorkHours {
+        WorkHours(startMinutes: localWorkStartMinutes, endMinutes: localWorkEndMinutes)
+    }
+
+    /// 兼容旧版按整点调用构造的入口；内部仍写入分钟字段。
+    init(
+        id: UUID,
+        cityName: String,
+        cityEn: String,
+        timezoneId: String,
+        country: String = "",
+        sortIndex: Int,
+        workStartHour: Int = 9,
+        workEndHour: Int = 18,
+        localWorkStart: Int = 9,
+        localWorkEnd: Int = 18
+    ) {
+        let targetHours = MinuteTime.sanitizedWorkHours(
+            startMinutes: workStartHour * MinuteTime.minutesPerHour,
+            endMinutes: workEndHour * MinuteTime.minutesPerHour
+        )
+        let currentHours = MinuteTime.sanitizedWorkHours(
+            startMinutes: localWorkStart * MinuteTime.minutesPerHour,
+            endMinutes: localWorkEnd * MinuteTime.minutesPerHour
+        )
         self.id = id
         self.cityName = cityName
         self.cityEn = cityEn
         self.timezoneId = timezoneId
         self.country = country
         self.sortIndex = sortIndex
-        self.workStartHour = workStartHour
-        self.workEndHour = workEndHour
-        self.localWorkStart = localWorkStart
-        self.localWorkEnd = localWorkEnd
+        self.workStartMinutes = targetHours.start
+        self.workEndMinutes = targetHours.end
+        self.localWorkStartMinutes = currentHours.start
+        self.localWorkEndMinutes = currentHours.end
+    }
+
+    /// 分钟制入口。可联系时段和提醒全部使用这条路径。
+    init(
+        id: UUID,
+        cityName: String,
+        cityEn: String,
+        timezoneId: String,
+        country: String = "",
+        sortIndex: Int,
+        workHours: WorkHours,
+        localWorkHours: WorkHours
+    ) {
+        let targetHours = workHours.sanitized()
+        let currentHours = localWorkHours.sanitized()
+        self.id = id
+        self.cityName = cityName
+        self.cityEn = cityEn
+        self.timezoneId = timezoneId
+        self.country = country
+        self.sortIndex = sortIndex
+        self.workStartMinutes = targetHours.startMinutes
+        self.workEndMinutes = targetHours.endMinutes
+        self.localWorkStartMinutes = currentHours.startMinutes
+        self.localWorkEndMinutes = currentHours.endMinutes
     }
 
     init(from decoder: Decoder) throws {
@@ -230,10 +376,43 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
         timezoneId = try c.decode(String.self, forKey: .timezoneId)
         country = try c.decodeIfPresent(String.self, forKey: .country) ?? ""
         sortIndex = try c.decodeIfPresent(Int.self, forKey: .sortIndex) ?? 0
-        workStartHour = try c.decodeIfPresent(Int.self, forKey: .workStartHour) ?? 9
-        workEndHour = try c.decodeIfPresent(Int.self, forKey: .workEndHour) ?? 18
-        localWorkStart = try c.decodeIfPresent(Int.self, forKey: .localWorkStart) ?? 9
-        localWorkEnd = try c.decodeIfPresent(Int.self, forKey: .localWorkEnd) ?? 18
+        let legacyWorkStartHour = try c.decodeIfPresent(Int.self, forKey: .workStartHour) ?? 9
+        let legacyWorkEndHour = try c.decodeIfPresent(Int.self, forKey: .workEndHour) ?? 18
+        let legacyLocalWorkStart = try c.decodeIfPresent(Int.self, forKey: .localWorkStart) ?? 9
+        let legacyLocalWorkEnd = try c.decodeIfPresent(Int.self, forKey: .localWorkEnd) ?? 18
+        workStartMinutes = try c.decodeIfPresent(Int.self, forKey: .workStartMinutes)
+            ?? legacyWorkStartHour * MinuteTime.minutesPerHour
+        workEndMinutes = try c.decodeIfPresent(Int.self, forKey: .workEndMinutes)
+            ?? legacyWorkEndHour * MinuteTime.minutesPerHour
+        localWorkStartMinutes = try c.decodeIfPresent(Int.self, forKey: .localWorkStartMinutes)
+            ?? legacyLocalWorkStart * MinuteTime.minutesPerHour
+        localWorkEndMinutes = try c.decodeIfPresent(Int.self, forKey: .localWorkEndMinutes)
+            ?? legacyLocalWorkEnd * MinuteTime.minutesPerHour
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(cityName, forKey: .cityName)
+        try c.encode(cityEn, forKey: .cityEn)
+        try c.encode(timezoneId, forKey: .timezoneId)
+        try c.encode(country, forKey: .country)
+        try c.encode(sortIndex, forKey: .sortIndex)
+        try c.encode(workStartMinutes, forKey: .workStartMinutes)
+        try c.encode(workEndMinutes, forKey: .workEndMinutes)
+        try c.encode(localWorkStartMinutes, forKey: .localWorkStartMinutes)
+        try c.encode(localWorkEndMinutes, forKey: .localWorkEndMinutes)
+        // 同时写出旧整点字段：新版本读取分钟字段，旧版本仍可读取自己认识的字段。
+        try c.encode(workStartHour, forKey: .workStartHour)
+        try c.encode(workEndHour, forKey: .workEndHour)
+        try c.encode(localWorkStart, forKey: .localWorkStart)
+        try c.encode(localWorkEnd, forKey: .localWorkEnd)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, cityName, cityEn, timezoneId, country, sortIndex
+        case workStartMinutes, workEndMinutes, localWorkStartMinutes, localWorkEndMinutes
+        case workStartHour, workEndHour, localWorkStart, localWorkEnd
     }
 }
 
@@ -241,7 +420,8 @@ struct CityItem: Identifiable, Equatable, Codable, Hashable {
 
 /// 导出文件信封：带 schemaVersion，便于未来字段变更时做兼容判断。
 struct CitiesExportEnvelope: Codable {
-    static let currentSchemaVersion = 2
+    static let currentSchemaVersion = 3
+    static let minimumSupportedSchemaVersion = 1
     var schemaVersion: Int
     var cities: [CityItem]
 }

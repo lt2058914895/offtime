@@ -18,6 +18,23 @@ final class CityService {
 
     func configure(modelContainer: ModelContainer) {
         self.modelContainer = modelContainer
+        migrateLegacyWorkHoursIfNeeded()
+    }
+
+    /// 旧版本只保存整点工作时段。启动时把整点值补写成分钟字段，
+    /// 后续所有可联系计算都只读取分钟字段；旧字段仍同步写入以支持版本回退。
+    func migrateLegacyWorkHoursIfNeeded() {
+        guard let modelContainer else { return }
+        let context = modelContainer.mainContext
+        guard let cities = try? context.fetch(FetchDescriptor<CityModel>()) else { return }
+
+        var didChange = false
+        for city in cities where city.migrateLegacyWorkHoursIfNeeded() {
+            didChange = true
+        }
+        if didChange {
+            try? context.save()
+        }
     }
 
     private func requireMainContext() throws -> ModelContext {
@@ -180,7 +197,8 @@ final class CityService {
         let decodedCities: [CityItem]
         
         if let envelope = try? decoder.decode(CitiesExportEnvelope.self, from: data) {
-            guard envelope.schemaVersion == CitiesExportEnvelope.currentSchemaVersion else {
+            guard envelope.schemaVersion >= CitiesExportEnvelope.minimumSupportedSchemaVersion,
+                  envelope.schemaVersion <= CitiesExportEnvelope.currentSchemaVersion else {
                 throw CityError.unsupportedSchemaVersion
             }
             decodedCities = envelope.cities
@@ -213,10 +231,10 @@ final class CityService {
                     timezoneId: item.timezoneId,
                     country: item.country,
                     sortIndex: index,
-                    workStartHour: item.workStartHour,
-                    workEndHour: item.workEndHour,
-                    localWorkStart: item.localWorkStart,
-                    localWorkEnd: item.localWorkEnd
+                    workStartMinutes: item.workStartMinutes,
+                    workEndMinutes: item.workEndMinutes,
+                    localWorkStartMinutes: item.localWorkStartMinutes,
+                    localWorkEndMinutes: item.localWorkEndMinutes
                 )
                 ctx.insert(model)
                 retainedIDs.insert(id)
@@ -243,10 +261,10 @@ final class CityService {
                     timezoneId: item.timezoneId,
                     country: item.country,
                     sortIndex: maxIndex,
-                    workStartHour: item.workStartHour,
-                    workEndHour: item.workEndHour,
-                    localWorkStart: item.localWorkStart,
-                    localWorkEnd: item.localWorkEnd
+                    workStartMinutes: item.workStartMinutes,
+                    workEndMinutes: item.workEndMinutes,
+                    localWorkStartMinutes: item.localWorkStartMinutes,
+                    localWorkEndMinutes: item.localWorkEndMinutes
                 )
                 ctx.insert(model)
             }
@@ -276,8 +294,8 @@ final class CityService {
             guard !cityName.isEmpty,
                   !CityIdentity.normalizedEnglishName(cityEn).isEmpty,
                   TimeZone(identifier: timezoneId) != nil,
-                  Self.isValidWorkHours(start: item.workStartHour, end: item.workEndHour),
-                  Self.isValidWorkHours(start: item.localWorkStart, end: item.localWorkEnd) else {
+                  item.workHours.isValid,
+                  item.localWorkHours.isValid else {
                 throw CityError.invalidImportData
             }
 
@@ -292,10 +310,8 @@ final class CityService {
                     timezoneId: timezoneId,
                     country: country,
                     sortIndex: item.sortIndex,
-                    workStartHour: item.workStartHour,
-                    workEndHour: item.workEndHour,
-                    localWorkStart: item.localWorkStart,
-                    localWorkEnd: item.localWorkEnd
+                    workHours: item.workHours,
+                    localWorkHours: item.localWorkHours
                 )
             )
         }
@@ -310,10 +326,6 @@ final class CityService {
         return candidate
     }
 
-    private static func isValidWorkHours(start: Int, end: Int) -> Bool {
-        (0..<24).contains(start) && (1...24).contains(end) && start < end
-    }
-    
     // MARK: - City Name Matching（静态方法，供 AppEnvironment 等外部调用）
     
     /// 内置城市目录在进程内只读取、解码一次。

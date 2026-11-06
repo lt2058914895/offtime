@@ -20,10 +20,10 @@ protocol TimezoneServiceProviding: AnyObject {
         timezoneId: String,
         date: Date,
         localTimezoneId: String,
-        localWorkStart: Int,
-        localWorkEnd: Int,
-        targetWorkStart: Int,
-        targetWorkEnd: Int
+        localWorkStartMinutes: Int,
+        localWorkEndMinutes: Int,
+        targetWorkStartMinutes: Int,
+        targetWorkEndMinutes: Int
     ) -> WorkingHoursOverlap
 }
 

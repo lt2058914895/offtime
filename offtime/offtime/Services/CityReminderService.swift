@@ -51,9 +51,10 @@ final class UserNotificationCenterAdapter: UserNotificationCenterProtocol {
     }
 }
 
-enum CityReminderError: LocalizedError {
+enum CityReminderError: LocalizedError, Equatable {
     case authorizationDenied
     case invalidTimezone
+    case invalidTime
 
     var errorDescription: String? {
         switch self {
@@ -61,6 +62,8 @@ enum CityReminderError: LocalizedError {
             return String(localized: "city.reminder.error.authorization")
         case .invalidTimezone:
             return String(localized: "city.reminder.error.timezone")
+        case .invalidTime:
+            return String(localized: "city.reminder.error.invalid-time")
         }
     }
 }
@@ -90,6 +93,16 @@ struct CityReminderGroup: Identifiable, Equatable {
     var isPaused: Bool = false
     var triggerCityName: String? = nil
     var triggerCityEn: String? = nil
+
+    /// 本地触发时刻（距离当天 00:00 的分钟数）。
+    var triggerMinutes: Int {
+        hour * MinuteTime.minutesPerHour + minute
+    }
+
+    /// 目标城市对应时刻（距离当天 00:00 的分钟数）。
+    var targetMinutes: Int {
+        targetHour * MinuteTime.minutesPerHour + targetMinute
+    }
 }
 
 enum CityReminderScheduler {
@@ -324,6 +337,10 @@ final class CityReminderService {
         triggerCityName: String? = nil,
         triggerCityEn: String? = nil
     ) async throws -> CityReminderGroup {
+        guard MinuteTime.isValidClockTime(hour: hour, minute: minute) else {
+            throw CityReminderError.invalidTime
+        }
+
         let reminderID = UUID().uuidString
         let group = CityReminderGroup(
             id: reminderID,

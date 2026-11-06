@@ -163,14 +163,16 @@ final class ClockListViewModel: ObservableObject {
     }
 
     func getWorkingHoursOverlap(city: CityModel, localTimezoneId: String) -> WorkingHoursOverlap {
+        let localWorkHours = city.localWorkHours
+        let targetWorkHours = city.workHours
         return timezoneService.getWorkingHoursOverlap(
             timezoneId: city.timezoneId,
             date: currentDate,
             localTimezoneId: localTimezoneId,
-            localWorkStart: city.localWorkStart,
-            localWorkEnd: city.localWorkEnd,
-            targetWorkStart: city.workStartHour,
-            targetWorkEnd: city.workEndHour
+            localWorkStartMinutes: localWorkHours.startMinutes,
+            localWorkEndMinutes: localWorkHours.endMinutes,
+            targetWorkStartMinutes: targetWorkHours.startMinutes,
+            targetWorkEndMinutes: targetWorkHours.endMinutes
         )
     }
     

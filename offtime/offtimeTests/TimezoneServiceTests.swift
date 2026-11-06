@@ -104,6 +104,35 @@ final class TimezoneServiceTests: XCTestCase {
         XCTAssertTrue(overlap.isCurrentlyOverlapping)
     }
 
+    func testWorkingHoursOverlapUsesHalfHourGranularity() throws {
+        let date = try self.date(
+            year: 2026,
+            month: 1,
+            day: 15,
+            hour: 10,
+            minute: 0,
+            timezoneId: "Etc/GMT"
+        )
+
+        let overlap = service.getWorkingHoursOverlap(
+            timezoneId: "Etc/GMT-2",
+            date: date,
+            localTimezoneId: "Etc/GMT",
+            localWorkStartMinutes: 9 * 60 + 30,
+            localWorkEndMinutes: 18 * 60,
+            targetWorkStartMinutes: 8 * 60,
+            targetWorkEndMinutes: 17 * 60
+        )
+
+        // 本地 9:30–18:00 与目标城市 8:00–17:00 相交为本地 9:30–15:00。
+        XCTAssertEqual(overlap.halfHourlyOverlap.filter { $0 }.count, 11)
+        XCTAssertFalse(overlap.halfHourlyOverlap[18])
+        XCTAssertTrue(overlap.halfHourlyOverlap[19])
+        XCTAssertTrue(overlap.halfHourlyOverlap[29])
+        XCTAssertFalse(overlap.halfHourlyOverlap[30])
+        XCTAssertTrue(overlap.isCurrentlyOverlapping)
+    }
+
     /// 回归：小组件底部日期行由「星期 + 月日」拼成，若月日文本自带星期
     /// 就会出现「周三 09/16周三」这种重复展示（旧版 MMEd 模板的问题）。
     func testMonthDayOnlyIsFreeOfWeekdayForWidgetDateLine() throws {

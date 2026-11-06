@@ -86,6 +86,60 @@ final class CityReminderServiceTests: XCTestCase {
         )
     }
 
+    func testAddReminderSupportsHalfHourTriggerAndPersistsMinutes() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+
+        let group = try await service.addReminder(
+            cityID: UUID(),
+            cityName: "上海",
+            timezoneId: "Asia/Shanghai",
+            hour: 9,
+            minute: 30,
+            weekdayPolicy: .everyDay,
+            targetTimezoneId: "Asia/Tokyo",
+            targetHour: 10,
+            targetMinute: 30
+        )
+
+        XCTAssertEqual(group.triggerMinutes, 9 * 60 + 30)
+        XCTAssertEqual(group.targetMinutes, 10 * 60 + 30)
+        let model = try XCTUnwrap(try context.fetch(FetchDescriptor<ReminderModel>()).first)
+        XCTAssertEqual(model.minute, 30)
+        XCTAssertEqual(model.targetMinute, 30)
+
+        let trigger = try XCTUnwrap(
+            mock.requests.first?.trigger as? UNCalendarNotificationTrigger
+        )
+        XCTAssertEqual(trigger.dateComponents.hour, 9)
+        XCTAssertEqual(trigger.dateComponents.minute, 30)
+    }
+
+    func testAddReminderRejectsTimeOutsideThirtyMinuteGrid() async throws {
+        let mock = MockNotificationCenter()
+        let service = CityReminderService(notificationCenter: mock, modelContainer: container)
+
+        do {
+            _ = try await service.addReminder(
+                cityID: UUID(),
+                cityName: "上海",
+                timezoneId: "Asia/Shanghai",
+                hour: 9,
+                minute: 15,
+                weekdayPolicy: .everyDay,
+                targetTimezoneId: "Asia/Tokyo",
+                targetHour: 10,
+                targetMinute: 0
+            )
+            XCTFail("Expected invalid time")
+        } catch {
+            XCTAssertEqual(error as? CityReminderError, .invalidTime)
+        }
+
+        XCTAssertTrue(try context.fetch(FetchDescriptor<ReminderModel>()).isEmpty)
+        XCTAssertTrue(mock.requests.isEmpty)
+    }
+
     func testLegacyWeekdaysOnlyModelFallsBackToBothCitiesPolicy() throws {
         let reminder = ReminderModel(
             cityID: UUID(),

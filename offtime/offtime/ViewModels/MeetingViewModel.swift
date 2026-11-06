@@ -133,8 +133,8 @@ final class MeetingViewModel: ObservableObject {
                 cityName: localName,
                 cityEn: localEn,
                 timezoneId: localTimezoneId,
-                workStartHour: TimezoneService.workStartHour,
-                workEndHour: TimezoneService.workEndHour,
+                workStartMinutes: TimezoneService.workStartMinutes,
+                workEndMinutes: TimezoneService.workEndMinutes,
                 isLocal: true
             )
         ]
@@ -145,14 +145,15 @@ final class MeetingViewModel: ObservableObject {
             for city in cities {
                 let cityKey = CityIdentity.key(cityEn: city.cityEn, timezoneId: city.timezoneId)
                 if cityKey == localKey { continue }
+                let workHours = city.workHours
                 loaded.append(
                     MeetingParticipant(
                         id: city.id.uuidString,
                         cityName: city.cityName,
                         cityEn: city.cityEn,
                         timezoneId: city.timezoneId,
-                        workStartHour: city.workStartHour,
-                        workEndHour: city.workEndHour,
+                        workStartMinutes: workHours.startMinutes,
+                        workEndMinutes: workHours.endMinutes,
                         isLocal: false
                     )
                 )

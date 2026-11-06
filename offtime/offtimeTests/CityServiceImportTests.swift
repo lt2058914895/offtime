@@ -194,6 +194,101 @@ final class CityServiceImportTests: XCTestCase {
         }
     }
 
+    func testImportsLegacySchemaV2HourFieldsAsMinutes() throws {
+        let legacyJSON = """
+        {
+          "schemaVersion": 2,
+          "cities": [{
+            "id": "11111111-1111-1111-1111-111111111111",
+            "cityName": "上海",
+            "cityEn": "Shanghai",
+            "timezoneId": "Asia/Shanghai",
+            "country": "CN",
+            "sortIndex": 0,
+            "workStartHour": 8,
+            "workEndHour": 17,
+            "localWorkStart": 10,
+            "localWorkEnd": 19
+          }]
+        }
+        """
+
+        try CityService.shared.importCities(
+            from: Data(legacyJSON.utf8),
+            strategy: .replace,
+            context: context
+        )
+
+        let city = try XCTUnwrap(try context.fetch(FetchDescriptor<CityModel>()).first)
+        XCTAssertEqual(city.workHours, WorkHours(startMinutes: 8 * 60, endMinutes: 17 * 60))
+        XCTAssertEqual(city.localWorkHours, WorkHours(startMinutes: 10 * 60, endMinutes: 19 * 60))
+    }
+
+    func testImportsAndExportsSchemaV3HalfHourWorkHours() throws {
+        let imported = CityItem(
+            id: UUID(),
+            cityName: "东京",
+            cityEn: "Tokyo",
+            timezoneId: "Asia/Tokyo",
+            sortIndex: 0,
+            workHours: WorkHours(startMinutes: 9 * 60 + 30, endMinutes: 18 * 60),
+            localWorkHours: WorkHours(startMinutes: 8 * 60, endMinutes: 17 * 60 + 30)
+        )
+
+        try CityService.shared.importCities(
+            from: encode([imported]),
+            strategy: .replace,
+            context: context
+        )
+
+        let model = try XCTUnwrap(try context.fetch(FetchDescriptor<CityModel>()).first)
+        XCTAssertEqual(model.workHours, imported.workHours)
+        XCTAssertEqual(model.localWorkHours, imported.localWorkHours)
+
+        let exported = try CityService.shared.exportCities(context: context)
+        let object = try XCTUnwrap(
+            try JSONSerialization.jsonObject(with: exported) as? [String: Any]
+        )
+        XCTAssertEqual(object["schemaVersion"] as? Int, CitiesExportEnvelope.currentSchemaVersion)
+        let cities = try XCTUnwrap(object["cities"] as? [[String: Any]])
+        let exportedCity = try XCTUnwrap(cities.first)
+        XCTAssertEqual(exportedCity["workStartMinutes"] as? Int, 9 * 60 + 30)
+        XCTAssertEqual(exportedCity["workEndMinutes"] as? Int, 18 * 60)
+        XCTAssertEqual(exportedCity["workStartHour"] as? Int, 9)
+        XCTAssertEqual(exportedCity["workEndHour"] as? Int, 18)
+    }
+
+    func testRejectsImportWithNonThirtyMinuteWorkHours() throws {
+        let invalidJSON = """
+        {
+          "schemaVersion": 3,
+          "cities": [{
+            "id": "22222222-2222-2222-2222-222222222222",
+            "cityName": "上海",
+            "cityEn": "Shanghai",
+            "timezoneId": "Asia/Shanghai",
+            "country": "CN",
+            "sortIndex": 0,
+            "workStartMinutes": 555,
+            "workEndMinutes": 1080,
+            "localWorkStartMinutes": 540,
+            "localWorkEndMinutes": 1080
+          }]
+        }
+        """
+
+        XCTAssertThrowsError(
+            try CityService.shared.importCities(
+                from: Data(invalidJSON.utf8),
+                strategy: .replace,
+                context: context
+            )
+        ) { error in
+            XCTAssertEqual(error as? CityError, .invalidImportData)
+        }
+        XCTAssertTrue(try context.fetch(FetchDescriptor<CityModel>()).isEmpty)
+    }
+
     private func encode(_ cities: [CityItem]) throws -> Data {
         try JSONEncoder().encode(
             CitiesExportEnvelope(

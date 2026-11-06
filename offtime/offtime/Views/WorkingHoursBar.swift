@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// 工作时段重叠可视化：24 小时色条 + 状态文案。
-/// 绿色段 = 本地与目标城市均在 9:00–18:00 工作时段；红色竖线 = 当前时刻。
+/// 工作时段重叠可视化：48 个半小时色条 + 状态文案。
+/// 绿色段 = 本地与目标城市均在各自工作时段内；红色竖线 = 当前时刻。
 struct WorkingHoursBar: View {
     let overlap: WorkingHoursOverlap
     /// 本地时区标识，用于把 nextOverlapDate 格式化为本地时间字符串
@@ -52,16 +52,17 @@ struct WorkingHoursBar: View {
     var body: some View {
         HStack(spacing: 8) {
             Canvas { context, size in
-                let segW = size.width / 24
+                let segmentCount = max(overlap.halfHourlyOverlap.count, 1)
+                let segW = size.width / CGFloat(segmentCount)
                 let h = size.height
-                for hour in 0..<24 {
-                    let x = CGFloat(hour) * segW
+                for segment in 0..<segmentCount {
+                    let x = CGFloat(segment) * segW
                     let rect = CGRect(x: x, y: 0, width: max(segW - 1, 1), height: h)
-                    let color: Color = overlap.hourlyOverlap[hour] ? .green : Color(.systemGray5)
+                    let color: Color = overlap.halfHourlyOverlap[segment] ? .green : Color(.systemGray5)
                     context.fill(Path(roundedRect: rect, cornerRadius: 1), with: .color(color))
                 }
                 // "现在"标记
-                let nowX = CGFloat(currentHourValue) * segW
+                let nowX = CGFloat(currentHourValue) / 24 * size.width
                 let marker = CGRect(x: nowX - 1, y: -1.5, width: 2, height: h + 3)
                 context.fill(Path(roundedRect: marker, cornerRadius: 1), with: .color(.red))
             }

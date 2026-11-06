@@ -94,6 +94,34 @@ final class WidgetSnapshotStoreTests: XCTestCase {
         XCTAssertNil(snapshot.themeMode)
     }
 
+    func testDecodeSupportsLegacyCityHourFields() throws {
+        let legacyJSON = """
+        {
+          "cities": [{
+            "id": "legacy",
+            "cityName": "上海",
+            "cityEn": "Shanghai",
+            "countryCode": "CN",
+            "timezoneId": "Asia/Shanghai",
+            "workStartHour": 8,
+            "workEndHour": 17,
+            "isLocal": true
+          }],
+          "localTimezoneId": "Asia/Shanghai",
+          "use24Hour": true,
+          "updatedAt": 0
+        }
+        """
+
+        let snapshot = try JSONDecoder().decode(
+            WidgetSnapshot.self,
+            from: Data(legacyJSON.utf8)
+        )
+        let city = try XCTUnwrap(snapshot.cities.first)
+        XCTAssertEqual(city.workStartMinutes, 8 * 60)
+        XCTAssertEqual(city.workEndMinutes, 17 * 60)
+    }
+
     // MARK: - 文件读写
 
     func testSaveThenLoadReturnsLatestSnapshot() throws {

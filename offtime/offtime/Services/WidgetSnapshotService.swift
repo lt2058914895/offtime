@@ -37,14 +37,15 @@ enum WidgetSnapshotService {
             let cities = try context.fetch(descriptor)
 
             let snapshots = cities.map { city in
-                WidgetCitySnapshot(
+                let workHours = city.workHours
+                return WidgetCitySnapshot(
                     id: city.id.uuidString,
                     cityName: city.cityName,
                     cityEn: city.cityEn,
                     countryCode: city.country,
                     timezoneId: city.timezoneId,
-                    workStartHour: city.workStartHour,
-                    workEndHour: city.workEndHour,
+                    workStartMinutes: workHours.startMinutes,
+                    workEndMinutes: workHours.endMinutes,
                     isLocal: city.timezoneId == localTimezoneId
                 )
             }

@@ -52,13 +52,13 @@
 
 // MARK: - City Detail
 "detail.contactable.period" = "可联系时段";
-"detail.contactable.range" = "%02d:00–%02d:00（%d%@）";
+"detail.contactable.range" = "%@–%@（%@%@）";
 "detail.contactable.none" = "无可联系时段，调整工作时段试试";
 "detail.current.time" = "当前时间";
 "detail.work.start" = "开始";
 "detail.work.end" = "结束";
 "detail.rules.title" = "工作时段";
-"detail.rules.hint" = "默认 9:00–18:00，可按城市调整。";
+"detail.rules.hint" = "默认 9:00–18:00，可按城市以 30 分钟为单位调整。";
 "detail.rules.2" = "可联系时段为双方工作时段的交集。";
 "detail.hours" = "小时";
 "city.reminder.title" = "提醒设置";
@@ -77,6 +77,7 @@
 "city.reminder.duplicate" = "该时间已存在提醒";
 "city.reminder.error.authorization" = "未开启通知权限，请在系统设置中开启";
 "city.reminder.error.timezone" = "所选城市时区不可用";
+"city.reminder.error.invalid-time" = "提醒时间必须为 30 分钟粒度";
 "city.reminder.outdated" = "以下提醒已超出工作时段";
 "city.reminder.remove.outdated" = "移除过期提醒";
 

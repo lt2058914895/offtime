@@ -52,13 +52,13 @@
 
 // MARK: - City Detail
 "detail.contactable.period" = "Contactable Period";
-"detail.contactable.range" = "%02d:00–%02d:00 (%d%@)";
+"detail.contactable.range" = "%@–%@ (%@%@)";
 "detail.contactable.none" = "No contactable hours. Try adjusting work hours.";
 "detail.current.time" = "Current Time";
 "detail.work.start" = "Start";
 "detail.work.end" = "End";
 "detail.rules.title" = "Work Hours";
-"detail.rules.hint" = "Defaults to 9:00–18:00 and can be adjusted per city.";
+"detail.rules.hint" = "Defaults to 9:00–18:00 and can be adjusted per city in 30-minute steps.";
 "detail.rules.2" = "The contactable period is the overlap of both work hours.";
 "detail.hours" = "h";
 "city.reminder.title" = "Reminder Settings";
@@ -77,6 +77,7 @@
 "city.reminder.duplicate" = "A reminder already exists for this time";
 "city.reminder.error.authorization" = "Notifications are disabled. Enable them in Settings.";
 "city.reminder.error.timezone" = "The selected city time zone is unavailable.";
+"city.reminder.error.invalid-time" = "Reminder time must use 30-minute increments.";
 "city.reminder.outdated" = "Reminders outside work hours";
 "city.reminder.remove.outdated" = "Remove outdated reminder";
 

@@ -4,13 +4,22 @@ import SwiftData
 
 // MARK: - CityDetailViewModel
 
+/// 一个可联系槽位：本地触发时刻与目标城市对应时刻都使用分钟制。
+struct ContactableSlot: Identifiable, Equatable {
+    let localMinuteOfDay: Int
+    let targetMinuteOfDay: Int
+    let date: Date
+
+    var id: Int { localMinuteOfDay }
+}
+
 @MainActor
 final class CityDetailViewModel: ObservableObject {
     @Published var currentDate: Date = Date()
-    @Published var localWorkStart: Int = 9
-    @Published var localWorkEnd: Int = 18
-    @Published var targetWorkStart: Int
-    @Published var targetWorkEnd: Int
+    @Published var localWorkStartMinutes: Int = MinuteTime.defaultWorkStartMinutes
+    @Published var localWorkEndMinutes: Int = MinuteTime.defaultWorkEndMinutes
+    @Published var targetWorkStartMinutes: Int
+    @Published var targetWorkEndMinutes: Int
     @Published var use24Hour: Bool = true
     @Published var localTimezoneId: String = TimeZone.current.identifier
     /// 设置页当前城市名覆盖（优先于时区反推）
@@ -33,18 +42,12 @@ final class CityDetailViewModel: ObservableObject {
         self.reminderService = reminderService ?? CityReminderService(
             modelContainer: CityService.shared.modelContainer
         )
-        let targetWorkHours = Self.validatedWorkHours(
-            start: city.workStartHour,
-            end: city.workEndHour
-        )
-        let localWorkHours = Self.validatedWorkHours(
-            start: city.localWorkStart,
-            end: city.localWorkEnd
-        )
-        self.targetWorkStart = targetWorkHours.start
-        self.targetWorkEnd = targetWorkHours.end
-        self.localWorkStart = localWorkHours.start
-        self.localWorkEnd = localWorkHours.end
+        let targetWorkHours = city.workHours.sanitized()
+        let localWorkHours = city.localWorkHours.sanitized()
+        self.targetWorkStartMinutes = targetWorkHours.startMinutes
+        self.targetWorkEndMinutes = targetWorkHours.endMinutes
+        self.localWorkStartMinutes = localWorkHours.startMinutes
+        self.localWorkEndMinutes = localWorkHours.endMinutes
     }
 
     // MARK: - Time Display
@@ -101,14 +104,32 @@ final class CityDetailViewModel: ObservableObject {
         return Double(h) + Double(m) / 60.0
     }
 
-    /// 本地工作时段（以本地 24 小时为轴）
-    var localHourlyWorking: [Bool] {
-        (0..<24).map { $0 >= localWorkStart && $0 < localWorkEnd }
+    private var localWorkHours: WorkHours {
+        WorkHours(startMinutes: localWorkStartMinutes, endMinutes: localWorkEndMinutes).sanitized()
     }
 
-    /// 目标城市工作时段（以目标城市自身 24 小时为轴）
+    private var targetWorkHours: WorkHours {
+        WorkHours(startMinutes: targetWorkStartMinutes, endMinutes: targetWorkEndMinutes).sanitized()
+    }
+
+    /// 本地工作时段（48 个半小时槽，以本地 24 小时为轴）
+    var localHalfHourlyWorking: [Bool] {
+        (0..<48).map { localWorkHours.contains($0 * MinuteTime.stepMinutes) }
+    }
+
+    /// 目标城市工作时段（48 个半小时槽，以目标城市自身 24 小时为轴）
+    var targetHalfHourlyWorking: [Bool] {
+        (0..<48).map { targetWorkHours.contains($0 * MinuteTime.stepMinutes) }
+    }
+
+    /// 兼容旧界面：任一半小时槽为工作时间即视为该小时工作。
+    var localHourlyWorking: [Bool] {
+        (0..<24).map { localHalfHourlyWorking[$0 * 2] || localHalfHourlyWorking[$0 * 2 + 1] }
+    }
+
+    /// 兼容旧界面：任一半小时槽为工作时间即视为该小时工作。
     var targetHourlyWorking: [Bool] {
-        (0..<24).map { $0 >= targetWorkStart && $0 < targetWorkEnd }
+        (0..<24).map { targetHalfHourlyWorking[$0 * 2] || targetHalfHourlyWorking[$0 * 2 + 1] }
     }
 
     /// 可联系重叠时段（以本地 24 小时为轴，双方均在各自工作时段内）
@@ -117,34 +138,40 @@ final class CityDetailViewModel: ObservableObject {
             timezoneId: city.timezoneId,
             date: currentDate,
             localTimezoneId: localTimezoneId,
-            localWorkStart: localWorkStart,
-            localWorkEnd: localWorkEnd,
-            targetWorkStart: targetWorkStart,
-            targetWorkEnd: targetWorkEnd
+            localWorkStartMinutes: localWorkHours.startMinutes,
+            localWorkEndMinutes: localWorkHours.endMinutes,
+            targetWorkStartMinutes: targetWorkHours.startMinutes,
+            targetWorkEndMinutes: targetWorkHours.endMinutes
         )
     }
 
     var overlapSummary: String {
-        let hourly = overlap.hourlyOverlap
+        let halfHourly = overlap.halfHourlyOverlap
         var ranges: [(Int, Int)] = []
         var rangeStart: Int? = nil
-        for hour in 0..<24 {
-            if hourly[hour] {
-                if rangeStart == nil { rangeStart = hour }
+        for slot in 0..<48 {
+            if halfHourly[slot] {
+                if rangeStart == nil { rangeStart = slot }
             } else if let start = rangeStart {
-                ranges.append((start, hour))
+                ranges.append((start, slot))
                 rangeStart = nil
             }
         }
-        if let start = rangeStart { ranges.append((start, 24)) }
+        if let start = rangeStart { ranges.append((start, 48)) }
         guard !ranges.isEmpty else { return String(localized: "detail.contactable.none") }
         return ranges.map { range in
-            let hours = range.1 - range.0
+            let startMinutes = range.0 * MinuteTime.stepMinutes
+            let endMinutes = range.1 * MinuteTime.stepMinutes
+            let durationMinutes = endMinutes - startMinutes
+            let hours = Double(durationMinutes) / Double(MinuteTime.minutesPerHour)
+            let hoursText = hours.rounded() == hours
+                ? String(format: "%.0f", hours)
+                : String(format: "%.1f", hours)
             return String(
                 format: String(localized: "detail.contactable.range"),
-                range.0,
-                range.1,
-                hours,
+                MinuteTime.text(startMinutes),
+                MinuteTime.text(endMinutes),
+                hoursText,
                 String(localized: "detail.hours")
             )
         }
@@ -190,8 +217,9 @@ final class CityDetailViewModel: ObservableObject {
         return timeText
     }
 
-    /// 可联系时间段（按目标城市时区 24 小时轴），提醒据此一键添加
-    var contactableTargetRanges: [(startHour: Int, endHour: Int)] {
+    /// 可联系槽位（按本地 30 分钟时间轴排列）。提醒时间使用本地槽位，
+    /// 目标城市对应时刻由同一绝对时刻换算得到。
+    var contactableSlots: [ContactableSlot] {
         guard let targetTZ = TimeZone(identifier: city.timezoneId),
               let localTZ = TimeZone(identifier: localTimezoneId) else {
             return []
@@ -201,41 +229,58 @@ final class CityDetailViewModel: ObservableObject {
         targetCal.timeZone = targetTZ
         var localCal = Calendar(identifier: .gregorian)
         localCal.timeZone = localTZ
-        let dayStart = targetCal.startOfDay(for: currentDate)
+        guard let localDayStart = localCal.dateInterval(of: .day, for: currentDate)?.start else {
+            return []
+        }
 
-        var hourly: [Bool] = []
-        for hour in 0..<24 {
-            let date = targetCal.date(byAdding: .hour, value: hour, to: dayStart) ?? dayStart
-            let localHour = localCal.component(.hour, from: date)
-            hourly.append(
-                hour >= targetWorkStart && hour < targetWorkEnd
-                    && localHour >= localWorkStart && localHour < localWorkEnd
+        let resolvedLocalHours = localWorkHours
+        let resolvedTargetHours = targetWorkHours
+        var slots: [ContactableSlot] = []
+        slots.reserveCapacity(48)
+
+        for minuteOfDay in stride(from: 0, to: MinuteTime.minutesPerDay, by: MinuteTime.stepMinutes) {
+            guard let date = localCal.date(
+                byAdding: .minute,
+                value: minuteOfDay,
+                to: localDayStart
+            ) else { continue }
+
+            let localMinute = localCal.component(.hour, from: date) * MinuteTime.minutesPerHour
+                + localCal.component(.minute, from: date)
+            let targetMinute = targetCal.component(.hour, from: date) * MinuteTime.minutesPerHour
+                + targetCal.component(.minute, from: date)
+            guard resolvedLocalHours.contains(localMinute),
+                  resolvedTargetHours.contains(targetMinute) else {
+                continue
+            }
+
+            slots.append(
+                ContactableSlot(
+                    localMinuteOfDay: localMinute,
+                    targetMinuteOfDay: targetMinute,
+                    date: date
+                )
             )
         }
-
-        var ranges: [(Int, Int)] = []
-        var rangeStart: Int?
-        for hour in 0..<24 {
-            if hourly[hour] {
-                if rangeStart == nil { rangeStart = hour }
-            } else if let start = rangeStart {
-                ranges.append((start, hour))
-                rangeStart = nil
-            }
-        }
-        if let start = rangeStart { ranges.append((start, 24)) }
-        return ranges
+        return slots
     }
 
-    /// 可联系时段（按本地触发时间升序排列的逐小时列表）
+    /// 可联系槽位的本地分钟列表，用于判断提醒是否已超出工作时段。
+    var contactableLocalMinutes: [Int] {
+        contactableSlots.map(\.localMinuteOfDay)
+    }
+
+    /// 兼容旧调用：按目标城市整点返回可联系小时（仅用于非 UI 的旧逻辑）。
     var contactableTargetHours: [Int] {
-        contactableTargetRanges
-            .flatMap { ($0.startHour..<$0.endHour).map { $0 } }
-            .sorted { localHour(forTargetHour: $0) < localHour(forTargetHour: $1) }
+        contactableSlots
+            .map { $0.targetMinuteOfDay / MinuteTime.minutesPerHour }
+            .reduce(into: [Int]()) { result, hour in
+                if result.last != hour { result.append(hour) }
+            }
     }
 
     /// 目标城市时刻与同一绝对时刻在本地时区所属日期的跨天关系；同一天不标记
-    func targetDayLabel(forTargetHour targetHour: Int) -> String? {
+    func targetDayLabel(for date: Date) -> String? {
         guard let targetTZ = TimeZone(identifier: city.timezoneId),
               let localTZ = TimeZone(identifier: localTimezoneId) else {
             return nil
@@ -246,14 +291,9 @@ final class CityDetailViewModel: ObservableObject {
         var localCal = Calendar(identifier: .gregorian)
         localCal.timeZone = localTZ
 
-        let targetDayStart = targetCal.startOfDay(for: currentDate)
-        guard let targetDate = targetCal.date(byAdding: .hour, value: targetHour, to: targetDayStart) else {
-            return nil
-        }
-
         let dateComponents: Set<Calendar.Component> = [.year, .month, .day]
-        let targetComponents = targetCal.dateComponents(dateComponents, from: targetDate)
-        let localComponents = localCal.dateComponents(dateComponents, from: targetDate)
+        let targetComponents = targetCal.dateComponents(dateComponents, from: date)
+        let localComponents = localCal.dateComponents(dateComponents, from: date)
 
         guard let targetYear = targetComponents.year,
               let targetMonth = targetComponents.month,
@@ -280,50 +320,51 @@ final class CityDetailViewModel: ObservableObject {
     }
 
     func saveWorkHours() {
-        let targetWorkHours = Self.validatedWorkHours(
-            start: targetWorkStart,
-            end: targetWorkEnd
-        )
-        let localWorkHours = Self.validatedWorkHours(
-            start: localWorkStart,
-            end: localWorkEnd
-        )
-        city.workStartHour = targetWorkHours.start
-        city.workEndHour = targetWorkHours.end
-        city.localWorkStart = localWorkHours.start
-        city.localWorkEnd = localWorkHours.end
+        let resolvedTargetHours = targetWorkHours
+        let resolvedLocalHours = localWorkHours
+        targetWorkStartMinutes = resolvedTargetHours.startMinutes
+        targetWorkEndMinutes = resolvedTargetHours.endMinutes
+        localWorkStartMinutes = resolvedLocalHours.startMinutes
+        localWorkEndMinutes = resolvedLocalHours.endMinutes
+        city.updateWorkHours(resolvedTargetHours)
+        city.updateLocalWorkHours(resolvedLocalHours)
         try? CityService.shared.modelContainer?.mainContext.save()
         NotificationCenter.default.post(name: .cityStoreDidChange, object: nil)
     }
 
-    private static func validatedWorkHours(start: Int, end: Int) -> (start: Int, end: Int) {
-        let validatedStart = min(max(start, 0), 23)
-        let validatedEnd = min(max(end, 1), 24)
-        return (validatedStart, max(validatedEnd, validatedStart + 1))
-    }
-
     // MARK: - City Reminder
 
-    /// 已超出当前工作时段的提醒（targetHour 不在 contactableTargetHours 中）
+    /// 已超出当前工作时段的提醒（本地触发分钟不在可联系槽位中）
     var orphanedReminders: [CityReminderGroup] {
-        let contactableSet = Set(contactableTargetHours)
-        return reminders.filter { !contactableSet.contains($0.targetHour) }
+        let contactableSet = Set(contactableLocalMinutes)
+        return reminders.filter {
+            !contactableSet.contains($0.hour * MinuteTime.minutesPerHour + $0.minute)
+        }
     }
 
     func loadReminders() async {
         reminders = await reminderService.reminders(for: city.id)
     }
 
-    /// 为可联系时段添加提醒：固定使用添加时的当前城市时间
+    /// 为可联系时段添加提醒：固定使用添加时的当前城市时间。
     @discardableResult
     func addContactableReminder(
-        localHour: Int,
-        targetHour: Int,
+        localMinuteOfDay: Int,
+        targetMinuteOfDay: Int,
         weekdayPolicy: CityReminderWeekdayPolicy
     ) async -> Bool {
         reminderStatus = nil
-        guard !hasReminder(atHour: localHour, minute: 0) else {
+        guard !hasReminder(atLocalMinute: localMinuteOfDay) else {
             reminderStatus = String(localized: "city.reminder.duplicate")
+            reminderStatusIsError = true
+            return false
+        }
+
+        guard MinuteTime.isValidClockTime(
+            hour: MinuteTime.hour(of: localMinuteOfDay),
+            minute: MinuteTime.minute(of: localMinuteOfDay)
+        ) else {
+            reminderStatus = CityReminderError.invalidTime.localizedDescription
             reminderStatusIsError = true
             return false
         }
@@ -333,12 +374,12 @@ final class CityDetailViewModel: ObservableObject {
                 cityID: city.id,
                 cityName: city.cityName,
                 timezoneId: localTimezoneId,
-                hour: localHour,
-                minute: 0,
+                hour: MinuteTime.hour(of: localMinuteOfDay),
+                minute: MinuteTime.minute(of: localMinuteOfDay),
                 weekdayPolicy: weekdayPolicy,
                 targetTimezoneId: city.timezoneId,
-                targetHour: targetHour,
-                targetMinute: 0,
+                targetHour: MinuteTime.hour(of: targetMinuteOfDay),
+                targetMinute: MinuteTime.minute(of: targetMinuteOfDay),
                 triggerCityName: localCityName,
                 triggerCityEn: localCityEn
             )
@@ -353,6 +394,20 @@ final class CityDetailViewModel: ObservableObject {
         }
     }
 
+    /// 兼容旧调用：按整点添加提醒。
+    @discardableResult
+    func addContactableReminder(
+        localHour: Int,
+        targetHour: Int,
+        weekdayPolicy: CityReminderWeekdayPolicy
+    ) async -> Bool {
+        await addContactableReminder(
+            localMinuteOfDay: localHour * MinuteTime.minutesPerHour,
+            targetMinuteOfDay: targetHour * MinuteTime.minutesPerHour,
+            weekdayPolicy: weekdayPolicy
+        )
+    }
+
     /// 指定时刻（当前城市时区）是否已有提醒
     func hasReminder(atHour hour: Int, minute: Int) -> Bool {
         reminder(atHour: hour, minute: minute) != nil
@@ -363,6 +418,17 @@ final class CityDetailViewModel: ObservableObject {
         reminders.first {
             $0.hour == hour && $0.minute == minute
         }
+    }
+
+    func hasReminder(atLocalMinute minuteOfDay: Int) -> Bool {
+        reminder(atLocalMinute: minuteOfDay) != nil
+    }
+
+    func reminder(atLocalMinute minuteOfDay: Int) -> CityReminderGroup? {
+        reminder(
+            atHour: MinuteTime.hour(of: minuteOfDay),
+            minute: MinuteTime.minute(of: minuteOfDay)
+        )
     }
 
     /// 当前城市名（触发提醒的城市）——优先使用设置页选择的城市名

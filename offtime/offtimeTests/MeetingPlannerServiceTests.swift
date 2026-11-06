@@ -114,6 +114,30 @@ final class MeetingPlannerServiceTests: XCTestCase {
         XCTAssertFalse(hours[18])
     }
 
+    func testParticipantHalfHourWorkHoursUseThirtyMinuteGrid() {
+        let participant = MeetingParticipant(
+            id: "sh",
+            cityName: "Shanghai",
+            cityEn: "Shanghai",
+            timezoneId: "Asia/Shanghai",
+            workStartMinutes: 9 * 60 + 30,
+            workEndMinutes: 18 * 60,
+            isLocal: true
+        )
+
+        let overlap = MeetingPlannerService.hourlyOverlap(
+            participants: [participant],
+            localTimezoneId: "Asia/Shanghai",
+            date: date(hour: 10, timezoneId: "Asia/Shanghai")
+        )
+
+        XCTAssertEqual(overlap.halfHourlyOverlap.filter { $0 }.count, 17)
+        XCTAssertFalse(overlap.halfHourlyOverlap[18])
+        XCTAssertTrue(overlap.halfHourlyOverlap[19])
+        XCTAssertTrue(overlap.halfHourlyOverlap[35])
+        XCTAssertFalse(overlap.halfHourlyOverlap[36])
+    }
+
     func testWindowsSortedByDurationDescendingThenStartAscending() {
         var overlap = Array(repeating: false, count: 24)
         for hour in 0..<2 { overlap[hour] = true }

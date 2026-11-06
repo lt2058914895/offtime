@@ -1,34 +1,57 @@
 import Foundation
 
 enum MeetingPlannerService {
-    /// 单个参与者在其本地 24 小时轴上的工作时段（布尔数组，0–23 点）。
-    static func workingHours(
+    /// 单个参与者在其本地 24 小时轴上的工作时段（48 个半小时槽）。
+    static func halfHourlyWorkingHours(
         participant: MeetingParticipant,
         localTimezoneId: String,
         date: Date = Date()
     ) -> [Bool] {
         guard let timezone = TimeZone(identifier: participant.timezoneId),
               let localTimezone = TimeZone(identifier: localTimezoneId) else {
-            return Array(repeating: false, count: 24)
+            return Array(repeating: false, count: 48)
         }
 
         var localCalendar = Calendar(identifier: .gregorian)
         localCalendar.timeZone = localTimezone
         guard let startOfDay = localCalendar.dateInterval(of: .day, for: date)?.start else {
-            return Array(repeating: false, count: 24)
+            return Array(repeating: false, count: 48)
         }
 
         var participantCalendar = Calendar(identifier: .gregorian)
         participantCalendar.timeZone = timezone
+        let workHours = WorkHours(
+            startMinutes: participant.workStartMinutes,
+            endMinutes: participant.workEndMinutes
+        ).sanitized()
 
-        return (0..<24).map { hour in
-            guard let hourDate = localCalendar.date(byAdding: .hour, value: hour, to: startOfDay) else {
+        return (0..<48).map { slot in
+            guard let slotDate = localCalendar.date(
+                byAdding: .minute,
+                value: slot * MinuteTime.stepMinutes,
+                to: startOfDay
+            ) else {
                 return false
             }
-            let participantHour = participantCalendar.component(.hour, from: hourDate)
-            return participantHour >= participant.workStartHour
-                && participantHour < participant.workEndHour
+            let participantMinute = participantCalendar.component(.hour, from: slotDate)
+                * MinuteTime.minutesPerHour
+                + participantCalendar.component(.minute, from: slotDate)
+            return workHours.contains(participantMinute)
         }
+    }
+
+    /// 兼容旧调用：仅当整点两个半小时槽都在工作时段内时才标记该小时。
+    static func workingHours(
+        participant: MeetingParticipant,
+        localTimezoneId: String,
+        date: Date = Date()
+    ) -> [Bool] {
+        let halfHourly = halfHourlyWorkingHours(
+            participant: participant,
+            localTimezoneId: localTimezoneId,
+            date: date
+        )
+        return (0..<24).map { halfHourly[$0 * 2] && halfHourly[$0 * 2 + 1] }
     }
 
     static func hourlyOverlap(
@@ -44,7 +67,7 @@ enum MeetingPlannerService {
         let currentHourDouble = Double(currentHour) + Double(currentMinute) / 60.0
 
         let empty = MeetingOverlap(
-            hourlyOverlap: Array(repeating: false, count: 24),
+            halfHourlyOverlap: Array(repeating: false, count: 48),
             currentLocalHour: currentHourDouble,
             isCurrentlyOverlapping: false
         )
@@ -60,22 +83,17 @@ enum MeetingPlannerService {
         }
 
         let perParticipantHours = participants.map {
-            workingHours(participant: $0, localTimezoneId: localTimezone.identifier, date: date)
+            halfHourlyWorkingHours(participant: $0, localTimezoneId: localTimezone.identifier, date: date)
         }
 
-        var hourlyOverlap: [Bool] = []
-        var isCurrentlyOverlapping = false
-
-        for hour in 0..<24 {
-            let allWorking = perParticipantHours.allSatisfy { $0[hour] }
-            hourlyOverlap.append(allWorking)
-            if allWorking && hour == currentHour {
-                isCurrentlyOverlapping = true
-            }
+        var halfHourlyOverlap: [Bool] = []
+        for slot in 0..<48 {
+            halfHourlyOverlap.append(perParticipantHours.allSatisfy { $0[slot] })
         }
+        let isCurrentlyOverlapping = participants.allSatisfy { isWorking($0, at: date) }
 
         return MeetingOverlap(
-            hourlyOverlap: hourlyOverlap,
+            halfHourlyOverlap: halfHourlyOverlap,
             currentLocalHour: currentHourDouble,
             isCurrentlyOverlapping: isCurrentlyOverlapping
         )
@@ -223,8 +241,8 @@ extension MeetingPlannerService {
         calendar.timeZone = timezone
         let minutes = calendar.component(.hour, from: date) * 60
             + calendar.component(.minute, from: date)
-        return minutes >= participant.workStartHour * 60
-            && minutes < participant.workEndHour * 60
+        return minutes >= participant.workStartMinutes
+            && minutes < participant.workEndMinutes
     }
 
     /// 将连续状态时段分割后生成候选档期，并按
@@ -338,11 +356,17 @@ extension MeetingPlannerService {
 
             var day = participantCalendar.startOfDay(for: firstLocalDay.addingTimeInterval(-24 * 60 * 60))
             let lastDay = participantCalendar.startOfDay(for: lastLocalDay.addingTimeInterval(24 * 60 * 60))
-            let boundaryHours = [0, Self.sleepEndHour, participant.workStartHour, participant.workEndHour, Self.sleepStartHour]
+            let boundaryMinutes = [
+                0,
+                Self.sleepEndHour * MinuteTime.minutesPerHour,
+                participant.workStartMinutes,
+                participant.workEndMinutes,
+                Self.sleepStartHour * MinuteTime.minutesPerHour
+            ]
 
             while day <= lastDay {
-                for boundaryHour in boundaryHours {
-                    if let boundary = participantCalendar.date(byAdding: .hour, value: boundaryHour, to: day) {
+                for boundaryMinute in boundaryMinutes {
+                    if let boundary = participantCalendar.date(byAdding: .minute, value: boundaryMinute, to: day) {
                         boundaries.append(boundary)
                     }
                 }
