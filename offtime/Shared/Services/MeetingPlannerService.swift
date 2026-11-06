@@ -9,13 +9,13 @@ enum MeetingPlannerService {
     ) -> [Bool] {
         guard let timezone = TimeZone(identifier: participant.timezoneId),
               let localTimezone = TimeZone(identifier: localTimezoneId) else {
-            return Array(repeating: false, count: 48)
+            return Array(repeating: false, count: MinuteTime.slotCount)
         }
 
         var localCalendar = Calendar(identifier: .gregorian)
         localCalendar.timeZone = localTimezone
         guard let startOfDay = localCalendar.dateInterval(of: .day, for: date)?.start else {
-            return Array(repeating: false, count: 48)
+            return Array(repeating: false, count: MinuteTime.slotCount)
         }
 
         var participantCalendar = Calendar(identifier: .gregorian)
@@ -25,11 +25,11 @@ enum MeetingPlannerService {
             endMinutes: participant.workEndMinutes
         ).sanitized()
 
-        return (0..<48).map { slot in
-            guard let slotDate = localCalendar.date(
-                byAdding: .minute,
-                value: slot * MinuteTime.stepMinutes,
-                to: startOfDay
+        return (0..<MinuteTime.slotCount).map { slot in
+            guard let slotDate = MinuteTime.date(
+                on: startOfDay,
+                minuteOfDay: slot * MinuteTime.stepMinutes,
+                calendar: localCalendar
             ) else {
                 return false
             }
@@ -67,7 +67,7 @@ enum MeetingPlannerService {
         let currentHourDouble = Double(currentHour) + Double(currentMinute) / 60.0
 
         let empty = MeetingOverlap(
-            halfHourlyOverlap: Array(repeating: false, count: 48),
+            halfHourlyOverlap: Array(repeating: false, count: MinuteTime.slotCount),
             currentLocalHour: currentHourDouble,
             isCurrentlyOverlapping: false
         )
@@ -87,7 +87,8 @@ enum MeetingPlannerService {
         }
 
         var halfHourlyOverlap: [Bool] = []
-        for slot in 0..<48 {
+        halfHourlyOverlap.reserveCapacity(MinuteTime.slotCount)
+        for slot in 0..<MinuteTime.slotCount {
             halfHourlyOverlap.append(perParticipantHours.allSatisfy { $0[slot] })
         }
         let isCurrentlyOverlapping = participants.allSatisfy { isWorking($0, at: date) }
@@ -273,7 +274,7 @@ extension MeetingPlannerService {
         }
 
         var slots: [MeetingSlot] = []
-        let rangeEndDate = rangeEnd.addingTimeInterval(24 * 60 * 60)
+        let rangeEndDate = calendar.date(byAdding: .day, value: 1, to: rangeEnd) ?? rangeEnd
         let boundaries = statusSegmentBoundaries(
             participants: participants,
             localTimezoneId: localTimezoneId,
@@ -301,10 +302,20 @@ extension MeetingPlannerService {
             }
 
             let tier: Int = working == participants.count ? 0 : (sleeping == 0 ? 1 : 2)
-            var offset = 0
+            var offset = MinuteTime.minutesUntilNextSlot(
+                from: segmentStart,
+                calendar: calendar
+            )
             while true {
-                guard let slotStart = calendar.date(byAdding: .minute, value: offset, to: segmentStart),
-                      slotStart.addingTimeInterval(Double(durationMinutes) * 60) <= segmentEnd else {
+                guard let slotStart = MinuteTime.date(
+                    byAddingWallClockMinutes: offset,
+                    to: segmentStart,
+                    calendar: calendar
+                ) else {
+                    offset += stepMinutes
+                    continue
+                }
+                guard slotStart.addingTimeInterval(Double(durationMinutes) * 60) <= segmentEnd else {
                     break
                 }
                 if slotStart > date {
@@ -348,14 +359,19 @@ extension MeetingPlannerService {
             return []
         }
 
-        var boundaries: [Date] = [rangeStart, rangeEnd.addingTimeInterval(24 * 60 * 60)]
+        let rangeEndDate = localCalendar.date(byAdding: .day, value: 1, to: rangeEnd) ?? rangeEnd
+        var boundaries: [Date] = [rangeStart, rangeEndDate]
         for participant in participants {
             guard let timezone = TimeZone(identifier: participant.timezoneId) else { continue }
             var participantCalendar = Calendar(identifier: .gregorian)
             participantCalendar.timeZone = timezone
 
-            var day = participantCalendar.startOfDay(for: firstLocalDay.addingTimeInterval(-24 * 60 * 60))
-            let lastDay = participantCalendar.startOfDay(for: lastLocalDay.addingTimeInterval(24 * 60 * 60))
+            let firstParticipantDay = participantCalendar.startOfDay(for: firstLocalDay)
+            let lastParticipantDay = participantCalendar.startOfDay(for: lastLocalDay)
+            guard var day = participantCalendar.date(byAdding: .day, value: -1, to: firstParticipantDay),
+                  let lastDay = participantCalendar.date(byAdding: .day, value: 1, to: lastParticipantDay) else {
+                continue
+            }
             let boundaryMinutes = [
                 0,
                 Self.sleepEndHour * MinuteTime.minutesPerHour,
@@ -366,7 +382,11 @@ extension MeetingPlannerService {
 
             while day <= lastDay {
                 for boundaryMinute in boundaryMinutes {
-                    if let boundary = participantCalendar.date(byAdding: .minute, value: boundaryMinute, to: day) {
+                    if let boundary = MinuteTime.date(
+                        on: day,
+                        minuteOfDay: boundaryMinute,
+                        calendar: participantCalendar
+                    ) {
                         boundaries.append(boundary)
                     }
                 }
@@ -517,14 +537,18 @@ extension MeetingPlannerService {
 
         var day = rangeStart
         while day <= rangeEnd {
-            for offset in stride(from: 0, to: 24 * 60, by: 30) {
-                guard let moment = calendar.date(byAdding: .minute, value: offset, to: day) else { continue }
+            for slot in 0..<MinuteTime.slotCount {
+                guard let moment = MinuteTime.date(
+                    on: day,
+                    minuteOfDay: slot * MinuteTime.stepMinutes,
+                    calendar: calendar
+                ) else { continue }
                 let allWorking = moment > date && participants.allSatisfy {
                     state(of: $0, at: moment) == .working
                 }
                 if allWorking {
                     if currentStart == nil { currentStart = moment }
-                    currentMinutes += 30
+                    currentMinutes += MinuteTime.stepMinutes
                 } else {
                     if currentMinutes > bestMinutes {
                         bestMinutes = currentMinutes
@@ -543,7 +567,11 @@ extension MeetingPlannerService {
         }
 
         guard let start = bestStart, bestMinutes > 0 else { return nil }
-        let end = calendar.date(byAdding: .minute, value: bestMinutes, to: start) ?? start
+        let end = MinuteTime.date(
+            byAddingWallClockMinutes: bestMinutes,
+            to: start,
+            calendar: calendar
+        ) ?? start
         return (start, end, bestMinutes)
     }
 }

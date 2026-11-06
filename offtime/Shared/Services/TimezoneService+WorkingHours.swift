@@ -47,7 +47,7 @@ extension TimezoneService {
         let currentLocalHour = Double(currentHour) + Double(currentMinute) / 60.0
 
         let empty = WorkingHoursOverlap(
-            halfHourlyOverlap: Array(repeating: false, count: 48),
+            halfHourlyOverlap: Array(repeating: false, count: MinuteTime.slotCount),
             isCurrentlyOverlapping: false,
             nextOverlapDate: nil,
             currentLocalHour: currentLocalHour
@@ -85,13 +85,17 @@ extension TimezoneService {
         }
 
         var halfHourlyOverlap: [Bool] = []
-        halfHourlyOverlap.reserveCapacity(48)
-        for slot in 0..<48 {
-            let slotDate = localCalendar.date(
-                byAdding: .minute,
-                value: slot * MinuteTime.stepMinutes,
-                to: localStartOfDay
-            ) ?? localStartOfDay
+        halfHourlyOverlap.reserveCapacity(MinuteTime.slotCount)
+        for slot in 0..<MinuteTime.slotCount {
+            let minuteOfDay = slot * MinuteTime.stepMinutes
+            guard let slotDate = MinuteTime.date(
+                on: localStartOfDay,
+                minuteOfDay: minuteOfDay,
+                calendar: localCalendar
+            ) else {
+                halfHourlyOverlap.append(false)
+                continue
+            }
             halfHourlyOverlap.append(isOverlapping(at: slotDate))
         }
 
@@ -108,11 +112,12 @@ extension TimezoneService {
                     to: localStartOfDay
                 ) else { continue }
 
-                for slot in 0..<48 {
-                    guard let slotDate = localCalendar.date(
-                        byAdding: .minute,
-                        value: slot * MinuteTime.stepMinutes,
-                        to: dayStart
+                for slot in 0..<MinuteTime.slotCount {
+                    let minuteOfDay = slot * MinuteTime.stepMinutes
+                    guard let slotDate = MinuteTime.date(
+                        on: dayStart,
+                        minuteOfDay: minuteOfDay,
+                        calendar: localCalendar
                     ), slotDate > date else {
                         continue
                     }

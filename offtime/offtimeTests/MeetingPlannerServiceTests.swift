@@ -734,4 +734,47 @@ final class MeetingPlannerServiceTests: XCTestCase {
         // 首尔 17:30–18:30 已跨过 18:00 下班时间 → 非工作时间
         XCTAssertEqual(detail.rows.first { $0.id == "sel" }?.state, .awake)
     }
+
+    func testMeetingSlotsUseWallClockAcrossDST() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/New_York"))
+        let participant = MeetingParticipant(
+            id: "ny",
+            cityName: "New York",
+            cityEn: "New York",
+            timezoneId: "America/New_York",
+            workStartMinutes: 0,
+            workEndMinutes: MinuteTime.minutesPerDay,
+            isLocal: true
+        )
+
+        for (month, day, expectedCount) in [(3, 8, MinuteTime.slotCount - 2), (11, 1, MinuteTime.slotCount)] {
+            let dayStart = try XCTUnwrap(
+                calendar.date(from: DateComponents(year: 2026, month: month, day: day, hour: 0))
+            )
+            let slots = MeetingPlannerService.recommendedSlots(
+                participants: [participant],
+                localTimezoneId: "America/New_York",
+                durationMinutes: 30,
+                startDate: dayStart,
+                endDate: dayStart,
+                date: dayStart.addingTimeInterval(-1)
+            )
+
+            XCTAssertEqual(slots.count, expectedCount)
+            XCTAssertEqual(Set(slots.map(\.startDate)).count, slots.count)
+            XCTAssertTrue(slots.allSatisfy {
+                calendar.component(.minute, from: $0.startDate).isMultiple(of: MinuteTime.stepMinutes)
+            })
+
+            let maxOverlap = MeetingPlannerService.maxOverlapMinutes(
+                participants: [participant],
+                localTimezoneId: "America/New_York",
+                startDate: dayStart,
+                endDate: dayStart,
+                date: dayStart.addingTimeInterval(-1)
+            )
+            XCTAssertEqual(maxOverlap, expectedCount * MinuteTime.stepMinutes)
+        }
+    }
 }

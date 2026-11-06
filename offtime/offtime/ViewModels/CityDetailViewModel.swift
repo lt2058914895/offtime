@@ -114,12 +114,16 @@ final class CityDetailViewModel: ObservableObject {
 
     /// 本地工作时段（48 个半小时槽，以本地 24 小时为轴）
     var localHalfHourlyWorking: [Bool] {
-        (0..<48).map { localWorkHours.contains($0 * MinuteTime.stepMinutes) }
+        (0..<MinuteTime.slotCount).map {
+            localWorkHours.contains($0 * MinuteTime.stepMinutes)
+        }
     }
 
     /// 目标城市工作时段（48 个半小时槽，以目标城市自身 24 小时为轴）
     var targetHalfHourlyWorking: [Bool] {
-        (0..<48).map { targetWorkHours.contains($0 * MinuteTime.stepMinutes) }
+        (0..<MinuteTime.slotCount).map {
+            targetWorkHours.contains($0 * MinuteTime.stepMinutes)
+        }
     }
 
     /// 兼容旧界面：任一半小时槽为工作时间即视为该小时工作。
@@ -149,7 +153,7 @@ final class CityDetailViewModel: ObservableObject {
         let halfHourly = overlap.halfHourlyOverlap
         var ranges: [(Int, Int)] = []
         var rangeStart: Int? = nil
-        for slot in 0..<48 {
+        for slot in 0..<MinuteTime.slotCount {
             if halfHourly[slot] {
                 if rangeStart == nil { rangeStart = slot }
             } else if let start = rangeStart {
@@ -157,7 +161,7 @@ final class CityDetailViewModel: ObservableObject {
                 rangeStart = nil
             }
         }
-        if let start = rangeStart { ranges.append((start, 48)) }
+        if let start = rangeStart { ranges.append((start, MinuteTime.slotCount)) }
         guard !ranges.isEmpty else { return String(localized: "detail.contactable.none") }
         return ranges.map { range in
             let startMinutes = range.0 * MinuteTime.stepMinutes
@@ -236,27 +240,24 @@ final class CityDetailViewModel: ObservableObject {
         let resolvedLocalHours = localWorkHours
         let resolvedTargetHours = targetWorkHours
         var slots: [ContactableSlot] = []
-        slots.reserveCapacity(48)
+        slots.reserveCapacity(MinuteTime.slotCount)
 
         for minuteOfDay in stride(from: 0, to: MinuteTime.minutesPerDay, by: MinuteTime.stepMinutes) {
-            guard let date = localCal.date(
-                byAdding: .minute,
-                value: minuteOfDay,
-                to: localDayStart
+            guard let date = MinuteTime.date(
+                on: localDayStart,
+                minuteOfDay: minuteOfDay,
+                calendar: localCal
             ) else { continue }
-
-            let localMinute = localCal.component(.hour, from: date) * MinuteTime.minutesPerHour
-                + localCal.component(.minute, from: date)
             let targetMinute = targetCal.component(.hour, from: date) * MinuteTime.minutesPerHour
                 + targetCal.component(.minute, from: date)
-            guard resolvedLocalHours.contains(localMinute),
+            guard resolvedLocalHours.contains(minuteOfDay),
                   resolvedTargetHours.contains(targetMinute) else {
                 continue
             }
 
             slots.append(
                 ContactableSlot(
-                    localMinuteOfDay: localMinute,
+                    localMinuteOfDay: minuteOfDay,
                     targetMinuteOfDay: targetMinute,
                     date: date
                 )

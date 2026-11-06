@@ -62,7 +62,7 @@
 "detail.rules.2" = "The contactable period is the overlap of both work hours.";
 "detail.hours" = "h";
 "city.reminder.title" = "Reminder Settings";
-"city.reminder.hint" = "Tap a 30-minute slot to add or remove its reminder.";
+"city.reminder.hint" = "Tap a period to add or remove its reminder.";
 "city.reminder.empty" = "No reminder periods available";
 "city.reminder.add" = "Add Reminder";
 "city.reminder.cancel" = "Cancel Reminder";

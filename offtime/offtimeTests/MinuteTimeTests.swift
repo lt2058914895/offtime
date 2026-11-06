@@ -99,4 +99,69 @@ final class MinuteTimeTests: XCTestCase {
             [9 * 60 + 30, 10 * 60]
         )
     }
+
+    func testWallClockSlotsHandleSpringForwardWithoutDuplicates() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/New_York"))
+        let day = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12))
+        )
+
+        let slotDates = stride(from: 0, to: MinuteTime.minutesPerDay, by: MinuteTime.stepMinutes)
+            .compactMap { MinuteTime.date(on: day, minuteOfDay: $0, calendar: calendar) }
+
+        XCTAssertEqual(slotDates.count, MinuteTime.slotCount - 2)
+        XCTAssertEqual(Set(slotDates).count, slotDates.count)
+        XCTAssertNil(MinuteTime.date(on: day, minuteOfDay: 2 * 60, calendar: calendar))
+        XCTAssertNil(MinuteTime.date(on: day, minuteOfDay: 2 * 60 + 30, calendar: calendar))
+    }
+
+    func testWallClockSlotsHandleFallBackWithoutDuplicates() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/New_York"))
+        let day = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 11, day: 1, hour: 12))
+        )
+
+        let slotDates = stride(from: 0, to: MinuteTime.minutesPerDay, by: MinuteTime.stepMinutes)
+            .compactMap { MinuteTime.date(on: day, minuteOfDay: $0, calendar: calendar) }
+
+        XCTAssertEqual(slotDates.count, MinuteTime.slotCount)
+        XCTAssertEqual(Set(slotDates).count, slotDates.count)
+    }
+
+    @MainActor
+    func testCityDetailContactableSlotsRemainUniqueAcrossDST() throws {
+        let city = CityModel(
+            cityName: "New York",
+            cityEn: "New York",
+            timezoneId: "America/New_York",
+            workStartMinutes: 0,
+            workEndMinutes: MinuteTime.minutesPerDay,
+            localWorkStartMinutes: 0,
+            localWorkEndMinutes: MinuteTime.minutesPerDay
+        )
+        let viewModel = CityDetailViewModel(city: city)
+        viewModel.localTimezoneId = "America/New_York"
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "America/New_York"))
+        let springForward = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 3, day: 8, hour: 12))
+        )
+        let fallBack = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 11, day: 1, hour: 12))
+        )
+
+        viewModel.currentDate = springForward
+        let springSlots = viewModel.contactableSlots
+        XCTAssertEqual(springSlots.count, MinuteTime.slotCount - 2)
+        XCTAssertEqual(Set(springSlots.map(\.localMinuteOfDay)).count, springSlots.count)
+
+        viewModel.currentDate = fallBack
+        let fallSlots = viewModel.contactableSlots
+        XCTAssertEqual(fallSlots.count, MinuteTime.slotCount)
+        XCTAssertEqual(Set(fallSlots.map(\.localMinuteOfDay)).count, fallSlots.count)
+        XCTAssertEqual(Set(fallSlots.map(\.date)).count, fallSlots.count)
+    }
 }
