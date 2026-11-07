@@ -32,6 +32,7 @@ struct MeetingListView: View {
         let id: Int
         let title: String
         let meetings: [MeetingModel]
+        let isToday: Bool
     }
 
     private var use24Hour: Bool {
@@ -86,9 +87,18 @@ struct MeetingListView: View {
                                         row(for: meeting)
                                     }
                                 } header: {
-                                    Text(section.title)
-                                        .font(.subheadline.weight(.semibold))
-                                        .textCase(nil)
+                                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                        Text(section.title)
+                                            .font(.subheadline.weight(.semibold))
+
+                                        if section.isToday {
+                                            cardBadge(
+                                                String(localized: "meeting.date.today"),
+                                                background: .green
+                                            )
+                                        }
+                                    }
+                                    .textCase(nil)
                                 }
                             }
                         }
@@ -169,7 +179,8 @@ struct MeetingListView: View {
             return MeetingDaySection(
                 id: key,
                 title: dateText(first.startDate, timezoneId: first.localTimezoneId),
-                meetings: items.sorted(by: isUpcoming ? { $0.startDate < $1.startDate } : { $0.startDate > $1.startDate })
+                meetings: items.sorted(by: isUpcoming ? { $0.startDate < $1.startDate } : { $0.startDate > $1.startDate }),
+                isToday: isMeetingToday(first)
             )
         }
     }
@@ -222,13 +233,7 @@ struct MeetingListView: View {
                 Spacer(minLength: 8)
 
                 if isOngoing {
-                    Text(String(localized: "meeting.list.ongoing"))
-                        .font(.caption2.weight(.semibold))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.green)
-                        .clipShape(Capsule())
+                    cardBadge(String(localized: "meeting.list.ongoing"), background: .green)
                 }
             }
 
@@ -267,6 +272,23 @@ struct MeetingListView: View {
         .onTapGesture {
             share(meeting)
         }
+    }
+
+    private func isMeetingToday(_ meeting: MeetingModel) -> Bool {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: meeting.localTimezoneId) ?? .current
+        return calendar.isDate(meeting.startDate, inSameDayAs: now)
+    }
+
+    private func cardBadge(_ text: String, background: Color) -> some View {
+        Text(text)
+            .font(.caption2.weight(.semibold))
+            .foregroundColor(.white)
+            .lineLimit(1)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(background)
+            .clipShape(Capsule())
     }
 
     private func cityTimeRow(
