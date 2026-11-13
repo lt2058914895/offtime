@@ -256,11 +256,9 @@
 "settings.import.cities" = "Import City List";
 "settings.contact" = "Contact Us";
 "contact.headline" = "How can I help?";
-"contact.subtitle" = "Questions, bug reports, or feature ideas? Reach me by email or WeChat. I usually reply within 1–2 business days.";
+"contact.subtitle" = "Questions, bug reports, or feature ideas? Reach me by email. I usually reply within 1–2 business days.";
 "contact.emailLabel" = "Email";
-"contact.wechatLabel" = "WeChat";
 "contact.copyEmail" = "Copy Email";
-"contact.copyWechat" = "Copy WeChat ID";
 "contact.copied" = "Copied";
 "settings.add.widget" = "Add Widget";
 "settings.add.widget.subtitle" = "Put %@ on your Home Screen or Lock Screen";

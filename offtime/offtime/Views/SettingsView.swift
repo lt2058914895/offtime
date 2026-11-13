@@ -781,14 +781,12 @@ struct JSONFileDocument: FileDocument {
 struct ContactView: View {
     private enum ContactField: Equatable {
         case email
-        case wechat
     }
 
     @Environment(\.dismiss) private var dismiss
     @State private var copiedField: ContactField?
 
     private let email = "2058914895@qq.com"
-    private let wechatID = "SweetLili_91"
 
     var body: some View {
         ScrollView {
@@ -840,18 +838,6 @@ struct ContactView: View {
                 value: email,
                 field: .email,
                 copyLabel: String(localized: "contact.copyEmail")
-            )
-
-            Divider()
-                .padding(.leading, 52)
-
-            contactRow(
-                icon: "message.fill",
-                iconColor: .green,
-                label: String(localized: "contact.wechatLabel"),
-                value: wechatID,
-                field: .wechat,
-                copyLabel: String(localized: "contact.copyWechat")
             )
         }
         .background(
