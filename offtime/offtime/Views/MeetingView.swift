@@ -18,11 +18,17 @@ struct MeetingView: View {
     @State private var highlightedMeetingID: UUID?
     @State private var isAppeared = false
     var embedsNavigationStack: Bool = true
+    var isTabRoot: Bool = false
 
     private let timezoneService = TimezoneService.shared
 
     private var use24Hour: Bool {
         appEnvironment.settings.use24Hour
+    }
+
+    private var tabBarVisibility: Visibility {
+        guard isTabRoot else { return .hidden }
+        return showMeetingRecords ? .hidden : .visible
     }
 
     /// 页面可见且 App 在前台时刷新分钟级时间。
@@ -61,14 +67,16 @@ struct MeetingView: View {
         .navigationTitle(String(localized: "settings.meeting.recommendation.title"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar(.hidden, for: .tabBar)
+        .toolbar(tabBarVisibility, for: .tabBar)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .fontWeight(.semibold)
+            if !isTabRoot {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .fontWeight(.semibold)
+                    }
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -383,7 +391,7 @@ struct MeetingView: View {
         }
     }
 
-    /// 日期显示：今天/明天显示特殊文案，其余按「月 日 周几」展示。
+    /// 日期显示：今天/明天显示特殊文案，其余按「年/月/日 周几」展示。
     private func dateLabel(_ date: Date) -> String {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: viewModel.localTimezoneId) ?? .current
@@ -395,9 +403,10 @@ struct MeetingView: View {
         if dayDiff == 1 {
             return String(localized: "meeting.date.tomorrow")
         }
-        var style = Date.FormatStyle.dateTime.month(.defaultDigits).day().weekday(.abbreviated)
-        style.timeZone = calendar.timeZone
-        return date.formatted(style)
+        return timezoneService.getLocalDateWithWeekday(
+            timezoneId: viewModel.localTimezoneId,
+            date: date
+        ) ?? ""
     }
 
     // MARK: - 推荐档期卡片
@@ -842,7 +851,7 @@ private struct SlotDetailSheet: View {
     private var bottomActionBar: some View {
         HStack(spacing: 12) {
             detailActionButton(
-                title: String(localized: "meeting.share.action"),
+                title: String(localized: "meeting.actions.title"),
                 foreground: .blue,
                 background: .white,
                 border: .blue
@@ -904,13 +913,12 @@ private struct SlotDetailSheet: View {
         return "\(startTimeText(date))–\(startTimeText(end))"
     }
 
-    /// 会议日期格式化：2026-9-1 周二（按本地时区）
+    /// 会议日期格式化：2026/09/01 周二（按本地时区）。
     private var meetingDateString: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.timeZone = TimeZone(identifier: localTimezoneId) ?? .current
-        formatter.dateFormat = "yyyy/MM/dd EEE"
-        return formatter.string(from: meetingDate)
+        DateDisplayFormat.dateWithWeekday(
+            meetingDate,
+            timezone: TimeZone(identifier: localTimezoneId) ?? .current
+        )
     }
 
     private func stateColor(_ state: MeetingParticipantState) -> Color {

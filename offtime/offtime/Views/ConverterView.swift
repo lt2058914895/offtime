@@ -375,13 +375,7 @@ struct ConverterView: View {
 
     private static let sourceDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
-        return formatter
-    }()
-
-    private static let sourceWeekdayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
+        formatter.dateFormat = DateDisplayFormat.yearMonthDay
         return formatter
     }()
 
@@ -404,22 +398,14 @@ struct ConverterView: View {
     private var conversionShareText: String {
         guard let sourceCity = viewModel.sourceCity else { return "" }
         let sourceName = CityDisplay.primaryName(cityName: sourceCity.cityName, cityEn: sourceCity.cityEn)
-        let sourceDate = Self.sourceDateFormatter.string(from: viewModel.sourceDate)
         let sourceTime = sourceTimeFormatter.string(from: viewModel.sourceDate)
-
-        var lines: [String] = []
-        lines.append("\(sourceName) \(sourceDate) \(sourceTime)")
-
-        for result in viewModel.results {
-            let name = CityDisplay.primaryName(cityName: result.cityName, cityEn: result.cityEn)
-            var line = "• \(name) \(result.dateText)"
-            if let crossDay = result.crossDayText {
-                line += " (\(crossDay))"
-            }
-            line += " \(result.timeText)"
-            lines.append(line)
-        }
-        return lines.joined(separator: "\n")
+        return ConverterShareTextBuilder.make(
+            sourceName: sourceName,
+            sourceDate: viewModel.sourceDate,
+            sourceTime: sourceTime,
+            sourceTimezone: .current,
+            results: viewModel.results
+        )
     }
 
     private var datePickerRow: some View {
@@ -484,7 +470,7 @@ struct ConverterView: View {
                     .font(.body.weight(.bold))
                     .foregroundColor(Color(.label))
                     .lineLimit(1)
-                Text(Self.sourceWeekdayFormatter.string(from: viewModel.sourceDate))
+                Text(DateDisplayFormat.weekday(viewModel.sourceDate, timezone: .current))
                     .font(.subheadline.weight(.bold))
                     .foregroundColor(Color(.label))
                     .lineLimit(1)
@@ -500,7 +486,7 @@ struct ConverterView: View {
         .accessibilityLabel(
             String(localized: "converter.select.date") + ": "
             + Self.sourceDateFormatter.string(from: viewModel.sourceDate) + " "
-            + Self.sourceWeekdayFormatter.string(from: viewModel.sourceDate)
+            + DateDisplayFormat.weekday(viewModel.sourceDate, timezone: .current)
         )
     }
 

@@ -1,5 +1,5 @@
 /* OffTime - English Info.plist Localization */
 
 "CFBundleDisplayName" = "OffTime";
-"NSDocumentPickerUsageDescription" = "Used to import/export city list files";
+"NSCalendarsFullAccessUsageDescription" = "Used to add meeting schedules and keep their status in sync with your calendar";
 "NSPhotoLibraryAddUsageDescription" = "Used to save meeting schedule images to your photo library";

@@ -1,19 +1,12 @@
 import SwiftUI
 import Combine
 import UIKit
-import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @EnvironmentObject private var proAccessService: ProAccessService
     @State private var path = NavigationPath()
-    @State private var isPresentingFileExporter = false
-    @State private var isPresentingFileImporter = false
-    @State private var exportFileURL: URL?
-    /// 导入流程：先读取文件数据到内存，再弹确认框让用户选择「合并 / 替换」策略
-    @State private var pendingImportData: Data?
-    @State private var showImportConfirm = false
     @State private var showProPaywall = false
     @AppStorage("settings_defaultReminderSound") private var defaultReminderSoundRaw =
         ReminderSound.system.rawValue
@@ -66,28 +59,12 @@ struct SettingsView: View {
         )
     }
 
-    /// 版本行：info 图标 + 版本号，纯只读展示
-    private var versionRow: some View {
-        HStack {
-            Image(systemName: "info.circle.fill")
-                .foregroundColor(.blue)
-
-            Text(String(localized: "settings.version"))
-                .foregroundColor(.primary)
-
-            Spacer()
-            Text(versionText)
-                .foregroundColor(Color(uiColor: .label).opacity(0.35))
-        }
-        .accessibilityElement(children: .combine)
-    }
-
     private var settingsList: some View {
         List {
             proSection
             primarySection
-            preferencesDataSection
-            aboutSection
+            preferencesAndAboutSection
+            versionFooterSection
         }
         .listStyle(.insetGrouped)
         .navigationTitle(String(localized: "settings.title"))
@@ -104,30 +81,6 @@ struct SettingsView: View {
         .sheet(isPresented: $showProPaywall) {
             ProPaywallView()
         }
-        .fileExporter(
-            isPresented: $isPresentingFileExporter,
-            document: exportDocument,
-            contentType: UTType.json,
-            defaultFilename: "offtime_cities"
-        ) { result in
-            handleExportResult(result)
-        }
-        .fileImporter(
-            isPresented: $isPresentingFileImporter,
-            allowedContentTypes: [UTType.json],
-            allowsMultipleSelection: false
-        ) { result in
-            handleImportResult(result)
-        }
-        .confirmationDialog(
-            String(localized: "settings.import.confirm.title"),
-            isPresented: $showImportConfirm,
-            titleVisibility: .visible
-        ) {
-            importConfirmationButtons
-        } message: {
-            Text(String(localized: "settings.import.confirm.message"))
-        }
     }
 
     private var proSection: some View {
@@ -142,13 +95,6 @@ struct SettingsView: View {
                 path.append(AppRoute.citySelector)
             } label: {
                 currentCityRow
-            }
-            .buttonStyle(.plain)
-
-            Button {
-                path.append(AppRoute.meetingRecommendation)
-            } label: {
-                meetingRecommendationRow
             }
             .buttonStyle(.plain)
 
@@ -175,7 +121,7 @@ struct SettingsView: View {
         }
     }
 
-    private var preferencesDataSection: some View {
+    private var preferencesAndAboutSection: some View {
         Section {
             Button {
                 path.append(AppRoute.addWidgetGuide)
@@ -204,49 +150,21 @@ struct SettingsView: View {
 
             themePicker
 
-            Button {
-                prepareExportFile()
-                isPresentingFileExporter = true
-            } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: "square.and.arrow.up.fill")
-                        .foregroundColor(.blue)
-                        .font(.title3)
-
-                    Text(String(localized: "settings.export.cities"))
-                        .foregroundColor(.primary)
-
-                    Spacer()
-
-                    settingsChevron
-                }
-            }
-
-            Button {
-                isPresentingFileImporter = true
-            } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: "square.and.arrow.down.fill")
-                        .foregroundColor(.blue)
-                        .font(.title3)
-
-                    Text(String(localized: "settings.import.cities"))
-                        .foregroundColor(.primary)
-
-                    Spacer()
-
-                    settingsChevron
-                }
-            }
-        }
-    }
-
-    private var aboutSection: some View {
-        Section {
             shareAppLink
             rateAppButton
             contactButton
-            versionRow
+        }
+    }
+
+    private var versionFooterSection: some View {
+        Section {
+        } footer: {
+            Text(String(format: String(localized: "settings.version"), versionText))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .accessibilityElement(children: .combine)
         }
     }
 
@@ -345,28 +263,6 @@ struct SettingsView: View {
             Spacer()
 
             ProBadge(showsText: false)
-
-            settingsChevron
-        }
-        .contentShape(Rectangle())
-    }
-
-    private var meetingRecommendationRow: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "calendar.badge.clock")
-                .foregroundColor(.blue)
-                .font(.title3)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(String(localized: "settings.meeting.recommendation.title"))
-                    .foregroundColor(.primary)
-
-                Text(String(localized: "settings.meeting.recommendation.subtitle"))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            Spacer()
 
             settingsChevron
         }
@@ -534,27 +430,6 @@ struct SettingsView: View {
         )
     }
 
-    private var exportDocument: JSONFileDocument {
-        JSONFileDocument(
-            fileURL: exportFileURL ?? URL(fileURLWithPath: "/dev/null")
-        )
-    }
-
-    @ViewBuilder
-    private var importConfirmationButtons: some View {
-        Button(String(localized: "settings.import.merge")) {
-            importCities(strategy: .merge)
-        }
-
-        Button(String(localized: "settings.import.replace"), role: .destructive) {
-            importCities(strategy: .replace)
-        }
-
-        Button(String(localized: "common.cancel"), role: .cancel) {
-            pendingImportData = nil
-        }
-    }
-
     var body: some View {
         NavigationStack(path: $path) {
             settingsList
@@ -574,8 +449,6 @@ struct SettingsView: View {
             AddWidgetGuideView()
         case .contactPage:
             ContactView()
-        case .meetingRecommendation:
-            MeetingView(embedsNavigationStack: false)
         case .customTheme:
             CustomThemeSettingsView()
         case .reminderSound:
@@ -601,58 +474,6 @@ struct SettingsView: View {
         appEnvironment.updateSettings(settings)
     }
 
-    private func handleExportResult(_ result: Result<URL, Error>) {
-        switch result {
-        case .success:
-            viewModel.errorMessage = String(localized: "settings.export.success")
-        case .failure(let error):
-            viewModel.errorMessage = String(localized: "settings.export.failed") + ": \(error.localizedDescription)"
-        }
-
-        if let url = exportFileURL {
-            try? FileManager.default.removeItem(at: url)
-            exportFileURL = nil
-        }
-    }
-
-    private func handleImportResult(_ result: Result<[URL], Error>) {
-        switch result {
-        case .success(let urls):
-            guard let url = urls.first else { return }
-            do {
-                pendingImportData = try Data(contentsOf: url)
-                showImportConfirm = true
-            } catch {
-                viewModel.errorMessage = String(localized: "settings.import.failed")
-            }
-        case .failure:
-            viewModel.errorMessage = String(localized: "settings.import.failed")
-        }
-    }
-
-    private func importCities(strategy: ImportStrategy) {
-        guard let data = pendingImportData else { return }
-        if viewModel.importCities(from: data, strategy: strategy) {
-            appEnvironment.citiesRevision += 1
-            viewModel.errorMessage = String(localized: "settings.import.success")
-        }
-        pendingImportData = nil
-    }
-    
-    private func prepareExportFile() {
-        guard let data = viewModel.exportCities() else {
-            viewModel.errorMessage = String(localized: "settings.export.failed")
-            return
-        }
-        
-        let fileURL = FileManager.default.temporaryDirectory.appending(path: "offtime_cities.json")
-        do {
-            try data.write(to: fileURL)
-            exportFileURL = fileURL
-        } catch {
-            viewModel.errorMessage = String(localized: "settings.export.failed")
-        }
-    }
 }
 
 private struct ProEntryCard: View {
@@ -752,27 +573,6 @@ private struct ProEntryCard: View {
             y: colorScheme == .dark ? 3 : 2
         )
         .accessibilityElement(children: .combine)
-    }
-}
-
-// MARK: - JSONFileDocument for SwiftUI fileExporter
-
-struct JSONFileDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [.json] }
-    
-    var fileURL: URL
-    
-    init(fileURL: URL) {
-        self.fileURL = fileURL
-    }
-    
-    init(configuration: ReadConfiguration) throws {
-        fileURL = URL(fileURLWithPath: "/dev/null")
-    }
-    
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = try Data(contentsOf: fileURL)
-        return FileWrapper(regularFileWithContents: data)
     }
 }
 

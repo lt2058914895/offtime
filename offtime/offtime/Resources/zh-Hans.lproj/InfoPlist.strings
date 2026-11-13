@@ -1,5 +1,5 @@
 /* OffTime - 简体中文 Info.plist 本地化 */
 
 "CFBundleDisplayName" = "世界时钟";
-"NSDocumentPickerUsageDescription" = "用于导入/导出城市列表文件";
+"NSCalendarsFullAccessUsageDescription" = "用于加入会议日程，并同步日程是否仍存在于您的日历中";
 "NSPhotoLibraryAddUsageDescription" = "用于将会议日程图片保存到相册";

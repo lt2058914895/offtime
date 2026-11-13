@@ -68,13 +68,13 @@ final class TimezoneService {
     
     func getLocalDate(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "yyyy/MM/dd").string(from: date)
+        return DateDisplayFormat.date(date, timezone: timezone)
     }
 
     /// 日期 + 星期，供提醒、会议等列表复用同一套缓存格式化器。
     func getLocalDateWithWeekday(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "yyyy/MM/dd EEE").string(from: date)
+        return DateDisplayFormat.dateWithWeekday(date, timezone: timezone)
     }
 
     /// 格式化「时:分」文本，避免列表每一行都新建 DateFormatter。
@@ -99,12 +99,15 @@ final class TimezoneService {
     
     func getLocalWeekday(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "EEE").string(from: date)
+        return DateDisplayFormat.weekday(date, timezone: timezone)
     }
     
     func getLocalDateTime(timezoneId: String, date: Date = Date()) -> String? {
         guard let timezone = timezone(for: timezoneId) else { return nil }
-        return makeFormatter(timezone: timezone, dateFormat: "yyyy-MM-dd HH:mm").string(from: date)
+        return makeFormatter(
+            timezone: timezone,
+            dateFormat: DateDisplayFormat.yearMonthDayAndTime
+        ).string(from: date)
     }
 
     func getLocalizedTime(timezoneId: String, date: Date = Date()) -> String? {
@@ -114,29 +117,6 @@ final class TimezoneService {
             options: 0,
             locale: Locale.current
         ) ?? "HH:mm"
-        return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
-    }
-
-    /// 月日文本，**包含星期**（如「09/16周三」）。
-    /// 界面若单独展示星期，请改用 `getMonthDayOnly`，否则会出现星期重复展示。
-    func getMonthDay(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = timezone(for: timezoneId) else { return nil }
-        let format = DateFormatter.dateFormat(
-            fromTemplate: "MMEd",
-            options: 0,
-            locale: Locale.current
-        ) ?? "MM/dd"
-        return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
-    }
-
-    /// 月日文本，不包含星期，供需要单独展示星期的界面使用。
-    func getMonthDayOnly(timezoneId: String, date: Date = Date()) -> String? {
-        guard let timezone = timezone(for: timezoneId) else { return nil }
-        let format = DateFormatter.dateFormat(
-            fromTemplate: "MMMd",
-            options: 0,
-            locale: Locale.current
-        ) ?? "MM/dd"
         return makeFormatter(timezone: timezone, dateFormat: format).string(from: date)
     }
 

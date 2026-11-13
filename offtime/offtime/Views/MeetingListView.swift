@@ -468,11 +468,10 @@ struct MeetingListView: View {
     }
 
     private func dateText(_ date: Date, timezoneId: String) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.timeZone = TimeZone(identifier: timezoneId) ?? .current
-        formatter.dateFormat = "yyyy/MM/dd EEE"
-        return formatter.string(from: date)
+        DateDisplayFormat.dateWithWeekday(
+            date,
+            timezone: TimeZone(identifier: timezoneId) ?? .current
+        )
     }
 
     private func updateMinuteClock() {

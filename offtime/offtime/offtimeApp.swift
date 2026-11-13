@@ -110,6 +110,13 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.converter)
 
+            MeetingView(isTabRoot: true)
+                .tabItem {
+                    Image(systemName: "calendar.badge.clock")
+                    Text(String(localized: "tab.meeting"))
+                }
+                .tag(AppTab.meeting)
+
             SettingsView()
                 .tabItem {
                     Image(systemName: "gear")

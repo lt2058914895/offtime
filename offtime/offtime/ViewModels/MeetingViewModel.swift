@@ -267,9 +267,10 @@ final class MeetingViewModel: ObservableObject {
 
         if participantDay != referenceDay {
             // 跨天时显示参与者时区下的具体日期，避免相对标签的歧义
-            var style = Date.FormatStyle.dateTime.month(.defaultDigits).day()
-            style.timeZone = participantTimezone
-            let dateStr = date.formatted(style)
+            let dateStr = timezoneService.getLocalDate(
+                timezoneId: participant.timezoneId,
+                date: date
+            ) ?? ""
             return "\(dateStr) \(time)"
         }
         return time

@@ -98,7 +98,7 @@ struct WidgetStylePreviewView: View {
         }
         .font(.caption2)
         .lineLimit(1)
-        .minimumScaleFactor(0.75)
+        .minimumScaleFactor(0.6)
     }
 
     private var emptyState: some View {
@@ -134,7 +134,7 @@ struct WidgetStylePreviewView: View {
 
     private func dateAndWeekdayText(for city: WidgetCitySnapshot) -> String {
         let weekday = TimezoneService.shared.getLocalWeekday(timezoneId: city.timezoneId, date: date) ?? ""
-        let dateText = TimezoneService.shared.getMonthDayOnly(timezoneId: city.timezoneId, date: date) ?? ""
+        let dateText = TimezoneService.shared.getLocalDate(timezoneId: city.timezoneId, date: date) ?? ""
         return [dateText, weekday].filter { !$0.isEmpty }.joined(separator: " ")
     }
 

@@ -136,7 +136,7 @@ enum MeetingCalendarExportService {
         return "OffTime-Meeting-\(formatter.string(from: event.startDate)).ics"
     }
 
-    private static func summary(for event: MeetingCalendarEvent) -> String {
+    static func summary(for event: MeetingCalendarEvent) -> String {
         let names = event.participants.map {
             CityDisplay.primaryName(cityName: $0.cityName, cityEn: $0.cityEn)
         }
@@ -147,7 +147,7 @@ enum MeetingCalendarExportService {
         return names.joined(separator: String(localized: "meeting.slots.constraints.join"))
     }
 
-    private static func description(for event: MeetingCalendarEvent, locale: Locale) -> String {
+    static func description(for event: MeetingCalendarEvent, locale: Locale) -> String {
         let endDate = event.startDate.addingTimeInterval(Double(event.durationMinutes) * 60)
         var lines = [
             String(format: String(localized: "meeting.ics.duration"), event.durationMinutes)
@@ -209,8 +209,8 @@ enum MeetingCalendarExportService {
         timezone: TimeZone,
         locale: Locale
     ) -> String {
-        let startDay = dayText(start, timezone: timezone, locale: locale)
-        let endDay = dayText(end, timezone: timezone, locale: locale)
+        let startDay = dayText(start, timezone: timezone)
+        let endDay = dayText(end, timezone: timezone)
         let startTime = timeText(start, timezone: timezone, locale: locale)
         let endTime = timeText(end, timezone: timezone, locale: locale)
 
@@ -220,16 +220,8 @@ enum MeetingCalendarExportService {
         return "\(startDay) \(startTime)–\(endDay) \(endTime)"
     }
 
-    private static func dayText(_ date: Date, timezone: TimeZone, locale: Locale) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = locale
-        formatter.timeZone = timezone
-        formatter.dateFormat = DateFormatter.dateFormat(
-            fromTemplate: "yMMMMdEEEE",
-            options: 0,
-            locale: locale
-        ) ?? "yyyy/MM/dd EEE"
-        return formatter.string(from: date)
+    private static func dayText(_ date: Date, timezone: TimeZone) -> String {
+        DateDisplayFormat.dateWithWeekday(date, timezone: timezone)
     }
 
     private static func timeText(_ date: Date, timezone: TimeZone, locale: Locale) -> String {

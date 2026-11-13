@@ -104,8 +104,6 @@ struct ClockListView: View {
                     EmptyView()
                 case .addWidgetGuide:
                     EmptyView()
-                case .meetingRecommendation:
-                    EmptyView()
                 case .customTheme:
                     EmptyView()
                 case .reminderSound:

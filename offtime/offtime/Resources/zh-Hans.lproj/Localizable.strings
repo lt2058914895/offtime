@@ -2,6 +2,7 @@
 
 // MARK: - Tab Bar
 "tab.clock" = "时钟";
+"tab.meeting" = "会议";
 "tab.converter" = "时区转换";
 "tab.settings" = "设置";
 
@@ -132,15 +133,15 @@
 "meeting.detail.title" = "档期详情";
 "meeting.detail.subtitle" = "各城市的对应时间";
 "meeting.detail.select.start" = "选择会议开始时间";
-"meeting.detail.add" = "添加到推荐记录";
+"meeting.detail.add" = "添加到会议记录";
 "meeting.detail.duration" = "%d 分钟";
-"meeting.share.action" = "分享日程";
+"meeting.actions.title" = "会议安排";
 "meeting.share.failed.title" = "无法分享日程";
 "meeting.share.failed.message" = "生成日历文件失败，请稍后重试。";
 "meeting.share.preview.title" = "图片预览";
 "meeting.share.image.action" = "分享图片";
 "meeting.share.image.hint" = "适合在聊天中直接查看";
-"meeting.share.ics.action" = "日历文件";
+"meeting.share.ics.action" = "分享日历文件";
 "meeting.share.ics.hint" = "对方可导入系统日历";
 "meeting.share.image.failed.message" = "生成日程图片失败，请稍后重试。";
 "meeting.share.save.action" = "保存到相册";
@@ -151,16 +152,46 @@
 "meeting.share.save.permission.title" = "需要相册权限";
 "meeting.share.save.permission.message" = "请在系统设置中允许“%@”添加照片。";
 "meeting.share.save.settings.action" = "前往设置";
+"meeting.calendar.action" = "添加到日历";
+"meeting.calendar.hint" = "加入系统日历，默认提前 10 分钟提醒";
+"meeting.calendar.hint.saved" = "已加入系统日历，可在日历中查看或修改";
+"meeting.calendar.editor.title" = "新建日程";
+"meeting.calendar.field.title" = "标题";
+"meeting.calendar.field.start" = "开始";
+"meeting.calendar.field.end" = "结束";
+"meeting.calendar.field.alert" = "提醒";
+"meeting.calendar.field.notes" = "备注";
+"meeting.calendar.alert.none" = "无";
+"meeting.calendar.alert.onTime" = "日程开始时";
+"meeting.calendar.alert.5" = "5 分钟前";
+"meeting.calendar.alert.10" = "10 分钟前";
+"meeting.calendar.alert.15" = "15 分钟前";
+"meeting.calendar.alert.30" = "30 分钟前";
+"meeting.calendar.alert.60" = "1 小时前";
+"meeting.calendar.alert.120" = "2 小时前";
+"meeting.calendar.alert.1day" = "1 天前";
+"meeting.calendar.alert.2days" = "2 天前";
+"meeting.calendar.alert.1week" = "1 周前";
+"meeting.calendar.add.action" = "添加";
+"meeting.calendar.open.action" = "打开系统日历";
+"meeting.calendar.success.created" = "已加入系统日历";
+"meeting.calendar.success.updated" = "已更新系统日程";
+"meeting.calendar.failed.title" = "无法添加到日历";
+"meeting.calendar.permission.title" = "需要日历权限";
+"meeting.calendar.error.access" = "请在系统设置中允许“%@”写入日历。";
+"meeting.calendar.error.noCalendar" = "未找到可写入的日历，请先在系统日历中启用一个日历。";
+"meeting.calendar.error.invalidTime" = "会议时间无效，请重新选择。";
+"meeting.calendar.error.save" = "系统日历写入失败，请稍后重试。";
 "meeting.ics.summary.empty" = "会议";
 "meeting.ics.duration" = "时长：%d 分钟";
 "meeting.ics.participant" = "%@：%@";
 "meeting.ics.participants" = "参与城市：%@";
 "meeting.ics.local_time" = "本地时间：%@";
-"meeting.add.success" = "添加成功，可在推荐记录查看";
+"meeting.add.success" = "添加成功，可在会议记录查看";
 "meeting.add.conflict" = "该时间与已有会议档期冲突，请选择其他时间";
 "meeting.add.conflict.title" = "无法添加会议档期";
 "meeting.add.conflict.view" = "去查看";
-"meeting.list.title" = "会议档期记录";
+"meeting.list.title" = "会议记录";
 "meeting.list.empty.title" = "暂无会议档期";
 "meeting.list.empty" = "从推荐档期添加的会议档期将显示在这里。";
 "meeting.list.delete.confirm.title" = "删除会议档期？";
@@ -170,7 +201,7 @@
 "meeting.list.filter.finished" = "已结束";
 "meeting.list.filter.empty" = "该分类暂无会议档期";
 "meeting.list.ongoing" = "进行中";
-"meeting.list.hint" = "左滑删除，点击分享日程";
+"meeting.list.hint" = "左滑删除，点击进入会议安排";
 
 // MARK: - Converter
 "converter.source.city" = "起点城市";
@@ -202,10 +233,9 @@
 "settings.theme.section" = "主题样式";
 "settings.custom.theme" = "小组件主题";
 "settings.custom.theme.subtitle" = "让小组件换个风格吧";
-"settings.version" = "版本号";
+"settings.version" = "版本 %@";
 "settings.meeting.recommendation.title" = "会议档期推荐";
-"settings.meeting.recommendation.subtitle" = "自动推荐全员都合适的开会时段";
-"meeting.recommendation.records" = "推荐记录";
+"meeting.recommendation.records" = "会议记录";
 "reminder.list.title" = "提醒";
 "reminder.list.empty.title" = "暂无提醒";
 "reminder.list.empty" = "在城市详情页添加提醒后，将在此处显示";
@@ -252,8 +282,6 @@
 "reminder.action.updateFailed.title" = "无法更新提醒";
 "reminder.list.count.one" = "1 条";
 "reminder.list.count" = "%d 条";
-"settings.export.cities" = "导出城市列表";
-"settings.import.cities" = "导入城市列表";
 "settings.contact" = "联系我们";
 "contact.headline" = "有什么可以帮你？";
 "contact.subtitle" = "遇到问题、发现 Bug，或有功能建议，欢迎通过邮件联系我。通常会在 1–2 个工作日内回复。";
@@ -262,14 +290,6 @@
 "contact.copied" = "已复制";
 "settings.add.widget" = "添加小组件";
 "settings.add.widget.subtitle" = "把%@放到主屏幕或锁定屏幕";
-"settings.export.failed" = "导出失败";
-"settings.export.success" = "导出成功";
-"settings.import.failed" = "导入失败，文件格式错误";
-"settings.import.success" = "导入成功";
-"settings.import.confirm.title" = "导入城市";
-"settings.import.merge" = "合并到现有城市";
-"settings.import.replace" = "替换所有城市";
-"settings.import.confirm.message" = "替换将清空当前所有城市，合并将保留现有城市并追加新城市。";
 
 // MARK: - Widget Guide
 "widget.guide.home.title" = "添加到主屏幕";
@@ -336,7 +356,7 @@
 "widget.guide.tips.order" = "组件显示的城市与 App 的城市列表一致，请先在 App 里添加城市。";
 "widget.guide.tips.refresh" = "增删城市或切换 12/24 小时制后，打开一次 App 即可刷新组件。";
 "widget.guide.tips.empty" = "组件显示「打开%@添加城市」？打开一次 App 就会显示。";
-"widget.guide.mock.date" = "周三 9月16日";
+"widget.guide.mock.date" = "2026/09/16 周三";
 
 // MARK: - Theme
 "theme.system" = "跟随系统";

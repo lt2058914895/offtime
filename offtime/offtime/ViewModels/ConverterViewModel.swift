@@ -52,6 +52,38 @@ struct ConvertedTimeResult: Identifiable, Equatable {
     let crossDayText: String?
 }
 
+enum ConverterShareTextBuilder {
+    static func make(
+        sourceName: String,
+        sourceDate: Date,
+        sourceTime: String,
+        sourceTimezone: TimeZone,
+        results: [ConvertedTimeResult]
+    ) -> String {
+        var lines = [
+            "\(sourceName) \(DateDisplayFormat.dateWithWeekday(sourceDate, timezone: sourceTimezone)) \(sourceTime)"
+        ]
+
+        for result in results {
+            let name = CityDisplay.primaryName(
+                cityName: result.cityName,
+                cityEn: result.cityEn
+            )
+            var line = "• \(name) \(result.dateText)"
+            if !result.weekdayText.isEmpty {
+                line += " \(result.weekdayText)"
+            }
+            if let crossDay = result.crossDayText {
+                line += " (\(crossDay))"
+            }
+            line += " \(result.timeText)"
+            lines.append(line)
+        }
+
+        return lines.joined(separator: "\n")
+    }
+}
+
 @MainActor
 final class ConverterViewModel: ObservableObject {
     @Published var sourceCity: CityModel?

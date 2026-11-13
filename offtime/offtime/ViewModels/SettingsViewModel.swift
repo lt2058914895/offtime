@@ -84,27 +84,6 @@ final class SettingsViewModel: ObservableObject {
         saveSettings()
     }
     
-    func exportCities() -> Data? {
-        do {
-            return try CityService.shared.exportCities()
-        } catch {
-            errorMessage = String(localized: "settings.export.failed")
-            return nil
-        }
-    }
-    
-    func importCities(from data: Data, strategy: ImportStrategy) -> Bool {
-        do {
-            try CityService.shared.importCities(from: data, strategy: strategy)
-            Haptics.success()
-            return true
-        } catch {
-            errorMessage = String(localized: "settings.import.failed")
-            Haptics.error()
-            return false
-        }
-    }
-    
     func dismissError() {
         errorMessage = nil
     }

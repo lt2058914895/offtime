@@ -7,8 +7,6 @@ protocol TimezoneServiceProviding: AnyObject {
     func getLocalWeekday(timezoneId: String, date: Date) -> String?
     func getLocalDateTime(timezoneId: String, date: Date) -> String?
     func getLocalizedTime(timezoneId: String, date: Date) -> String?
-    func getMonthDay(timezoneId: String, date: Date) -> String?
-    func getMonthDayOnly(timezoneId: String, date: Date) -> String?
     func getUTCText(timezoneId: String) -> String?
     func isDaytime(timezoneId: String, date: Date) -> Bool
     func getTimeDifference(timezoneId: String, date: Date) -> (offset: String, crossDay: String?)

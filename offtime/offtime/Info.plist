@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSDocumentPickerUsageDescription</key>
-	<string>Used to import/export city list files</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Used to add meeting schedules and keep their status in sync with your calendar</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Used to save meeting schedule images to your photo library</string>
 </dict>

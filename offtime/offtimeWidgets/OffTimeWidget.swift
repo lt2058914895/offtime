@@ -451,7 +451,7 @@ struct OffTimeWidgetView: View {
         }
         .font(.caption2)
         .lineLimit(1)
-        .minimumScaleFactor(0.75)
+        .minimumScaleFactor(0.6)
     }
 
     private func crossDayBadge(_ text: String) -> some View {
@@ -574,10 +574,10 @@ struct OffTimeWidgetView: View {
     }
 
     private func dateText(for city: WidgetCitySnapshot) -> String {
-        TimezoneService.shared.getMonthDayOnly(timezoneId: city.timezoneId, date: entry.date) ?? ""
+        TimezoneService.shared.getLocalDate(timezoneId: city.timezoneId, date: entry.date) ?? ""
     }
 
-    /// 「月日 + 周几」：与时钟列表保持相同顺序，月日文本不含星期，保证星期只出现一次。
+    /// 「年/月/日 + 周几」：与时钟列表保持相同顺序，日期文本不含星期，避免重复展示。
     private func dateAndWeekdayText(for city: WidgetCitySnapshot) -> String {
         let weekday = TimezoneService.shared.getLocalWeekday(timezoneId: city.timezoneId, date: entry.date) ?? ""
         let date = dateText(for: city)
