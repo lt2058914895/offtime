@@ -135,7 +135,7 @@
 "meeting.detail.title" = "推荐时段详情";
 "meeting.detail.subtitle" = "各城市对应时间";
 "meeting.detail.select.start" = "选择开始时间";
-"meeting.detail.share" = "分享时间";
+"meeting.detail.share" = "分享日程";
 "meeting.detail.add" = "创建日程";
 "meeting.actions.title" = "分享日程";
 "meeting.schedule.action.systemCalendar" = "添加到系统日历";
