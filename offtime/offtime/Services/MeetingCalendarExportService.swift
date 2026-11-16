@@ -57,6 +57,29 @@ struct MeetingCalendarEvent {
     let participants: [MeetingCalendarParticipant]
 }
 
+extension MeetingModel {
+    var calendarEvent: MeetingCalendarEvent {
+        let timezoneIds = participantTimezoneIds ?? []
+        return MeetingCalendarEvent(
+            uid: id.uuidString,
+            startDate: startDate,
+            durationMinutes: durationMinutes,
+            localTimezoneId: localTimezoneId,
+            participants: participantNames.enumerated().map { index, cityName in
+                MeetingCalendarParticipant(
+                    cityName: cityName,
+                    cityEn: index < participantEnNames.count
+                        ? participantEnNames[index]
+                        : cityName,
+                    timezoneId: index < timezoneIds.count
+                        ? timezoneIds[index]
+                        : nil
+                )
+            }
+        )
+    }
+}
+
 enum MeetingCalendarExportService {
     static func makeICS(
         event: MeetingCalendarEvent,

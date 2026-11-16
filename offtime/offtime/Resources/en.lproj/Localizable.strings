@@ -199,7 +199,10 @@
 "meeting.calendar.error.noCalendar" = "No writable calendar is available. Enable a calendar in the Calendar app first.";
 "meeting.calendar.error.invalidTime" = "The meeting time is invalid. Choose another time.";
 "meeting.calendar.error.save" = "Couldn’t save the event to your calendar. Please try again.";
+"meeting.calendar.error.delete" = "Couldn’t delete the system calendar event. Please try again.";
 "meeting.calendar.error.eventMissing" = "The system calendar event was deleted and can’t be edited.";
+"meeting.calendar.error.deleteNotTracked" = "The linked system calendar event couldn’t be found. Check and delete it in System Calendar first.";
+"meeting.calendar.delete.failed.title" = "Unable to Delete Schedule";
 "meeting.ics.summary.empty" = "Schedule";
 "meeting.ics.duration" = "Duration: %d min";
 "meeting.ics.participant" = "%@: %@";
@@ -214,7 +217,7 @@
 "meeting.list.empty" = "Schedules you create will appear here.";
 "meeting.list.delete.confirm.title" = "Delete Schedule?";
 "meeting.list.delete" = "Delete";
-"meeting.list.delete.systemCalendar.note" = "The event will remain in the system calendar.";
+"meeting.list.delete.systemCalendar.note" = "This will delete the event from both System Calendar and Schedules.";
 "meeting.list.filter.title" = "Schedule Status";
 "meeting.list.filter.upcoming" = "Upcoming";
 "meeting.list.filter.finished" = "Finished";

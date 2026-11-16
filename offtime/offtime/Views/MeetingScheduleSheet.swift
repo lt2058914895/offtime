@@ -356,7 +356,7 @@ struct MeetingScheduleSheet: View {
         switch await MeetingCalendarService.shared.eventStatus(for: event) {
         case .available:
             break
-        case .missing:
+        case .missing, .notTracked:
             alert = MeetingScheduleAlert(
                 title: String(localized: "meeting.calendar.failed.title"),
                 message: String(localized: "meeting.calendar.error.eventMissing")

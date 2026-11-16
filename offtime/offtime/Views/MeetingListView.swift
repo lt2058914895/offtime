@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
 private let meetingCardCornerRadius: CGFloat = 18
 
@@ -11,6 +12,7 @@ struct MeetingListView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @Query(sort: \MeetingModel.startDate, order: .reverse) private var meetings: [MeetingModel]
     @State private var meetingToDelete: MeetingModel?
+    @State private var deleteAlert: MeetingDeleteAlert?
     @State private var statusFilter: MeetingStatus = .upcoming
     @State private var isAppeared = false
     @State private var actionSelection: MeetingActionSelection?
@@ -41,6 +43,7 @@ struct MeetingListView: View {
         let id: UUID
         let meeting: MeetingModel
         let payload: MeetingSharePayload
+        let canEdit: Bool
     }
 
     private struct MeetingEditSelection: Identifiable {
@@ -163,11 +166,7 @@ struct MeetingListView: View {
             presenting: meetingToDelete
         ) { meeting in
             Button(String(localized: "meeting.list.delete"), role: .destructive) {
-                Task {
-                    await MeetingReminderService.shared.cancel(for: meeting.id)
-                }
-                modelContext.delete(meeting)
-                try? modelContext.save()
+                deleteMeeting(meeting)
                 meetingToDelete = nil
             }
             Button(String(localized: "common.cancel"), role: .cancel) {
@@ -175,6 +174,23 @@ struct MeetingListView: View {
             }
         } message: { meeting in
             Text(deleteMessage(for: meeting))
+        }
+        .alert(
+            deleteAlert?.title ?? "",
+            isPresented: Binding(
+                get: { deleteAlert != nil },
+                set: { if !$0 { deleteAlert = nil } }
+            ),
+            presenting: deleteAlert
+        ) { alert in
+            if alert.showsSettingsAction {
+                Button(String(localized: "meeting.share.save.settings.action")) {
+                    openSettings()
+                }
+            }
+            Button(String(localized: "common.ok"), role: .cancel) {}
+        } message: { alert in
+            Text(alert.message)
         }
         .sheet(
             item: $actionSelection,
@@ -186,14 +202,15 @@ struct MeetingListView: View {
             }
         ) { selection in
             MeetingShareSheet(
-                payload: selection.payload
-            ) {
-                pendingEditSelection = MeetingEditSelection(
-                    id: selection.meeting.id,
-                    meeting: selection.meeting,
-                    payload: selection.payload
-                )
-            }
+                payload: selection.payload,
+                onEdit: selection.canEdit ? {
+                    pendingEditSelection = MeetingEditSelection(
+                        id: selection.meeting.id,
+                        meeting: selection.meeting,
+                        payload: selection.payload
+                    )
+                } : nil
+            )
         }
         .sheet(item: $editSelection) { selection in
             MeetingScheduleSheet(
@@ -370,15 +387,59 @@ struct MeetingListView: View {
         return "\(range)\n\(String(localized: "meeting.list.delete.systemCalendar.note"))"
     }
 
+    private func deleteMeeting(_ meeting: MeetingModel) {
+        guard meeting.scheduleSource == .systemCalendar else {
+            Task { @MainActor in
+                await MeetingReminderService.shared.cancel(for: meeting.id)
+                modelContext.delete(meeting)
+                try? modelContext.save()
+            }
+            return
+        }
+
+        Task { @MainActor in
+            do {
+                switch try await MeetingCalendarService.shared.deleteSavedEvent(
+                    for: meeting.calendarEvent
+                ) {
+                case .deleted, .alreadyMissing:
+                    await MeetingReminderService.shared.cancel(for: meeting.id)
+                    modelContext.delete(meeting)
+                    try modelContext.save()
+                case .notTracked:
+                    deleteAlert = MeetingDeleteAlert(
+                        title: String(localized: "meeting.calendar.delete.failed.title"),
+                        message: String(localized: "meeting.calendar.error.deleteNotTracked")
+                    )
+                }
+            } catch let error as MeetingCalendarServiceError {
+                deleteAlert = MeetingDeleteAlert(
+                    title: String(localized: "meeting.calendar.delete.failed.title"),
+                    message: error.localizedDescription,
+                    showsSettingsAction: error.requiresSettingsAction
+                )
+            } catch {
+                deleteAlert = MeetingDeleteAlert(
+                    title: String(localized: "meeting.calendar.delete.failed.title"),
+                    message: String(localized: "meeting.calendar.error.delete")
+                )
+            }
+        }
+    }
+
     private func openSchedule(_ meeting: MeetingModel) {
         let resolvedParticipants = participants(for: meeting)
+        let endDate = meeting.startDate.addingTimeInterval(
+            Double(meeting.durationMinutes) * 60
+        )
         actionSelection = MeetingActionSelection(
             id: meeting.id,
             meeting: meeting,
             payload: makePayload(
                 for: meeting,
                 participants: resolvedParticipants
-            )
+            ),
+            canEdit: endDate > now
         )
     }
 
@@ -587,6 +648,11 @@ struct MeetingListView: View {
         }
     }
 
+    private func openSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
+
 }
 
 #Preview {
@@ -616,4 +682,11 @@ enum MeetingScheduleText {
         }
         return String(localized: String.LocalizationValue(key))
     }
+}
+
+private struct MeetingDeleteAlert: Identifiable {
+    let id = UUID()
+    let title: String
+    let message: String
+    var showsSettingsAction = false
 }

@@ -199,7 +199,10 @@
 "meeting.calendar.error.noCalendar" = "未找到可写入的日历，请先在系统日历中启用一个日历。";
 "meeting.calendar.error.invalidTime" = "会议时间无效，请重新选择。";
 "meeting.calendar.error.save" = "系统日历写入失败，请稍后重试。";
+"meeting.calendar.error.delete" = "系统日历日程删除失败，请稍后重试。";
 "meeting.calendar.error.eventMissing" = "系统日历中的日程已删除，无法修改。";
+"meeting.calendar.error.deleteNotTracked" = "无法找到对应的系统日历日程，请先在系统日历中确认并删除。";
+"meeting.calendar.delete.failed.title" = "无法删除日程";
 "meeting.ics.summary.empty" = "日程";
 "meeting.ics.duration" = "时长：%d 分钟";
 "meeting.ics.participant" = "%@：%@";
@@ -214,7 +217,7 @@
 "meeting.list.empty" = "创建日程后，会显示在这里。";
 "meeting.list.delete.confirm.title" = "删除日程？";
 "meeting.list.delete" = "删除";
-"meeting.list.delete.systemCalendar.note" = "系统日历中的日程不会被删除。";
+"meeting.list.delete.systemCalendar.note" = "将同时从系统日历和日程列表中删除。";
 "meeting.list.filter.title" = "日程状态";
 "meeting.list.filter.upcoming" = "未开始";
 "meeting.list.filter.finished" = "已结束";

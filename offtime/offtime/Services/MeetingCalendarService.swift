@@ -9,7 +9,14 @@ enum MeetingCalendarWriteResult: Equatable {
 enum MeetingCalendarEventStatus: Equatable {
     case available
     case missing
+    case notTracked
     case accessDenied
+}
+
+enum MeetingCalendarDeleteResult: Equatable {
+    case deleted
+    case alreadyMissing
+    case notTracked
 }
 
 enum MeetingCalendarServiceError: LocalizedError, Equatable {
@@ -17,6 +24,7 @@ enum MeetingCalendarServiceError: LocalizedError, Equatable {
     case noDefaultCalendar
     case invalidTimeRange
     case saveFailed
+    case deleteFailed
 
     var errorDescription: String? {
         switch self {
@@ -28,6 +36,8 @@ enum MeetingCalendarServiceError: LocalizedError, Equatable {
             return String(localized: "meeting.calendar.error.invalidTime")
         case .saveFailed:
             return String(localized: "meeting.calendar.error.save")
+        case .deleteFailed:
+            return String(localized: "meeting.calendar.error.delete")
         }
     }
 
@@ -128,7 +138,7 @@ final class MeetingCalendarService {
     func eventStatus(for event: MeetingCalendarEvent) async -> MeetingCalendarEventStatus {
         let integrationKey = Self.integrationKey(for: event)
         guard let identifier = storedEventIdentifiers()[integrationKey] else {
-            return .missing
+            return .notTracked
         }
 
         guard hasCalendarAccess else {
@@ -139,14 +149,36 @@ final class MeetingCalendarService {
             return .available
         }
 
-        var identifiers = storedEventIdentifiers()
-        var startDates = storedEventStartDates()
-        identifiers.removeValue(forKey: integrationKey)
-        startDates.removeValue(forKey: integrationKey)
-        UserDefaults.standard.set(identifiers, forKey: eventIdentifiersKey)
-        UserDefaults.standard.set(startDates, forKey: eventStartDatesKey)
-        sessionEvents.removeValue(forKey: integrationKey)
+        clearStoredEvent(for: integrationKey)
         return .missing
+    }
+
+    func deleteSavedEvent(
+        for event: MeetingCalendarEvent
+    ) async throws -> MeetingCalendarDeleteResult {
+        let integrationKey = Self.integrationKey(for: event)
+        guard let identifier = storedEventIdentifiers()[integrationKey] else {
+            return .notTracked
+        }
+        guard hasCalendarAccess else {
+            throw MeetingCalendarServiceError.accessDenied
+        }
+        guard let calendarEvent = store.event(withIdentifier: identifier) else {
+            clearStoredEvent(for: integrationKey)
+            return .alreadyMissing
+        }
+        guard calendarEvent.calendar?.allowsContentModifications == true else {
+            throw MeetingCalendarServiceError.deleteFailed
+        }
+
+        do {
+            try store.remove(calendarEvent, span: .thisEvent, commit: true)
+        } catch {
+            throw MeetingCalendarServiceError.deleteFailed
+        }
+
+        clearStoredEvent(for: integrationKey)
+        return .deleted
     }
 
     /// 仅在用户主动选择“添加到日历”时调用。
@@ -215,5 +247,15 @@ final class MeetingCalendarService {
 
     private func storedEventStartDates() -> [String: Double] {
         UserDefaults.standard.dictionary(forKey: eventStartDatesKey) as? [String: Double] ?? [:]
+    }
+
+    private func clearStoredEvent(for integrationKey: String) {
+        var identifiers = storedEventIdentifiers()
+        var startDates = storedEventStartDates()
+        identifiers.removeValue(forKey: integrationKey)
+        startDates.removeValue(forKey: integrationKey)
+        UserDefaults.standard.set(identifiers, forKey: eventIdentifiersKey)
+        UserDefaults.standard.set(startDates, forKey: eventStartDatesKey)
+        sessionEvents.removeValue(forKey: integrationKey)
     }
 }

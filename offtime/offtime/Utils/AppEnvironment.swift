@@ -198,6 +198,31 @@ final class AppEnvironment: ObservableObject {
         return report
     }
 
+    /// 用户可能从系统日历删除由 App 创建的事件；回到前台时清理对应的本地日程记录。
+    @discardableResult
+    func synchronizeCalendarSchedules() async -> Int {
+        guard let modelContainer else { return 0 }
+        let context = modelContainer.mainContext
+        guard let meetings = try? context.fetch(FetchDescriptor<MeetingModel>()) else {
+            return 0
+        }
+
+        var removedCount = 0
+        for meeting in meetings where meeting.scheduleSource == .systemCalendar {
+            let status = await MeetingCalendarService.shared.eventStatus(
+                for: meeting.calendarEvent
+            )
+            guard status == .missing else { continue }
+            context.delete(meeting)
+            removedCount += 1
+        }
+
+        if removedCount > 0 {
+            try? context.save()
+        }
+        return removedCount
+    }
+
     private func loadOnboardingState() {
         onboardingCompleted = UserDefaults.standard.bool(forKey: "onboarding_completed")
     }

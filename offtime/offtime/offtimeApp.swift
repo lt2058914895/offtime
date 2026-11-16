@@ -45,6 +45,7 @@ struct offtimeApp: App {
             ))
             .task {
                 appEnvironment.setup()
+                await appEnvironment.synchronizeCalendarSchedules()
                 await proAccessService.load()
                 await appEnvironment.synchronizeReminders(
                     isProUnlocked: proAccessService.isUnlocked
@@ -60,6 +61,7 @@ struct offtimeApp: App {
                 case .active:
                     Task {
                         await proAccessService.refreshEntitlements()
+                        await appEnvironment.synchronizeCalendarSchedules()
                         await appEnvironment.synchronizeReminders(
                             isProUnlocked: proAccessService.isUnlocked
                         )
