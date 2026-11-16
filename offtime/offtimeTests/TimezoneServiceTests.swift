@@ -175,4 +175,42 @@ final class TimezoneServiceTests: XCTestCase {
             )
         }
     }
+
+    func testCrossDayTimeRangeKeepsStartDateAndMarksNextDay() throws {
+        let timezone = try XCTUnwrap(TimeZone(identifier: "Asia/Shanghai"))
+        let start = try date(
+            year: 2026,
+            month: 11,
+            day: 16,
+            hour: 23,
+            minute: 30,
+            timezoneId: "Asia/Shanghai"
+        )
+        let end = start.addingTimeInterval(60 * 60)
+
+        XCTAssertEqual(
+            DateDisplayFormat.dateWithWeekday(start, timezone: timezone),
+            "2026/11/16 周一"
+        )
+        XCTAssertEqual(
+            DateDisplayFormat.timeRange(
+                start: start,
+                end: end,
+                timezone: timezone,
+                use24Hour: true,
+                locale: Locale(identifier: "zh_CN")
+            ),
+            "23:30–次日 00:30"
+        )
+        XCTAssertEqual(
+            DateDisplayFormat.timeRange(
+                start: start,
+                end: end,
+                timezone: timezone,
+                use24Hour: false,
+                locale: Locale(identifier: "en_US")
+            ),
+            "11:30 PM–next day 12:30 AM"
+        )
+    }
 }

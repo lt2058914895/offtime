@@ -120,9 +120,23 @@ extension CityModel {
     }
 }
 
-// MARK: - 已添加的会议
+// MARK: - 已创建的日程
 
-/// SwiftData 持久化模型：用户从推荐档期加入的会议
+enum MeetingScheduleSource: String, Codable {
+    case systemCalendar
+    case inAppReminder
+
+    var displayName: String {
+        switch self {
+        case .systemCalendar:
+            return String(localized: "schedule.source.systemCalendar")
+        case .inAppReminder:
+            return String(localized: "schedule.source.inAppReminder")
+        }
+    }
+}
+
+/// SwiftData 持久化模型：用户从共同时段创建的日程索引。
 @Model
 final class MeetingModel {
     var id: UUID
@@ -133,6 +147,12 @@ final class MeetingModel {
     var participantEnNames: [String]
     var participantTimezoneIds: [String]?
     var createdAt: Date
+    var title: String?
+    var notes: String?
+    var reminderLeadTimeMinutes: Int?
+    var scheduleSourceRaw: String?
+    var notificationIdentifier: String?
+    var calendarIntegrationKey: String?
 
     init(
         id: UUID = UUID(),
@@ -142,7 +162,13 @@ final class MeetingModel {
         participantNames: [String],
         participantEnNames: [String] = [],
         participantTimezoneIds: [String]? = nil,
-        createdAt: Date = Date()
+        createdAt: Date = Date(),
+        title: String? = nil,
+        notes: String? = nil,
+        reminderLeadTimeMinutes: Int? = nil,
+        scheduleSource: MeetingScheduleSource = .inAppReminder,
+        notificationIdentifier: String? = nil,
+        calendarIntegrationKey: String? = nil
     ) {
         self.id = id
         self.startDate = startDate
@@ -152,6 +178,21 @@ final class MeetingModel {
         self.participantEnNames = participantEnNames
         self.participantTimezoneIds = participantTimezoneIds
         self.createdAt = createdAt
+        self.title = title
+        self.notes = notes
+        self.reminderLeadTimeMinutes = reminderLeadTimeMinutes
+        self.scheduleSourceRaw = scheduleSource.rawValue
+        self.notificationIdentifier = notificationIdentifier
+        self.calendarIntegrationKey = calendarIntegrationKey
+    }
+
+    var scheduleSource: MeetingScheduleSource {
+        get {
+            scheduleSourceRaw.flatMap(MeetingScheduleSource.init(rawValue:)) ?? .inAppReminder
+        }
+        set {
+            scheduleSourceRaw = newValue.rawValue
+        }
     }
 }
 

@@ -6,6 +6,12 @@ enum MeetingCalendarWriteResult: Equatable {
     case updated
 }
 
+enum MeetingCalendarEventStatus: Equatable {
+    case available
+    case missing
+    case accessDenied
+}
+
 enum MeetingCalendarServiceError: LocalizedError, Equatable {
     case accessDenied
     case noDefaultCalendar
@@ -69,7 +75,9 @@ final class MeetingCalendarService {
             ?? identifiers[integrationKey].flatMap(store.event(withIdentifier:))
 
         let calendarEvent = existing ?? EKEvent(eventStore: store)
-        calendarEvent.calendar = calendar
+        if existing == nil || calendarEvent.calendar == nil {
+            calendarEvent.calendar = calendar
+        }
         calendarEvent.title = title.flatMap {
             $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : $0
         } ?? MeetingCalendarExportService.summary(for: event)
@@ -114,17 +122,21 @@ final class MeetingCalendarService {
 
     /// 使用日历读取权限核对已记录的事件是否仍存在；用户从 Calendar 删除后清除本地状态。
     func refreshSavedEvent(for event: MeetingCalendarEvent) async -> Bool {
+        await eventStatus(for: event) == .available
+    }
+
+    func eventStatus(for event: MeetingCalendarEvent) async -> MeetingCalendarEventStatus {
         let integrationKey = Self.integrationKey(for: event)
         guard let identifier = storedEventIdentifiers()[integrationKey] else {
-            return false
+            return .missing
         }
 
         guard hasCalendarAccess else {
-            return false
+            return .accessDenied
         }
 
         if store.event(withIdentifier: identifier) != nil {
-            return true
+            return .available
         }
 
         var identifiers = storedEventIdentifiers()
@@ -134,7 +146,7 @@ final class MeetingCalendarService {
         UserDefaults.standard.set(identifiers, forKey: eventIdentifiersKey)
         UserDefaults.standard.set(startDates, forKey: eventStartDatesKey)
         sessionEvents.removeValue(forKey: integrationKey)
-        return false
+        return .missing
     }
 
     /// 仅在用户主动选择“添加到日历”时调用。

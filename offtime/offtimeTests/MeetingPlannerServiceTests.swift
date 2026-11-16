@@ -728,9 +728,9 @@ final class MeetingPlannerServiceTests: XCTestCase {
         let detail = viewModel.slotDetail(startDate: start, durationMinutes: 60, use24Hour: true)
 
         // 北京 16:30 时：卡尔加里同日 02:30、首尔同日 17:30，均不应出现「昨日/次日」前缀
-        XCTAssertEqual(detail.rows.first { $0.id == "bj" }?.timeText, "16:30 – 17:30")
-        XCTAssertEqual(detail.rows.first { $0.id == "yyc" }?.timeText, "02:30 – 03:30")
-        XCTAssertEqual(detail.rows.first { $0.id == "sel" }?.timeText, "17:30 – 18:30")
+        XCTAssertEqual(detail.rows.first { $0.id == "bj" }?.timeText, "16:30–17:30")
+        XCTAssertEqual(detail.rows.first { $0.id == "yyc" }?.timeText, "02:30–03:30")
+        XCTAssertEqual(detail.rows.first { $0.id == "sel" }?.timeText, "17:30–18:30")
         // 首尔 17:30–18:30 已跨过 18:00 下班时间 → 非工作时间
         XCTAssertEqual(detail.rows.first { $0.id == "sel" }?.state, .awake)
     }

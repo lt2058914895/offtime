@@ -3,7 +3,7 @@ import SwiftData
 
 private let meetingCardCornerRadius: CGFloat = 18
 
-/// 已添加会议列表：展示从推荐档期加入的会议，支持滑动删除。
+/// 已安排会议列表：展示用户明确安排后的会议，支持滑动删除。
 struct MeetingListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -13,7 +13,9 @@ struct MeetingListView: View {
     @State private var meetingToDelete: MeetingModel?
     @State private var statusFilter: MeetingStatus = .upcoming
     @State private var isAppeared = false
-    @State private var sharePayload: MeetingSharePayload?
+    @State private var actionSelection: MeetingActionSelection?
+    @State private var pendingEditSelection: MeetingEditSelection?
+    @State private var editSelection: MeetingEditSelection?
     let highlightMeetingID: UUID?
 
     init(highlightMeetingID: UUID? = nil) {
@@ -33,6 +35,18 @@ struct MeetingListView: View {
         let title: String
         let meetings: [MeetingModel]
         let isToday: Bool
+    }
+
+    private struct MeetingActionSelection: Identifiable {
+        let id: UUID
+        let meeting: MeetingModel
+        let payload: MeetingSharePayload
+    }
+
+    private struct MeetingEditSelection: Identifiable {
+        let id: UUID
+        let meeting: MeetingModel
+        let payload: MeetingSharePayload
     }
 
     private var use24Hour: Bool {
@@ -149,6 +163,9 @@ struct MeetingListView: View {
             presenting: meetingToDelete
         ) { meeting in
             Button(String(localized: "meeting.list.delete"), role: .destructive) {
+                Task {
+                    await MeetingReminderService.shared.cancel(for: meeting.id)
+                }
                 modelContext.delete(meeting)
                 try? modelContext.save()
                 meetingToDelete = nil
@@ -157,10 +174,32 @@ struct MeetingListView: View {
                 meetingToDelete = nil
             }
         } message: { meeting in
-            Text(fullRangeText(for: meeting))
+            Text(deleteMessage(for: meeting))
         }
-        .sheet(item: $sharePayload) { payload in
-            MeetingShareSheet(payload: payload)
+        .sheet(
+            item: $actionSelection,
+            onDismiss: {
+                if let pendingEditSelection {
+                    editSelection = pendingEditSelection
+                    self.pendingEditSelection = nil
+                }
+            }
+        ) { selection in
+            MeetingShareSheet(
+                payload: selection.payload
+            ) {
+                pendingEditSelection = MeetingEditSelection(
+                    id: selection.meeting.id,
+                    meeting: selection.meeting,
+                    payload: selection.payload
+                )
+            }
+        }
+        .sheet(item: $editSelection) { selection in
+            MeetingScheduleSheet(
+                payload: selection.payload,
+                editingMeeting: selection.meeting
+            ) {}
         }
     }
 
@@ -195,7 +234,6 @@ struct MeetingListView: View {
 
     private func row(for meeting: MeetingModel) -> some View {
         let end = meeting.startDate.addingTimeInterval(Double(meeting.durationMinutes) * 60)
-        let isOngoing = meeting.startDate <= now && end > now
         let isFinished = end <= now
         let isHighlighted = meeting.id == highlightMeetingID
         let meetingDateTime = localDateTimeParts(
@@ -204,10 +242,9 @@ struct MeetingListView: View {
             timezoneId: meeting.localTimezoneId
         )
         let resolvedParticipants = participants(for: meeting)
-        let duration = String(
-            format: String(localized: "meeting.settings.duration.format"),
-            meeting.durationMinutes
-        )
+        let title = displayTitle(for: meeting)
+        let notes = meeting.notes?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let reminder = reminderText(for: meeting.reminderLeadTimeMinutes)
         let cardBackground = isHighlighted
             ? Color.orange.opacity(0.16)
             : Color(uiColor: .secondarySystemGroupedBackground)
@@ -216,24 +253,53 @@ struct MeetingListView: View {
             : Color(uiColor: .separator).opacity(0.18)
 
         return VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .center, spacing: 8) {
-                Text(meetingDateTime.time)
-                    .font(.title3.weight(.bold))
-                    .monospacedDigit()
-                    .layoutPriority(1)
-
-                Text(duration)
-                    .font(.caption.weight(.semibold))
-                    .foregroundColor(isFinished ? .secondary : .accentColor)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background((isFinished ? Color.secondary : Color.accentColor).opacity(0.12))
-                    .clipShape(Capsule())
+            HStack(alignment: .top, spacing: 8) {
+                Text(title)
+                    .font(.headline)
+                    .lineLimit(2)
 
                 Spacer(minLength: 8)
 
-                if isOngoing {
-                    cardBadge(String(localized: "meeting.list.ongoing"), background: .green)
+                if meeting.scheduleSource == .systemCalendar {
+                    cardBadge(
+                        meeting.scheduleSource.displayName,
+                        background: .blue
+                    )
+                    .fixedSize(horizontal: true, vertical: false)
+                    .layoutPriority(2)
+                }
+            }
+            .frame(maxWidth: .infinity)
+
+            if !notes.isEmpty {
+                Text(notes)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            HStack(alignment: .center, spacing: 8) {
+                Text(meetingDateTime.time)
+                    .font(.system(.title2, design: .rounded).weight(.bold))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+                    .foregroundStyle(isFinished ? Color.secondary : Color.primary)
+                    .layoutPriority(1)
+
+                Spacer(minLength: 8)
+
+                if let reminder {
+                    HStack(spacing: 3) {
+                        Image(systemName: "bell")
+                        Text(reminder)
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .accessibilityElement(children: .combine)
                 }
             }
 
@@ -270,8 +336,50 @@ struct MeetingListView: View {
             }
         }
         .onTapGesture {
-            share(meeting)
+            openSchedule(meeting)
         }
+    }
+
+    private func reminderText(for minutes: Int?) -> String? {
+        guard let minutes else { return nil }
+        return MeetingScheduleText.reminder(for: minutes)
+    }
+
+    private func displayTitle(for meeting: MeetingModel) -> String {
+        let customTitle = meeting.title?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !customTitle.isEmpty {
+            return customTitle
+        }
+
+        let cityNames = meeting.participantNames.filter {
+            !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        if !cityNames.isEmpty {
+            return cityNames.joined(
+                separator: String(localized: "meeting.slots.constraints.join")
+            )
+        }
+        return String(localized: "meeting.ics.summary.empty")
+    }
+
+    private func deleteMessage(for meeting: MeetingModel) -> String {
+        let range = fullRangeText(for: meeting)
+        guard meeting.scheduleSource == .systemCalendar else {
+            return range
+        }
+        return "\(range)\n\(String(localized: "meeting.list.delete.systemCalendar.note"))"
+    }
+
+    private func openSchedule(_ meeting: MeetingModel) {
+        let resolvedParticipants = participants(for: meeting)
+        actionSelection = MeetingActionSelection(
+            id: meeting.id,
+            meeting: meeting,
+            payload: makePayload(
+                for: meeting,
+                participants: resolvedParticipants
+            )
+        )
     }
 
     private func isMeetingToday(_ meeting: MeetingModel) -> Bool {
@@ -349,16 +457,21 @@ struct MeetingListView: View {
         }
     }
 
-    private func share(_ meeting: MeetingModel) {
-        sharePayload = MeetingSharePayload(
+    private func makePayload(
+        for meeting: MeetingModel,
+        participants: [MeetingCalendarParticipant]
+    ) -> MeetingSharePayload {
+        MeetingSharePayload(
             event: MeetingCalendarEvent(
                 uid: meeting.id.uuidString,
                 startDate: meeting.startDate,
                 durationMinutes: meeting.durationMinutes,
                 localTimezoneId: meeting.localTimezoneId,
-                participants: participants(for: meeting)
+                participants: participants
             ),
-            use24Hour: use24Hour
+            use24Hour: use24Hour,
+            title: displayTitle(for: meeting),
+            notes: meeting.notes
         )
     }
 
@@ -447,24 +560,16 @@ struct MeetingListView: View {
         end: Date,
         timezoneId: String
     ) -> (date: String, time: String) {
-        let timeRange = "\(timeText(start, timezoneId: timezoneId))–\(timeText(end, timezoneId: timezoneId))"
-        let startDate = dateText(start, timezoneId: timezoneId)
-
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: timezoneId) ?? .current
-        guard !calendar.isDate(start, inSameDayAs: end) else {
-            return (startDate, timeRange)
-        }
-
-        let endDate = dateText(end, timezoneId: timezoneId)
-        return ("\(startDate) – \(endDate)", timeRange)
-    }
-
-    private func timeText(_ date: Date, timezoneId: String) -> String {
-        if use24Hour {
-            return timezoneService.getLocalTime24(timezoneId: timezoneId, date: date) ?? ""
-        }
-        return timezoneService.getLocalTime12(timezoneId: timezoneId, date: date) ?? ""
+        let timezone = TimeZone(identifier: timezoneId) ?? .current
+        return (
+            DateDisplayFormat.dateWithWeekday(start, timezone: timezone),
+            DateDisplayFormat.timeRange(
+                start: start,
+                end: end,
+                timezone: timezone,
+                use24Hour: use24Hour
+            )
+        )
     }
 
     private func dateText(_ date: Date, timezoneId: String) -> String {
@@ -487,4 +592,28 @@ struct MeetingListView: View {
 #Preview {
     MeetingListView()
         .environmentObject(AppEnvironment())
+}
+
+enum MeetingScheduleText {
+    static func reminder(for minutes: Int) -> String {
+        let key: String
+        switch minutes {
+        case 0: key = "meeting.calendar.alert.onTime"
+        case 5: key = "meeting.calendar.alert.5"
+        case 10: key = "meeting.calendar.alert.10"
+        case 15: key = "meeting.calendar.alert.15"
+        case 30: key = "meeting.calendar.alert.30"
+        case 60: key = "meeting.calendar.alert.60"
+        case 120: key = "meeting.calendar.alert.120"
+        case 1_440: key = "meeting.calendar.alert.1day"
+        case 2_880: key = "meeting.calendar.alert.2days"
+        case 10_080: key = "meeting.calendar.alert.1week"
+        default:
+            return String(
+                format: String(localized: "schedule.reminder.minutesBefore"),
+                minutes
+            )
+        }
+        return String(localized: String.LocalizationValue(key))
+    }
 }

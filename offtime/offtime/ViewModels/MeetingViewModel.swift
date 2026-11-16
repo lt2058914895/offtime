@@ -213,14 +213,17 @@ final class MeetingViewModel: ObservableObject {
     func slotDetail(startDate: Date, durationMinutes: Int, use24Hour: Bool) -> MeetingSlotDetail {
         let endDate = startDate.addingTimeInterval(Double(durationMinutes) * 60)
         let rows = selectedParticipants.map { participant in
-            let startText = formatBoundary(date: startDate, participant: participant, use24Hour: use24Hour)
-            let endText = formatBoundary(date: endDate, participant: participant, use24Hour: use24Hour)
             return MeetingSlotRow(
                 id: participant.id,
                 cityName: participant.cityName,
                 cityEn: participant.cityEn,
                 isLocal: participant.isLocal,
-                timeText: "\(startText) – \(endText)",
+                timeText: formatRange(
+                    start: startDate,
+                    end: endDate,
+                    participant: participant,
+                    use24Hour: use24Hour
+                ),
                 state: MeetingPlannerService.state(of: participant, from: startDate, to: endDate)
             )
         }
@@ -237,18 +240,25 @@ final class MeetingViewModel: ObservableObject {
         return MeetingSlotDetail(slot: slot, rows: rows)
     }
 
-    private func formatBoundary(
-        date: Date,
+    private func formatRange(
+        start: Date,
+        end: Date,
         participant: MeetingParticipant,
         use24Hour: Bool
     ) -> String {
-        let time = use24Hour
-            ? timezoneService.getLocalTime24(timezoneId: participant.timezoneId, date: date) ?? ""
-            : timezoneService.getLocalTime12(timezoneId: participant.timezoneId, date: date) ?? ""
+        guard let participantTimezone = TimeZone(identifier: participant.timezoneId) else {
+            return ""
+        }
+        let range = DateDisplayFormat.timeRange(
+            start: start,
+            end: end,
+            timezone: participantTimezone,
+            use24Hour: use24Hour
+        )
 
         guard let localTimezone = TimeZone(identifier: localTimezoneId),
-              let participantTimezone = TimeZone(identifier: participant.timezoneId) else {
-            return time
+              !participant.isLocal else {
+            return range
         }
 
         var localCalendar = Calendar(identifier: .gregorian)
@@ -256,24 +266,22 @@ final class MeetingViewModel: ObservableObject {
         var participantCalendar = Calendar(identifier: .gregorian)
         participantCalendar.timeZone = participantTimezone
 
-        // 本地时区无需日期前缀：会议日期已在标题显示，时间范围自然连续
-        if participant.isLocal {
-            return time
-        }
-
         // 参考日为会议日期（本地时区），而非边界时刻的本地日
-        let referenceDay = dayOrder(localCalendar.dateComponents([.year, .month, .day], from: meetingDate))
-        let participantDay = dayOrder(participantCalendar.dateComponents([.year, .month, .day], from: date))
+        let referenceDay = dayOrder(
+            localCalendar.dateComponents([.year, .month, .day], from: meetingDate)
+        )
+        let participantDay = dayOrder(
+            participantCalendar.dateComponents([.year, .month, .day], from: start)
+        )
 
         if participantDay != referenceDay {
-            // 跨天时显示参与者时区下的具体日期，避免相对标签的歧义
-            let dateStr = timezoneService.getLocalDate(
-                timezoneId: participant.timezoneId,
-                date: date
-            ) ?? ""
-            return "\(dateStr) \(time)"
+            let dateText = DateDisplayFormat.dateWithWeekday(
+                start,
+                timezone: participantTimezone
+            )
+            return "\(dateText) \(range)"
         }
-        return time
+        return range
     }
 
     /// 将日历日期转为可比较的年月日序号（同日返回相同值，跨时区比较不再受零点时刻影响）。

@@ -148,10 +148,37 @@ enum MeetingCalendarExportService {
     }
 
     static func description(for event: MeetingCalendarEvent, locale: Locale) -> String {
-        let endDate = event.startDate.addingTimeInterval(Double(event.durationMinutes) * 60)
         var lines = [
             String(format: String(localized: "meeting.ics.duration"), event.durationMinutes)
         ]
+        lines.append(contentsOf: cityTimeLines(for: event, locale: locale))
+        return lines.joined(separator: "\n")
+    }
+
+    /// 系统日历备注只包含城市时间，不重复写入时长。
+    static func calendarNotes(
+        for event: MeetingCalendarEvent,
+        customNotes: String?,
+        locale: Locale
+    ) -> String {
+        let generated = cityTimeLines(for: event, locale: locale).joined(separator: "\n")
+        let custom = customNotes?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+        if custom.isEmpty {
+            return generated
+        }
+        if generated.isEmpty {
+            return custom
+        }
+        return "\(custom)\n\n\(generated)"
+    }
+
+    private static func cityTimeLines(
+        for event: MeetingCalendarEvent,
+        locale: Locale
+    ) -> [String] {
+        let endDate = event.startDate.addingTimeInterval(Double(event.durationMinutes) * 60)
+        var lines: [String] = []
 
         var unresolvedNames: [String] = []
         for participant in event.participants {
@@ -200,7 +227,7 @@ enum MeetingCalendarExportService {
             )
         }
 
-        return lines.joined(separator: "\n")
+        return lines
     }
 
     private static func localRangeText(
@@ -210,30 +237,17 @@ enum MeetingCalendarExportService {
         locale: Locale
     ) -> String {
         let startDay = dayText(start, timezone: timezone)
-        let endDay = dayText(end, timezone: timezone)
-        let startTime = timeText(start, timezone: timezone, locale: locale)
-        let endTime = timeText(end, timezone: timezone, locale: locale)
-
-        if startDay == endDay {
-            return "\(startDay) \(startTime)–\(endTime)"
-        }
-        return "\(startDay) \(startTime)–\(endDay) \(endTime)"
+        let timeRange = DateDisplayFormat.timeRange(
+            start: start,
+            end: end,
+            timezone: timezone,
+            locale: locale
+        )
+        return "\(startDay) \(timeRange)"
     }
 
     private static func dayText(_ date: Date, timezone: TimeZone) -> String {
         DateDisplayFormat.dateWithWeekday(date, timezone: timezone)
-    }
-
-    private static func timeText(_ date: Date, timezone: TimeZone, locale: Locale) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = locale
-        formatter.timeZone = timezone
-        formatter.dateFormat = DateFormatter.dateFormat(
-            fromTemplate: "jmm",
-            options: 0,
-            locale: locale
-        ) ?? "HH:mm"
-        return formatter.string(from: date)
     }
 
     private static func utcTimestamp(_ date: Date) -> String {

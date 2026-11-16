@@ -152,6 +152,28 @@ final class MeetingCalendarExportServiceTests: XCTestCase {
         XCTAssertFalse(description.contains("15:30"))
     }
 
+    func testCalendarNotesKeepsCustomTextAndAddsCityTimesWithoutDuration() {
+        let notes = MeetingCalendarExportService.calendarNotes(
+            for: event(),
+            customNotes: "确认议程",
+            locale: Locale(identifier: "zh_CN")
+        )
+
+        XCTAssertTrue(notes.contains("确认议程"))
+        XCTAssertTrue(notes.contains("Shanghai"))
+        XCTAssertTrue(notes.contains("London"))
+        XCTAssertTrue(notes.contains("2026/11/07 周六"))
+        XCTAssertTrue(notes.contains("15:30–16:30"))
+        XCTAssertFalse(
+            notes.contains(
+                String(
+                    format: String(localized: "meeting.ics.duration"),
+                    60
+                )
+            )
+        )
+    }
+
     func testTimezoneResolverUsesUniqueSavedCityMatch() {
         let savedCities = [
             MeetingCityTimezoneCandidate(

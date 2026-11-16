@@ -36,4 +36,49 @@ enum DateDisplayFormat {
         "\(self.date(date, timezone: timezone)) \(weekday(date, timezone: timezone))"
             .trimmingCharacters(in: .whitespaces)
     }
+
+    /// 会议时间范围。日期始终使用开始日，结束时间跨天时增加相对日标记。
+    static func timeRange(
+        start: Date,
+        end: Date,
+        timezone: TimeZone,
+        use24Hour: Bool? = nil,
+        locale: Locale = .current
+    ) -> String {
+        let format: String
+        if let use24Hour {
+            format = use24Hour ? "HH:mm" : "h:mm a"
+        } else {
+            format = DateFormatter.dateFormat(
+                fromTemplate: "jmm",
+                options: 0,
+                locale: locale
+            ) ?? "HH:mm"
+        }
+
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.timeZone = timezone
+        formatter.dateFormat = format
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timezone
+        let startDay = calendar.startOfDay(for: start)
+        let endDay = calendar.startOfDay(for: end)
+        let dayOffset = calendar.dateComponents([.day], from: startDay, to: endDay).day ?? 0
+        let endText = formatter.string(from: end)
+
+        guard dayOffset > 0 else {
+            return "\(formatter.string(from: start))–\(endText)"
+        }
+
+        let marker: String
+        let isChinese = locale.language.languageCode?.identifier == "zh"
+        if dayOffset == 1 {
+            marker = isChinese ? "次日" : "next day"
+        } else {
+            marker = isChinese ? "\(dayOffset)天后" : "\(dayOffset) days later"
+        }
+        return "\(formatter.string(from: start))–\(marker) \(endText)"
+    }
 }

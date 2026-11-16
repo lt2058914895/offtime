@@ -6,32 +6,89 @@ struct MeetingSharePayload: Identifiable {
     let id = UUID()
     let event: MeetingCalendarEvent
     let use24Hour: Bool
+    var title: String? = nil
+    var notes: String? = nil
 }
 
-/// 统一会议操作入口：添加到日历，以及分享图片或日历文件。
+struct BottomSheetActionCard: View {
+    let title: String
+    let detail: String
+    let systemImage: String
+    var isLoading = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Group {
+                    if isLoading {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: systemImage)
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                }
+                .frame(width: 38, height: 38)
+                .background(Color.accentColor, in: Circle())
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(.primary)
+
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer(minLength: 8)
+
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(14)
+            .background(Color(uiColor: .secondarySystemGroupedBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(Color(uiColor: .separator).opacity(0.18), lineWidth: 0.5)
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(isLoading)
+    }
+}
+
+/// 分享日程：只负责分享日历文件和图片，不申请日历或通知权限。
 struct MeetingShareSheet: View {
     let payload: MeetingSharePayload
+    let onEdit: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.scenePhase) private var scenePhase
     @State private var stage: ShareStage = .actions
-    @State private var selectedDetent: PresentationDetent = .height(450)
+    @State private var selectedDetent: PresentationDetent
     @State private var previewImage: UIImage?
     @State private var isPreparingImage = false
     @State private var isSavingImage = false
-    @State private var isSavingCalendar = false
-    @State private var isRequestingCalendarAccess = false
-    @State private var calendarSaved = false
-    @State private var calendarDraft = MeetingCalendarEditorDraft()
-    @State private var calendarOpenDate: Date?
     @State private var pendingShare: PendingMeetingShare?
     @State private var shareAlert: MeetingShareAlert?
     @State private var toastMessage: String?
 
     private enum ShareStage: Equatable {
         case actions
-        case calendarEditor
         case imagePreview
+    }
+
+    init(
+        payload: MeetingSharePayload,
+        onEdit: (() -> Void)? = nil
+    ) {
+        self.payload = payload
+        self.onEdit = onEdit
+        _selectedDetent = State(initialValue: .height(onEdit == nil ? 450 : 520))
     }
 
     var body: some View {
@@ -40,8 +97,6 @@ struct MeetingShareSheet: View {
                 switch stage {
                 case .actions:
                     optionsContent
-                case .calendarEditor:
-                    calendarEditorContent
                 case .imagePreview:
                     imagePreviewContent
                 }
@@ -50,7 +105,7 @@ struct MeetingShareSheet: View {
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if stage != .actions {
+                if stage == .imagePreview {
                     ToolbarItem(placement: .topBarLeading) {
                         Button(action: backToOptions) {
                             Image(systemName: "chevron.left")
@@ -60,26 +115,11 @@ struct MeetingShareSheet: View {
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    if stage == .calendarEditor {
-                        Button {
-                            saveEditedCalendarEvent()
-                        } label: {
-                            if isSavingCalendar {
-                                ProgressView()
-                                    .controlSize(.small)
-                            } else {
-                                Text(String(localized: "meeting.calendar.add.action"))
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                        .disabled(isSavingCalendar)
-                    } else {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                                .font(.body.weight(.semibold))
-                        }
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.body.weight(.semibold))
                     }
                 }
             }
@@ -108,42 +148,17 @@ struct MeetingShareSheet: View {
             }
             .toast(message: $toastMessage)
         }
-        .presentationDetents([.height(450), .large], selection: $selectedDetent)
+        .presentationDetents(
+            [.height(450), .height(520), .large],
+            selection: $selectedDetent
+        )
         .presentationDragIndicator(.visible)
-        .onAppear {
-            calendarSaved = MeetingCalendarService.shared.hasSavedEvent(for: payload.event)
-            if calendarDraft.title.isEmpty {
-                let startDate = MeetingCalendarService.shared.savedStartDate(for: payload.event)
-                    ?? payload.event.startDate
-                calendarDraft.startDate = startDate
-                calendarDraft.endDate = startDate.addingTimeInterval(
-                    Double(payload.event.durationMinutes) * 60
-                )
-                calendarOpenDate = startDate
-                calendarDraft.title = MeetingCalendarExportService.summary(for: payload.event)
-                calendarDraft.notes = MeetingCalendarExportService.description(
-                    for: payload.event,
-                    locale: .current
-                )
-            }
-            Task {
-                await refreshCalendarState()
-            }
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            guard newPhase == .active else { return }
-            Task {
-                await refreshCalendarState()
-            }
-        }
     }
 
     private var navigationTitle: String {
         switch stage {
         case .actions:
             return String(localized: "meeting.actions.title")
-        case .calendarEditor:
-            return String(localized: "meeting.calendar.editor.title")
         case .imagePreview:
             return String(localized: "meeting.share.preview.title")
         }
@@ -151,28 +166,7 @@ struct MeetingShareSheet: View {
 
     private var optionsContent: some View {
         VStack(spacing: 10) {
-            shareActionButton(
-                title: String(
-                    localized: calendarSaved
-                        ? "meeting.calendar.open.action"
-                        : "meeting.calendar.action"
-                ),
-                detail: String(
-                    localized: calendarSaved
-                        ? "meeting.calendar.hint.saved"
-                        : "meeting.calendar.hint"
-                ),
-                systemImage: calendarSaved ? "calendar.badge.checkmark" : "calendar.badge.plus",
-                isLoading: isSavingCalendar || isRequestingCalendarAccess
-            ) {
-                if calendarSaved {
-                    openCalendar()
-                } else {
-                    beginAddingToCalendar()
-                }
-            }
-
-            shareActionButton(
+            BottomSheetActionCard(
                 title: String(localized: "meeting.share.ics.action"),
                 detail: String(localized: "meeting.share.ics.hint"),
                 systemImage: "calendar.badge.plus"
@@ -180,7 +174,7 @@ struct MeetingShareSheet: View {
                 shareCalendarFile()
             }
 
-            shareActionButton(
+            BottomSheetActionCard(
                 title: String(localized: "meeting.share.image.action"),
                 detail: String(localized: "meeting.share.image.hint"),
                 systemImage: "photo.on.rectangle",
@@ -189,20 +183,20 @@ struct MeetingShareSheet: View {
                 showImagePreview()
             }
 
+            if let onEdit {
+                BottomSheetActionCard(
+                    title: String(localized: "meeting.list.action.edit"),
+                    detail: String(localized: "meeting.list.action.edit.hint"),
+                    systemImage: "square.and.pencil"
+                ) {
+                    onEdit()
+                    dismiss()
+                }
+            }
+
             Spacer(minLength: 0)
         }
         .padding(16)
-    }
-
-    private var calendarEditorContent: some View {
-        MeetingCalendarEditorForm(
-            draft: calendarDraft,
-            displayTimezone: calendarDisplayTimezone
-        )
-    }
-
-    private var calendarDisplayTimezone: TimeZone {
-        TimeZone(identifier: payload.event.localTimezoneId) ?? .current
     }
 
     private var imagePreviewContent: some View {
@@ -280,56 +274,6 @@ struct MeetingShareSheet: View {
         }
     }
 
-    private func shareActionButton(
-        title: String,
-        detail: String,
-        systemImage: String,
-        isLoading: Bool = false,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                Group {
-                    if isLoading {
-                        ProgressView()
-                            .tint(.white)
-                    } else {
-                        Image(systemName: systemImage)
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                }
-                .frame(width: 38, height: 38)
-                .background(Color.accentColor, in: Circle())
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.body.weight(.semibold))
-                        .foregroundStyle(.primary)
-
-                    Text(detail)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer(minLength: 8)
-
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-            }
-            .padding(14)
-            .background(Color(uiColor: .secondarySystemGroupedBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(Color(uiColor: .separator).opacity(0.18), lineWidth: 0.5)
-            }
-        }
-        .buttonStyle(.plain)
-        .disabled(isLoading)
-    }
-
     private func showImagePreview() {
         guard !isPreparingImage else { return }
 
@@ -348,6 +292,7 @@ struct MeetingShareSheet: View {
             isPreparingImage = false
 
             guard let image else {
+                stage = .actions
                 shareAlert = MeetingShareAlert(
                     title: String(localized: "meeting.share.failed.title"),
                     message: String(localized: "meeting.share.image.failed.message")
@@ -372,130 +317,6 @@ struct MeetingShareSheet: View {
                 stage = .actions
                 selectedDetent = .height(450)
             }
-        }
-    }
-
-    private func saveEditedCalendarEvent() {
-        guard calendarDraft.endDate > calendarDraft.startDate else {
-            shareAlert = MeetingShareAlert(
-                title: String(localized: "meeting.calendar.failed.title"),
-                message: String(localized: "meeting.calendar.error.invalidTime")
-            )
-            return
-        }
-
-        let durationMinutes = max(
-            1,
-            Int(calendarDraft.endDate.timeIntervalSince(calendarDraft.startDate) / 60)
-        )
-        let editedEvent = MeetingCalendarEvent(
-            uid: payload.event.uid,
-            startDate: calendarDraft.startDate,
-            durationMinutes: durationMinutes,
-            localTimezoneId: payload.event.localTimezoneId,
-            participants: payload.event.participants
-        )
-        saveToCalendar(
-            event: editedEvent,
-            title: calendarDraft.title,
-            notes: calendarDraft.notes.isEmpty ? nil : calendarDraft.notes,
-            leadTimeMinutes: calendarDraft.leadTimeMinutes
-        )
-    }
-
-    private func beginAddingToCalendar() {
-        guard !isRequestingCalendarAccess else { return }
-        isRequestingCalendarAccess = true
-
-        Task { @MainActor in
-            defer { isRequestingCalendarAccess = false }
-            let granted = await MeetingCalendarService.shared.requestAccessIfNeeded()
-            guard granted else {
-                shareAlert = MeetingShareAlert(
-                    title: String(localized: "meeting.calendar.permission.title"),
-                    message: AppDisplay.text(
-                        "meeting.calendar.error.access",
-                        AppDisplay.name
-                    ),
-                    showsSettingsAction: true
-                )
-                return
-            }
-
-            withAnimation(.easeInOut(duration: 0.2)) {
-                stage = .calendarEditor
-                selectedDetent = .large
-            }
-        }
-    }
-
-    private func saveToCalendar(
-        event: MeetingCalendarEvent,
-        title: String,
-        notes: String?,
-        leadTimeMinutes: Int?
-    ) {
-        guard !isSavingCalendar else { return }
-        isSavingCalendar = true
-
-        Task { @MainActor in
-            defer { isSavingCalendar = false }
-
-            do {
-                let result = try await MeetingCalendarService.shared.save(
-                    event: event,
-                    integrationKeyOverride: MeetingCalendarService.integrationKey(
-                        for: payload.event
-                    ),
-                    title: title,
-                    location: "",
-                    notes: notes,
-                    url: nil,
-                    leadTimeMinutes: leadTimeMinutes
-                )
-                calendarSaved = true
-                calendarOpenDate = event.startDate
-                toastMessage = String(
-                    localized: result == .created
-                        ? "meeting.calendar.success.created"
-                        : "meeting.calendar.success.updated"
-                )
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    stage = .actions
-                    selectedDetent = .height(450)
-                }
-            } catch let error as MeetingCalendarServiceError {
-                shareAlert = MeetingShareAlert(
-                    title: String(localized: "meeting.calendar.failed.title"),
-                    message: error.localizedDescription,
-                    showsSettingsAction: error.requiresSettingsAction
-                )
-            } catch {
-                shareAlert = MeetingShareAlert(
-                    title: String(localized: "meeting.calendar.failed.title"),
-                    message: String(localized: "meeting.calendar.error.save"),
-                    showsSettingsAction: false
-                )
-            }
-        }
-    }
-
-    private func refreshCalendarState() async {
-        let exists = await MeetingCalendarService.shared.refreshSavedEvent(
-            for: payload.event
-        )
-        guard !exists else {
-            calendarSaved = true
-            return
-        }
-
-        calendarSaved = false
-        if stage == .actions {
-            calendarOpenDate = nil
-            calendarDraft.startDate = payload.event.startDate
-            calendarDraft.endDate = payload.event.startDate.addingTimeInterval(
-                Double(payload.event.durationMinutes) * 60
-            )
         }
     }
 
@@ -552,6 +373,8 @@ struct MeetingShareSheet: View {
                 MeetingCalendarExportService.removeTemporaryFile(at: url)
             }
         } catch {
+            stage = .actions
+            selectedDetent = .height(450)
             shareAlert = MeetingShareAlert(
                 title: String(localized: "meeting.share.failed.title"),
                 message: String(localized: "meeting.share.failed.message")
@@ -562,104 +385,6 @@ struct MeetingShareSheet: View {
     private func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url)
-    }
-
-    private func openCalendar() {
-        guard let url = MeetingCalendarService.calendarDeepLink(
-            for: calendarOpenDate
-                ?? MeetingCalendarService.shared.savedStartDate(for: payload.event)
-                ?? payload.event.startDate
-        ) else { return }
-        UIApplication.shared.open(url)
-    }
-}
-
-@MainActor
-@Observable
-private final class MeetingCalendarEditorDraft {
-    var title = ""
-    var startDate = Date()
-    var endDate = Date()
-    var notes = ""
-    var leadTimeMinutes: Int? = 10
-}
-
-private struct MeetingCalendarEditorForm: View {
-    @Bindable var draft: MeetingCalendarEditorDraft
-    let displayTimezone: TimeZone
-
-    private var alertOptions: [(minutes: Int?, title: String)] {
-        [
-            (nil, String(localized: "meeting.calendar.alert.none")),
-            (0, String(localized: "meeting.calendar.alert.onTime")),
-            (5, String(localized: "meeting.calendar.alert.5")),
-            (10, String(localized: "meeting.calendar.alert.10")),
-            (15, String(localized: "meeting.calendar.alert.15")),
-            (30, String(localized: "meeting.calendar.alert.30")),
-            (60, String(localized: "meeting.calendar.alert.60")),
-            (120, String(localized: "meeting.calendar.alert.120")),
-            (1_440, String(localized: "meeting.calendar.alert.1day")),
-            (2_880, String(localized: "meeting.calendar.alert.2days")),
-            (10_080, String(localized: "meeting.calendar.alert.1week"))
-        ]
-    }
-
-    var body: some View {
-        Form {
-            Section {
-                TextField(
-                    String(localized: "meeting.calendar.field.title"),
-                    text: $draft.title
-                )
-            }
-
-            Section {
-                DatePicker(
-                    String(localized: "meeting.calendar.field.start"),
-                    selection: $draft.startDate,
-                    displayedComponents: [.date, .hourAndMinute]
-                )
-                .datePickerStyle(.compact)
-                .onChange(of: draft.startDate) { oldValue, newValue in
-                    let duration = max(draft.endDate.timeIntervalSince(oldValue), 60)
-                    draft.endDate = newValue.addingTimeInterval(duration)
-                }
-
-                DatePicker(
-                    String(localized: "meeting.calendar.field.end"),
-                    selection: $draft.endDate,
-                    displayedComponents: [.date, .hourAndMinute]
-                )
-                .datePickerStyle(.compact)
-            }
-
-            Section {
-                Picker(
-                    String(localized: "meeting.calendar.field.alert"),
-                    selection: $draft.leadTimeMinutes
-                ) {
-                    ForEach(alertOptions, id: \.minutes) { option in
-                        Text(option.title).tag(option.minutes)
-                    }
-                }
-                .pickerStyle(.menu)
-            }
-
-            Section {
-                TextField(
-                    String(localized: "meeting.calendar.field.notes"),
-                    text: $draft.notes,
-                    axis: .vertical
-                )
-                .lineLimit(5, reservesSpace: true)
-                .textInputAutocapitalization(.sentences)
-            }
-
-        }
-        .scrollContentBackground(.hidden)
-        .scrollDismissesKeyboard(.interactively)
-        .background(Color(uiColor: .systemGroupedBackground))
-        .environment(\.timeZone, displayTimezone)
     }
 }
 
@@ -728,16 +453,22 @@ private struct MeetingShareCardView: View {
         return names.joined(separator: String(localized: "meeting.slots.constraints.join"))
     }
 
+    private var displayTitle: String {
+        let custom = payload.title?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return custom.isEmpty ? cityTitle : custom
+    }
+
     private var localDateText: String {
-        dateRangeText(start: event.startDate, end: endDate, timezone: localTimezone)
+        DateDisplayFormat.dateWithWeekday(event.startDate, timezone: localTimezone)
     }
 
     private var localTimeText: String {
-        timeRangeText(start: event.startDate, end: endDate, timezone: localTimezone)
-    }
-
-    private var durationText: String {
-        String(format: String(localized: "meeting.settings.duration.format"), event.durationMinutes)
+        DateDisplayFormat.timeRange(
+            start: event.startDate,
+            end: endDate,
+            timezone: localTimezone,
+            use24Hour: payload.use24Hour
+        )
     }
 
     private var cityRows: [MeetingShareCityRow] {
@@ -750,60 +481,73 @@ private struct MeetingShareCardView: View {
                     cityEn: participant.cityEn
                 ),
                 dateText: timezone.map {
-                    dateRangeText(start: event.startDate, end: endDate, timezone: $0)
+                    DateDisplayFormat.dateWithWeekday(event.startDate, timezone: $0)
                 },
                 timeText: timezone.map {
-                    timeRangeText(start: event.startDate, end: endDate, timezone: $0)
+                    DateDisplayFormat.timeRange(
+                        start: event.startDate,
+                        end: endDate,
+                        timezone: $0,
+                        use24Hour: payload.use24Hour
+                    )
                 }
             )
         }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Text(cityTitle)
-                .font(.system(size: 28, weight: .bold))
+        VStack(alignment: .leading, spacing: 10) {
+            Text(displayTitle)
+                .font(.headline)
                 .foregroundStyle(Color.black)
+                .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
 
-            VStack(alignment: .leading, spacing: 6) {
-                Text(localDateText)
-                    .font(.system(size: 15, weight: .medium))
+            if let notesText {
+                Text(notesText)
+                    .font(.caption)
                     .foregroundStyle(Color(white: 0.42))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
-                HStack(alignment: .center, spacing: 10) {
-                    Text(localTimeText)
-                        .font(.system(size: 34, weight: .bold))
-                        .monospacedDigit()
-                        .foregroundStyle(Color.black)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
-                        .layoutPriority(1)
+            HStack(alignment: .center, spacing: 8) {
+                Text(localDateText)
+                    .font(.caption)
+                    .foregroundStyle(Color(white: 0.42))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
 
-                    Text(durationText)
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Color.blue)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 4)
-                        .background(Color.blue.opacity(0.12))
-                        .clipShape(Capsule())
-                }
+                Text(localTimeText)
+                    .font(.system(.title2, design: .rounded).weight(.bold))
+                    .monospacedDigit()
+                    .foregroundStyle(Color.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+                    .layoutPriority(1)
+
+                Spacer(minLength: 0)
             }
 
             if !cityRows.isEmpty {
                 Divider()
 
-                VStack(spacing: 14) {
+                VStack(spacing: 8) {
                     ForEach(cityRows) { row in
                         cityRow(row)
                     }
                 }
             }
         }
-        .padding(24)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
         .frame(width: 390, alignment: .leading)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: Color.black.opacity(0.04), radius: 4, y: 2)
+        .overlay {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(Color.black.opacity(0.08), lineWidth: 0.5)
+        }
         .padding(20)
         .background(Color(red: 0.95, green: 0.95, blue: 0.97))
     }
@@ -811,7 +555,7 @@ private struct MeetingShareCardView: View {
     private func cityRow(_ row: MeetingShareCityRow) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(row.cityName)
-                .font(.system(size: 16, weight: .medium))
+                .font(.subheadline.weight(.medium))
                 .foregroundStyle(Color.black)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
@@ -823,12 +567,12 @@ private struct MeetingShareCardView: View {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(dateText)
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundStyle(Color(white: 0.42))
                             .lineLimit(1)
 
                         Text(timeText)
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.subheadline.weight(.semibold))
                             .monospacedDigit()
                             .foregroundStyle(Color.black)
                             .lineLimit(1)
@@ -836,13 +580,13 @@ private struct MeetingShareCardView: View {
 
                     VStack(alignment: .trailing, spacing: 2) {
                         Text(dateText)
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundStyle(Color(white: 0.42))
                             .multilineTextAlignment(.trailing)
                             .lineLimit(2)
 
                         Text(timeText)
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.subheadline.weight(.semibold))
                             .monospacedDigit()
                             .foregroundStyle(Color.black)
                             .lineLimit(1)
@@ -850,37 +594,17 @@ private struct MeetingShareCardView: View {
                 }
             } else {
                 Text(verbatim: "—")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color(white: 0.42))
             }
         }
     }
 
-    private func dateRangeText(start: Date, end: Date, timezone: TimeZone) -> String {
-        let startText = dateText(start, timezone: timezone)
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = timezone
-        guard !calendar.isDate(start, inSameDayAs: end) else {
-            return startText
-        }
-        return "\(startText) – \(dateText(end, timezone: timezone))"
+    private var notesText: String? {
+        let trimmed = payload.notes?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return trimmed.isEmpty ? nil : trimmed
     }
 
-    private func timeRangeText(start: Date, end: Date, timezone: TimeZone) -> String {
-        "\(timeText(start, timezone: timezone))–\(timeText(end, timezone: timezone))"
-    }
-
-    private func dateText(_ date: Date, timezone: TimeZone) -> String {
-        DateDisplayFormat.dateWithWeekday(date, timezone: timezone)
-    }
-
-    private func timeText(_ date: Date, timezone: TimeZone) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.timeZone = timezone
-        formatter.dateFormat = payload.use24Hour ? "HH:mm" : "h:mm a"
-        return formatter.string(from: date)
-    }
 }
 
 private struct MeetingShareCityRow: Identifiable {

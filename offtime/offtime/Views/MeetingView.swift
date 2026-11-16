@@ -1,20 +1,16 @@
 import SwiftUI
 import SwiftData
 
-/// 多时区会议规划：勾选城市 + 设置时长与会议日期 → 自动按各城市工作时间生成推荐档期 → 加入会议列表。
+/// 跨时区共同时段查询：勾选城市 + 设置时长与日期 → 生成共同可联系时间 → 可选分享或安排会议。
 struct MeetingView: View {
     @StateObject private var viewModel = MeetingViewModel()
     @EnvironmentObject private var appEnvironment: AppEnvironment
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dismiss) private var dismiss
     @State private var lastSeenCitiesRevision: Int = 0
     @State private var selectedGroup: MeetingSlotGroup?
     @State private var toastMessage: String?
-    @State private var showConflictAlert = false
-    @State private var conflictMeetingID: UUID?
     @State private var showMeetingRecords = false
-    @State private var openRecordsAfterSheetDismissal = false
     @State private var highlightedMeetingID: UUID?
     @State private var isAppeared = false
     var embedsNavigationStack: Bool = true
@@ -109,12 +105,7 @@ struct MeetingView: View {
         .onReceive(appEnvironment.$currentDate) { date in
             viewModel.updateCurrentDate(date)
         }
-        .sheet(item: $selectedGroup, onDismiss: {
-            if openRecordsAfterSheetDismissal {
-                openRecordsAfterSheetDismissal = false
-                showMeetingRecords = true
-            }
-        }) { group in
+        .sheet(item: $selectedGroup) { group in
             SlotDetailSheet(
                 rangeText: groupRangeText(group),
                 group: group,
@@ -135,27 +126,11 @@ struct MeetingView: View {
                         use24Hour: use24Hour
                     )
                 },
-                onAdd: { startDate in
-                    if addMeeting(startDate: startDate, durationMinutes: group.durationMinutes) {
-                        selectedGroup = nil
-                    }
+                onScheduleCreated: {
+                    toastMessage = String(localized: "meeting.schedule.success")
                 }
             )
             .presentationDetents([.large])
-            .alert(
-                String(localized: "meeting.add.conflict.title"),
-                isPresented: $showConflictAlert
-            ) {
-                Button(String(localized: "meeting.add.conflict.view")) {
-                    guard let conflictMeetingID else { return }
-                    highlightedMeetingID = conflictMeetingID
-                    openRecordsAfterSheetDismissal = true
-                    selectedGroup = nil
-                }
-                Button(String(localized: "common.cancel"), role: .cancel) {}
-            } message: {
-                Text(String(localized: "meeting.add.conflict"))
-            }
         }
         .toast(message: $toastMessage)
         .navigationDestination(isPresented: $showMeetingRecords) {
@@ -173,34 +148,7 @@ struct MeetingView: View {
         }
     }
 
-    @discardableResult
-    private func addMeeting(startDate: Date, durationMinutes: Int) -> Bool {
-        let endDate = startDate.addingTimeInterval(Double(durationMinutes) * 60)
-        let existing = (try? modelContext.fetch(FetchDescriptor<MeetingModel>())) ?? []
-        if let conflict = existing.first(where: { meeting in
-            let meetingEnd = meeting.startDate.addingTimeInterval(Double(meeting.durationMinutes) * 60)
-            return startDate < meetingEnd && meeting.startDate < endDate
-        }) {
-            conflictMeetingID = conflict.id
-            showConflictAlert = true
-            return false
-        }
-        let meeting = MeetingModel(
-            startDate: startDate,
-            durationMinutes: durationMinutes,
-            localTimezoneId: viewModel.localTimezoneId,
-            participantNames: viewModel.participantNames,
-            participantEnNames: viewModel.participantEnNames,
-            participantTimezoneIds: viewModel.selectedParticipants.map(\.timezoneId)
-        )
-        modelContext.insert(meeting)
-        try? modelContext.save()
-        viewModel.saveSelectedParticipantIDs()
-        toastMessage = String(localized: "meeting.add.success")
-        return true
-    }
-
-    // MARK: - 参与者与工作时段重叠卡片
+    // MARK: - 城市与工作时段重叠卡片
 
     private var participantOverlapCard: some View {
         CardView {
@@ -341,24 +289,11 @@ struct MeetingView: View {
         return timezoneService.getLocalTime12(timezoneId: participant.timezoneId, date: viewModel.currentDate) ?? ""
     }
 
-    // MARK: - 会议设置卡片
+    // MARK: - 协调设置卡片
 
     private var settingsCard: some View {
         CardView {
             VStack(alignment: .leading, spacing: 14) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(String(localized: "meeting.settings.duration"))
-                        .font(.headline)
-                    Picker(String(localized: "meeting.settings.duration"), selection: $viewModel.durationMinutes) {
-                        ForEach([30, 60, 90, 120], id: \.self) { minutes in
-                            Text(String(format: String(localized: "meeting.settings.duration.format"), minutes))
-                                .tag(minutes)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .tint(Color.accentColor)
-                }
-
                 HStack(spacing: 12) {
                     Text(String(localized: "meeting.settings.range"))
                         .font(.headline)
@@ -387,6 +322,19 @@ struct MeetingView: View {
                         .cornerRadius(10)
                     }
                 }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(String(localized: "meeting.settings.duration"))
+                        .font(.headline)
+                    Picker(String(localized: "meeting.settings.duration"), selection: $viewModel.durationMinutes) {
+                        ForEach([30, 60, 90, 120], id: \.self) { minutes in
+                            Text(String(format: String(localized: "meeting.settings.duration.format"), minutes))
+                                .tag(minutes)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .tint(Color.accentColor)
+                }
             }
         }
     }
@@ -409,7 +357,7 @@ struct MeetingView: View {
         ) ?? ""
     }
 
-    // MARK: - 推荐档期卡片
+    // MARK: - 推荐可联系时间卡片
 
     private var slotsCard: some View {
         CardView {
@@ -479,19 +427,9 @@ struct MeetingView: View {
     }
 
     private func slotTierBadge(_ group: MeetingSlotGroup) -> some View {
-        let text: String
-        let color: Color
-        switch group.tier {
-        case 0:
-            text = String(localized: "meeting.slots.tier.all")
-            color = .green
-        case 1:
-            text = String(format: String(localized: "meeting.slots.tier.offwork"), group.awakeCount)
-            color = .orange
-        default:
-            text = String(format: String(localized: "meeting.slots.tier.sleeping"), group.sleepingCount)
-            color = Color(.systemGray)
-        }
+        let status = tierBadgeStatus(group)
+        let text = status.text
+        let color = status.color
         return Text(text)
             .font(.caption2.weight(.semibold))
             .lineLimit(2)
@@ -592,6 +530,31 @@ private struct HoursBar: View {
     }
 }
 
+private func tierBadgeStatus(_ group: MeetingSlotGroup) -> (text: String, color: Color) {
+    switch group.tier {
+    case 0:
+        return (String(localized: "meeting.slots.tier.all"), .green)
+    case 1:
+        let key = group.awakeCount == 1
+            ? "meeting.slots.tier.offwork.one"
+            : "meeting.slots.tier.offwork.many"
+        let text = String(
+            format: String(localized: String.LocalizationValue(key)),
+            group.awakeCount
+        )
+        return (text, .orange)
+    default:
+        let key = group.sleepingCount == 1
+            ? "meeting.slots.tier.sleeping.one"
+            : "meeting.slots.tier.sleeping.many"
+        let text = String(
+            format: String(localized: String.LocalizationValue(key)),
+            group.sleepingCount
+        )
+        return (text, Color(.systemGray))
+    }
+}
+
 // MARK: - 档期详情弹层
 
 private struct SlotDetailSheet: View {
@@ -602,10 +565,11 @@ private struct SlotDetailSheet: View {
     let localTimezoneId: String
     let shareParticipants: [MeetingCalendarParticipant]
     let makeDetail: (Date) -> MeetingSlotDetail
-    let onAdd: (Date) -> Void
+    let onScheduleCreated: () -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var selectedStartDate: Date
     @State private var sharePayload: MeetingSharePayload?
+    @State private var schedulePayload: MeetingSharePayload?
 
     init(
         rangeText: String,
@@ -615,7 +579,7 @@ private struct SlotDetailSheet: View {
         localTimezoneId: String,
         shareParticipants: [MeetingCalendarParticipant],
         makeDetail: @escaping (Date) -> MeetingSlotDetail,
-        onAdd: @escaping (Date) -> Void
+        onScheduleCreated: @escaping () -> Void
     ) {
         self.rangeText = rangeText
         self.group = group
@@ -624,7 +588,7 @@ private struct SlotDetailSheet: View {
         self.localTimezoneId = localTimezoneId
         self.shareParticipants = shareParticipants
         self.makeDetail = makeDetail
-        self.onAdd = onAdd
+        self.onScheduleCreated = onScheduleCreated
         _selectedStartDate = State(initialValue: group.optionStartDates.first ?? group.startDate)
     }
 
@@ -659,11 +623,25 @@ private struct SlotDetailSheet: View {
             .sheet(item: $sharePayload) { payload in
                 MeetingShareSheet(payload: payload)
             }
+            .sheet(item: $schedulePayload) { payload in
+                MeetingScheduleSheet(payload: payload) {
+                    onScheduleCreated()
+                    dismiss()
+                }
+            }
         }
     }
 
     private func shareSelectedSlot() {
-        sharePayload = MeetingSharePayload(
+        sharePayload = selectedPayload
+    }
+
+    private func createSchedule() {
+        schedulePayload = selectedPayload
+    }
+
+    private var selectedPayload: MeetingSharePayload {
+        MeetingSharePayload(
             event: MeetingCalendarEvent(
                 uid: UUID().uuidString,
                 startDate: selectedStartDate,
@@ -709,14 +687,6 @@ private struct SlotDetailSheet: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
                 .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text(String(format: String(localized: "meeting.detail.duration"), group.durationMinutes))
-                .font(.caption.weight(.semibold))
-                .foregroundColor(.secondary)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(Color.accentColor.opacity(0.12))
-                .clipShape(Capsule())
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
@@ -822,36 +792,24 @@ private struct SlotDetailSheet: View {
     }
 
     private var statusBadge: some View {
-        let text: String
-        let color: Color
-        switch group.tier {
-        case 0:
-            text = String(localized: "meeting.slots.tier.all")
-            color = .green
-        case 1:
-            text = String(format: String(localized: "meeting.slots.tier.offwork"), group.awakeCount)
-            color = .orange
-        default:
-            text = String(format: String(localized: "meeting.slots.tier.sleeping"), group.sleepingCount)
-            color = Color(.systemGray)
-        }
+        let status = tierBadgeStatus(group)
 
-        return Text(text)
+        return Text(status.text)
             .font(.caption.weight(.semibold))
             .lineLimit(2)
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(color.opacity(0.14))
-            .foregroundColor(color)
+            .background(status.color.opacity(0.14))
+            .foregroundColor(status.color)
             .clipShape(Capsule())
     }
 
     private var bottomActionBar: some View {
         HStack(spacing: 12) {
             detailActionButton(
-                title: String(localized: "meeting.actions.title"),
+                title: String(localized: "meeting.detail.share"),
                 foreground: .blue,
                 background: .white,
                 border: .blue
@@ -864,7 +822,7 @@ private struct SlotDetailSheet: View {
                 foreground: .white,
                 background: .accentColor
             ) {
-                onAdd(selectedStartDate)
+                createSchedule()
             }
         }
         .padding(.horizontal, 16)
