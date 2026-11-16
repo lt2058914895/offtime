@@ -65,6 +65,7 @@ struct BottomSheetActionCard: View {
 /// 分享日程：只负责分享日历文件和图片，不申请日历或通知权限。
 struct MeetingShareSheet: View {
     let payload: MeetingSharePayload
+    let showsCalendarFileAction: Bool
     let onEdit: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
@@ -84,11 +85,23 @@ struct MeetingShareSheet: View {
 
     init(
         payload: MeetingSharePayload,
+        showsCalendarFileAction: Bool = true,
         onEdit: (() -> Void)? = nil
     ) {
         self.payload = payload
+        self.showsCalendarFileAction = showsCalendarFileAction
         self.onEdit = onEdit
-        _selectedDetent = State(initialValue: .height(onEdit == nil ? 450 : 520))
+        let actionCount = (showsCalendarFileAction ? 1 : 0) + 1 + (onEdit == nil ? 0 : 1)
+        let height: CGFloat
+        switch actionCount {
+        case 1:
+            height = 300
+        case 2:
+            height = 450
+        default:
+            height = 520
+        }
+        _selectedDetent = State(initialValue: .height(height))
     }
 
     var body: some View {
@@ -149,7 +162,7 @@ struct MeetingShareSheet: View {
             .toast(message: $toastMessage)
         }
         .presentationDetents(
-            [.height(450), .height(520), .large],
+            [.height(300), .height(450), .height(520), .large],
             selection: $selectedDetent
         )
         .presentationDragIndicator(.visible)
@@ -166,12 +179,14 @@ struct MeetingShareSheet: View {
 
     private var optionsContent: some View {
         VStack(spacing: 10) {
-            BottomSheetActionCard(
-                title: String(localized: "meeting.share.ics.action"),
-                detail: String(localized: "meeting.share.ics.hint"),
-                systemImage: "calendar.badge.plus"
-            ) {
-                shareCalendarFile()
+            if showsCalendarFileAction {
+                BottomSheetActionCard(
+                    title: String(localized: "meeting.share.ics.action"),
+                    detail: String(localized: "meeting.share.ics.hint"),
+                    systemImage: "calendar.badge.plus"
+                ) {
+                    shareCalendarFile()
+                }
             }
 
             BottomSheetActionCard(

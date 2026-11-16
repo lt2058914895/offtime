@@ -44,6 +44,7 @@ struct MeetingListView: View {
         let meeting: MeetingModel
         let payload: MeetingSharePayload
         let canEdit: Bool
+        let isFinished: Bool
     }
 
     private struct MeetingEditSelection: Identifiable {
@@ -203,6 +204,7 @@ struct MeetingListView: View {
         ) { selection in
             MeetingShareSheet(
                 payload: selection.payload,
+                showsCalendarFileAction: !selection.isFinished,
                 onEdit: selection.canEdit ? {
                     pendingEditSelection = MeetingEditSelection(
                         id: selection.meeting.id,
@@ -439,7 +441,8 @@ struct MeetingListView: View {
                 for: meeting,
                 participants: resolvedParticipants
             ),
-            canEdit: endDate > now
+            canEdit: endDate > now,
+            isFinished: endDate <= now
         )
     }
 
