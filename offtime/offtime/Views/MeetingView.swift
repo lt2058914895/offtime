@@ -597,6 +597,10 @@ private struct SlotDetailSheet: View {
             ScrollView {
                 VStack(spacing: 12) {
                     overviewCard
+                    if group.optionStartDates.count > 1 {
+                        startTimeSelector
+                            .padding(.bottom, 16)
+                    }
                     selectedTimeCard
                     cityTimeCard
                 }
@@ -654,25 +658,35 @@ private struct SlotDetailSheet: View {
     }
 
     private var overviewCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top, spacing: 12) {
+        HStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(rangeText)
-                    .font(.title3.weight(.bold))
+                    .font(.title3.weight(.semibold))
                     .monospacedDigit()
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-                Spacer(minLength: 0)
-                statusBadge
+                    .lineLimit(1)
+                    .layoutPriority(2)
+
+                Text(
+                    String(
+                        format: String(localized: "meeting.slots.start.meta"),
+                        group.optionStartDates.count,
+                        group.durationMinutes
+                    )
+                )
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .lineLimit(1)
+                .layoutPriority(1)
             }
 
-            if group.optionStartDates.count > 1 {
-                startTimeSelector
-            }
+            Spacer(minLength: 0)
+            statusBadge
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(16)
+        .padding(.leading, 8)
+        .padding(.trailing, 12)
+        .padding(.vertical, 10)
+        .background(Color(.systemGray6).opacity(0.55))
+        .cornerRadius(12)
     }
 
     private var selectedTimeCard: some View {
@@ -711,7 +725,11 @@ private struct SlotDetailSheet: View {
                             .monospacedDigit()
                             .padding(.horizontal, 12)
                             .padding(.vertical, 7)
-                            .background(isSelected ? Color.accentColor : Color(.tertiarySystemFill))
+                            .background(
+                                isSelected
+                                    ? Color.accentColor
+                                    : Color(uiColor: .systemBackground)
+                            )
                             .foregroundColor(isSelected ? .white : .primary)
                             .clipShape(Capsule())
                     }
@@ -720,9 +738,6 @@ private struct SlotDetailSheet: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(16)
     }
 
     private var cityTimeCard: some View {
@@ -795,15 +810,17 @@ private struct SlotDetailSheet: View {
         let status = tierBadgeStatus(group)
 
         return Text(status.text)
-            .font(.caption.weight(.semibold))
+            .font(.caption2.weight(.semibold))
             .lineLimit(2)
-            .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
+            .minimumScaleFactor(0.6)
+            .multilineTextAlignment(.center)
+            .layoutPriority(-1)
             .padding(.horizontal, 8)
-            .padding(.vertical, 4)
+            .padding(.vertical, 3)
             .background(status.color.opacity(0.14))
             .foregroundColor(status.color)
-            .clipShape(Capsule())
+            .cornerRadius(6)
     }
 
     private var bottomActionBar: some View {
