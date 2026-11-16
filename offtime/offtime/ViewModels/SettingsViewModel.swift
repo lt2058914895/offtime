@@ -47,13 +47,28 @@ final class SettingsViewModel: ObservableObject {
             sound,
             isProUnlocked: proAccessService.isUnlocked
         )
-        let report = await reminderService.rescheduleRemindersForSoundChange()
-        if report.skippedForAuthorization {
+        var skippedForAuthorization = false
+        var failureCount = 0
+
+        let cityReport = await reminderService.rescheduleRemindersForSoundChange()
+        skippedForAuthorization = cityReport.skippedForAuthorization
+        failureCount += cityReport.failures.count
+
+        if let modelContainer = cityService.modelContainer {
+            let meetingReport = await MeetingReminderService.shared.rescheduleAll(
+                in: modelContainer
+            )
+            skippedForAuthorization =
+                skippedForAuthorization || meetingReport.skippedForAuthorization
+            failureCount += meetingReport.failures.count
+        }
+
+        if skippedForAuthorization {
             errorMessage = String(localized: "reminder.sound.reschedule.notificationsOff")
-        } else if report.hasFailures {
+        } else if failureCount > 0 {
             errorMessage = String(
                 format: String(localized: "reminder.sound.reschedule.failed"),
-                report.failures.count
+                failureCount
             )
         }
         return appliedSound

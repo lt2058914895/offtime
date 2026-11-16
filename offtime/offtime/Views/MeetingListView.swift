@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import UIKit
+import UserNotifications
 
 private let meetingCardCornerRadius: CGFloat = 18
 
@@ -18,6 +19,7 @@ struct MeetingListView: View {
     @State private var actionSelection: MeetingActionSelection?
     @State private var pendingEditSelection: MeetingEditSelection?
     @State private var editSelection: MeetingEditSelection?
+    @State private var notificationAuthorizationStatus: UNAuthorizationStatus?
     let highlightMeetingID: UUID?
 
     init(highlightMeetingID: UUID? = nil) {
@@ -65,6 +67,58 @@ struct MeetingListView: View {
         scenePhase == .active && isAppeared
     }
 
+    private var notificationPermissionUnavailable: Bool {
+        switch notificationAuthorizationStatus {
+        case .denied, .notDetermined:
+            return true
+        default:
+            return false
+        }
+    }
+
+    private var shouldShowNotificationPermissionBanner: Bool {
+        guard notificationPermissionUnavailable else { return false }
+        return meetings.contains { meeting in
+            guard meeting.scheduleSource == .inAppReminder,
+                  meeting.reminderLeadTimeMinutes != nil else {
+                return false
+            }
+            let endDate = meeting.startDate.addingTimeInterval(
+                Double(meeting.durationMinutes) * 60
+            )
+            return endDate > now
+        }
+    }
+
+    private var notificationPermissionBanner: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "bell.slash.fill")
+                .font(.body)
+                .foregroundStyle(.orange)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(localized: "meeting.list.notificationPermission.title"))
+                    .font(.subheadline.weight(.semibold))
+
+                Text(String(localized: "system.notification.disabled.subtitle"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 8)
+
+            Button(String(localized: "meeting.share.save.settings.action")) {
+                openSettings()
+            }
+            .font(.caption.weight(.semibold))
+        }
+        .padding(12)
+        .background(Color.orange.opacity(0.10))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
+    }
+
     var body: some View {
         Group {
             if meetings.isEmpty {
@@ -75,6 +129,10 @@ struct MeetingListView: View {
                 )
             } else {
                 VStack(spacing: 0) {
+                    if shouldShowNotificationPermissionBanner {
+                        notificationPermissionBanner
+                    }
+
                     Picker(String(localized: "meeting.list.filter.title"), selection: $statusFilter) {
                         Text(String(localized: "meeting.list.filter.upcoming")).tag(MeetingStatus.upcoming)
                         Text(String(localized: "meeting.list.filter.finished")).tag(MeetingStatus.finished)
@@ -144,6 +202,7 @@ struct MeetingListView: View {
         .onAppear {
             isAppeared = true
             updateMinuteClock()
+            refreshNotificationAuthorizationStatus()
             if let highlightMeetingID,
                let meeting = meetings.first(where: { $0.id == highlightMeetingID }) {
                 let end = meeting.startDate.addingTimeInterval(Double(meeting.durationMinutes) * 60)
@@ -156,6 +215,9 @@ struct MeetingListView: View {
         }
         .onChange(of: scenePhase) { _, _ in
             updateMinuteClock()
+            if scenePhase == .active {
+                refreshNotificationAuthorizationStatus()
+            }
         }
         .confirmationDialog(
             String(localized: "meeting.list.delete.confirm.title"),
@@ -263,7 +325,11 @@ struct MeetingListView: View {
         let resolvedParticipants = participants(for: meeting)
         let title = displayTitle(for: meeting)
         let notes = meeting.notes?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let reminder = reminderText(for: meeting.reminderLeadTimeMinutes)
+        let reminder = isFinished
+            ? nil
+            : meeting.reminderLeadTimeMinutes.map {
+                MeetingScheduleText.reminder(for: $0)
+            }
         let cardBackground = isHighlighted
             ? Color.orange.opacity(0.16)
             : Color(uiColor: .secondarySystemGroupedBackground)
@@ -357,11 +423,6 @@ struct MeetingListView: View {
         .onTapGesture {
             openSchedule(meeting)
         }
-    }
-
-    private func reminderText(for minutes: Int?) -> String? {
-        guard let minutes else { return nil }
-        return MeetingScheduleText.reminder(for: minutes)
     }
 
     private func displayTitle(for meeting: MeetingModel) -> String {
@@ -648,6 +709,13 @@ struct MeetingListView: View {
             appEnvironment.startMinuteClock()
         } else {
             appEnvironment.stopMinuteClock()
+        }
+    }
+
+    private func refreshNotificationAuthorizationStatus() {
+        Task { @MainActor in
+            notificationAuthorizationStatus =
+                await MeetingReminderService.shared.notificationAuthorizationStatus()
         }
     }
 

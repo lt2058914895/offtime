@@ -95,6 +95,7 @@ private struct StorageUnavailableView: View {
 struct MainTabView: View {
     @EnvironmentObject private var appEnvironment: AppEnvironment
     @State private var selectedTab: AppTab = .clock
+    @ObservedObject private var notificationNavigation = NotificationNavigationCenter.shared
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -129,7 +130,16 @@ struct MainTabView: View {
         .modifier(SidebarAdaptableTabStyle())
         .onAppear {
             appEnvironment.loadSettings()
+            routeMeetingNotificationIfNeeded()
         }
+        .onChange(of: notificationNavigation.pendingMeetingID) { _, _ in
+            routeMeetingNotificationIfNeeded()
+        }
+    }
+
+    private func routeMeetingNotificationIfNeeded() {
+        guard notificationNavigation.pendingMeetingID != nil else { return }
+        selectedTab = .meeting
     }
 }
 

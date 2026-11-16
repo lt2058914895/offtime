@@ -28,6 +28,11 @@ struct MeetingScheduleSheet: View {
         self.onComplete = onComplete
         let startDate = editingMeeting?.startDate ?? payload.event.startDate
         let durationMinutes = editingMeeting?.durationMinutes ?? payload.event.durationMinutes
+        let proposedLeadTime = editingMeeting?.reminderLeadTimeMinutes ?? 10
+        let initialLeadTime = MeetingReminderTiming.isAvailable(
+            startDate: startDate,
+            leadTimeMinutes: proposedLeadTime
+        ) ? proposedLeadTime : nil
         _draft = State(
             initialValue: MeetingScheduleDraft(
                 title: editingMeeting?.title ?? MeetingCalendarExportService.summary(for: payload.event),
@@ -36,7 +41,7 @@ struct MeetingScheduleSheet: View {
                     Double(durationMinutes) * 60
                 ),
                 notes: editingMeeting?.notes ?? "",
-                leadTimeMinutes: editingMeeting?.reminderLeadTimeMinutes ?? 10
+                leadTimeMinutes: initialLeadTime
             )
         )
     }
@@ -219,6 +224,7 @@ struct MeetingScheduleSheet: View {
 
     private func createSchedule(using destination: MeetingScheduleDestination) {
         guard !isSaving else { return }
+        guard validateReminderTiming() else { return }
         guard draft.endDate > draft.startDate else {
             alert = MeetingScheduleAlert(
                 title: String(localized: "meeting.calendar.failed.title"),
@@ -257,6 +263,7 @@ struct MeetingScheduleSheet: View {
 
     private func saveEditedSchedule() {
         guard let editingMeeting, !isSaving else { return }
+        guard validateReminderTiming() else { return }
         let durationMinutes = editingMeeting.durationMinutes
         let event = MeetingCalendarEvent(
             uid: editingMeeting.id.uuidString,
@@ -299,9 +306,6 @@ struct MeetingScheduleSheet: View {
 
         do {
             identifier = try await MeetingReminderService.shared.schedule(for: candidate)
-        } catch MeetingReminderServiceError.reminderDatePassed {
-            await MeetingReminderService.shared.cancel(for: editingMeeting.id)
-            identifier = nil
         } catch let error as MeetingReminderServiceError {
             alert = MeetingScheduleAlert(
                 title: String(localized: "meeting.reminder.failed.title"),
@@ -334,6 +338,21 @@ struct MeetingScheduleSheet: View {
                 message: String(localized: "meeting.reminder.error.schedule")
             )
         }
+    }
+
+    private func validateReminderTiming() -> Bool {
+        guard let leadTimeMinutes = draft.leadTimeMinutes,
+              !MeetingReminderTiming.isAvailable(
+                  startDate: draft.startDate,
+                  leadTimeMinutes: leadTimeMinutes
+              ) else {
+            return true
+        }
+        alert = MeetingScheduleAlert(
+            title: String(localized: "meeting.reminder.invalid.title"),
+            message: String(localized: "meeting.reminder.error.timePassed")
+        )
+        return false
     }
 
     private func saveEditedSystemCalendarSchedule(
@@ -731,6 +750,7 @@ private struct MeetingScheduleForm: View {
                 ) {
                     ForEach(alertOptions, id: \.minutes) { option in
                         Text(option.title).tag(option.minutes)
+                            .disabled(!isAlertOptionAvailable(option.minutes))
                     }
                 }
                 .pickerStyle(.menu)
@@ -759,6 +779,14 @@ private struct MeetingScheduleForm: View {
                 }
             }
         }
+    }
+
+    private func isAlertOptionAvailable(_ minutes: Int?) -> Bool {
+        guard let minutes else { return true }
+        return MeetingReminderTiming.isAvailable(
+            startDate: draft.startDate,
+            leadTimeMinutes: minutes
+        )
     }
 
 }

@@ -13,6 +13,7 @@ struct MeetingView: View {
     @State private var showMeetingRecords = false
     @State private var highlightedMeetingID: UUID?
     @State private var isAppeared = false
+    @ObservedObject private var notificationNavigation = NotificationNavigationCenter.shared
     var embedsNavigationStack: Bool = true
     var isTabRoot: Bool = false
 
@@ -48,6 +49,13 @@ struct MeetingView: View {
             localCityEn: appEnvironment.settings.currentCityEn
         )
         lastSeenCitiesRevision = appEnvironment.citiesRevision
+    }
+
+    private func routeMeetingNotificationIfNeeded() {
+        guard let meetingID = notificationNavigation.pendingMeetingID else { return }
+        highlightedMeetingID = meetingID
+        showMeetingRecords = true
+        notificationNavigation.clearMeeting()
     }
 
     private var meetingContent: some View {
@@ -86,6 +94,7 @@ struct MeetingView: View {
             isAppeared = true
             loadParticipants()
             updateTimer()
+            routeMeetingNotificationIfNeeded()
         }
         .onDisappear {
             isAppeared = false
@@ -101,6 +110,9 @@ struct MeetingView: View {
         }
         .onChange(of: appEnvironment.settings.currentCityTimezoneId) { _, _ in
             loadParticipants()
+        }
+        .onChange(of: notificationNavigation.pendingMeetingID) { _, _ in
+            routeMeetingNotificationIfNeeded()
         }
         .onReceive(appEnvironment.$currentDate) { date in
             viewModel.updateCurrentDate(date)

@@ -189,6 +189,7 @@ final class AppEnvironment: ObservableObject {
             isProUnlocked: { isProUnlocked }
         )
         let report = await reminderService.synchronize()
+        await MeetingReminderService.shared.rescheduleAll(in: modelContainer)
         if report.hasFailures {
             reminderSyncMessage = String(
                 format: String(localized: "reminder.sync.failed"),

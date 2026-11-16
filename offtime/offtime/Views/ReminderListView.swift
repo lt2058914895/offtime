@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 private let reminderCardCornerRadius: CGFloat = 18
 
@@ -105,7 +106,7 @@ struct ReminderListView: View {
                 List {
                     if !viewModel.isNotificationDeliveryAvailable {
                         notificationDisabledBanner
-                            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 2, trailing: 16))
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 2, trailing: 16))
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                     }
@@ -328,31 +329,37 @@ struct ReminderListView: View {
     }
 
     private var notificationDisabledBanner: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(spacing: 12) {
             Image(systemName: "bell.slash.fill")
-                .font(.subheadline.weight(.semibold))
-                .foregroundColor(.orange)
-                .padding(.top, 2)
+                .font(.body)
+                .foregroundStyle(.orange)
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(String(localized: "reminder.list.notifications.disabled.title"))
-                    .font(.footnote.weight(.semibold))
-                    .foregroundColor(.primary)
+                    .font(.subheadline.weight(.semibold))
 
-                Text(String(localized: "reminder.list.notifications.disabled.message"))
+                Text(String(localized: "system.notification.disabled.subtitle"))
                     .font(.caption)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundStyle(.secondary)
             }
 
-            Spacer(minLength: 0)
+            Spacer(minLength: 8)
+
+            Button(String(localized: "meeting.share.save.settings.action")) {
+                openSettings()
+            }
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Color.accentColor)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
+        .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.orange.opacity(0.12))
+        .background(Color.orange.opacity(0.10))
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .accessibilityElement(children: .combine)
+    }
+
+    private func openSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 
     private var timeSortedReminders: [CityReminderGroup] {

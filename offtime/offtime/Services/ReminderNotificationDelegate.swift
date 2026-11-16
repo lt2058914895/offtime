@@ -19,4 +19,20 @@ final class ReminderNotificationDelegate: NSObject, UNUserNotificationCenterDele
     ) async -> UNNotificationPresentationOptions {
         Self.foregroundPresentationOptions
     }
+
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        if userInfo["notificationType"] as? String == "meetingReminder",
+           let rawMeetingID = userInfo["meetingID"] as? String,
+           let meetingID = UUID(uuidString: rawMeetingID) {
+            Task { @MainActor in
+                NotificationNavigationCenter.shared.openMeeting(meetingID)
+            }
+        }
+        completionHandler()
+    }
 }

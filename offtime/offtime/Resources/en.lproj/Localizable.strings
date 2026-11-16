@@ -150,9 +150,15 @@
 "schedule.reminder.minutesBefore" = "%d minutes before";
 "meeting.schedule.success" = "Schedule created";
 "meeting.reminder.failed.title" = "Unable to Create In-App Reminder";
+"meeting.reminder.invalid.title" = "Invalid Reminder Time";
 "meeting.reminder.error.authorization" = "Allow %@ to send notifications to use in-app schedule reminders.";
 "meeting.reminder.error.timePassed" = "The reminder time has passed. Choose a later reminder.";
 "meeting.reminder.error.schedule" = "Couldn’t create the in-app reminder. Please try again.";
+"meeting.reminder.body.started" = "Already started";
+"meeting.reminder.body.minutesRemaining" = "Starts in %d minutes";
+"meeting.reminder.body.hoursRemaining" = "Starts in %d hours";
+"meeting.reminder.body.daysRemaining" = "Starts in %d days";
+"meeting.reminder.body.weeksRemaining" = "Starts in %d weeks";
 "meeting.share.failed.title" = "Unable to Share Event";
 "meeting.share.failed.message" = "Couldn’t create the calendar file. Please try again.";
 "meeting.share.preview.title" = "Image Preview";
@@ -222,6 +228,8 @@
 "meeting.list.filter.upcoming" = "Upcoming";
 "meeting.list.filter.finished" = "Finished";
 "meeting.list.filter.empty" = "No schedules in this category";
+"meeting.list.notificationPermission.title" = "System Notifications Are Off";
+"system.notification.disabled.subtitle" = "Existing reminders won’t notify you";
 "meeting.list.actions.title" = "Schedule Actions";
 "meeting.list.action.edit" = "Edit Schedule";
 "meeting.list.action.edit.hint" = "Edit the title, notes, and reminder";
@@ -284,8 +292,7 @@
 "reminder.sound.reschedule.failed" = "%d reminder(s) couldn’t use the new sound. Please try again.";
 "reminder.sound.reschedule.notificationsOff" = "Sound saved. Notifications are off, so reminders will sync when you enable them.";
 "reminder.sync.failed" = "%d reminder(s) couldn’t be restored. Open Reminders and try again.";
-"reminder.list.notifications.disabled.title" = "Reminder notifications are off";
-"reminder.list.notifications.disabled.message" = "Reminders are kept, but iOS won’t deliver notifications. Enable notifications in Settings.";
+"reminder.list.notifications.disabled.title" = "System Notifications Are Off";
 "reminder.list.delete.confirm.title" = "Delete Reminder?";
 "reminder.list.next" = "Next reminder";
 "reminder.sort.label" = "Sort order";
